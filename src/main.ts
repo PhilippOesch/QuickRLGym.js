@@ -1,7 +1,22 @@
+import 'phaser';
+import GameScene from './GameScene';
 
+export module Main {
+  const config: Phaser.Types.Core.GameConfig = {
+    type: Phaser.AUTO,
+    parent: 'app',
+    width: 800,
+    height: 600,
+    physics: {
+      default: 'arcade',
+      arcade: {
+        gravity: {
+          y: 200
+        },
+      }
+    },
+    scene: GameScene
+  }
 
-
-console.log("Test");
-console.log("Test");
-
-export { }
+  new Phaser.Game(config)
+}
