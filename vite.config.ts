@@ -1,4 +1,4 @@
 // vite.config.ts
 export default {
-    // config options
-  }
+  base: 'https://PhilippOesch.github.io/TsTaxiRL/'
+}
