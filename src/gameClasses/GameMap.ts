@@ -1,10 +1,10 @@
-import 'phaser'
 import GameObject from '../interfaces/GameObject';
+import GameScene from './GameScene';
 
-export default class GameMap implements GameObject{
-    private scene: Phaser.Scene
+export default class GameMap extends GameObject{
+    private layer: Phaser.Tilemaps.TilemapLayer; 
 
-    static tileMap: number [][] = [
+    private static tileMap: number [][] = [
         [5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5],
         [5, 1, 0, 0, 5, 0, 0, 0, 0, 2, 5],
         [5, 0, 0, 0, 5, 0, 0, 0, 0, 0, 5],
@@ -14,19 +14,23 @@ export default class GameMap implements GameObject{
         [5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5],
     ]
 
-    constructor(scene: Phaser.Scene){
-        this.scene= scene;
+    constructor(scene: GameScene){
+        super(scene)
     }
 
-    preload(): void {
+    public get getLayer(): Phaser.Tilemaps.TilemapLayer{
+        return this.layer;
+    }
+
+    public preload(): void {
         this.scene.load.image('tiles', 'assets/tilemap.png');
     }
 
-    create(): void {
+    public create(): void {
         const map= this.scene.make.tilemap({
             data: GameMap.tileMap, tileWidth: 16, tileHeight: 16
         })
         const tiles = map.addTilesetImage('tiles');
-        map.createLayer(0, tiles, 0, 0);
+        this.layer= map.createLayer(0, tiles, 0, 0);
     }
 }
