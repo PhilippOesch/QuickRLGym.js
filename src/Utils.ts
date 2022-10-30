@@ -1,11 +1,54 @@
 import Globals from "./Globals";
-import Vec2 from "./interfaces/Vec2";
+import Vec2 from "./gameClasses/Vec2";
 
-module Utils{
+module Utils {
     export function adjustedToAbsPos(relPosition: Vec2): Vec2 {
-        const x: number= Globals.tileWidth*1.5 + (Globals.tileWidth* 2* relPosition.x);
-        const y: number= Globals.tileHeight*1.5 + (Globals.tileHeight* relPosition.y);
-        return {x:x, y:y};
+        const x: number =
+            (Globals.tileWidth * 1.5 +
+                Globals.tileWidth * 2 * relPosition.getX) *
+            Globals.scale;
+        const y: number =
+            (Globals.tileHeight * 1.5 + Globals.tileHeight * relPosition.getY) *
+            Globals.scale;
+        return new Vec2(x, y);
+    }
+
+    export function checkIfPositionIsDestination(position: Vec2): boolean {
+        for (const destination of Globals.destinations) {
+            if (destination.isEqual(position)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    export function resetCustomer(playerPos: Vec2): number[] {
+        let spawnIdx: number = Math.floor(
+            Math.random() * Globals.destinations.length
+        );
+        while (Globals.destinations[spawnIdx].isEqual(playerPos)) {
+            spawnIdx = Math.floor(Math.random() * Globals.destinations.length);
+        }
+        let destIdx: number = Math.floor(
+            Math.random() * Globals.destinations.length
+        );
+        while (
+            Globals.destinations[spawnIdx].isEqual(
+                Globals.destinations[destIdx]
+            )
+        ) {
+            destIdx = Math.floor(Math.random() * Globals.destinations.length);
+        }
+
+        return [spawnIdx, destIdx];
+    }
+
+    export function getRandomPosition(): Vec2 {
+        const x: number = Math.floor(Math.random() * Globals.relWidth);
+        const y: number = Math.floor(Math.random() * Globals.relHeigth);
+
+        return new Vec2(x, y);
     }
 }
 
