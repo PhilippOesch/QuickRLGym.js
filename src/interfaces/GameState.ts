@@ -1,4 +1,4 @@
-class GameState {
+export default class GameState {
     private iterations: number = 0;
     private points: number = 0;
 
@@ -24,4 +24,4 @@ class GameState {
     }
 }
 
-export default GameState;
+GameState;

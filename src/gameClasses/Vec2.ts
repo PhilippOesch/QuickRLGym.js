@@ -15,9 +15,13 @@ export default class Vec2 {
         return this.y;
     }
 
-    add(addVector: Vec2) {
+    add(addVector: Vec2): void {
         this.x += addVector.getX;
         this.y += addVector.getY;
+    }
+
+    copy(): Vec2 {
+        return new Vec2(this.x, this.y);
     }
 
     isEqual(other: Vec2): boolean {

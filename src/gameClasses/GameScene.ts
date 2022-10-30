@@ -1,5 +1,5 @@
 import "phaser";
-import CarMoveState from "../enums/CarMoveState";
+import CarMoveState from "../enums/Action";
 import Utils from "../Utils";
 import Customer from "./Customer";
 import GameMap from "./GameMap";
@@ -34,30 +34,12 @@ export default class GameScene extends Phaser.Scene {
         return this.player;
     }
 
-    public preload(): void {
-        this.gameMap.preload();
-        this.player.preload();
-        this.customer.preload();
-        this.gameScoreUI.preload();
-    }
-
-    public create(): void {
-        this.gameMap.create();
-        this.player.create();
-        this.customer.create();
-        this.gameScoreUI.create();
-        this.gameScoreUI.setDestination(this.customer.getDestIdx);
-    }
-
     public initGame(): void {
-        this.gameMap = new GameMap(this);
-        this.gameScoreUI = new GameScoreUI(this);
-
-        const playerPos: Vec2 = Utils.getRandomPosition();
-        this.player = new Player(this, playerPos, CarMoveState.Down);
-
-        const customerInfo: number[] = Utils.resetCustomer(playerPos);
-        this.customer = new Customer(this, customerInfo[0], customerInfo[1]);
+        // this.gameMap = new GameMap();
+        // const playerPos: Vec2 = Utils.getRandomPosition();
+        // this.player = new Player(this, playerPos, CarMoveState.Down);
+        // const customerInfo: number[] = Utils.resetCustomer(playerPos);
+        // this.customer = new Customer(customerInfo[0], customerInfo[1]);
     }
 
     public updatePoints(points: number): void {
@@ -66,7 +48,7 @@ export default class GameScene extends Phaser.Scene {
 
     public respawnCustomer(): void {
         const customerInfo: number[] = Utils.resetCustomer(
-            this.getPlayer.getRelPosition
+            this.getPlayer.getPosition
         );
         this.gameScoreUI.setDestination(customerInfo[1]);
         this.customer.setNewPosition(customerInfo[0], customerInfo[1]);
