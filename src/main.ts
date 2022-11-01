@@ -1,26 +1,15 @@
-import "phaser";
-import GameScene from "./gameClasses/GameScene";
-import Globals from "./Globals";
+import RandomAgent from "./gameClasses/RandomAgent";
+import TaxiEnv from "./gameClasses/TaxiEnv";
+import TaxiGame from "./gameClasses/TaxiGame";
 
 export module Main {
-    const config: Phaser.Types.Core.GameConfig = {
-        type: Phaser.AUTO,
-        parent: "app",
-        width: Globals.tileWidth * 11 * Globals.scale,
-        height: Globals.tileHeight * 7 * Globals.scale,
-        zoom: 1,
-        physics: {
-            default: "arcade",
-            arcade: {
-                gravity: {
-                    y: 0,
-                },
-            },
-        },
-        scene: GameScene,
-    };
-
-    new Phaser.Game(config);
-
-    Phaser.Scene;
+    const actionSpace: string[] = Array.from(TaxiGame.actionMapping.keys());
+    const randomSeed: number = 12;
+    const env: TaxiEnv = new TaxiEnv(
+        new TaxiGame(randomSeed),
+        new RandomAgent(actionSpace, randomSeed),
+        true
+    );
+    env.initGame(false, true);
+    env.train(100);
 }

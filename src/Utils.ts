@@ -1,5 +1,7 @@
+import seedrandom from "seedrandom";
 import Globals from "./Globals";
 import Vec2 from "./gameClasses/Vec2";
+import GameState from "./interfaces/GameState";
 
 module Utils {
     export function adjustedToAbsPos(relPosition: Vec2): Vec2 {
@@ -23,32 +25,39 @@ module Utils {
         return false;
     }
 
-    export function resetCustomer(playerPos: Vec2): number[] {
-        let spawnIdx: number = Math.floor(
-            Math.random() * Globals.destinations.length
-        );
+    export function resetCustomer(
+        rng: seedrandom.PRNG,
+        playerPos: Vec2
+    ): number[] {
+        let spawnIdx: number = Math.floor(rng() * Globals.destinations.length);
         while (Globals.destinations[spawnIdx].isEqual(playerPos)) {
-            spawnIdx = Math.floor(Math.random() * Globals.destinations.length);
+            spawnIdx = Math.floor(rng() * Globals.destinations.length);
         }
-        let destIdx: number = Math.floor(
-            Math.random() * Globals.destinations.length
-        );
+        let destIdx: number = Math.floor(rng() * Globals.destinations.length);
         while (
             Globals.destinations[spawnIdx].isEqual(
                 Globals.destinations[destIdx]
             )
         ) {
-            destIdx = Math.floor(Math.random() * Globals.destinations.length);
+            destIdx = Math.floor(rng() * Globals.destinations.length);
         }
 
         return [spawnIdx, destIdx];
     }
 
-    export function getRandomPosition(): Vec2 {
-        const x: number = Math.floor(Math.random() * Globals.relWidth);
-        const y: number = Math.floor(Math.random() * Globals.relHeigth);
+    export function getRandomPosition(rng: seedrandom.PRNG): Vec2 {
+        const x: number = Math.floor(rng() * Globals.relWidth);
+        const y: number = Math.floor(rng() * Globals.relHeigth);
 
         return new Vec2(x, y);
+    }
+
+    export function logGameState(gameState: GameState): void {
+        const iteration: string = `Iteration ${gameState.iterations}`;
+
+        console.info({
+            [iteration]: gameState,
+        });
     }
 }
 
