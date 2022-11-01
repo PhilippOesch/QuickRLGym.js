@@ -1,7 +1,6 @@
 import "phaser";
 import Action from "../enums/Action";
 import Globals from "../Globals";
-import Utils from "../Utils";
 import TaxiGame from "./TaxiGame";
 import GameMap from "./GameMap";
 import Vec2 from "./Vec2";
@@ -56,6 +55,7 @@ export default class Player {
                 this.updatePosition(action);
                 break;
             case Action.DropOff:
+                this.dropOffCustomer();
                 break;
             case Action.PickUp:
                 this.pickUpCustomer();
@@ -64,14 +64,15 @@ export default class Player {
     }
 
     private detectCollision(curPos: Vec2, action: Action): boolean {
-        let adjustedPos: Vec2 = new Vec2(
-            (1 + curPos.getX) * 2,
-            (1 + curPos.getY) * 2
-        );
-        const moveDir: Vec2 = Player.moveDirMapping.get(action)!;
+        let adjustedPos: Vec2 = new Vec2(1 + curPos.getX * 2, 1 + curPos.getY);
+        const moveDir: Vec2 = Player.moveDirMapping.get(action)!.copy();
         adjustedPos.add(moveDir);
 
-        return GameMap.tileMap[adjustedPos.getX][adjustedPos.getY] == 5;
+        return GameMap.tileMap[adjustedPos.getY][adjustedPos.getX] == 5;
+    }
+
+    public get getCarMoveState(): Action {
+        return this.moveState;
     }
 
     public pickUpCustomer(): void {
@@ -94,11 +95,13 @@ export default class Player {
         if (
             this.position.isEqual(
                 Globals.destinations[this.gameManager.getCustomer.getDestIdx]
-            )
+            ) &&
+            this.customerPickedUp
         ) {
             this.gameManager.getGameStateManager.updatePoints(
                 Globals.dropOffPassangerPoints
             );
+            this.customerPickedUp = false;
             this.gameManager.getGameStateManager.terminateGame();
         } else {
             this.gameManager.getGameStateManager.updatePoints(
@@ -113,7 +116,9 @@ export default class Player {
         );
         if (!this.detectCollision(this.position, action)) {
             this.moveState = action;
-            const moveDir: Vec2 = Player.moveDirMapping.get(this.moveState)!;
+            const moveDir: Vec2 = Player.moveDirMapping
+                .get(this.moveState)!
+                .copy();
             this.position.add(moveDir);
         }
     }

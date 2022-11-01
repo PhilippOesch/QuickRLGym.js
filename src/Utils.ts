@@ -1,6 +1,7 @@
 import seedrandom from "seedrandom";
 import Globals from "./Globals";
 import Vec2 from "./gameClasses/Vec2";
+import GameState from "./interfaces/GameState";
 
 module Utils {
     export function adjustedToAbsPos(relPosition: Vec2): Vec2 {
@@ -49,6 +50,14 @@ module Utils {
         const y: number = Math.floor(rng() * Globals.relHeigth);
 
         return new Vec2(x, y);
+    }
+
+    export function logGameState(gameState: GameState): void {
+        const iteration: string = `Iteration ${gameState.iterations}`;
+
+        console.info({
+            [iteration]: gameState,
+        });
     }
 }
 
