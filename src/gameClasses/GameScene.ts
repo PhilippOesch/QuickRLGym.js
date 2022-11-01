@@ -146,12 +146,23 @@ export default class TaxiGameScene extends Scene {
         const adjustedToAbsPos: Vec2 = Utils.adjustedToAbsPos(
             this.taxiGame.getPlayer.getPosition
         );
-        this.playerSprite.x = adjustedToAbsPos.getX;
-        this.playerSprite.y = adjustedToAbsPos.getY;
         const index: number = this.getSpriteIndex(
             this.taxiGame.getPlayer.getCarMoveState
         );
         this.playerSprite.setTexture("taxi", index);
+
+        // tweening test
+        // this.tweens.add({
+        //     targets: this.playerSprite,
+        //     x: adjustedToAbsPos.getX,
+        //     y: adjustedToAbsPos.getY,
+        //     ease: "Power1",
+        //     duration: 100,
+        //     repeat: 1,
+        // });
+
+        this.playerSprite.x = adjustedToAbsPos.getX;
+        this.playerSprite.y = adjustedToAbsPos.getY;
 
         // Update Customer
         if (this.taxiGame.getPlayer.getCustomerPickedUp) {
