@@ -23,11 +23,17 @@ export default class TaxiGameScene extends Scene {
     private playerSprite: GameObjects.Sprite;
     private customerImage: GameObjects.Image;
     private uidata: GameObjects.Text;
+    private loopEndless: boolean;
 
-    constructor(taxigame: TaxiGame, interactiveMode: boolean) {
+    constructor(
+        taxigame: TaxiGame,
+        interactiveMode: boolean,
+        loopEndless: boolean = false
+    ) {
         super("Taxi Game");
         this.interactiveMode = interactiveMode;
         this.taxiGame = taxigame;
+        this.loopEndless = loopEndless;
     }
 
     public preload(): void {
@@ -174,8 +180,13 @@ export default class TaxiGameScene extends Scene {
 
     private checkIfTerminated(): void {
         if (this.taxiGame.getGameState.isTerminal) {
-            if (this.interactiveMode) {
+            if (this.interactiveMode && !this.loopEndless) {
                 this.input.keyboard.destroy();
+            }
+            if (this.loopEndless) {
+                this.taxiGame.reset(false);
+                this.taxiGame.getGameStateManager.continue();
+                this.reRender();
             }
             this.customerImage.addToDisplayList();
         }

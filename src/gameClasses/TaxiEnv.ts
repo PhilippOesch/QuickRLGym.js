@@ -25,7 +25,7 @@ export default class TaxiEnv {
         this.game.initGame();
     }
 
-    public async startGame(): Promise<void> {
+    public async startGame(loopEndless: boolean = false): Promise<void> {
         if (!this.isInteractive && this.agent == undefined) {
             throw Error(
                 "an agent has to be defined when not running in Interactive mode"
@@ -33,7 +33,7 @@ export default class TaxiEnv {
         }
 
         if ((this.isInteractive || this.visualize) && !this.gameScene) {
-            this.setupScene();
+            this.setupScene(loopEndless);
         }
 
         if (!this.isInteractive && this.agent != undefined) {
@@ -92,8 +92,12 @@ export default class TaxiEnv {
         this.game.reset();
     }
 
-    private setupScene(): void {
-        this.gameScene = new GameScene(this.game, this.isInteractive);
+    private setupScene(loopEndless: boolean = false): void {
+        this.gameScene = new GameScene(
+            this.game,
+            this.isInteractive,
+            loopEndless
+        );
 
         const config: Phaser.Types.Core.GameConfig = {
             type: Phaser.AUTO,

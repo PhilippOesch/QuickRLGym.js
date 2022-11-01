@@ -3,12 +3,14 @@ import Agent from "../interfaces/Agent";
 
 export default class RandomAgent extends Agent {
     private rng: seedrandom.PRNG;
-    private randomSeed: string;
+    private randomSeed?: string;
 
-    constructor(actionSpace: string[], randomSeed: number) {
+    constructor(actionSpace: string[], randomSeed?: number) {
         super(actionSpace);
-        this.randomSeed = randomSeed.toString();
-        this.rng = seedrandom(this.randomSeed);
+        if (randomSeed != undefined) {
+            this.randomSeed = randomSeed.toString();
+            this.rng = seedrandom(this.randomSeed);
+        }
     }
 
     public init(): void {

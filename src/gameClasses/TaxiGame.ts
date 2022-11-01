@@ -43,9 +43,11 @@ export default class TaxiGame {
         this.customer = new Customer(customerInfo[0], customerInfo[1]);
     }
 
-    public reset(): void {
+    public reset(resetGameState = true): void {
         this.spawnGameElements();
-        this.gameStateManager.resetGameState();
+        if (resetGameState) {
+            this.gameStateManager.resetGameState();
+        }
     }
 
     public step(actionString: string) {

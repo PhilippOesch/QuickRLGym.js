@@ -4,12 +4,12 @@ import TaxiGame from "./gameClasses/TaxiGame";
 
 export module Main {
     const actionSpace: string[] = Array.from(TaxiGame.actionMapping.keys());
-    const randomSeed: number = 12;
+    //const randomSeed: number = 12;
     const env: TaxiEnv = new TaxiEnv(
-        new TaxiGame(randomSeed),
-        new RandomAgent(actionSpace, randomSeed),
+        new TaxiGame(),
+        new RandomAgent(actionSpace),
         true
     );
-    env.initGame(false, true);
-    env.train(100);
+    env.initGame(true, true);
+    env.startGame(true);
 }

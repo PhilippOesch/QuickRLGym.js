@@ -15,6 +15,10 @@ export default class GameStateManager {
         return this.isTerminal;
     }
 
+    public continue(): void {
+        this.isTerminal = false;
+    }
+
     public incrementIterations(): void {
         this.iterations++;
     }
