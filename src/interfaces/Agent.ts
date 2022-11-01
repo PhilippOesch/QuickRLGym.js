@@ -1,14 +1,19 @@
+import GameState from "./GameState";
+
 export default abstract class Agent {
     protected actionSpace: string[];
-    protected reward: number = 0;
 
     constructor(actionSpace: string[]) {
         this.actionSpace = actionSpace;
     }
 
+    public get getActionSpace(): string[] {
+        return this.actionSpace;
+    }
+
     abstract init(): void;
 
-    abstract step(): string;
+    abstract step(state: GameState): string;
 
-    abstract eval_step(): string;
+    abstract eval_step(state: GameState): string;
 }
