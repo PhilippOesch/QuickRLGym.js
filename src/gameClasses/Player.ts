@@ -1,6 +1,9 @@
 import "phaser";
 import Action from "../enums/Action";
-import GameManager from "./GameManager";
+import Globals from "../Globals";
+import Utils from "../Utils";
+import TaxiGame from "./TaxiGame";
+import GameMap from "./GameMap";
 import Vec2 from "./Vec2";
 
 export default class Player {
@@ -15,11 +18,11 @@ export default class Player {
 
     private moveState: Action;
     private position: Vec2;
-    private gameManager: GameManager;
+    private gameManager: TaxiGame;
     private customerPickedUp: boolean;
 
     constructor(
-        gameManager: GameManager,
+        gameManager: TaxiGame,
         relPos: Vec2,
         carMoveState: Action = Action.Left
     ) {
@@ -33,7 +36,12 @@ export default class Player {
         return this.position;
     }
 
+    public get getCustomerPickedUp(): boolean {
+        return this.customerPickedUp;
+    }
+
     public playAction(action: Action): void {
+        this.gameManager.getGameStateManager.incrementIterations();
         switch (action) {
             case Action.Up:
                 this.updatePosition(action);
@@ -50,29 +58,63 @@ export default class Player {
             case Action.DropOff:
                 break;
             case Action.PickUp:
+                this.pickUpCustomer();
+                break;
         }
     }
 
-    private detectCollision(newPos: Vec2): boolean {
-        // TODO
-        return false;
+    private detectCollision(curPos: Vec2, action: Action): boolean {
+        let adjustedPos: Vec2 = new Vec2(
+            (1 + curPos.getX) * 2,
+            (1 + curPos.getY) * 2
+        );
+        const moveDir: Vec2 = Player.moveDirMapping.get(action)!;
+        adjustedPos.add(moveDir);
+
+        return GameMap.tileMap[adjustedPos.getX][adjustedPos.getY] == 5;
     }
 
-    private pickUpCustomer(): void {
-        // TODO
+    public pickUpCustomer(): void {
+        if (
+            !this.customerPickedUp &&
+            this.position.isEqual(this.gameManager.getCustomer.getPosition)
+        ) {
+            this.customerPickedUp = true;
+            this.gameManager.getGameStateManager.updatePoints(
+                Globals.stepPenaltyPoints
+            );
+        } else {
+            this.gameManager.getGameStateManager.updatePoints(
+                Globals.illegalMovePoints
+            );
+        }
     }
 
-    private dropOffCustomer(): void {
-        // TODO
+    public dropOffCustomer(): void {
+        if (
+            this.position.isEqual(
+                Globals.destinations[this.gameManager.getCustomer.getDestIdx]
+            )
+        ) {
+            this.gameManager.getGameStateManager.updatePoints(
+                Globals.dropOffPassangerPoints
+            );
+            this.gameManager.getGameStateManager.terminateGame();
+        } else {
+            this.gameManager.getGameStateManager.updatePoints(
+                Globals.illegalMovePoints
+            );
+        }
     }
 
     public updatePosition(action: Action): void {
-        let newPos: Vec2 = this.position.copy();
-        newPos.add(Player.moveDirMapping.get(action)!);
-        if (!this.detectCollision(newPos)) {
+        this.gameManager.getGameStateManager.updatePoints(
+            Globals.stepPenaltyPoints
+        );
+        if (!this.detectCollision(this.position, action)) {
             this.moveState = action;
             const moveDir: Vec2 = Player.moveDirMapping.get(this.moveState)!;
-            this.position.add(new Vec2(moveDir.getX, moveDir.getY));
+            this.position.add(moveDir);
         }
     }
 }
