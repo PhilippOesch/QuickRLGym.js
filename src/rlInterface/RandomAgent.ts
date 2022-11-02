@@ -1,5 +1,5 @@
 import seedrandom from "seedrandom";
-import Agent from "../interfaces/Agent";
+import Agent from "./Agent";
 
 export default class RandomAgent extends Agent {
     private rng: seedrandom.PRNG;

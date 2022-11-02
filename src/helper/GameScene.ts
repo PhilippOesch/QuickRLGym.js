@@ -1,10 +1,10 @@
 import { Scene, GameObjects } from "phaser";
-import Action from "../enums/Action";
+import Action from "../rlInterface/Action";
 import Globals from "../Globals";
-import Utils from "../Utils";
-import GameMap from "./GameMap";
-import TaxiGame from "./TaxiGame";
-import Vec2 from "./Vec2";
+import Utils from "./Utils";
+import GameMap from "../game/GameMap";
+import TaxiGame from "../game/TaxiGame";
+import Vec2 from "../game/Vec2";
 
 export default class TaxiGameScene extends Scene {
     private static destMapping: string[] = ["red", "yellow", "green", "blue"];

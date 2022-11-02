@@ -1,4 +1,4 @@
-import Vec2 from "../gameClasses/Vec2";
+import Vec2 from "./Vec2";
 
 export default interface GameState {
     playerPos: Vec2;
