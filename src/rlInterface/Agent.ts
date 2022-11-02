@@ -1,4 +1,4 @@
-import GameState from "./GameState";
+import GameState from "../game/GameState";
 
 export default abstract class Agent {
     protected actionSpace: string[];

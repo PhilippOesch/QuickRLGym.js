@@ -7,6 +7,14 @@ import Customer from "./Customer";
 import Player from "./Player";
 import Vec2 from "./Vec2";
 
+/**
+ * The Taxi Game class
+ * @property {Map<string, Action>} actionMapping - Static mapping of certain strings to actions.
+ * @property {Player} player - The player object.
+ * @property {Customer} customer - The customer object.
+ * @property {GameStateManager} gameStateManager - The game state manager object.
+ * @property {rng} rng - The random number generator.
+ */
 export default class TaxiGame {
     public static readonly actionMapping: Map<string, Action> = new Map([
         ["Up", Action.Up],
@@ -22,37 +30,15 @@ export default class TaxiGame {
     private gameStateManager: GameStateManager;
     private rng: seedrandom.PRNG;
 
+    /**
+     * @param {number} randomSeed - Set a random seed for the game for reproducability.
+     */
     constructor(randomSeed?: number) {
         if (randomSeed) {
             this.rng = seedrandom(randomSeed.toString());
         } else {
             this.rng = seedrandom();
         }
-    }
-
-    public initGame(): void {
-        this.spawnGameElements();
-        this.gameStateManager = new GameStateManager();
-    }
-
-    public spawnGameElements(): void {
-        const playerPos: Vec2 = Utils.getRandomPosition(this.rng);
-        this.player = new Player(this, playerPos, Action.Down);
-
-        const customerInfo: number[] = Utils.resetCustomer(this.rng, playerPos);
-        this.customer = new Customer(customerInfo[0], customerInfo[1]);
-    }
-
-    public reset(resetGameState = true): void {
-        this.spawnGameElements();
-        if (resetGameState) {
-            this.gameStateManager.resetGameState();
-        }
-    }
-
-    public step(actionString: string) {
-        const action: Action = TaxiGame.actionMapping.get(actionString)!;
-        this.player.playAction(action);
     }
 
     public get getCustomer(): Customer {
@@ -80,5 +66,44 @@ export default class TaxiGame {
             points: this.gameStateManager.getPoints,
             isTerminal: this.getGameStateManager.getIsTerminal,
         };
+    }
+
+    /**
+     * Initialize the game objects
+     */
+    public initGame(): void {
+        this.spawnGameElements();
+        this.gameStateManager = new GameStateManager();
+    }
+
+    /**
+     * Spawn the player and customer object
+     */
+    public spawnGameElements(): void {
+        const playerPos: Vec2 = Utils.getRandomPosition(this.rng);
+        this.player = new Player(this, playerPos, Action.Down);
+
+        const customerInfo: number[] = Utils.resetCustomer(this.rng, playerPos);
+        this.customer = new Customer(customerInfo[0], customerInfo[1]);
+    }
+
+    /**
+     * Reset the game
+     * @param {boolean} resetGameState - Set to false if only the game objects should be respawn without reseting the point and iteration score.
+     */
+    public reset(resetGameState: boolean = true): void {
+        this.spawnGameElements();
+        if (resetGameState) {
+            this.gameStateManager.resetGameState();
+        }
+    }
+
+    /**
+     * Perform a single game step
+     * @param {string} actionString - The action to perform.
+     */
+    public step(actionString: string) {
+        const action: Action = TaxiGame.actionMapping.get(actionString)!;
+        this.player.playAction(action);
     }
 }
