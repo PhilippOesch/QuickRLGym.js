@@ -1,4 +1,4 @@
-import Vec2 from "./gameClasses/Vec2";
+import Vec2 from "./game/Vec2";
 
 module Globals {
     export const tileWidth: number = 16;

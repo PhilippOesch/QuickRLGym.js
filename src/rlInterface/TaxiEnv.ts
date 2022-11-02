@@ -1,9 +1,9 @@
 import Globals from "../Globals";
-import Agent from "../interfaces/Agent";
-import GameState from "../interfaces/GameState";
-import Utils from "../Utils";
-import GameScene from "./GameScene";
-import TaxiGame from "./TaxiGame";
+import Agent from "./Agent";
+import GameState from "../game/GameState";
+import Utils from "../helper/Utils";
+import GameScene from "../helper/GameScene";
+import TaxiGame from "../game/TaxiGame";
 
 export default class TaxiEnv {
     private game: TaxiGame;
