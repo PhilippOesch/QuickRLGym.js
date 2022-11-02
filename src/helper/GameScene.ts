@@ -151,18 +151,15 @@ export default class TaxiGameScene extends Scene {
         );
         this.playerSprite.setTexture("taxi", index);
 
-        // tweening test
-        // this.tweens.add({
-        //     targets: this.playerSprite,
-        //     x: adjustedToAbsPos.getX,
-        //     y: adjustedToAbsPos.getY,
-        //     ease: "Power1",
-        //     duration: 100,
-        //     repeat: 1,
-        // });
-
-        this.playerSprite.x = adjustedToAbsPos.getX;
-        this.playerSprite.y = adjustedToAbsPos.getY;
+        // for smooth movements
+        this.tweens.add({
+            targets: this.playerSprite,
+            x: adjustedToAbsPos.getX,
+            y: adjustedToAbsPos.getY,
+            ease: "Power1",
+            duration: 100,
+            repeat: 0,
+        });
 
         // Update Customer
         if (this.taxiGame.getPlayer.getCustomerPickedUp) {
