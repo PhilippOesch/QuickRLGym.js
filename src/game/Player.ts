@@ -61,7 +61,7 @@ export default class Player {
      * @param {Action} action - The action to perform.
      */
     public playAction(action: Action): void {
-        this.game.getGameStateManager.incrementIterations();
+        this.game.getGameInfoManager.incrementIterations();
         switch (action) {
             case Action.Up:
                 this.updatePosition(action);
@@ -110,11 +110,11 @@ export default class Player {
             this.position.isEqual(this.game.getCustomer.getPosition)
         ) {
             this.customerPickedUp = true;
-            this.game.getGameStateManager.updatePoints(
+            this.game.getGameInfoManager.updatePoints(
                 Globals.stepPenaltyPoints
             );
         } else {
-            this.game.getGameStateManager.updatePoints(
+            this.game.getGameInfoManager.updatePoints(
                 Globals.illegalMovePoints
             );
         }
@@ -127,20 +127,20 @@ export default class Player {
             ) &&
             this.customerPickedUp
         ) {
-            this.game.getGameStateManager.updatePoints(
+            this.game.getGameInfoManager.updatePoints(
                 Globals.dropOffPassangerPoints
             );
             this.customerPickedUp = false;
-            this.game.getGameStateManager.terminateGame();
+            this.game.getGameInfoManager.terminateGame();
         } else {
-            this.game.getGameStateManager.updatePoints(
+            this.game.getGameInfoManager.updatePoints(
                 Globals.illegalMovePoints
             );
         }
     }
 
     public updatePosition(action: Action): void {
-        this.game.getGameStateManager.updatePoints(Globals.stepPenaltyPoints);
+        this.game.getGameInfoManager.updatePoints(Globals.stepPenaltyPoints);
         if (!this.detectCollision(action)) {
             this.moveState = action;
             const moveDir: Vec2 = Player.moveDirMapping

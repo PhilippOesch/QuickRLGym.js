@@ -23,6 +23,9 @@ export default class TaxiEnv {
         this.visualize = visualize;
         this.isInteractive = isInteractive;
         this.game.initGame();
+        if (this.agent) {
+            this.agent.init();
+        }
     }
 
     public async startGame(loopEndless: boolean = false): Promise<void> {
@@ -37,11 +40,10 @@ export default class TaxiEnv {
         }
 
         if (!this.isInteractive && this.agent != undefined) {
-            this.agent.init();
             if (!this.isInteractive) {
                 if (this.visualize)
                     await new Promise((f) => setTimeout(f, 500));
-                while (!this.game.getGameStateManager.getIsTerminal) {
+                while (!this.game.getGameInfoManager.getIsTerminal) {
                     const nextAction: string = this.agent.step(
                         this.getGameState
                     );
@@ -72,9 +74,21 @@ export default class TaxiEnv {
 
         for (let i = 0; i < iterations; i++) {
             if (this.visualize) await new Promise((f) => setTimeout(f, 500));
-            while (!this.game.getGameStateManager.getIsTerminal) {
+            console.log("Iteration", i);
+            while (!this.game.getIsTerminal) {
+                const prevState: GameState = this.game.getGameState;
                 const nextAction: string = this.agent.step(this.getGameState);
                 this.game.step(nextAction);
+                console.log(
+                    "Iteration:",
+                    this.game.getGameInfoManager.getIterations
+                );
+                this.agent.feed(
+                    prevState,
+                    nextAction,
+                    this.game.getGameState,
+                    this.game.getPayoff
+                );
                 if (this.visualize) {
                     await new Promise((f) => setTimeout(f, 20));
                     this.gameScene!.reRender();

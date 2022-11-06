@@ -5,10 +5,12 @@ import Globals from "../Globals";
  * The class of the Customer who has to be droped of
  * @property {Vec2} position - The current position of the customer
  * @property {number} destinationIdx - The index of the destination the customer has to be droped of to
+ * @property {number} spawnDestIdx - The index of the destination, the customer started on
  */
 export default class Customer {
     private position: Vec2;
     private destinationIdx: number;
+    private spawnDestIdx: number;
 
     /**
      * @constructor
@@ -16,6 +18,7 @@ export default class Customer {
      * @param {number} destIdx - The indes of the drop off destination
      */
     constructor(spawnIdx: number, destIdx: number) {
+        this.spawnDestIdx = spawnIdx;
         this.position = Globals.destinations[spawnIdx];
         this.destinationIdx = destIdx;
     }
@@ -26,6 +29,10 @@ export default class Customer {
 
     public get getDestIdx(): number {
         return this.destinationIdx;
+    }
+
+    public get getSpawnDestIdx(): number {
+        return this.spawnDestIdx;
     }
 
     /**

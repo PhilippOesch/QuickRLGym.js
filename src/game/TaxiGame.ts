@@ -1,7 +1,7 @@
 import seedrandom from "seedrandom";
 import Action from "../rlInterface/Action";
 import GameState from "./GameState";
-import GameStateManager from "./GameStateManager";
+import GameInfoManager from "./GameInfoManager";
 import Utils from "../helper/Utils";
 import Customer from "./Customer";
 import Player from "./Player";
@@ -27,7 +27,7 @@ export default class TaxiGame {
 
     private player: Player;
     private customer: Customer;
-    private gameStateManager: GameStateManager;
+    private gameInfoManager: GameInfoManager;
     private rng: seedrandom.PRNG;
 
     /**
@@ -45,8 +45,8 @@ export default class TaxiGame {
         return this.customer;
     }
 
-    public get getGameStateManager(): GameStateManager {
-        return this.gameStateManager;
+    public get getGameInfoManager(): GameInfoManager {
+        return this.gameInfoManager;
     }
 
     public get getPlayer(): Player {
@@ -60,12 +60,17 @@ export default class TaxiGame {
     public get getGameState(): GameState {
         return {
             playerPos: this.getPlayer.getPosition,
-            customerPos: this.getCustomer.getPosition,
-            isCustomerPickedUp: this.getPlayer.getCustomerPickedUp,
-            iterations: this.gameStateManager.getIterations,
-            points: this.gameStateManager.getPoints,
-            isTerminal: this.getGameStateManager.getIsTerminal,
+            destinationIdx: this.getCustomer.getDestIdx,
+            customerPosIdx: this.getEncodedCustomerPos(),
         };
+    }
+
+    public get getPayoff(): number {
+        return this.gameInfoManager.getPoints;
+    }
+
+    public get getIsTerminal(): boolean {
+        return this.gameInfoManager.getIsTerminal;
     }
 
     /**
@@ -73,7 +78,7 @@ export default class TaxiGame {
      */
     public initGame(): void {
         this.spawnGameElements();
-        this.gameStateManager = new GameStateManager();
+        this.gameInfoManager = new GameInfoManager();
     }
 
     /**
@@ -94,7 +99,7 @@ export default class TaxiGame {
     public reset(resetGameState: boolean = true): void {
         this.spawnGameElements();
         if (resetGameState) {
-            this.gameStateManager.resetGameState();
+            this.gameInfoManager.resetGameState();
         }
     }
 
@@ -105,5 +110,16 @@ export default class TaxiGame {
     public step(actionString: string) {
         const action: Action = TaxiGame.actionMapping.get(actionString)!;
         this.player.playAction(action);
+    }
+
+    /**
+     * Encodes the customer Position for the GameState (see GameState-Interface)
+     * @returns {number} - [0<=x<=3] if customer hasn't been picked up or 4 if the customer has been picked up.
+     */
+    private getEncodedCustomerPos(): number {
+        if (this.getPlayer.getCustomerPickedUp) {
+            return 4;
+        }
+        return this.getCustomer.getSpawnDestIdx;
     }
 }

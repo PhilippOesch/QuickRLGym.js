@@ -176,9 +176,9 @@ export default class TaxiGameScene extends Scene {
 
         // Update UI
         this.uidata.data.values.iterations =
-            this.taxiGame.getGameStateManager.getIterations;
+            this.taxiGame.getGameInfoManager.getIterations;
         this.uidata.data.values.points =
-            this.taxiGame.getGameStateManager.getPoints;
+            this.taxiGame.getGameInfoManager.getPoints;
         this.uidata.data.values.destination =
             TaxiGameScene.destMapping[this.taxiGame.getCustomer.getDestIdx];
         this.updateUIText();
@@ -187,13 +187,13 @@ export default class TaxiGameScene extends Scene {
     }
 
     private checkIfTerminated(): void {
-        if (this.taxiGame.getGameState.isTerminal) {
+        if (this.taxiGame.getGameInfoManager.getIsTerminal) {
             if (this.interactiveMode && !this.loopEndless) {
                 this.input.keyboard.destroy();
             }
             if (this.loopEndless) {
                 this.taxiGame.reset(false);
-                this.taxiGame.getGameStateManager.continue();
+                this.taxiGame.getGameInfoManager.continue();
                 this.reRender();
             }
             this.customerImage.addToDisplayList();

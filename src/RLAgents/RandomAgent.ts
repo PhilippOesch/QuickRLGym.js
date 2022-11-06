@@ -1,5 +1,5 @@
 import seedrandom from "seedrandom";
-import Agent from "./Agent";
+import Agent from "../rlInterface/Agent";
 
 export default class RandomAgent extends Agent {
     private rng: seedrandom.PRNG;
@@ -10,6 +10,8 @@ export default class RandomAgent extends Agent {
         if (randomSeed != undefined) {
             this.randomSeed = randomSeed.toString();
             this.rng = seedrandom(this.randomSeed);
+        } else {
+            this.rng = seedrandom();
         }
     }
 
@@ -27,4 +29,6 @@ export default class RandomAgent extends Agent {
     public eval_step(): string {
         return this.step();
     }
+
+    feed(): void {}
 }

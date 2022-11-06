@@ -53,11 +53,46 @@ module Utils {
     }
 
     export function logGameState(gameState: GameState): void {
-        const iteration: string = `Iteration ${gameState.iterations}`;
-
         console.info({
-            [iteration]: gameState,
+            gameState,
         });
+    }
+
+    export function genMulitiDArray(dims: number[]): Array<object> {
+        const copyDims: number[] = [...dims];
+        const array: Array<object> = new Array(dims[0]);
+        copyDims.shift();
+        genRecursiveSubArrays(copyDims, array);
+        return array;
+    }
+
+    export function argMax(array: number[]): number {
+        let maxIdx: number = 0;
+        let max: number = array[0];
+        for (let i = 0; i < array.length; i++) {
+            if (array[i] > max) {
+                max = array[i];
+                maxIdx = i;
+            }
+        }
+        return maxIdx;
+    }
+
+    function genRecursiveSubArrays(dims: number[], array: object[]) {
+        if (dims.length > 1) {
+            const nextDim: number[] = [...dims];
+            nextDim.shift();
+            for (let i = 0; i < dims[0]; i++) {
+                const pushArray: object[] = new Array(dims[1]);
+                array[i] = pushArray;
+                genRecursiveSubArrays(nextDim, pushArray);
+            }
+        }
+        if (dims.length == 1) {
+            for (let i = 0; i < dims[0]; i++) {
+                array[i] = new Array<number>(dims[0]).fill(0);
+            }
+        }
     }
 }
 
