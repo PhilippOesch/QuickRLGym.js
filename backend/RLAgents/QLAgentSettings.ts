@@ -1,6 +1,8 @@
 export default interface QLAgentSettings {
     gameStateDim: number[];
-    explorationRate: number;
+    epsilonStart: number;
+    epsilonEnd: number;
     learningRate: number;
     discountFactor: number;
+    episodes?: number;
 }

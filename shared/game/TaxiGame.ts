@@ -1,8 +1,7 @@
 import seedrandom from "seedrandom";
-import Action from "../rlInterface/Action";
+import Action from "./Action";
 import GameState from "./GameState";
-import GameInfoManager from "./GameInfoManager";
-import Utils from "../helper/Utils";
+import Utils from "../Utils";
 import Customer from "./Customer";
 import Player from "./Player";
 import Vec2 from "./Vec2";
@@ -27,8 +26,15 @@ export default class TaxiGame {
 
     private player: Player;
     private customer: Customer;
-    private gameInfoManager: GameInfoManager;
+    //private gameInfoManager: GameInfoManager;
     private rng: seedrandom.PRNG;
+    private points: number = 0;
+    private isTerminal: boolean = false;
+    private iteration: number = 0;
+
+    public static get getActionSpace(): string[] {
+        return Array.from(TaxiGame.actionMapping.keys());
+    }
 
     /**
      * @param {number} randomSeed - Set a random seed for the game for reproducability.
@@ -43,10 +49,6 @@ export default class TaxiGame {
 
     public get getCustomer(): Customer {
         return this.customer;
-    }
-
-    public get getGameInfoManager(): GameInfoManager {
-        return this.gameInfoManager;
     }
 
     public get getPlayer(): Player {
@@ -66,11 +68,23 @@ export default class TaxiGame {
     }
 
     public get getPayoff(): number {
-        return this.gameInfoManager.getPoints;
+        return this.points;
     }
 
     public get getIsTerminal(): boolean {
-        return this.gameInfoManager.getIsTerminal;
+        return this.isTerminal;
+    }
+
+    public get getIteration(): number {
+        return this.iteration;
+    }
+
+    public continue(): void {
+        this.isTerminal = false;
+    }
+
+    public incrementIterations(): void {
+        this.iteration++;
     }
 
     /**
@@ -78,7 +92,14 @@ export default class TaxiGame {
      */
     public initGame(): void {
         this.spawnGameElements();
-        this.gameInfoManager = new GameInfoManager();
+    }
+
+    public updatePoints(points: number): void {
+        this.points += points;
+    }
+
+    public terminateGame(): void {
+        this.isTerminal = true;
     }
 
     /**
@@ -99,7 +120,9 @@ export default class TaxiGame {
     public reset(resetGameState: boolean = true): void {
         this.spawnGameElements();
         if (resetGameState) {
-            this.gameInfoManager.resetGameState();
+            this.points = 0;
+            this.isTerminal = false;
+            this.iteration = 0;
         }
     }
 
@@ -107,7 +130,7 @@ export default class TaxiGame {
      * Perform a single game step
      * @param {string} actionString - The action to perform.
      */
-    public step(actionString: string) {
+    public async step(actionString: string): Promise<void> {
         const action: Action = TaxiGame.actionMapping.get(actionString)!;
         this.player.playAction(action);
     }

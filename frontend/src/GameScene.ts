@@ -1,10 +1,10 @@
 import { Scene, GameObjects } from "phaser";
-import Action from "../rlInterface/Action";
-import Globals from "../Globals";
-import Utils from "./Utils";
-import GameMap from "../game/GameMap";
-import TaxiGame from "../game/TaxiGame";
-import Vec2 from "../game/Vec2";
+import Action from "../../shared/game/Action";
+import Globals from "../../shared/Globals";
+import Utils from "../../shared/Utils";
+import GameMap from "../../shared/game/GameMap";
+import TaxiGame from "../../shared/game/TaxiGame";
+import Vec2 from "../../shared/game/Vec2";
 
 export default class TaxiGameScene extends Scene {
     private static destMapping: string[] = ["red", "yellow", "green", "blue"];
@@ -175,10 +175,8 @@ export default class TaxiGameScene extends Scene {
         );
 
         // Update UI
-        this.uidata.data.values.iterations =
-            this.taxiGame.getGameInfoManager.getIterations;
-        this.uidata.data.values.points =
-            this.taxiGame.getGameInfoManager.getPoints;
+        this.uidata.data.values.iterations = this.taxiGame.getIteration;
+        this.uidata.data.values.points = this.taxiGame.getPayoff;
         this.uidata.data.values.destination =
             TaxiGameScene.destMapping[this.taxiGame.getCustomer.getDestIdx];
         this.updateUIText();
@@ -187,13 +185,13 @@ export default class TaxiGameScene extends Scene {
     }
 
     private checkIfTerminated(): void {
-        if (this.taxiGame.getGameInfoManager.getIsTerminal) {
+        if (this.taxiGame.getIsTerminal) {
             if (this.interactiveMode && !this.loopEndless) {
                 this.input.keyboard.destroy();
             }
             if (this.loopEndless) {
                 this.taxiGame.reset(false);
-                this.taxiGame.getGameInfoManager.continue();
+                this.taxiGame.continue();
                 this.reRender();
             }
             this.customerImage.addToDisplayList();

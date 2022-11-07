@@ -1,5 +1,4 @@
-import "phaser";
-import Action from "../rlInterface/Action";
+import Action from "./Action";
 import Globals from "../Globals";
 import TaxiGame from "./TaxiGame";
 import GameMap from "./GameMap";
@@ -61,7 +60,7 @@ export default class Player {
      * @param {Action} action - The action to perform.
      */
     public playAction(action: Action): void {
-        this.game.getGameInfoManager.incrementIterations();
+        this.game.incrementIterations();
         switch (action) {
             case Action.Up:
                 this.updatePosition(action);
@@ -110,13 +109,9 @@ export default class Player {
             this.position.isEqual(this.game.getCustomer.getPosition)
         ) {
             this.customerPickedUp = true;
-            this.game.getGameInfoManager.updatePoints(
-                Globals.stepPenaltyPoints
-            );
+            this.game.updatePoints(Globals.stepPenaltyPoints);
         } else {
-            this.game.getGameInfoManager.updatePoints(
-                Globals.illegalMovePoints
-            );
+            this.game.updatePoints(Globals.illegalMovePoints);
         }
     }
 
@@ -127,20 +122,16 @@ export default class Player {
             ) &&
             this.customerPickedUp
         ) {
-            this.game.getGameInfoManager.updatePoints(
-                Globals.dropOffPassangerPoints
-            );
+            this.game.updatePoints(Globals.dropOffPassangerPoints);
             this.customerPickedUp = false;
-            this.game.getGameInfoManager.terminateGame();
+            this.game.terminateGame();
         } else {
-            this.game.getGameInfoManager.updatePoints(
-                Globals.illegalMovePoints
-            );
+            this.game.updatePoints(Globals.illegalMovePoints);
         }
     }
 
     public updatePosition(action: Action): void {
-        this.game.getGameInfoManager.updatePoints(Globals.stepPenaltyPoints);
+        this.game.updatePoints(Globals.stepPenaltyPoints);
         if (!this.detectCollision(action)) {
             this.moveState = action;
             const moveDir: Vec2 = Player.moveDirMapping

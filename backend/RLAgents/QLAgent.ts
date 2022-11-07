@@ -1,14 +1,16 @@
 import seedrandom from "seedrandom";
-import GameState from "../game/GameState";
-import Utils from "../helper/Utils";
+import GameState from "../../shared/game/GameState";
+import Utils from "../../shared/Utils";
 import Agent from "../rlInterface/Agent";
 import QLAgentSettings from "./QLAgentSettings";
+import { writeFile, readFile } from "node:fs/promises";
 
 export default class QLAgent extends Agent {
     private config: QLAgentSettings;
     private rng: seedrandom.PRNG;
     private randomSeed?: string;
-    private qTable: object[];
+    private qTable: any[];
+    private epsilon: number;
 
     constructor(
         config: QLAgentSettings,
@@ -25,23 +27,27 @@ export default class QLAgent extends Agent {
         this.config = config;
     }
 
+    public get getQTable(): any[] {
+        return this.qTable;
+    }
+
     init(): void {
         const qTableDims: number[] = [...this.config.gameStateDim];
         qTableDims.push(this.actionSpace.length);
-        this.qTable = Utils.genMulitiDArray(qTableDims);
+        this.qTable = Utils.genMultiDimArray(qTableDims);
     }
 
-    step(state: GameState): string {
-        console.log("test");
+    step(state: GameState, episode: number): string {
         const randNum: number = this.rng();
-        if (randNum < this.config.explorationRate) {
+        this.epsilon = this.currentExpRate(episode);
+        if (randNum < this.epsilon) {
             const randIdx = Math.floor(this.rng() * this.actionSpace.length);
             return this.actionSpace[randIdx];
         } else {
-            return this.eval_step(state);
+            return this.evalStep(state);
         }
     }
-    eval_step(state: GameState): string {
+    evalStep(state: GameState): string {
         const actions: number[] = this.getStateActionValues(state);
 
         const actionIdx: number = Utils.argMax(actions);
@@ -52,7 +58,7 @@ export default class QLAgent extends Agent {
         takenAction: string,
         newState: GameState,
         payoff: number
-    ) {
+    ): void {
         //lookups
         const takenActionIdx = this.actionSpace.indexOf(takenAction);
         const prevActionQvalues = this.getStateActionValues(prevState);
@@ -70,6 +76,7 @@ export default class QLAgent extends Agent {
 
         // update qValue
         prevActionQvalues[takenActionIdx] = newQValue;
+        return;
     }
 
     public printQTable() {
@@ -77,11 +84,35 @@ export default class QLAgent extends Agent {
     }
 
     private getStateActionValues(state: GameState): number[] {
-        return this.qTable[
-            (state.playerPos.getX,
-            state.playerPos.getY,
-            state.destinationIdx,
-            state.customerPosIdx)
-        ] as number[];
+        return this.qTable[state.playerPos.getX][state.playerPos.getY][
+            state.destinationIdx
+        ][state.customerPosIdx] as number[];
+    }
+
+    public currentExpRate(episode: number): number {
+        return (
+            this.config.epsilonStart -
+            ((this.config.epsilonStart - this.config.epsilonEnd) /
+                this.config.episodes) *
+                episode
+        );
+    }
+
+    public log(): void {
+        const mean = Utils.getMeanMultiDimArray(this.qTable);
+        console.log("Mean QTable:", mean);
+    }
+
+    public async saveQTableToFile(path: string): Promise<void> {
+        await writeFile(path, JSON.stringify(this.qTable), (error: any) => {
+            if (error) {
+                console.log(error);
+            }
+        });
+    }
+
+    public async loadQTable(path: string): Promise<any> {
+        let qtable: Buffer = await readFile(path);
+        return JSON.parse(qtable.toString());
     }
 }

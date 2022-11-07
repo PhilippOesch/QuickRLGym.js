@@ -1,7 +1,7 @@
 import seedrandom from "seedrandom";
-import Globals from "../Globals";
-import Vec2 from "../game/Vec2";
-import GameState from "../game/GameState";
+import Globals from "./Globals";
+import Vec2 from "./game/Vec2";
+import GameState from "./game/GameState";
 
 module Utils {
     export function adjustedToAbsPos(relPosition: Vec2): Vec2 {
@@ -58,11 +58,16 @@ module Utils {
         });
     }
 
-    export function genMulitiDArray(dims: number[]): Array<object> {
+    export function genMultiDimArray(dims: number[]): Array<any> {
+        if (dims.length == 1) {
+            return new Array<number>(dims[0]).fill(0);
+        }
+        let array = new Array(dims[0]);
         const copyDims: number[] = [...dims];
-        const array: Array<object> = new Array(dims[0]);
         copyDims.shift();
-        genRecursiveSubArrays(copyDims, array);
+        for (let i = 0; i < dims[0]; i++) {
+            array[i] = genMultiDimArray(copyDims);
+        }
         return array;
     }
 
@@ -78,21 +83,34 @@ module Utils {
         return maxIdx;
     }
 
-    function genRecursiveSubArrays(dims: number[], array: object[]) {
-        if (dims.length > 1) {
-            const nextDim: number[] = [...dims];
-            nextDim.shift();
-            for (let i = 0; i < dims[0]; i++) {
-                const pushArray: object[] = new Array(dims[1]);
-                array[i] = pushArray;
-                genRecursiveSubArrays(nextDim, pushArray);
+    export function getMultiDimArrayLength(array: Array<any>): number {
+        let size = 0;
+        for (let i = 0; i < array.length; i++) {
+            if (!isNaN(array[i])) {
+                size += 1;
+            } else {
+                size += getMultiDimArrayLength(array[i]);
             }
         }
-        if (dims.length == 1) {
-            for (let i = 0; i < dims[0]; i++) {
-                array[i] = new Array<number>(dims[0]).fill(0);
+        return size;
+    }
+
+    export function getSumMultiDimArray(array: Array<any>): number {
+        let sum = 0;
+        for (let i = 0; i < array.length; i++) {
+            if (!isNaN(array[i])) {
+                sum += array[i];
+            } else {
+                sum += getSumMultiDimArray(array[i]);
             }
         }
+        return sum;
+    }
+
+    export function getMeanMultiDimArray(array: Array<any>): number {
+        let size = getMultiDimArrayLength(array);
+        let sum = getSumMultiDimArray(array);
+        return sum / size;
     }
 }
 

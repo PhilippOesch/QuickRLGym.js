@@ -1,4 +1,4 @@
-import GameState from "../game/GameState";
+import GameState from "../../shared/game/GameState";
 
 export default abstract class Agent {
     protected actionSpace: string[];
@@ -21,7 +21,7 @@ export default abstract class Agent {
      * @param {GameState} state - The current game state
      * @returns {string} - The action to select next
      */
-    abstract step(state: GameState): string;
+    abstract step(state: GameState, episode: number): string;
 
     /**
      * this method feed the new game state and reward back for the agent to update their algorithm
@@ -42,5 +42,7 @@ export default abstract class Agent {
      * @param {GameState} state - The current game state
      * @returns {string} - The action to select next
      */
-    abstract eval_step(state: GameState): string;
+    abstract evalStep(state: GameState): string;
+
+    abstract log(): void;
 }
