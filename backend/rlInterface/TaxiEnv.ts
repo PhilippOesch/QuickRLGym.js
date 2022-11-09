@@ -57,13 +57,12 @@ export default class TaxiEnv {
             throw Error("The Agent is not defined");
         }
 
+        let avgGameIterations: number = 0;
+
         for (let i = 0; i < iterations; i++) {
             while (!this.game.getIsTerminal && this.game.getIteration < 25) {
                 const prevState: GameState = this.game.getGameState;
-                const nextAction: string = this.agent.step(
-                    this.getGameState,
-                    i
-                );
+                const nextAction: string = this.agent.step(this.getGameState);
                 this.game.step(nextAction);
                 this.agent.feed(
                     prevState,
@@ -72,7 +71,10 @@ export default class TaxiEnv {
                     this.game.getPayoff
                 );
             }
+            avgGameIterations =
+                (avgGameIterations * i + this.game.getIteration) / (i + 1);
             if (i % 1000 === 0) {
+                console.log("avgGameIterations", this.game.getIteration);
                 console.log("Iteration", i);
                 this.agent.log();
             }

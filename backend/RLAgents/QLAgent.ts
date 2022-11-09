@@ -11,6 +11,7 @@ export default class QLAgent extends Agent {
     private randomSeed?: string;
     private qTable: any[];
     private epsilon: number;
+    private epsilonStep: number;
 
     constructor(
         config: QLAgentSettings,
@@ -35,11 +36,13 @@ export default class QLAgent extends Agent {
         const qTableDims: number[] = [...this.config.gameStateDim];
         qTableDims.push(this.actionSpace.length);
         this.qTable = Utils.genMultiDimArray(qTableDims);
+        this.epsilon = this.config.epsilonStart;
+        this.epsilonStep = 1;
     }
 
-    step(state: GameState, episode: number): string {
+    step(state: GameState): string {
         const randNum: number = this.rng();
-        this.epsilon = this.currentExpRate(episode);
+        this.decayEpsilon();
         if (randNum < this.epsilon) {
             const randIdx = Math.floor(this.rng() * this.actionSpace.length);
             return this.actionSpace[randIdx];
@@ -70,13 +73,24 @@ export default class QLAgent extends Agent {
             prevActionQvalues[takenActionIdx] +
             this.config.learningRate *
                 (payoff +
-                    (this.config.discountFactor +
-                        newPossibleActionValues[newBestActionIdx]) -
-                    prevActionQvalues[takenActionIdx]);
+                    this.config.discountFactor *
+                        (newPossibleActionValues[newBestActionIdx] -
+                            prevActionQvalues[takenActionIdx]));
 
         // update qValue
         prevActionQvalues[takenActionIdx] = newQValue;
         return;
+    }
+
+    public decayEpsilon(): void {
+        if (this.epsilonStep < this.config.epsilonDecaySteps) {
+            this.epsilonStep++;
+            this.epsilon =
+                this.config.epsilonStart -
+                ((this.config.epsilonStart - this.config.epsilonEnd) /
+                    this.config.epsilonDecaySteps) *
+                    this.epsilonStep;
+        }
     }
 
     public printQTable() {
@@ -89,26 +103,15 @@ export default class QLAgent extends Agent {
         ][state.customerPosIdx] as number[];
     }
 
-    public currentExpRate(episode: number): number {
-        return (
-            this.config.epsilonStart -
-            ((this.config.epsilonStart - this.config.epsilonEnd) /
-                this.config.episodes) *
-                episode
-        );
-    }
-
     public log(): void {
-        const mean = Utils.getMeanMultiDimArray(this.qTable);
-        console.log("Mean QTable:", mean);
+        //const mean = Utils.getMeanMultiDimArray(this.qTable);
+        //console.log("Mean QTable:", mean);
+        //console.log(this.epsilonStep);
+        console.log("epsilon", this.epsilon);
     }
 
     public async saveQTableToFile(path: string): Promise<void> {
-        await writeFile(path, JSON.stringify(this.qTable), (error: any) => {
-            if (error) {
-                console.log(error);
-            }
-        });
+        await writeFile(path, JSON.stringify(this.qTable));
     }
 
     public async loadQTable(path: string): Promise<any> {

@@ -13,12 +13,14 @@ export default class QLAgent extends BrowserAgent {
 
     public async load(): Promise<void> {
         const result: Response = await fetch(this.qTablePath);
-        const json: any = await result.json();
-        console.log("json", json);
+        this.qTable = await result.json();
+        console.log("json", this.qTable);
+        return;
     }
 
     public evalStep(state: GameState): string {
         const actions: number[] = this.getStateActionValues(state);
+        console.log(actions);
 
         const actionIdx: number = Utils.argMax(actions);
         return this.actionSpace[actionIdx];

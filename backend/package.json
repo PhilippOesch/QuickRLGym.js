@@ -1,9 +1,18 @@
 {
   "name": "backend",
-  "module": "Main.ts",
-  "type": "module",
+  "version": "1.0.0",
+  "description": "To install dependencies:",
+  "main": "Main.js",
+  "scripts": {
+    "compile": "npx tsc",
+    "script": "node ./out/backend/Main.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Philipp Oeschger",
+  "license": "ISC",
   "devDependencies": {
-    "bun-types": "^0.2.0"
+    "@types/node": "^18.11.9",
+    "typescript": "^4.8.4"
   },
   "dependencies": {
     "@types/seedrandom": "^3.0.2",

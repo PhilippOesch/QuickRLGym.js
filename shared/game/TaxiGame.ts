@@ -5,6 +5,7 @@ import Utils from "../Utils";
 import Customer from "./Customer";
 import Player from "./Player";
 import Vec2 from "./Vec2";
+import fs from "fs";
 
 /**
  * The Taxi Game class
@@ -130,7 +131,7 @@ export default class TaxiGame {
      * Perform a single game step
      * @param {string} actionString - The action to perform.
      */
-    public async step(actionString: string): Promise<void> {
+    public step(actionString: string): void {
         const action: Action = TaxiGame.actionMapping.get(actionString)!;
         this.player.playAction(action);
     }

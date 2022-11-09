@@ -21,7 +21,7 @@ export default abstract class Agent {
      * @param {GameState} state - The current game state
      * @returns {string} - The action to select next
      */
-    abstract step(state: GameState, episode: number): string;
+    abstract step(state: GameState): string;
 
     /**
      * this method feed the new game state and reward back for the agent to update their algorithm
