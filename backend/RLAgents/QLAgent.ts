@@ -52,7 +52,6 @@ export default class QLAgent extends Agent {
     }
     evalStep(state: GameState): string {
         const actions: number[] = this.getStateActionValues(state);
-
         const actionIdx: number = Utils.argMax(actions);
         return this.actionSpace[actionIdx];
     }
@@ -63,11 +62,16 @@ export default class QLAgent extends Agent {
         payoff: number
     ): void {
         //lookups
+        // console.log("feed");
+        // console.log(prevState);
+        // console.log(takenAction);
+        // console.log(newState);
         const takenActionIdx = this.actionSpace.indexOf(takenAction);
         const prevActionQvalues = this.getStateActionValues(prevState);
         const newPossibleActionValues = this.getStateActionValues(newState);
         const newBestActionIdx: number = Utils.argMax(newPossibleActionValues);
 
+        //console.log("payoff", payoff);
         // bellmann equation
         const newQValue: number =
             prevActionQvalues[takenActionIdx] +
@@ -76,10 +80,21 @@ export default class QLAgent extends Agent {
                     this.config.discountFactor *
                         (newPossibleActionValues[newBestActionIdx] -
                             prevActionQvalues[takenActionIdx]));
+        //console.log(newQValue);
+
+        // const newQValue =
+        //     (1 - this.config.learningRate) * prevActionQvalues[takenActionIdx] +
+        //     this.config.learningRate *
+        //         (payoff +
+        //             this.config.discountFactor *
+        //                 newPossibleActionValues[newBestActionIdx]);
 
         // update qValue
         prevActionQvalues[takenActionIdx] = newQValue;
-        return;
+        // this.qTable[prevState.playerPos.getX][prevState.playerPos.getY][
+        //     prevState.destinationIdx
+        // ][prevState.customerPosIdx][takenActionIdx] = newQValue;
+        // console.log(prevActionQvalues[takenActionIdx]);
     }
 
     public decayEpsilon(): void {
@@ -104,10 +119,7 @@ export default class QLAgent extends Agent {
     }
 
     public log(): void {
-        //const mean = Utils.getMeanMultiDimArray(this.qTable);
-        //console.log("Mean QTable:", mean);
-        //console.log(this.epsilonStep);
-        console.log("epsilon", this.epsilon);
+        return;
     }
 
     public async saveQTableToFile(path: string): Promise<void> {

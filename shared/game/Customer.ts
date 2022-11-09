@@ -41,6 +41,7 @@ export default class Customer {
      * @param {number} destIdx - The indes of the drop off destination
      */
     public setNewPosition(spawnIdx: number, destIdx: number): void {
+        this.spawnDestIdx = spawnIdx;
         this.position = Globals.destinations[spawnIdx];
         this.destinationIdx = destIdx;
     }

@@ -6,6 +6,7 @@
   "scripts": {
     "compile": "npx tsc",
     "script": "node ./out/backend/Main.js",
+    "dev": "npx tsc; node ./out/backend/Main.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Philipp Oeschger",

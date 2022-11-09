@@ -1,3 +1,4 @@
+import GameState from "../../shared/game/GameState";
 import TaxiGame from "../../shared/game/TaxiGame";
 import Globals from "../../shared/Globals";
 import BrowserAgent from "./Agents/BrowserAgent";
@@ -7,16 +8,24 @@ export default class ShowTaxiGameEnv {
     private agent: BrowserAgent;
     private game: TaxiGame;
     private gameScene: TaxiGameScene;
+    private initialGameState?: GameState;
 
-    constructor(agent: BrowserAgent, game: TaxiGame, gameScene: TaxiGameScene) {
+    constructor(
+        agent: BrowserAgent,
+        game: TaxiGame,
+        gameScene: TaxiGameScene,
+        initialGameState?: GameState
+    ) {
         this.agent = agent;
         this.game = game;
         this.gameScene = gameScene;
+        this.initialGameState = initialGameState;
     }
 
     public async init() {
         await this.agent.load();
         this.game.initGame();
+        this.game.reset(true, this.initialGameState);
         const config: Phaser.Types.Core.GameConfig = {
             type: Phaser.AUTO,
             parent: "app",
@@ -57,8 +66,9 @@ export default class ShowTaxiGameEnv {
         }
 
         if (loopEndless) {
-            this.game.reset(true);
+            this.game.reset(true, this.initialGameState);
             this.startGame(loopEndless, timeBetweenMoves);
+            this.gameScene.reRender();
         }
     }
 

@@ -1,89 +1,66 @@
 import Agent from "./Agent";
 import GameState from "../../shared/game/GameState";
-import Utils from "../../shared/Utils";
 import TaxiGame from "../../shared/game/TaxiGame";
 
 export default class TaxiEnv {
     private game: TaxiGame;
     private agent?: Agent;
-    private visualize: boolean;
-    private isInteractive: boolean;
-    private log: boolean;
+    private initialGameState?: GameState;
 
-    constructor(game: TaxiGame, agent?: Agent, log: boolean = false) {
+    constructor(game: TaxiGame, agent?: Agent, initialGameState?: GameState) {
         this.game = game;
         this.agent = agent;
-        this.log = log;
+        this.initialGameState = initialGameState;
     }
 
-    public initGame(isInteractive: boolean = false): void {
-        this.isInteractive = isInteractive;
+    public initGame(): void {
         this.game.initGame();
         if (this.agent) {
             this.agent.init();
         }
     }
 
-    public async startGame(): Promise<void> {
-        if (!this.isInteractive && this.agent == undefined) {
-            throw Error(
-                "an agent has to be defined when not running in Interactive mode"
-            );
-        }
-
-        if (!this.isInteractive && this.agent != undefined) {
-            if (!this.isInteractive) {
-                if (this.visualize)
-                    await new Promise((f) => setTimeout(f, 500));
-                while (!this.game.getIsTerminal) {
-                    const nextAction: string = this.agent.evalStep(
-                        this.getGameState
-                    );
-                    this.game.step(nextAction);
-                    if (this.log) {
-                        Utils.logGameState(this.game.getGameState);
-                    }
-                }
-                if (this.log) {
-                    console.log("Final State");
-                    Utils.logGameState(this.game.getGameState);
-                }
-            }
-        }
-    }
-
-    public train(iterations: number = 100) {
+    public async train(iterations: number = 100, logEvery = 10) {
         if (this.agent == undefined) {
             throw Error("The Agent is not defined");
         }
 
-        let avgGameIterations: number = 0;
+        await this.game.reset(true, this.initialGameState);
 
+        let averageGameIterations = 0;
+        let count = 0;
         for (let i = 0; i < iterations; i++) {
             while (!this.game.getIsTerminal && this.game.getIteration < 25) {
                 const prevState: GameState = this.game.getGameState;
                 const nextAction: string = this.agent.step(this.getGameState);
-                this.game.step(nextAction);
-                this.agent.feed(
-                    prevState,
-                    nextAction,
-                    this.game.getGameState,
-                    this.game.getPayoff
+                const action = this.game.step(nextAction);
+                const newState = this.game.getGameState;
+                const payoff = this.game.getPayoff;
+                this.agent.feed(prevState, action, newState, payoff);
+                //this.agent.log();
+                //console.log(this.game.getIteration);
+            }
+            count++;
+            averageGameIterations += this.game.getIteration;
+            if (i % logEvery == 0) {
+                console.log(
+                    "averageGameIterations:",
+                    averageGameIterations / count
                 );
-            }
-            avgGameIterations =
-                (avgGameIterations * i + this.game.getIteration) / (i + 1);
-            if (i % 1000 === 0) {
-                console.log("avgGameIterations", this.game.getIteration);
-                console.log("Iteration", i);
+                console.log("Iteration:", i);
                 this.agent.log();
+                averageGameIterations = 0;
+                count = 0;
             }
-            this.reset();
+            const isReset = await this.reset();
+            if (!isReset) {
+                break;
+            }
         }
     }
 
-    public reset() {
-        this.game.reset();
+    public async reset(): Promise<boolean> {
+        return this.game.reset(true, this.initialGameState);
     }
 
     public get getGameState(): GameState {
