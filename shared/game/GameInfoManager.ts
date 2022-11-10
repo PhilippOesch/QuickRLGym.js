@@ -4,7 +4,7 @@
  * @property {number} points - The number of points, the player has received
  * @property {boolean} isTerminal - Set when the game episode has terminated.
  */
-export default class GameStateManager {
+export default class GameInfoManager {
     private iterations: number = 0;
     private points: number = 0;
     private isTerminal: boolean = false;

@@ -1,5 +1,4 @@
-import "phaser";
-import Action from "../rlInterface/Action";
+import Action from "./Action";
 import Globals from "../Globals";
 import TaxiGame from "./TaxiGame";
 import GameMap from "./GameMap";
@@ -15,8 +14,8 @@ import Vec2 from "./Vec2";
  */
 export default class Player {
     private static moveDirMapping: Map<Action, Vec2> = new Map([
-        [Action.Left, new Vec2(1, 0)],
-        [Action.Right, new Vec2(-1, 0)],
+        [Action.Left, new Vec2(-1, 0)],
+        [Action.Right, new Vec2(1, 0)],
         [Action.Up, new Vec2(0, -1)],
         [Action.Down, new Vec2(0, 1)],
         [Action.DropOff, new Vec2(0, 0)],
@@ -56,32 +55,30 @@ export default class Player {
         return this.moveState;
     }
 
+    public set setPosition(pos: Vec2) {
+        this.position = pos;
+    }
+
     /**
      * Perform an action to progress the game.
      * @param {Action} action - The action to perform.
      */
-    public playAction(action: Action): void {
-        this.game.getGameStateManager.incrementIterations();
-        switch (action) {
-            case Action.Up:
-                this.updatePosition(action);
-                break;
-            case Action.Down:
-                this.updatePosition(action);
-                break;
-            case Action.Left:
-                this.updatePosition(action);
-                break;
-            case Action.Right:
-                this.updatePosition(action);
-                break;
-            case Action.DropOff:
-                this.dropOffCustomer();
-                break;
-            case Action.PickUp:
-                this.pickUpCustomer();
-                break;
+    public playAction(action: Action): string {
+        //this.game.incrementIterations();
+        let takenAction = "";
+        if (action == Action.DropOff) {
+            this.dropOffCustomer();
+            takenAction = action.toString();
+            return takenAction;
         }
+        if (action == Action.PickUp) {
+            this.pickUpCustomer();
+            takenAction = action.toString();
+            return takenAction;
+        }
+        this.updatePosition(action);
+        takenAction = action.toString();
+        return takenAction;
     }
 
     /**
@@ -110,14 +107,11 @@ export default class Player {
             this.position.isEqual(this.game.getCustomer.getPosition)
         ) {
             this.customerPickedUp = true;
-            this.game.getGameStateManager.updatePoints(
-                Globals.stepPenaltyPoints
-            );
+            this.game.updatePoints(Globals.stepPenaltyPoints);
         } else {
-            this.game.getGameStateManager.updatePoints(
-                Globals.illegalMovePoints
-            );
+            this.game.updatePoints(Globals.illegalMovePoints);
         }
+        return;
     }
 
     public dropOffCustomer(): void {
@@ -127,20 +121,17 @@ export default class Player {
             ) &&
             this.customerPickedUp
         ) {
-            this.game.getGameStateManager.updatePoints(
-                Globals.dropOffPassangerPoints
-            );
+            this.game.updatePoints(Globals.dropOffPassangerPoints);
             this.customerPickedUp = false;
-            this.game.getGameStateManager.terminateGame();
+            this.game.terminateGame();
         } else {
-            this.game.getGameStateManager.updatePoints(
-                Globals.illegalMovePoints
-            );
+            this.game.updatePoints(Globals.illegalMovePoints);
         }
+        return;
     }
 
-    public updatePosition(action: Action): void {
-        this.game.getGameStateManager.updatePoints(Globals.stepPenaltyPoints);
+    public updatePosition(action: Action): Vec2 {
+        this.game.updatePoints(Globals.stepPenaltyPoints);
         if (!this.detectCollision(action)) {
             this.moveState = action;
             const moveDir: Vec2 = Player.moveDirMapping
@@ -148,5 +139,7 @@ export default class Player {
                 .copy();
             this.position.add(moveDir);
         }
+        //console.log("updatePosition", this.position);
+        return this.position;
     }
 }

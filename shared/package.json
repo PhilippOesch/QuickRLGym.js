@@ -1,0 +1,19 @@
+{
+  "name": "shared",
+  "version": "1.0.0",
+  "description": "shared classes between frontend and backend implementation",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Philipp Oeschger",
+  "license": "ISC",
+  "dependencies": {
+    "@types/node": "^18.11.9",
+    "@types/seedrandom": "^3.0.2",
+    "seedrandom": "^3.0.5"
+  },
+  "devDependencies": {
+    "typescript": "^4.8.4"
+  }
+}

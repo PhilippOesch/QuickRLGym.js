@@ -1,18 +1,17 @@
 import seedrandom from "seedrandom";
-import Action from "../rlInterface/Action";
+import Action from "./Action";
 import GameState from "./GameState";
-import GameStateManager from "./GameStateManager";
-import Utils from "../helper/Utils";
+import Utils from "../Utils";
 import Customer from "./Customer";
 import Player from "./Player";
 import Vec2 from "./Vec2";
+import fs from "fs";
 
 /**
  * The Taxi Game class
  * @property {Map<string, Action>} actionMapping - Static mapping of certain strings to actions.
  * @property {Player} player - The player object.
  * @property {Customer} customer - The customer object.
- * @property {GameStateManager} gameStateManager - The game state manager object.
  * @property {rng} rng - The random number generator.
  */
 export default class TaxiGame {
@@ -27,8 +26,14 @@ export default class TaxiGame {
 
     private player: Player;
     private customer: Customer;
-    private gameStateManager: GameStateManager;
     private rng: seedrandom.PRNG;
+    private points: number = 0;
+    private isTerminal: boolean = false;
+    private iteration: number = 0;
+
+    public static get getActionSpace(): string[] {
+        return Array.from(TaxiGame.actionMapping.keys());
+    }
 
     /**
      * @param {number} randomSeed - Set a random seed for the game for reproducability.
@@ -45,10 +50,6 @@ export default class TaxiGame {
         return this.customer;
     }
 
-    public get getGameStateManager(): GameStateManager {
-        return this.gameStateManager;
-    }
-
     public get getPlayer(): Player {
         return this.player;
     }
@@ -59,13 +60,30 @@ export default class TaxiGame {
 
     public get getGameState(): GameState {
         return {
-            playerPos: this.getPlayer.getPosition,
-            customerPos: this.getCustomer.getPosition,
-            isCustomerPickedUp: this.getPlayer.getCustomerPickedUp,
-            iterations: this.gameStateManager.getIterations,
-            points: this.gameStateManager.getPoints,
-            isTerminal: this.getGameStateManager.getIsTerminal,
+            playerPos: this.player.getPosition.copy(),
+            destinationIdx: this.customer.getDestIdx,
+            customerPosIdx: this.getEncodedCustomerPos(),
         };
+    }
+
+    public get getPayoff(): number {
+        return Number(this.points);
+    }
+
+    public get getIsTerminal(): boolean {
+        return this.isTerminal;
+    }
+
+    public get getIteration(): number {
+        return this.iteration;
+    }
+
+    public continue(): void {
+        this.isTerminal = false;
+    }
+
+    public incrementIterations(): void {
+        this.iteration++;
     }
 
     /**
@@ -73,7 +91,14 @@ export default class TaxiGame {
      */
     public initGame(): void {
         this.spawnGameElements();
-        this.gameStateManager = new GameStateManager();
+    }
+
+    public updatePoints(points: number): void {
+        this.points += points;
+    }
+
+    public terminateGame(): void {
+        this.isTerminal = true;
     }
 
     /**
@@ -91,19 +116,46 @@ export default class TaxiGame {
      * Reset the game
      * @param {boolean} resetGameState - Set to false if only the game objects should be respawn without reseting the point and iteration score.
      */
-    public reset(resetGameState: boolean = true): void {
+    public async reset(
+        resetGameState: boolean = true,
+        initialGameState?: GameState
+    ): Promise<boolean> {
         this.spawnGameElements();
-        if (resetGameState) {
-            this.gameStateManager.resetGameState();
+        if (initialGameState) {
+            this.player.setPosition = initialGameState.playerPos.copy();
+            this.customer.setNewPosition(
+                initialGameState.customerPosIdx,
+                initialGameState.destinationIdx
+            );
         }
+        if (resetGameState) {
+            this.points = 0;
+            this.isTerminal = false;
+            this.iteration = 0;
+        }
+        //console.log("reset");
+        return true;
     }
 
     /**
      * Perform a single game step
      * @param {string} actionString - The action to perform.
      */
-    public step(actionString: string) {
+    public step(actionString: string): string {
         const action: Action = TaxiGame.actionMapping.get(actionString)!;
-        this.player.playAction(action);
+        this.incrementIterations();
+        const takenAktion = this.player.playAction(action);
+        return actionString;
+    }
+
+    /**
+     * Encodes the customer Position for the GameState (see GameState-Interface)
+     * @returns {number} - [0<=x<=3] if customer hasn't been picked up or 4 if the customer has been picked up.
+     */
+    private getEncodedCustomerPos(): number {
+        if (this.getPlayer.getCustomerPickedUp) {
+            return 4;
+        }
+        return this.getCustomer.getSpawnDestIdx;
     }
 }
