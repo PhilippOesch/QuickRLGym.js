@@ -1,6 +1,6 @@
 import seedrandom from "seedrandom";
-import GameState from "../../shared/game/GameState";
-import Utils from "../../shared/Utils";
+import { GameState } from "../../../shared/src/";
+import { Utils } from "../../../shared/src/";
 import Agent from "../rlInterface/Agent";
 import QLAgentSettings from "./QLAgentSettings";
 import { writeFile, readFile } from "node:fs/promises";
@@ -62,16 +62,11 @@ export default class QLAgent extends Agent {
         payoff: number
     ): void {
         //lookups
-        // console.log("feed");
-        // console.log(prevState);
-        // console.log(takenAction);
-        // console.log(newState);
         const takenActionIdx = this.actionSpace.indexOf(takenAction);
         const prevActionQvalues = this.getStateActionValues(prevState);
         const newPossibleActionValues = this.getStateActionValues(newState);
         const newBestActionIdx: number = Utils.argMax(newPossibleActionValues);
 
-        //console.log("payoff", payoff);
         // bellmann equation
         const newQValue: number =
             prevActionQvalues[takenActionIdx] +
@@ -80,21 +75,11 @@ export default class QLAgent extends Agent {
                     this.config.discountFactor *
                         (newPossibleActionValues[newBestActionIdx] -
                             prevActionQvalues[takenActionIdx]));
-        //console.log(newQValue);
-
-        // const newQValue =
-        //     (1 - this.config.learningRate) * prevActionQvalues[takenActionIdx] +
-        //     this.config.learningRate *
-        //         (payoff +
-        //             this.config.discountFactor *
-        //                 newPossibleActionValues[newBestActionIdx]);
 
         // update qValue
-        prevActionQvalues[takenActionIdx] = newQValue;
-        // this.qTable[prevState.playerPos.getX][prevState.playerPos.getY][
-        //     prevState.destinationIdx
-        // ][prevState.customerPosIdx][takenActionIdx] = newQValue;
-        // console.log(prevActionQvalues[takenActionIdx]);
+        this.qTable[prevState.playerPos.getX][prevState.playerPos.getY][
+            prevState.destinationIdx
+        ][prevState.customerPosIdx][takenActionIdx] = newQValue;
     }
 
     public decayEpsilon(): void {

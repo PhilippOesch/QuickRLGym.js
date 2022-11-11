@@ -6,6 +6,8 @@ import Customer from "./Customer";
 import Player from "./Player";
 import Vec2 from "./Vec2";
 import fs from "fs";
+import Globals from "../Globals";
+import StepResult from "./StepResult";
 
 /**
  * The Taxi Game class
@@ -141,11 +143,18 @@ export default class TaxiGame {
      * Perform a single game step
      * @param {string} actionString - The action to perform.
      */
-    public step(actionString: string): string {
+    public step(actionString: string): StepResult {
         const action: Action = TaxiGame.actionMapping.get(actionString)!;
         this.incrementIterations();
-        const takenAktion = this.player.playAction(action);
-        return actionString;
+        let stepResult: StepResult;
+        if (action == Action.DropOff) {
+            stepResult = this.dropOffCustomer();
+        } else if (action == Action.PickUp) {
+            stepResult = this.pickUpCustomer();
+        } else {
+            stepResult = this.updatePlayerPosition(action);
+        }
+        return stepResult;
     }
 
     /**
@@ -153,9 +162,53 @@ export default class TaxiGame {
      * @returns {number} - [0<=x<=3] if customer hasn't been picked up or 4 if the customer has been picked up.
      */
     private getEncodedCustomerPos(): number {
-        if (this.getPlayer.getCustomerPickedUp) {
+        if (this.getCustomer.isCustomerPickedUp) {
             return 4;
         }
         return this.getCustomer.getSpawnDestIdx;
+    }
+
+    private dropOffCustomer(): StepResult {
+        let reward: number = 0;
+        if (
+            this.player.getPosition.isEqual(
+                Globals.destinations[this.getCustomer.getDestIdx]
+            ) &&
+            this.customer.isCustomerPickedUp
+        ) {
+            this.updatePoints(Globals.dropOffPassangerPoints);
+            this.customer.dropOffCustomer();
+            this.terminateGame();
+            reward = Globals.dropOffPassangerPoints;
+        } else {
+            this.updatePoints(Globals.illegalMovePoints);
+            reward = Globals.illegalMovePoints;
+        }
+        return { newState: this.getGameState, reward: reward };
+    }
+
+    private pickUpCustomer(): StepResult {
+        let reward: number = 0;
+        if (
+            !this.customer.isCustomerPickedUp &&
+            this.player.getPosition.isEqual(this.getCustomer.getPosition)
+        ) {
+            this.customer.pickUpCustomer();
+            this.updatePoints(Globals.stepPenaltyPoints);
+            reward = Globals.stepPenaltyPoints;
+        } else {
+            this.updatePoints(Globals.illegalMovePoints);
+            reward = Globals.illegalMovePoints;
+        }
+        return { newState: this.getGameState, reward: reward };
+    }
+
+    public updatePlayerPosition(action: Action): StepResult {
+        this.updatePoints(Globals.stepPenaltyPoints);
+        this.player.updatePosition(action);
+        return {
+            newState: this.getGameState,
+            reward: Globals.stepPenaltyPoints,
+        };
     }
 }

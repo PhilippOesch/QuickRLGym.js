@@ -1,6 +1,6 @@
 import Agent from "./Agent";
-import GameState from "../../shared/game/GameState";
-import TaxiGame from "../../shared/game/TaxiGame";
+import { GameState } from "../../../shared/src/";
+import { TaxiGame } from "../../../shared/src/";
 
 export default class TaxiEnv {
     private game: TaxiGame;
@@ -20,12 +20,12 @@ export default class TaxiEnv {
         }
     }
 
-    public async train(iterations: number = 100, logEvery = 10) {
+    public train(iterations: number = 100, logEvery = 10) {
         if (this.agent == undefined) {
             throw Error("The Agent is not defined");
         }
 
-        await this.game.reset(true, this.initialGameState);
+        this.game.reset(true, this.initialGameState);
 
         let averageGameIterations = 0;
         let count = 0;
@@ -33,10 +33,12 @@ export default class TaxiEnv {
             while (!this.game.getIsTerminal && this.game.getIteration < 25) {
                 const prevState: GameState = this.game.getGameState;
                 const nextAction: string = this.agent.step(this.getGameState);
-                const action = this.game.step(nextAction);
-                const newState = this.game.getGameState;
-                const payoff = this.game.getPayoff;
-                this.agent.feed(prevState, action, newState, payoff);
+                const { newState, reward } = this.game.step(nextAction);
+                // console.log("prevState", prevState);
+                // console.log("newState", newState);
+                // console.log("action", nextAction);
+                // console.log("reward", reward);
+                this.agent.feed(prevState, nextAction, newState, reward);
                 //this.agent.log();
                 //console.log(this.game.getIteration);
             }
@@ -52,14 +54,14 @@ export default class TaxiEnv {
                 averageGameIterations = 0;
                 count = 0;
             }
-            const isReset = await this.reset();
+            const isReset = this.reset();
             if (!isReset) {
                 break;
             }
         }
     }
 
-    public async reset(): Promise<boolean> {
+    public reset(): Promise<boolean> {
         return this.game.reset(true, this.initialGameState);
     }
 
