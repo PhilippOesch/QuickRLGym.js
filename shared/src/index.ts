@@ -1,4 +1,4 @@
-import Globals from "./Globals";
+import Globals from "./TaxiGame/Globals";
 import Utils from "./Utils";
 import TaxiGame from "./TaxiGame/TaxiGame";
 import Vec2 from "./TaxiGame/Vec2";

@@ -1,4 +1,4 @@
-import Vec2 from "./TaxiGame/Vec2";
+import Vec2 from "./Vec2";
 
 module Globals {
     export const tileWidth: number = 16;

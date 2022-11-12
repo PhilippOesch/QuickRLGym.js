@@ -1,5 +1,5 @@
 import Vec2 from "./Vec2";
-import Globals from "../Globals";
+import Globals from "./Globals";
 
 /**
  * The class of the Customer who has to be droped of
