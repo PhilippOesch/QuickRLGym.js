@@ -14,7 +14,6 @@ import Game from "../Game";
  * @property {Map<string, Action>} actionMapping - Static mapping of certain strings to actions.
  * @property {Player} player - The player object.
  * @property {Customer} customer - The customer object.
- * @property {rng} rng - The random number generator.
  */
 export default class TaxiGame extends Game {
     public static readonly actionMapping: Map<string, Action> = new Map([
