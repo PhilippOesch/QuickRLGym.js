@@ -4,7 +4,7 @@ import Utils from "../Utils";
 import Customer from "./Customer";
 import Player from "./Player";
 import Vec2 from "./Vec2";
-import Globals from "../Globals";
+import Globals from "./Globals";
 import StepResult from "./StepResult";
 import Game from "../Game";
 
@@ -92,10 +92,6 @@ export default class TaxiGame extends Game {
         this.customer = new Customer(customerInfo[0], customerInfo[1]);
     }
 
-    /**
-     * Reset the game
-     * @param {boolean} resetGameState - Set to false if only the game objects should be respawn without reseting the point and iteration score.
-     */
     public reset(
         resetGameState: boolean = true,
         initialGameState?: GameState
@@ -115,7 +111,6 @@ export default class TaxiGame extends Game {
         } else {
             this.isTerminal = false;
         }
-        //console.log("reset");
         return true;
     }
 

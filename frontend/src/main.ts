@@ -7,7 +7,7 @@ async function main() {
     const game: TaxiGame = new TaxiGame(1234);
     const agent: QLAgentBrowser = new QLAgentBrowser(
         game,
-        "/models/qTable.json",
+        "models/qTable.json",
         TaxiGame.getActionSpace
     );
     const gameScene: TaxiGameScene = new TaxiGameScene(game, false, true);

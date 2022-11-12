@@ -1,5 +1,5 @@
 import seedrandom from "seedrandom";
-import Globals from "./Globals";
+import Globals from "./TaxiGame/Globals";
 import Vec2 from "./TaxiGame/Vec2";
 import GameState from "./TaxiGame/GameState";
 
