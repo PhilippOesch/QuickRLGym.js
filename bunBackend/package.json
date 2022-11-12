@@ -1,0 +1,18 @@
+{
+  "name": "bunbackend",
+  "module": "index.ts",
+  "type": "module",
+  "devDependencies": {
+    "bun-types": "^0.2.0"
+  },
+  "scripts": {
+    "train": "bun run ./src/Main.ts",
+    "test": "mocha ./testing/Tensor.test.ts"
+  },
+  "dependencies": {
+    "@types/mocha": "^10.0.0",
+    "@types/seedrandom": "^3.0.2",
+    "mocha": "^10.1.0",
+    "seedrandom": "^3.0.5"
+  }
+}
