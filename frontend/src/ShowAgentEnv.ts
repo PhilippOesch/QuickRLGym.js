@@ -1,6 +1,4 @@
-import GameState from "../../shared/game/GameState";
-import TaxiGame from "../../shared/game/TaxiGame";
-import Globals from "../../shared/Globals";
+import { TaxiGame, Globals, GameState } from "../../shared/src";
 import BrowserAgent from "./Agents/BrowserAgent";
 import TaxiGameScene from "./TaxiGameScene";
 
@@ -56,9 +54,9 @@ export default class ShowTaxiGameEnv {
             );
         }
 
-        await new Promise((f) => setTimeout(f, 500));
+        await new Promise((f) => setTimeout(f, 1000));
 
-        while (!this.game.getIsTerminal && this.game.getIteration < 25) {
+        while (!this.game.getIsTerminal) {
             await new Promise((f) => setTimeout(f, timeBetweenMoves));
             const nextAction = this.agent.evalStep(this.game.getGameState);
             this.game.step(nextAction);
@@ -66,37 +64,10 @@ export default class ShowTaxiGameEnv {
         }
 
         if (loopEndless) {
-            this.game.reset(true, this.initialGameState);
+            this.game.reset(false, this.initialGameState);
             this.startGame(loopEndless, timeBetweenMoves);
-            this.gameScene.reRender();
         }
+        await new Promise((f) => setTimeout(f, 500));
+        this.gameScene.reRender();
     }
-
-    // public async startGame(): Promise<void> {
-    //     if (!&& this.agent == undefined) {
-    //         throw Error(
-    //             "an agent has to be defined when not running in Interactive mode"
-    //         );
-    //     }
-
-    //     if (!this.isInteractive && this.agent != undefined) {
-    //         if (!this.isInteractive) {
-    //             if (this.visualize)
-    //                 await new Promise((f) => setTimeout(f, 500));
-    //             while (!this.game.getIsTerminal) {
-    //                 const nextAction: string = this.agent.evalStep(
-    //                     this.getGameState
-    //                 );
-    //                 this.game.step(nextAction);
-    //                 if (this.log) {
-    //                     Utils.logGameState(this.game.getGameState);
-    //                 }
-    //             }
-    //             if (this.log) {
-    //                 console.log("Final State");
-    //                 Utils.logGameState(this.game.getGameState);
-    //             }
-    //         }
-    //     }
-    // }
 }
