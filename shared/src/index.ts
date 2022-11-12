@@ -1,25 +1,25 @@
 import Globals from "./Globals";
 import Utils from "./Utils";
-import TaxiGame from "./game/TaxiGame";
-import Vec2 from "./game/Vec2";
-import Tensor from "./game/Tensor";
-import StepResult from "./game/StepResult";
-import Player from "./game/Player";
-import GameState from "./game/GameState";
-import GameMap from "./game/GameMap";
-import Customer from "./game/Customer";
-import Action from "./game/Action";
+import TaxiGame from "./TaxiGame/TaxiGame";
+import Vec2 from "./TaxiGame/Vec2";
+import StepResult from "./TaxiGame/StepResult";
+import Player from "./TaxiGame/Player";
+import GameState from "./TaxiGame/GameState";
+import GameMap from "./TaxiGame/GameMap";
+import Customer from "./TaxiGame/Customer";
+import Action from "./TaxiGame/Action";
+import Game from "./Game";
 
 export {
     Globals,
     Utils,
     TaxiGame,
     Vec2,
-    Tensor,
     StepResult,
     Player,
     GameState,
     GameMap,
     Customer,
     Action,
+    Game,
 };

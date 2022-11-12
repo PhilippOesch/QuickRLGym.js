@@ -1,7 +1,7 @@
 import seedrandom from "seedrandom";
 import Globals from "./Globals";
-import Vec2 from "./game/Vec2";
-import GameState from "./game/GameState";
+import Vec2 from "./TaxiGame/Vec2";
+import GameState from "./TaxiGame/GameState";
 
 module Utils {
     export function adjustedToAbsPos(relPosition: Vec2): Vec2 {

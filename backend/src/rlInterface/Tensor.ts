@@ -48,10 +48,10 @@ export default class Tensor {
             );
         }
         let updateElement = this.array;
-        for (let i = 0; i < indices.length; i++) {
+        for (let i = 0; i < indices.length - 1; i++) {
             updateElement = updateElement[indices[i]];
         }
-        updateElement = value;
+        updateElement[indices[indices.length - 1]] = value;
     }
 
     private validate(indices: number[]): void {
@@ -127,6 +127,10 @@ export default class Tensor {
             }
         }
         return sum;
+    }
+
+    public toString(): string {
+        return `Tensor(${this.array.toString()})`;
     }
 
     public get mean(): number {

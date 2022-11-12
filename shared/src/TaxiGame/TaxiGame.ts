@@ -5,9 +5,9 @@ import Utils from "../Utils";
 import Customer from "./Customer";
 import Player from "./Player";
 import Vec2 from "./Vec2";
-import fs from "fs";
 import Globals from "../Globals";
 import StepResult from "./StepResult";
+import Game from "../Game";
 
 /**
  * The Taxi Game class
@@ -16,7 +16,7 @@ import StepResult from "./StepResult";
  * @property {Customer} customer - The customer object.
  * @property {rng} rng - The random number generator.
  */
-export default class TaxiGame {
+export default class TaxiGame extends Game {
     public static readonly actionMapping: Map<string, Action> = new Map([
         ["Up", Action.Up],
         ["Down", Action.Down],
@@ -28,10 +28,6 @@ export default class TaxiGame {
 
     private player: Player;
     private customer: Customer;
-    private rng: seedrandom.PRNG;
-    private points: number = 0;
-    private isTerminal: boolean = false;
-    private iteration: number = 0;
 
     public static get getActionSpace(): string[] {
         return Array.from(TaxiGame.actionMapping.keys());
@@ -41,11 +37,7 @@ export default class TaxiGame {
      * @param {number} randomSeed - Set a random seed for the game for reproducability.
      */
     constructor(randomSeed?: number) {
-        if (randomSeed) {
-            this.rng = seedrandom(randomSeed.toString());
-        } else {
-            this.rng = seedrandom();
-        }
+        super(randomSeed);
     }
 
     public get getCustomer(): Customer {
@@ -54,10 +46,6 @@ export default class TaxiGame {
 
     public get getPlayer(): Player {
         return this.player;
-    }
-
-    public get getRng(): seedrandom.PRNG {
-        return this.rng;
     }
 
     public get getGameState(): GameState {
@@ -76,16 +64,8 @@ export default class TaxiGame {
         return this.isTerminal;
     }
 
-    public get getIteration(): number {
-        return this.iteration;
-    }
-
     public continue(): void {
         this.isTerminal = false;
-    }
-
-    public incrementIterations(): void {
-        this.iteration++;
     }
 
     /**
@@ -118,10 +98,10 @@ export default class TaxiGame {
      * Reset the game
      * @param {boolean} resetGameState - Set to false if only the game objects should be respawn without reseting the point and iteration score.
      */
-    public async reset(
+    public reset(
         resetGameState: boolean = true,
         initialGameState?: GameState
-    ): Promise<boolean> {
+    ): boolean {
         this.spawnGameElements();
         if (initialGameState) {
             this.player.setPosition = initialGameState.playerPos.copy();
