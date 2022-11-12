@@ -7,11 +7,12 @@
     "compile": "npx tsc",
     "run": "node ./out/backend/src/Main.js",
     "buildrun": "npx tsc; node ./out/backend/src/Main.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "npx tsc; mocha ./out/backend/testing/"
   },
   "author": "Philipp Oeschger",
   "license": "ISC",
   "devDependencies": {
+    "@types/mocha": "^10.0.0",
     "@types/node": "^18.11.9",
     "@types/seedrandom": "^3.0.2",
     "mocha": "^10.1.0",

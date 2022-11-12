@@ -1,22 +1,21 @@
 import seedrandom from "seedrandom";
-import { GameState } from "../../../shared/src/";
-import { Utils } from "../../../shared/src/";
+import { Utils, Tensor, Game } from "../../../shared/src/";
 import Agent from "../rlInterface/Agent";
 import QLAgentSettings from "./QLAgentSettings";
 import { writeFile, readFile } from "node:fs/promises";
 import SingleAgentEnvironment from "../rlInterface/Environment";
 
 export default class QLAgent extends Agent {
-    private env: SingleAgentEnvironment;
+    private game: Game;
     private config: QLAgentSettings;
     private rng: seedrandom.PRNG;
     private randomSeed?: string;
-    private qTable: any[];
+    private qTable: Tensor;
     private epsilon: number;
     private epsilonStep: number;
 
     constructor(
-        env: SingleAgentEnvironment,
+        game: Game,
         config: QLAgentSettings,
         actionSpace: string[],
         randomSeed?: number
@@ -28,18 +27,18 @@ export default class QLAgent extends Agent {
         } else {
             this.rng = seedrandom();
         }
-        this.env = env;
+        this.game = game;
         this.config = config;
     }
 
-    public get getQTable(): any[] {
+    public get getQTable(): Tensor {
         return this.qTable;
     }
 
     init(): void {
         const qTableDims: number[] = [...this.config.gameStateDim];
         qTableDims.push(this.actionSpace.length);
-        this.qTable = Utils.genMultiDimArray(qTableDims);
+        this.qTable = Tensor.Zeros(...qTableDims);
         this.epsilon = this.config.epsilonStart;
         this.epsilonStep = 1;
     }
@@ -86,8 +85,9 @@ export default class QLAgent extends Agent {
                             prevActionQvalues[takenActionIdx]));
 
         // update qValue
-        this.setQValue(
-            [...this.env.encodeStateToIndices(prevState), takenActionIdx],
+
+        this.qTable.set(
+            [...this.game.encodeStateToIndices(prevState), takenActionIdx],
             newQValue
         );
     }
@@ -108,20 +108,8 @@ export default class QLAgent extends Agent {
     }
 
     private getStateActionValues(state: object): number[] {
-        const indices: number[] = this.env.encodeStateToIndices(state);
-        let actionValues: any = this.qTable;
-        for (let index of indices) {
-            actionValues = actionValues[index];
-        }
-        return actionValues as number[];
-    }
-
-    public setQValue(indices: number[], value: number): void {
-        let qvalues: any[] = this.qTable;
-        for (let i = 0; i < indices.length - 1; i++) {
-            qvalues = qvalues[indices[i]];
-        }
-        qvalues[indices[indices.length - 1]] = value;
+        const indices: number[] = this.game.encodeStateToIndices(state);
+        return this.qTable.get(...indices) as number[];
     }
 
     public async saveQTableToFile(path: string): Promise<void> {

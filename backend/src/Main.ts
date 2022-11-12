@@ -1,21 +1,21 @@
-import { TaxiGame } from "../../shared/src/";
-import { Vec2 } from "../../shared/src/";
+import { TaxiGame, Vec2, GameState } from "../../shared/src/";
 import QLAgent from "./RLAgents/QLAgent";
 import TaxiEnv from "./rlInterface/TaxiEnv";
 
 async function main() {
     const randomSeed: number = 1234;
     const game: TaxiGame = new TaxiGame(randomSeed);
-    const numIterations: number = 10000;
+    const numIterations: number = 100000;
     const logEvery: number = 1000;
     const maxIterationsPerGame: number = 25;
-    const env: TaxiEnv = new TaxiEnv(game, {
+    const initialState: GameState = {
         playerPos: new Vec2(3, 2),
         destinationIdx: 2,
         customerPosIdx: 0,
-    });
+    };
+    const env: TaxiEnv = new TaxiEnv(game);
     const agent = new QLAgent(
-        env,
+        game,
         {
             gameStateDim: [5, 5, 4, 5],
             epsilonStart: 0.1,

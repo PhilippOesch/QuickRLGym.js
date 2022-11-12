@@ -59,8 +59,6 @@ abstract class SingleAgentEnvironment {
         }
     }
 
-    public abstract encodeStateToIndices(state: object): number[];
-
     public abstract get getGameState(): object;
 
     public abstract reset(): boolean;

@@ -113,6 +113,8 @@ export default class TaxiGame extends Game {
             this.points = 0;
             this.isTerminal = false;
             this.iteration = 0;
+        } else {
+            this.isTerminal = false;
         }
         //console.log("reset");
         return true;
@@ -180,6 +182,16 @@ export default class TaxiGame extends Game {
             reward = Globals.illegalMovePoints;
         }
         return { newState: this.getGameState, reward: reward };
+    }
+
+    public encodeStateToIndices(state: object): number[] {
+        const gameState = state as GameState;
+        return [
+            gameState.playerPos.getX,
+            gameState.playerPos.getY,
+            gameState.destinationIdx,
+            gameState.customerPosIdx,
+        ];
     }
 
     public updatePlayerPosition(action: Action): StepResult {

@@ -42,6 +42,8 @@ abstract class Game {
 
     public abstract step(actionString: string): StepResult;
 
+    public abstract encodeStateToIndices(state: object): number[];
+
     public incrementIterations(): void {
         this.iteration++;
     }

@@ -1,11 +1,10 @@
 /**
- * Inum of Initialization Types for a Tensor-Object
+ * Enum of Initialization Types for a Tensor-Object
  */
 enum TensorFillType {
     Zeros,
     Ones,
     Random,
-    Null,
 }
 
 /**
@@ -17,13 +16,9 @@ export default class Tensor {
     private dim: number[];
     private array: Array<any>;
 
-    constructor(dim: number[], array?: Array<any>) {
+    public constructor(dim: number[], array: Array<any>) {
         this.dim = dim;
-        if (array) {
-            this.array = array;
-        } else {
-            this.array = Tensor.init(dim);
-        }
+        this.array = array;
     }
 
     /**
@@ -64,7 +59,7 @@ export default class Tensor {
      */
     private static init(
         dims: number[],
-        filltype: TensorFillType = TensorFillType.Null
+        filltype: TensorFillType = TensorFillType.Zeros
     ): Array<any> {
         if (dims.length == 1) {
             return Tensor.fillArray(new Array<number>(dims[0]), filltype);
@@ -73,7 +68,7 @@ export default class Tensor {
         const copyDims: number[] = [...dims];
         copyDims.shift();
         for (let i = 0; i < dims[0]; i++) {
-            array[i] = this.init(copyDims);
+            array[i] = this.init(copyDims, filltype);
         }
         return array;
     }
@@ -206,11 +201,7 @@ export default class Tensor {
      * @returns {number} The size
      */
     public get size(): number {
-        let length = 1;
-        for (const len of this.dim) {
-            length *= len;
-        }
-        return length;
+        return this.dim.reduce((a, b) => a * b);
     }
 
     /**
@@ -218,7 +209,7 @@ export default class Tensor {
      * @returns {number} The sum
      */
     public get sum(): number {
-        return this.recSum(this.array);
+        return this.array.flat(this.dim.length).reduce((a, b) => a + b);
     }
 
     /**
@@ -235,23 +226,6 @@ export default class Tensor {
             copy[i] = this.recCopy(array[i]);
         }
         return copy;
-    }
-
-    /**
-     * Helper function for recursively calculating the sum of the tensor
-     * @param {Array<any>} array - sub array
-     * @returns {Array<any> } The copy
-     */
-    private recSum(array: Array<any>): number {
-        let sum = 0;
-        for (let i = 0; i < array.length; i++) {
-            if (!isNaN(array[i])) {
-                sum += array[i];
-            } else {
-                sum += this.recSum(array[i]);
-            }
-        }
-        return sum;
     }
 
     /**

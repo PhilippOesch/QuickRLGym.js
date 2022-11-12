@@ -58,19 +58,6 @@ module Utils {
         });
     }
 
-    export function genMultiDimArray(dims: number[]): Array<any> {
-        if (dims.length == 1) {
-            return new Array<number>(dims[0]).fill(0);
-        }
-        let array = new Array(dims[0]);
-        const copyDims: number[] = [...dims];
-        copyDims.shift();
-        for (let i = 0; i < dims[0]; i++) {
-            array[i] = genMultiDimArray(copyDims);
-        }
-        return array;
-    }
-
     export function argMax(array: number[]): number {
         let maxIdx: number = 0;
         let max: number = array[0];
@@ -81,36 +68,6 @@ module Utils {
             }
         }
         return maxIdx;
-    }
-
-    export function getMultiDimArrayLength(array: Array<any>): number {
-        let size = 0;
-        for (let i = 0; i < array.length; i++) {
-            if (!isNaN(array[i])) {
-                size += 1;
-            } else {
-                size += getMultiDimArrayLength(array[i]);
-            }
-        }
-        return size;
-    }
-
-    export function getSumMultiDimArray(array: Array<any>): number {
-        let sum = 0;
-        for (let i = 0; i < array.length; i++) {
-            if (!isNaN(array[i])) {
-                sum += array[i];
-            } else {
-                sum += getSumMultiDimArray(array[i]);
-            }
-        }
-        return sum;
-    }
-
-    export function getMeanMultiDimArray(array: Array<any>): number {
-        let size = getMultiDimArrayLength(array);
-        let sum = getSumMultiDimArray(array);
-        return sum / size;
     }
 }
 

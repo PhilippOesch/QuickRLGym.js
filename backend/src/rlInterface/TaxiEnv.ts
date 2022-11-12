@@ -1,6 +1,4 @@
-import Agent from "./Agent";
-import { GameState } from "../../../shared/src/";
-import { TaxiGame } from "../../../shared/src/";
+import { GameState, TaxiGame } from "../../../shared/src/";
 import SingleAgentEnvironment from "./Environment";
 
 export default class TaxiEnv extends SingleAgentEnvironment {
@@ -13,16 +11,6 @@ export default class TaxiEnv extends SingleAgentEnvironment {
         if (this.agent) {
             this.agent.init();
         }
-    }
-
-    public encodeStateToIndices(state: object): number[] {
-        const gameState = state as GameState;
-        return [
-            gameState.playerPos.getX,
-            gameState.playerPos.getY,
-            gameState.destinationIdx,
-            gameState.customerPosIdx,
-        ];
     }
 
     public reset(): boolean {

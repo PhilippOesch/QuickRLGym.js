@@ -1,5 +1,3 @@
-import GameState from "../../../shared/game/GameState";
-
 export default abstract class BrowserAgent {
     protected actionSpace: string[];
 
@@ -9,5 +7,5 @@ export default abstract class BrowserAgent {
 
     public abstract load(): Promise<void>;
 
-    public abstract evalStep(state: GameState): string;
+    public abstract evalStep(state: object): string;
 }
