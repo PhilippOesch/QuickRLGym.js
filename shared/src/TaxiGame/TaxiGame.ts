@@ -1,4 +1,3 @@
-import seedrandom from "seedrandom";
 import Action from "./Action";
 import GameState from "./GameState";
 import Utils from "../Utils";
@@ -87,7 +86,7 @@ export default class TaxiGame extends Game {
      */
     public spawnGameElements(): void {
         const playerPos: Vec2 = Utils.getRandomPosition(this.rng);
-        this.player = new Player(this, playerPos, Action.Down);
+        this.player = new Player(playerPos, Action.Down);
 
         const customerInfo: number[] = Utils.resetCustomer(this.rng, playerPos);
         this.customer = new Customer(customerInfo[0], customerInfo[1]);

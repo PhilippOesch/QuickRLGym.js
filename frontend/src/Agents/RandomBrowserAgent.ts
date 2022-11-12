@@ -1,10 +1,7 @@
 import seedrandom from "seedrandom";
-import Agent from "../rlInterface/Agent";
+import BrowserAgent from "./BrowserAgent";
 
-/**
- * Agent For selecting Random Actions
- */
-export default class RandomAgent extends Agent {
+export default class RandomBrowserAgent extends BrowserAgent {
     private rng: seedrandom.PRNG;
     private randomSeed?: string;
 
@@ -18,26 +15,13 @@ export default class RandomAgent extends Agent {
         }
     }
 
-    public init(): void {
-        console.log("Random Agent initialized");
+    public async load(): Promise<void> {
+        console.log("Random Agent loaded");
     }
-
-    public step(): string {
+    public evalStep(state: object): string {
         const randomActionIdx: number = Math.floor(
             this.rng() * this.actionSpace.length
         );
         return this.actionSpace[randomActionIdx];
-    }
-
-    public evalStep(): string {
-        return this.step();
-    }
-
-    log(): void {
-        return;
-    }
-
-    feed(): void {
-        return;
     }
 }

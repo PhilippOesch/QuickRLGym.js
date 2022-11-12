@@ -179,11 +179,11 @@ export default class Tensor {
      */
     private getArrayDim(array: Array<any>): number[] {
         let dim = [];
-        let currentArray = array;
+        let currentArray: any = array;
         do {
             dim.push(array.length);
             currentArray = array[0];
-        } while (!isNaN(array[0]));
+        } while (!isNaN(currentArray[0]));
         return dim;
     }
 

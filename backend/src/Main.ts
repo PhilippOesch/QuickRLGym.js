@@ -2,17 +2,14 @@ import { TaxiGame, Vec2, GameState } from "../../shared/src/";
 import QLAgent from "./RLAgents/QLAgent";
 import TaxiEnv from "./rlInterface/TaxiEnv";
 
+//parameters
+const randomSeed: number = 1234;
+const numIterations: number = 100000;
+const logEvery: number = 1000;
+const maxIterationsPerGame: number = 25;
+
 async function main() {
-    const randomSeed: number = 1234;
     const game: TaxiGame = new TaxiGame(randomSeed);
-    const numIterations: number = 100000;
-    const logEvery: number = 1000;
-    const maxIterationsPerGame: number = 25;
-    const initialState: GameState = {
-        playerPos: new Vec2(3, 2),
-        destinationIdx: 2,
-        customerPosIdx: 0,
-    };
     const env: TaxiEnv = new TaxiEnv(game);
     const agent = new QLAgent(
         game,
@@ -29,11 +26,11 @@ async function main() {
         randomSeed
     );
     env.setAgent = agent;
+
     env.initGame();
     env.train(numIterations, logEvery, maxIterationsPerGame);
+
     await agent.saveQTableToFile("./qTables/qTable.json");
-    let qTable = await agent.loadQTable("./qTables/qTable.json");
-    console.log("qtable", qTable);
 }
 
 main();

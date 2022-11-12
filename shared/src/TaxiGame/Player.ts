@@ -1,6 +1,4 @@
 import Action from "./Action";
-import Globals from "../Globals";
-import TaxiGame from "./TaxiGame";
 import GameMap from "./GameMap";
 import Vec2 from "./Vec2";
 
@@ -24,19 +22,13 @@ export default class Player {
 
     private moveState: Action;
     private position: Vec2;
-    private game: TaxiGame;
 
     /**
      * @param {TaxiGame} game - The game reference.
      * @param {Vec2} relPos - The spawn position of the player
      * @param {Action} carMoveState - The current move state (for rendering).
      */
-    constructor(
-        game: TaxiGame,
-        relPos: Vec2,
-        carMoveState: Action = Action.Left
-    ) {
-        this.game = game;
+    constructor(relPos: Vec2, carMoveState: Action = Action.Left) {
         this.moveState = carMoveState;
         this.position = relPos;
     }
