@@ -17,5 +17,5 @@
         "strictNullChecks": true,
         "strictPropertyInitialization": false
     },
-    "include": ["/src", "../shared"]
+    "include": ["/src", "../shared/src"]
 }

@@ -25,7 +25,6 @@ export default class Player {
     private moveState: Action;
     private position: Vec2;
     private game: TaxiGame;
-    private customerPickedUp: boolean;
 
     /**
      * @param {TaxiGame} game - The game reference.
@@ -40,15 +39,10 @@ export default class Player {
         this.game = game;
         this.moveState = carMoveState;
         this.position = relPos;
-        this.customerPickedUp = false;
     }
 
     public get getPosition(): Vec2 {
         return this.position;
-    }
-
-    public get getCustomerPickedUp(): boolean {
-        return this.customerPickedUp;
     }
 
     public get getCarMoveState(): Action {
@@ -60,33 +54,11 @@ export default class Player {
     }
 
     /**
-     * Perform an action to progress the game.
-     * @param {Action} action - The action to perform.
-     */
-    public playAction(action: Action): string {
-        //this.game.incrementIterations();
-        let takenAction = "";
-        if (action == Action.DropOff) {
-            this.dropOffCustomer();
-            takenAction = action.toString();
-            return takenAction;
-        }
-        if (action == Action.PickUp) {
-            this.pickUpCustomer();
-            takenAction = action.toString();
-            return takenAction;
-        }
-        this.updatePosition(action);
-        takenAction = action.toString();
-        return takenAction;
-    }
-
-    /**
      * Collision detection logic for the collision with walls
      * @param {Action} action - The action that was performed
      * @returns {boolean} true if a collision with the wall was detected.
      */
-    private detectCollision(action: Action): boolean {
+    public detectCollision(action: Action): boolean {
         let adjustedPos: Vec2 = new Vec2(
             1 + this.position.getX * 2,
             1 + this.position.getY
@@ -96,42 +68,7 @@ export default class Player {
 
         return GameMap.tileMap[adjustedPos.getY][adjustedPos.getX] == 5;
     }
-
-    /**
-     * perform the pick up action to pick up the customer.
-     * When the action was not legal, the player is penalised.
-     */
-    public pickUpCustomer(): void {
-        if (
-            !this.customerPickedUp &&
-            this.position.isEqual(this.game.getCustomer.getPosition)
-        ) {
-            this.customerPickedUp = true;
-            this.game.updatePoints(Globals.stepPenaltyPoints);
-        } else {
-            this.game.updatePoints(Globals.illegalMovePoints);
-        }
-        return;
-    }
-
-    public dropOffCustomer(): void {
-        if (
-            this.position.isEqual(
-                Globals.destinations[this.game.getCustomer.getDestIdx]
-            ) &&
-            this.customerPickedUp
-        ) {
-            this.game.updatePoints(Globals.dropOffPassangerPoints);
-            this.customerPickedUp = false;
-            this.game.terminateGame();
-        } else {
-            this.game.updatePoints(Globals.illegalMovePoints);
-        }
-        return;
-    }
-
-    public updatePosition(action: Action): Vec2 {
-        this.game.updatePoints(Globals.stepPenaltyPoints);
+    public updatePosition(action: Action): void {
         if (!this.detectCollision(action)) {
             this.moveState = action;
             const moveDir: Vec2 = Player.moveDirMapping
@@ -139,7 +76,5 @@ export default class Player {
                 .copy();
             this.position.add(moveDir);
         }
-        //console.log("updatePosition", this.position);
-        return this.position;
     }
 }

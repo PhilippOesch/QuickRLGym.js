@@ -8,9 +8,9 @@ import Globals from "../Globals";
  * @property {number} spawnDestIdx - The index of the destination, the customer started on
  */
 export default class Customer {
-    private position: Vec2;
     private destinationIdx: number;
     private spawnDestIdx: number;
+    private customerPickedUp: boolean = false;
 
     /**
      * @constructor
@@ -19,12 +19,11 @@ export default class Customer {
      */
     constructor(spawnIdx: number, destIdx: number) {
         this.spawnDestIdx = spawnIdx;
-        this.position = Globals.destinations[spawnIdx];
         this.destinationIdx = destIdx;
     }
 
     public get getPosition(): Vec2 {
-        return this.position;
+        return Globals.destinations[this.spawnDestIdx];
     }
 
     public get getDestIdx(): number {
@@ -35,6 +34,18 @@ export default class Customer {
         return this.spawnDestIdx;
     }
 
+    public get isCustomerPickedUp(): boolean {
+        return this.customerPickedUp;
+    }
+
+    public pickUpCustomer(): void {
+        this.customerPickedUp = true;
+    }
+
+    public dropOffCustomer(): void {
+        this.customerPickedUp = false;
+    }
+
     /**
      * Define the spawn destination and the destination the customer has to be droped of to.
      * @param {number} spawnIdx - The index of the spawn destination
@@ -42,7 +53,7 @@ export default class Customer {
      */
     public setNewPosition(spawnIdx: number, destIdx: number): void {
         this.spawnDestIdx = spawnIdx;
-        this.position = Globals.destinations[spawnIdx];
         this.destinationIdx = destIdx;
+        this.customerPickedUp = false;
     }
 }
