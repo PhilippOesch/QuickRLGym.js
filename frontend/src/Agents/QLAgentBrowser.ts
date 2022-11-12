@@ -1,34 +1,33 @@
-import GameState from "../../../shared/game/GameState";
-import Utils from "../../../shared/Utils";
+import { Game, Utils, Tensor } from "../../../shared/src";
 import BrowserAgent from "./BrowserAgent";
 
 export default class QLAgent extends BrowserAgent {
     private qTablePath: string;
-    private qTable: Array<any>;
+    private qTable: Tensor;
+    private game: Game;
 
-    constructor(qTablePath: string, actionSpace: string[]) {
+    constructor(game: Game, qTablePath: string, actionSpace: string[]) {
         super(actionSpace);
         this.qTablePath = qTablePath;
+        this.game = game;
     }
 
     public async load(): Promise<void> {
         const result: Response = await fetch(this.qTablePath);
-        this.qTable = await result.json();
-        console.log("json", this.qTable);
+        const jsonObject = await result.json();
+        this.qTable = new Tensor(jsonObject.dim, jsonObject.array);
         return;
     }
 
-    public evalStep(state: GameState): string {
+    public evalStep(state: object): string {
         const actions: number[] = this.getStateActionValues(state);
-        console.log(actions);
 
         const actionIdx: number = Utils.argMax(actions);
         return this.actionSpace[actionIdx];
     }
 
-    private getStateActionValues(state: GameState): number[] {
-        return this.qTable[state.playerPos.getX][state.playerPos.getY][
-            state.destinationIdx
-        ][state.customerPosIdx] as number[];
+    private getStateActionValues(state: object): number[] {
+        const indices: number[] = this.game.encodeStateToIndices(state);
+        return this.qTable.get(...indices) as number[];
     }
 }

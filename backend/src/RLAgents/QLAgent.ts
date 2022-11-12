@@ -1,19 +1,21 @@
 import seedrandom from "seedrandom";
-import GameState from "../../shared/game/GameState";
-import Utils from "../../shared/Utils";
+import { Utils, Tensor, Game } from "../../../shared/src/";
 import Agent from "../rlInterface/Agent";
 import QLAgentSettings from "./QLAgentSettings";
 import { writeFile, readFile } from "node:fs/promises";
+import SingleAgentEnvironment from "../rlInterface/Environment";
 
 export default class QLAgent extends Agent {
+    private game: Game;
     private config: QLAgentSettings;
     private rng: seedrandom.PRNG;
     private randomSeed?: string;
-    private qTable: any[];
+    private qTable: Tensor;
     private epsilon: number;
     private epsilonStep: number;
 
     constructor(
+        game: Game,
         config: QLAgentSettings,
         actionSpace: string[],
         randomSeed?: number
@@ -25,22 +27,23 @@ export default class QLAgent extends Agent {
         } else {
             this.rng = seedrandom();
         }
+        this.game = game;
         this.config = config;
     }
 
-    public get getQTable(): any[] {
+    public get getQTable(): Tensor {
         return this.qTable;
     }
 
     init(): void {
         const qTableDims: number[] = [...this.config.gameStateDim];
         qTableDims.push(this.actionSpace.length);
-        this.qTable = Utils.genMultiDimArray(qTableDims);
+        this.qTable = Tensor.Zeros(...qTableDims);
         this.epsilon = this.config.epsilonStart;
         this.epsilonStep = 1;
     }
 
-    step(state: GameState): string {
+    step(state: object): string {
         const randNum: number = this.rng();
         this.decayEpsilon();
         if (randNum < this.epsilon) {
@@ -50,28 +53,28 @@ export default class QLAgent extends Agent {
             return this.evalStep(state);
         }
     }
-    evalStep(state: GameState): string {
+
+    log(): void {
+        return;
+    }
+
+    evalStep(state: object): string {
         const actions: number[] = this.getStateActionValues(state);
         const actionIdx: number = Utils.argMax(actions);
         return this.actionSpace[actionIdx];
     }
     feed(
-        prevState: GameState,
+        prevState: object,
         takenAction: string,
-        newState: GameState,
+        newState: object,
         payoff: number
     ): void {
         //lookups
-        // console.log("feed");
-        // console.log(prevState);
-        // console.log(takenAction);
-        // console.log(newState);
         const takenActionIdx = this.actionSpace.indexOf(takenAction);
         const prevActionQvalues = this.getStateActionValues(prevState);
         const newPossibleActionValues = this.getStateActionValues(newState);
         const newBestActionIdx: number = Utils.argMax(newPossibleActionValues);
 
-        //console.log("payoff", payoff);
         // bellmann equation
         const newQValue: number =
             prevActionQvalues[takenActionIdx] +
@@ -80,21 +83,13 @@ export default class QLAgent extends Agent {
                     this.config.discountFactor *
                         (newPossibleActionValues[newBestActionIdx] -
                             prevActionQvalues[takenActionIdx]));
-        //console.log(newQValue);
-
-        // const newQValue =
-        //     (1 - this.config.learningRate) * prevActionQvalues[takenActionIdx] +
-        //     this.config.learningRate *
-        //         (payoff +
-        //             this.config.discountFactor *
-        //                 newPossibleActionValues[newBestActionIdx]);
 
         // update qValue
-        prevActionQvalues[takenActionIdx] = newQValue;
-        // this.qTable[prevState.playerPos.getX][prevState.playerPos.getY][
-        //     prevState.destinationIdx
-        // ][prevState.customerPosIdx][takenActionIdx] = newQValue;
-        // console.log(prevActionQvalues[takenActionIdx]);
+
+        this.qTable.set(
+            [...this.game.encodeStateToIndices(prevState), takenActionIdx],
+            newQValue
+        );
     }
 
     public decayEpsilon(): void {
@@ -112,14 +107,9 @@ export default class QLAgent extends Agent {
         console.log("QTable", this.qTable);
     }
 
-    private getStateActionValues(state: GameState): number[] {
-        return this.qTable[state.playerPos.getX][state.playerPos.getY][
-            state.destinationIdx
-        ][state.customerPosIdx] as number[];
-    }
-
-    public log(): void {
-        return;
+    private getStateActionValues(state: object): number[] {
+        const indices: number[] = this.game.encodeStateToIndices(state);
+        return this.qTable.get(...indices) as number[];
     }
 
     public async saveQTableToFile(path: string): Promise<void> {

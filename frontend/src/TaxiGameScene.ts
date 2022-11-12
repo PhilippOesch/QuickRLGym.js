@@ -1,10 +1,12 @@
 import { Scene, GameObjects } from "phaser";
-import Action from "../../shared/game/Action";
-import Globals from "../../shared/Globals";
-import Utils from "../../shared/Utils";
-import GameMap from "../../shared/game/GameMap";
-import TaxiGame from "../../shared/game/TaxiGame";
-import Vec2 from "../../shared/game/Vec2";
+import {
+    Action,
+    Globals,
+    Utils,
+    GameMap,
+    TaxiGame,
+    Vec2,
+} from "../../shared/src";
 
 export default class TaxiGameScene extends Scene {
     private static destMapping: string[] = ["red", "yellow", "green", "blue"];
@@ -162,7 +164,7 @@ export default class TaxiGameScene extends Scene {
         });
 
         // Update Customer
-        if (this.taxiGame.getPlayer.getCustomerPickedUp) {
+        if (this.taxiGame.getCustomer.isCustomerPickedUp) {
             this.customerImage.removeFromDisplayList();
         }
 
@@ -189,11 +191,6 @@ export default class TaxiGameScene extends Scene {
             if (this.interactiveMode && !this.loopEndless) {
                 this.input.keyboard.destroy();
             }
-            if (this.loopEndless) {
-                this.taxiGame.reset(false);
-                this.taxiGame.continue();
-                this.reRender();
-            }
             this.customerImage.addToDisplayList();
         }
     }
@@ -201,7 +198,7 @@ export default class TaxiGameScene extends Scene {
     private getSpriteIndex(carMoveState: Action): number {
         const indexes: number[] =
             TaxiGameScene.carMoveMapping.get(carMoveState)!;
-        if (this.taxiGame.getPlayer.getCustomerPickedUp) {
+        if (this.taxiGame.getCustomer.isCustomerPickedUp) {
             return indexes[1];
         }
         return indexes[0];
