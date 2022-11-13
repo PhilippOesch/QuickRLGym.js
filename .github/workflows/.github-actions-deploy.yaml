@@ -6,7 +6,7 @@ on:
             - main
             - 'releases/**'
 jobs:
-    Deploy-And-Test-Frontend:
+    GitHub-Deploy-Frontend:
         runs-on:
         group: ubuntu-runners
         labels: ubuntu-20.04-16core
