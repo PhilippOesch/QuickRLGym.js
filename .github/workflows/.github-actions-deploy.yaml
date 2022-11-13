@@ -30,5 +30,6 @@ jobs:
                   git checkout -B main
                   git add -A
                   git commit -m 'deploy'
-                  git push -f https://x-access-token:${{ secrets.GITHUB_TOKEN }}git@github.com:PhilippOesch/TsTaxiRL.git main:gh-pages
+                  git remote set-url "origin" "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+                  git push main:gh-pages
                   cd -
