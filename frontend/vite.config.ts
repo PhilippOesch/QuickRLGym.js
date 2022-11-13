@@ -1,26 +1,9 @@
-import { defineConfig } from "vite";
-
-// vite.config.ts
-// export default {
-//     //base: "https://PhilippOesch.github.io/TsTaxiRL/",
-//     // server: {
-//     //     fs: {
-//     //         // Allow serving files from one level up to the project root
-//     //         allow: ["../shared", "./"],
-//     //     },
-//     // },
-//     // build: {
-//     //     fs: {
-//     //         // Allow serving files from one level up to the project root
-//     //         allow: ["../shared", "./"],
-//     //     },
-//     // },
-// };
+import { defineConfig } from 'vite';
 
 export default defineConfig(({ command, mode, ssrBuild }) => {
-    if (command === "build") {
+    if (command === 'build') {
         return {
-            base: "https://PhilippOesch.github.io/TsTaxiRL/",
+            base: 'https://PhilippOesch.github.io/TsTaxiRL/',
         };
     } else {
         return {};
