@@ -8,8 +8,8 @@ on:
 jobs:
     GitHub-Deploy-Frontend:
         runs-on:
-        group: ubuntu-runners
-        labels: ubuntu-20.04-16core
+            group: ubuntu-runners
+            labels: ubuntu-20.04-16core
         steps:
             - uses: actions/checkout@v3
             - uses: actions/setup-node@v3
