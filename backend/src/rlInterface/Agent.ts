@@ -42,5 +42,8 @@ export default abstract class Agent {
      */
     abstract evalStep(state: object): string;
 
+    /**
+     * Method for logging
+     */
     abstract log(): void;
 }

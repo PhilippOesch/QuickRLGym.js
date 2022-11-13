@@ -1,3 +1,7 @@
+/**
+ * Settings for the QLAgent
+ */
+
 export default interface QLAgentSettings {
     gameStateDim: number[];
     learningRate: number;

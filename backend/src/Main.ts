@@ -1,6 +1,6 @@
-import { TaxiGame, Vec2, GameState } from "../../shared/src/";
-import QLAgent from "./RLAgents/QLAgent";
-import TaxiEnv from "./rlInterface/TaxiEnv";
+import { TaxiGame } from '../../shared/src/';
+import QLAgent from './RLAgents/QLAgent';
+import TaxiEnv from './rlInterface/TaxiEnv';
 
 //parameters
 const randomSeed: number = 1234;
@@ -30,7 +30,7 @@ async function main() {
     env.initGame();
     env.train(numIterations, logEvery, maxIterationsPerGame);
 
-    await agent.saveQTableToFile("./qTables/qTable.json");
+    await agent.saveQTableToFile('./qTables/qTable.json');
 }
 
 main();

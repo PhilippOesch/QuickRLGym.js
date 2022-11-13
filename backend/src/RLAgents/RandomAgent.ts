@@ -1,5 +1,5 @@
-import seedrandom from "seedrandom";
-import Agent from "../rlInterface/Agent";
+import seedrandom from 'seedrandom';
+import Agent from '../rlInterface/Agent';
 
 /**
  * Agent For selecting Random Actions
@@ -19,7 +19,7 @@ export default class RandomAgent extends Agent {
     }
 
     public init(): void {
-        console.log("Random Agent initialized");
+        console.log('Random Agent initialized');
     }
 
     public step(): string {

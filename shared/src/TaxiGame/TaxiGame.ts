@@ -1,12 +1,12 @@
-import Action from "./Action";
-import GameState from "./GameState";
-import Utils from "../Utils";
-import Customer from "./Customer";
-import Player from "./Player";
-import Vec2 from "./Vec2";
-import Globals from "./Globals";
-import StepResult from "./StepResult";
-import Game from "../Game";
+import Action from './Action';
+import GameState from './GameState';
+import TaxiUtils from './TaxiUtils';
+import Customer from './Customer';
+import Player from './Player';
+import Vec2 from './Vec2';
+import Globals from './Globals';
+import StepResult from './StepResult';
+import Game from '../Game';
 
 /**
  * The Taxi Game class
@@ -16,12 +16,12 @@ import Game from "../Game";
  */
 export default class TaxiGame extends Game {
     public static readonly actionMapping: Map<string, Action> = new Map([
-        ["Up", Action.Up],
-        ["Down", Action.Down],
-        ["Left", Action.Left],
-        ["Right", Action.Right],
-        ["PickUp", Action.PickUp],
-        ["DropOff", Action.DropOff],
+        ['Up', Action.Up],
+        ['Down', Action.Down],
+        ['Left', Action.Left],
+        ['Right', Action.Right],
+        ['PickUp', Action.PickUp],
+        ['DropOff', Action.DropOff],
     ]);
 
     private player: Player;
@@ -85,10 +85,13 @@ export default class TaxiGame extends Game {
      * Spawn the player and customer object
      */
     public spawnGameElements(): void {
-        const playerPos: Vec2 = Utils.getRandomPosition(this.rng);
+        const playerPos: Vec2 = TaxiUtils.getRandomPosition(this.rng);
         this.player = new Player(playerPos, Action.Down);
 
-        const customerInfo: number[] = Utils.resetCustomer(this.rng, playerPos);
+        const customerInfo: number[] = TaxiUtils.resetCustomer(
+            this.rng,
+            playerPos
+        );
         this.customer = new Customer(customerInfo[0], customerInfo[1]);
     }
 
