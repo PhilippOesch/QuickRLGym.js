@@ -1,5 +1,5 @@
-import Vec2 from "./Vec2";
-import Globals from "./Globals";
+import Vec2 from './Vec2';
+import Globals from './Globals';
 
 /**
  * The class of the Customer who has to be droped of
@@ -54,6 +54,10 @@ export default class Customer {
     public setNewPosition(spawnIdx: number, destIdx: number): void {
         this.spawnDestIdx = spawnIdx;
         this.destinationIdx = destIdx;
-        this.customerPickedUp = false;
+        if (spawnIdx == 4) {
+            this.customerPickedUp = true;
+        } else {
+            this.customerPickedUp = false;
+        }
     }
 }

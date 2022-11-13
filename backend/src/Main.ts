@@ -1,6 +1,6 @@
 import { TaxiGame } from '../../shared/src/';
 import QLAgent from './RLAgents/QLAgent';
-import TaxiEnv from './rlInterface/TaxiEnv';
+import TaxiEnv from './gameEnvs/TaxiEnv';
 
 //parameters
 const randomSeed: number = 1234;
