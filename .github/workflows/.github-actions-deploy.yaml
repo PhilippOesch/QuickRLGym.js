@@ -13,8 +13,7 @@ jobs:
             - uses: actions/setup-node@v3
               with:
                   node-version: '18.x'
-            - run: git config --global user.email "${GITHUB_ACTOR}"
-            - run: git config --global user.name "${GITHUB_ACTOR}@users.noreply.github.com"
+                  github_token: ${{ secrets.GITHUB_TOKEN }}
             - run: npm install
             - run: npm run build
             - run: npm run test
