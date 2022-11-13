@@ -1,13 +1,13 @@
-import { TaxiGame, Vec2 } from "../../shared/src";
-import TaxiGameScene from "./TaxiGameScene";
-import QLAgentBrowser from "./Agents/QLAgentBrowser";
-import ShowTaxiGameEnv from "./ShowAgentEnv";
+import { TaxiGame } from '../../shared/src';
+import TaxiGameScene from './TaxiGameScene';
+import QLAgentBrowser from './Agents/QLAgentBrowser';
+import ShowTaxiGameEnv from './ShowAgentEnv';
 
-async function main() {
+async function Main() {
     const game: TaxiGame = new TaxiGame(1234);
     const agent: QLAgentBrowser = new QLAgentBrowser(
         game,
-        "models/qTable.json",
+        'models/qTable.json',
         TaxiGame.getActionSpace
     );
     const gameScene: TaxiGameScene = new TaxiGameScene(game, false, true);
@@ -16,4 +16,4 @@ async function main() {
     env.startGame(true);
 }
 
-main();
+Main();

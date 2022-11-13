@@ -1,5 +1,5 @@
-import { GameState, TaxiGame } from "../../../shared/src/";
-import SingleAgentEnvironment from "./Environment";
+import { GameState, TaxiGame } from '../../../shared/src/';
+import SingleAgentEnvironment from './Environment';
 
 export default class TaxiEnv extends SingleAgentEnvironment {
     constructor(game: TaxiGame, initialGameState?: GameState) {

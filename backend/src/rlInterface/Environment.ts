@@ -1,5 +1,5 @@
-import { Game } from "../../../shared/src";
-import Agent from "./Agent";
+import { Game } from '../../../shared/src';
+import Agent from './Agent';
 
 abstract class SingleAgentEnvironment {
     protected game: Game;
@@ -25,7 +25,7 @@ abstract class SingleAgentEnvironment {
         this.game.reset(true, this.initialGameState);
 
         if (this.agent == undefined) {
-            throw new Error("No Agent has been set");
+            throw new Error('No Agent has been set');
         }
 
         let averageGameIterations = 0;
@@ -44,10 +44,10 @@ abstract class SingleAgentEnvironment {
             averageGameIterations += this.game.getIteration;
             if (i % logEvery == 0) {
                 console.log(
-                    "averageGameIterations:",
+                    'averageGameIterations:',
                     averageGameIterations / count
                 );
-                console.log("Iteration:", i);
+                console.log('Iteration:', i);
                 this.agent.log();
                 averageGameIterations = 0;
                 count = 0;

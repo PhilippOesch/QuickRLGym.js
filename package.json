@@ -1,0 +1,25 @@
+{
+  "name": "tstaxirl",
+  "version": "1.0.0",
+  "description": "repository wide enforcement of a style guide",
+  "main": "index.js",
+  "scripts": {
+    "test": "npm run test --prefix ./backend",
+    "build": "npm i --prefix ./shared; npm i --prefix ./backend; npm i --prefix ./frontend;",
+    "frontend": "npm run dev --prefix ./frontend",
+    "backend": "npm run buildrun --prefix ./backend"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PhilippOesch/TsTaxiRL.git"
+  },
+  "author": "Philipp Oeschger",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/PhilippOesch/TsTaxiRL/issues"
+  },
+  "homepage": "https://github.com/PhilippOesch/TsTaxiRL#readme",
+  "devDependencies": {
+    "typescript": "^4.8.4"
+  }
+}

@@ -1,10 +1,12 @@
-import seedrandom from "seedrandom";
-import { Utils, Tensor, Game } from "../../../shared/src/";
-import Agent from "../rlInterface/Agent";
-import QLAgentSettings from "./QLAgentSettings";
-import { writeFile, readFile } from "node:fs/promises";
-import SingleAgentEnvironment from "../rlInterface/Environment";
+import seedrandom from 'seedrandom';
+import { Utils, Tensor, Game } from '../../../shared/src/';
+import Agent from '../rlInterface/Agent';
+import QLAgentSettings from './QLAgentSettings';
+import { writeFile, readFile } from 'node:fs/promises';
 
+/**
+ * Agent that represents a Q-Learning Algorithm
+ */
 export default class QLAgent extends Agent {
     private game: Game;
     private config: QLAgentSettings;
@@ -104,7 +106,7 @@ export default class QLAgent extends Agent {
     }
 
     public printQTable() {
-        console.log("QTable", this.qTable);
+        console.log('QTable', this.qTable);
     }
 
     private getStateActionValues(state: object): number[] {
