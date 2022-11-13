@@ -30,6 +30,6 @@ jobs:
                   git checkout -B main
                   git add -A
                   git commit -m 'deploy'
-                  git remote set-url origin https://x-access-token:${{ secrets.github_token }}@github.com:PhilippOesch/QuickRLGym.js.git
-                  git push main:gh-pages
+                  git remote set-url origin "https://x-access-token:${{ secrets.github_token }}git@github.com:PhilippOesch/QuickRLGym.js.git"
+                  git push -fgit push -f git@github.com:PhilippOesch/TsTaxiRL.git main:gh-pages
                   cd -
