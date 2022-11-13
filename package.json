@@ -7,7 +7,8 @@
     "test": "npm run test --prefix ./backend",
     "build": "npm i --prefix ./shared; npm i --prefix ./backend; npm i --prefix ./frontend;",
     "frontend": "npm run dev --prefix ./frontend",
-    "backend": "npm run buildrun --prefix ./backend"
+    "backend": "npm run buildrun --prefix ./backend",
+    "deployFrontend": "npm run deploy --prefix ./frontend"
   },
   "repository": {
     "type": "git",

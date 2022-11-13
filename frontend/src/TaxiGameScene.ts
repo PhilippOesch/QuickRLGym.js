@@ -84,7 +84,7 @@ export default class TaxiGameScene extends Scene {
             absPositionCustomer.getY,
             'customer'
         );
-        this.customerImage.setScale(Globals.scale, Globals.scale);
+        this.customerImage.setScale(2 * Globals.scale, 2 * Globals.scale);
 
         // generate UI
         this.uidata = this.add.text(0, 0, '', {
