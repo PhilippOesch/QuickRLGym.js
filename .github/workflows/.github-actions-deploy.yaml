@@ -13,8 +13,8 @@ jobs:
             - uses: actions/setup-node@v3
               with:
                   node-version: '18.x'
-            # - run: git config --global user.email "${GITHUB_ACTOR}"
-            # - run: git config --global user.name "${GITHUB_ACTOR}@users.noreply.github.com"
+            - run: git config --global user.email "${{github.actor}}"
+            - run: git config --global user.name "${{github.actor}}@users.noreply.github.com"
             - run: npm install
             - run: npm run build
             - run: npm run test
@@ -30,6 +30,5 @@ jobs:
                   git checkout -B main
                   git add -A
                   git commit -m 'deploy'
-                  git remote set-url origin "https://x-access-token:${{ secrets.github_token }}@github.com:PhilippOesch/QuickRLGym.js.git"
-                  git push -f git@github.com:PhilippOesch/TsTaxiRL.git main:gh-pages
+                  git push -f https://x-access-token:${{ secrets.github_token }}@github.com:PhilippOesch/QuickRLGym.js.git main:gh-pages
                   cd -
