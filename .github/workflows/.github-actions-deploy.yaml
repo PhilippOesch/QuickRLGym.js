@@ -13,23 +13,16 @@ jobs:
             - uses: actions/setup-node@v3
               with:
                   node-version: '18.x'
-            - run: git config --global user.email "${{github.actor}}"
-            - run: git config --global user.name "${{github.actor}}@users.noreply.github.com"
             - run: npm install
-            - run: npm run build
-            - run: npm run test
-            - name: deploy frontend
+            - name: Install Dependencies
+              run: npm run dep
+            - name: Tests
+              run: npm run test
+            - name: Build Frontend
               run: |
                   cd ./frontend
-                  set -e
                   npm run build
-                  cd dist
-                  git add -A
-                  echo > .nojekyll
-                  git init
-                  git checkout -B main
-                  git add -A
-                  git commit -m 'deploy'
-                  git remote set-url "origin "https://x-access-token:${{ secrets.DEPLOY_TOKEN }}@github.com:PhilippOesch/QuickRLGym.js.git"
-                  git push -f main:gh-pages
-                  cd -
+            - name: Deploy 🚀
+              uses: JamesIves/github-pages-deploy-action@v4
+              with:
+                  folder: build
