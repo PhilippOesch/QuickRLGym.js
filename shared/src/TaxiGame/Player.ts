@@ -1,6 +1,6 @@
-import Action from "./Action";
-import GameMap from "./GameMap";
-import Vec2 from "./Vec2";
+import Action from './Action';
+import GameMap from './GameMap';
+import Vec2 from './Vec2';
 
 /**
  * The Player class
@@ -58,7 +58,9 @@ export default class Player {
         const moveDir: Vec2 = Player.moveDirMapping.get(action)!.copy();
         adjustedPos.add(moveDir);
 
-        return GameMap.tileMap[adjustedPos.getY][adjustedPos.getX] == 5;
+        return GameMap.wallTiles.has(
+            GameMap.tileMap[adjustedPos.getY][adjustedPos.getX]
+        );
     }
     public updatePosition(action: Action): void {
         if (!this.detectCollision(action)) {

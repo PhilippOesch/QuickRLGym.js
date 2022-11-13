@@ -40,7 +40,7 @@ export default class TaxiGameScene extends Scene {
 
     public preload(): void {
         // load tilemap
-        this.load.image('tiles', 'assets/tilemap.png');
+        this.load.image('tiles', 'assets/tiles.png');
 
         // load player
         this.load.spritesheet('taxi', 'assets/car.png', {
@@ -65,8 +65,8 @@ export default class TaxiGameScene extends Scene {
 
         // generate Player
         const index: number = this.getSpriteIndex(Action.Left);
-        this.playerSprite = this.add.sprite(24, 24, 'taxi', index);
-        this.playerSprite.setScale(0.2 * Globals.scale);
+        this.playerSprite = this.add.sprite(92, 92, 'taxi', index);
+        this.playerSprite.setScale(0.7 * Globals.scale);
         const absPositionPlayer = TaxiUtils.adjustedToAbsPos(
             this.taxiGame.getPlayer.getPosition
         );
