@@ -22,8 +22,8 @@ jobs:
               run: |
                   cd ./frontend
                   npm run build
-              - name: Deploy 🚀
-                working-directory: ./frontend
-                uses: JamesIves/github-pages-deploy-action@v4
-                with:
-                    folder: dist
+            - name: Deploy 🚀
+              working-directory: ./frontend
+              uses: JamesIves/github-pages-deploy-action@v4
+              with:
+                  folder: dist
