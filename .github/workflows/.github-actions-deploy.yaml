@@ -13,10 +13,22 @@ jobs:
             - uses: actions/setup-node@v3
               with:
                   node-version: '18.x'
-                  github_token: ${{ secrets.GITHUB_TOKEN }}
             - run: git config --global user.email "${GITHUB_ACTOR}"
             - run: git config --global user.name "${GITHUB_ACTOR}@users.noreply.github.com"
             - run: npm install
             - run: npm run build
             - run: npm run test
-            - run: npm run deployFrontend
+            - name: deploy frontend
+              run: |
+                  cd ./frontend
+                  set -e
+                  npm run build
+                  cd dist
+                  git add -A
+                  echo > .nojekyll
+                  git init
+                  git checkout -B main
+                  git add -A
+                  git commit -m 'deploy'
+                  git push -f https://x-access-token:${{ secrets.GITHUB_TOKEN }}git@github.com:PhilippOesch/TsTaxiRL.git main:gh-pages
+                  cd -
