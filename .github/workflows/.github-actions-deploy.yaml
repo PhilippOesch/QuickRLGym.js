@@ -15,7 +15,7 @@ jobs:
                   node-version: '18.x'
             - run: npm install
             - name: Install Dependencies
-              run: npm run dep
+              run: npm run dependencies
             - name: Tests
               run: npm run test
             - name: Build Frontend
