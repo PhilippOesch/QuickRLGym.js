@@ -1,28 +1,28 @@
 import { Game } from '../../../shared/src';
 import Agent from './Agent';
+import { StepResult } from '../../../shared/src';
 
 abstract class SingleAgentEnvironment {
-    protected game: Game;
+    //protected game: Game;
     protected agent?: Agent;
-    protected initialGameState?: object;
+    protected initialState?: object;
 
-    constructor(game: any, initialGameState?: object) {
-        this.game = game;
-        this.initialGameState = initialGameState;
+    constructor(initialState?: object) {
+        this.initialState = initialState;
     }
 
     public set setAgent(agent: Agent) {
         this.agent = agent;
     }
 
-    public abstract initGame(): void;
+    public abstract initEnv(): void;
 
     public train(
         iterations: number = 100,
         logEvery = 10,
         maxIterationPerGame: number = 100
     ): void {
-        this.game.reset(true, this.initialGameState);
+        this.reset();
 
         if (this.agent == undefined) {
             throw new Error('No Agent has been set');
@@ -32,16 +32,16 @@ abstract class SingleAgentEnvironment {
         let count = 0;
         for (let i = 0; i < iterations; i++) {
             while (
-                !this.game.getIsTerminal &&
-                this.game.getIteration < maxIterationPerGame
+                !this.getIsTerminal &&
+                this.getIteration < maxIterationPerGame
             ) {
-                const prevState: object = this.game.getGameState;
-                const nextAction: string = this.agent.step(this.getGameState);
-                const { newState, reward } = this.game.step(nextAction);
+                const prevState: object = this.getState;
+                const nextAction: string = this.agent.step(this.getState);
+                const { newState, reward } = this.step(nextAction);
                 this.agent.feed(prevState, nextAction, newState, reward);
             }
             count++;
-            averageGameIterations += this.game.getIteration;
+            averageGameIterations += this.getIteration;
             if (i % logEvery == 0) {
                 console.log(
                     'averageGameIterations:',
@@ -59,9 +59,19 @@ abstract class SingleAgentEnvironment {
         }
     }
 
-    public abstract get getGameState(): object;
+    public abstract step(action: string): StepResult;
+
+    public abstract get getReward(): number;
+
+    public abstract get getState(): object;
 
     public abstract reset(): boolean;
+
+    public abstract get getIsTerminal(): boolean;
+
+    public abstract get getIteration(): number;
+
+    public abstract encodeStateToIndices(state: object): number[];
 }
 
 export default SingleAgentEnvironment;

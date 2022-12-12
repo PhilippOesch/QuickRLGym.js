@@ -12,7 +12,7 @@ async function main() {
     const game: TaxiGame = new TaxiGame(randomSeed);
     const env: TaxiEnv = new TaxiEnv(game);
     const agent = new QLAgent(
-        game,
+        env,
         {
             gameStateDim: [5, 5, 4, 5],
             epsilonStart: 0.1,
@@ -27,7 +27,7 @@ async function main() {
     );
     env.setAgent = agent;
 
-    env.initGame();
+    env.initEnv();
     env.train(numIterations, logEvery, maxIterationsPerGame);
 
     await agent.saveQTableToFile('./qTables/qTable.json');

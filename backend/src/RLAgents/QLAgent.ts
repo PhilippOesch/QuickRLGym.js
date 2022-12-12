@@ -1,5 +1,6 @@
 import seedrandom from 'seedrandom';
 import { Utils, Tensor, Game } from '../../../shared/src/';
+import SingleAgentEnvironment from '../rlInterface/Environment';
 import Agent from '../rlInterface/Agent';
 import QLAgentSettings from './QLAgentSettings';
 import { writeFile, readFile } from 'node:fs/promises';
@@ -8,7 +9,7 @@ import { writeFile, readFile } from 'node:fs/promises';
  * Agent that represents a Q-Learning Algorithm
  */
 export default class QLAgent extends Agent {
-    private game: Game;
+    private env: SingleAgentEnvironment;
     private config: QLAgentSettings;
     private rng: seedrandom.PRNG;
     private randomSeed?: string;
@@ -17,7 +18,7 @@ export default class QLAgent extends Agent {
     private epsilonStep: number;
 
     constructor(
-        game: Game,
+        env: SingleAgentEnvironment,
         config: QLAgentSettings,
         actionSpace: string[],
         randomSeed?: number
@@ -29,7 +30,7 @@ export default class QLAgent extends Agent {
         } else {
             this.rng = seedrandom();
         }
-        this.game = game;
+        this.env = env;
         this.config = config;
     }
 
@@ -89,7 +90,7 @@ export default class QLAgent extends Agent {
         // update qValue
 
         this.qTable.set(
-            [...this.game.encodeStateToIndices(prevState), takenActionIdx],
+            [...this.env.encodeStateToIndices(prevState), takenActionIdx],
             newQValue
         );
     }
@@ -110,7 +111,7 @@ export default class QLAgent extends Agent {
     }
 
     private getStateActionValues(state: object): number[] {
-        const indices: number[] = this.game.encodeStateToIndices(state);
+        const indices: number[] = this.env.encodeStateToIndices(state);
         return this.qTable.get(...indices) as number[];
     }
 

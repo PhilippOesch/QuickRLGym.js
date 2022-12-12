@@ -1,12 +1,34 @@
-import { GameState, TaxiGame } from '../../../shared/src';
+import { GameState, StepResult, TaxiGame } from '../../../shared/src';
 import SingleAgentEnvironment from '../rlInterface/Environment';
 
 export default class TaxiEnv extends SingleAgentEnvironment {
+    private game: TaxiGame;
+
     constructor(game: TaxiGame, initialGameState?: GameState) {
-        super(game, initialGameState);
+        super(initialGameState);
+        this.game = game;
     }
 
-    public initGame(): void {
+    public get getIsTerminal(): boolean {
+        return this.game.getIsTerminal;
+    }
+    public get getIteration(): number {
+        return this.game.getIteration;
+    }
+
+    public get getState(): GameState {
+        return this.game.getGameState as GameState;
+    }
+
+    public get getReward(): number {
+        return this.game.getPayoff;
+    }
+
+    public step(action: string): StepResult {
+        return this.game.step(action);
+    }
+
+    public initEnv(): void {
         this.game.initGame();
         if (this.agent) {
             this.agent.init();
@@ -14,10 +36,10 @@ export default class TaxiEnv extends SingleAgentEnvironment {
     }
 
     public reset(): boolean {
-        return this.game.reset(true, this.initialGameState);
+        return this.game.reset(true, this.initialState as GameState);
     }
 
-    public get getGameState(): GameState {
-        return this.game.getGameState as GameState;
+    public encodeStateToIndices(state: object): number[] {
+        return this.game.encodeStateToIndices(state);
     }
 }
