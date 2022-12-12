@@ -4,8 +4,8 @@ import {
     Tensor,
     SingleAgentEnvironment,
     Agent,
-    QLAgentSettings,
-} from '../../index';
+} from '../../../../shared/src';
+import QLAgentSettings from './QLAgentSettings';
 import { writeFile, readFile } from 'node:fs/promises';
 
 /**

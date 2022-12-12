@@ -12,14 +12,10 @@ import Tensor from './Utils/Tensor';
 import StepResult from './RLInterface/StepResult';
 import Agent from './RLInterface/Agent';
 import SingleAgentEnvironment from './RLInterface/Environment';
-import QLAgentSettings from './Agents/QAgent/QLAgentSettings';
-import QLAgent from './Agents/QAgent/QLAgent';
 import TaxiEnv from './Envs/TaxiEnv';
 
 export {
     TaxiEnv,
-    QLAgent,
-    type QLAgentSettings,
     SingleAgentEnvironment,
     Agent,
     Globals,

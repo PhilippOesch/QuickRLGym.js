@@ -1,15 +1,15 @@
-import { Game, Utils, Tensor } from "../../../shared/src";
-import BrowserAgent from "./BrowserAgent";
+import { Utils, Tensor, TaxiEnv } from '../../../shared/src';
+import BrowserAgent from './BrowserAgent';
 
 export default class QLAgent extends BrowserAgent {
     private qTablePath: string;
     private qTable: Tensor;
-    private game: Game;
+    private env: TaxiEnv;
 
-    constructor(game: Game, qTablePath: string, actionSpace: string[]) {
+    constructor(env: TaxiEnv, qTablePath: string, actionSpace: string[]) {
         super(actionSpace);
         this.qTablePath = qTablePath;
-        this.game = game;
+        this.env = env;
     }
 
     public async load(): Promise<void> {
@@ -27,7 +27,7 @@ export default class QLAgent extends BrowserAgent {
     }
 
     private getStateActionValues(state: object): number[] {
-        const indices: number[] = this.game.encodeStateToIndices(state);
+        const indices: number[] = this.env.encodeStateToIndices(state);
         return this.qTable.get(...indices) as number[];
     }
 }

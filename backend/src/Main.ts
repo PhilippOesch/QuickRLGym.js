@@ -1,4 +1,5 @@
-import { TaxiGame, QLAgent, TaxiEnv } from '../../shared/src/';
+import { TaxiGame, TaxiEnv } from '../../shared/src/';
+import QLAgent from './Agents/QAgent/QLAgent';
 
 //parameters
 const randomSeed: number = 1234;

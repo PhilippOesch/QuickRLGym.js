@@ -1,9 +1,9 @@
 import { strict as assert } from 'node:assert';
 import { describe } from 'mocha';
-import { Game, TaxiGame, Vec2, GameState, StepResult } from '../../shared/src';
+import { TaxiGame, Vec2, GameState, StepResult } from '../../shared/src';
 
 describe('TaxiGame', function () {
-    const game: Game = new TaxiGame();
+    const game: TaxiGame = new TaxiGame();
     game.initGame();
     describe('initial State', function () {
         const initialState: GameState = {
@@ -138,7 +138,7 @@ describe('TaxiGame', function () {
     });
 
     describe('totalGame Iteration', function () {
-        const game: Game = new TaxiGame();
+        const game: TaxiGame = new TaxiGame();
         game.initGame();
         const initialState: GameState = {
             playerPos: new Vec2(0, 1),
