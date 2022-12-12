@@ -3,7 +3,7 @@ import GameState from './GameState';
 import TaxiUtils from './TaxiUtils';
 import Customer from './Customer';
 import Player from './Player';
-import Vec2 from './Vec2';
+import Vec2 from '../../Utils/Vec2';
 import Globals from './Globals';
 import StepResult from '../../RLInterface/StepResult';
 import seedrandom from 'seedrandom';

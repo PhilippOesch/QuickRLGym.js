@@ -2,7 +2,7 @@ import Globals from './Games/TaxiGame/Globals';
 import MathUtils from './Utils/MathUtils';
 import TaxiUtils from './Games/TaxiGame/TaxiUtils';
 import TaxiGame from './Games/TaxiGame/TaxiGame';
-import Vec2 from './Games/TaxiGame/Vec2';
+import Vec2 from './Utils/Vec2';
 import Player from './Games/TaxiGame/Player';
 import GameState from './Games/TaxiGame/GameState';
 import GameMap from './Games/TaxiGame/GameMap';
@@ -13,9 +13,13 @@ import StepResult from './RLInterface/StepResult';
 import Agent from './RLInterface/Agent';
 import SingleAgentEnvironment from './RLInterface/Environment';
 import QLAgentSettings from './Agents/QAgent/QLAgentSettings';
+import QLAgent from './Agents/QAgent/QLAgent';
+import TaxiEnv from './Envs/TaxiEnv';
 
 export {
-    QLAgentSettings,
+    TaxiEnv,
+    QLAgent,
+    type QLAgentSettings,
     SingleAgentEnvironment,
     Agent,
     Globals,

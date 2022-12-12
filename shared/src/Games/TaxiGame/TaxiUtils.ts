@@ -1,6 +1,6 @@
 import seedrandom from 'seedrandom';
 import Globals from './Globals';
-import Vec2 from './Vec2';
+import Vec2 from '../../Utils/Vec2';
 import GameState from './GameState';
 
 module TaxiUtils {

@@ -1,6 +1,6 @@
 import Action from './Action';
 import GameMap from './GameMap';
-import Vec2 from './Vec2';
+import Vec2 from '../../Utils/Vec2';
 
 /**
  * The Player class
