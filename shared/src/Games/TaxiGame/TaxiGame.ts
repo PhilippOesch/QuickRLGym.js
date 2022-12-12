@@ -5,8 +5,8 @@ import Customer from './Customer';
 import Player from './Player';
 import Vec2 from './Vec2';
 import Globals from './Globals';
-import StepResult from './StepResult';
-import Game from '../Game';
+import StepResult from '../../RLInterface/StepResult';
+import seedrandom from 'seedrandom';
 
 /**
  * The Taxi Game class
@@ -14,7 +14,7 @@ import Game from '../Game';
  * @property {Player} player - The player object.
  * @property {Customer} customer - The customer object.
  */
-export default class TaxiGame extends Game {
+export default class TaxiGame {
     public static readonly actionMapping: Map<string, Action> = new Map([
         ['Up', Action.Up],
         ['Down', Action.Down],
@@ -27,6 +27,11 @@ export default class TaxiGame extends Game {
     private player: Player;
     private customer: Customer;
 
+    protected rng: seedrandom.PRNG;
+    protected isTerminal: boolean = false;
+    protected points: number = 0;
+    protected iteration: number = 0;
+
     public static get getActionSpace(): string[] {
         return Array.from(TaxiGame.actionMapping.keys());
     }
@@ -35,7 +40,11 @@ export default class TaxiGame extends Game {
      * @param {number} randomSeed - Set a random seed for the game for reproducability.
      */
     constructor(randomSeed?: number) {
-        super(randomSeed);
+        if (randomSeed) {
+            this.rng = seedrandom(randomSeed.toString());
+        } else {
+            this.rng = seedrandom();
+        }
     }
 
     public get getCustomer(): Customer {
@@ -198,5 +207,17 @@ export default class TaxiGame extends Game {
             newState: this.getGameState,
             reward: Globals.stepPenaltyPoints,
         };
+    }
+
+    public incrementIterations(): void {
+        this.iteration++;
+    }
+
+    public get getIteration(): number {
+        return this.iteration;
+    }
+
+    public get getRng(): seedrandom.PRNG {
+        return this.rng;
     }
 }

@@ -1,5 +1,5 @@
 import seedrandom from 'seedrandom';
-import Agent from '../rlInterface/Agent';
+import { Agent } from '../../index';
 
 /**
  * Agent For selecting Random Actions

@@ -1,6 +1,5 @@
-import { Game } from '../../../shared/src';
 import Agent from './Agent';
-import { StepResult } from '../../../shared/src';
+import StepResult from './StepResult';
 
 abstract class SingleAgentEnvironment {
     //protected game: Game;

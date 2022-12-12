@@ -1,5 +1,5 @@
-import { GameState, StepResult, TaxiGame } from '../../../shared/src';
-import SingleAgentEnvironment from '../rlInterface/Environment';
+import { GameState, StepResult, TaxiGame } from '../index';
+import SingleAgentEnvironment from '../RLInterface/Environment';
 
 export default class TaxiEnv extends SingleAgentEnvironment {
     private game: TaxiGame;

@@ -1,4 +1,4 @@
-module Utils {
+module MathUtils {
     export function argMax(array: number[]): number {
         let maxIdx: number = 0;
         let max: number = array[0];
@@ -12,4 +12,4 @@ module Utils {
     }
 }
 
-export default Utils;
+export default MathUtils;

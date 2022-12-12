@@ -1,18 +1,23 @@
-import Globals from './TaxiGame/Globals';
-import Utils from './Utils';
-import TaxiUtils from './TaxiGame/TaxiUtils';
-import TaxiGame from './TaxiGame/TaxiGame';
-import Vec2 from './TaxiGame/Vec2';
-import Player from './TaxiGame/Player';
-import GameState from './TaxiGame/GameState';
-import GameMap from './TaxiGame/GameMap';
-import Customer from './TaxiGame/Customer';
-import Action from './TaxiGame/Action';
-import Game from './Game';
-import Tensor from './Tensor';
-import StepResult from './TaxiGame/StepResult';
+import Globals from './Games/TaxiGame/Globals';
+import MathUtils from './Utils/MathUtils';
+import TaxiUtils from './Games/TaxiGame/TaxiUtils';
+import TaxiGame from './Games/TaxiGame/TaxiGame';
+import Vec2 from './Games/TaxiGame/Vec2';
+import Player from './Games/TaxiGame/Player';
+import GameState from './Games/TaxiGame/GameState';
+import GameMap from './Games/TaxiGame/GameMap';
+import Customer from './Games/TaxiGame/Customer';
+import Action from './Games/TaxiGame/Action';
+import Tensor from './Utils/Tensor';
+import StepResult from './RLInterface/StepResult';
+import Agent from './RLInterface/Agent';
+import SingleAgentEnvironment from './RLInterface/Environment';
+import QLAgentSettings from './Agents/QAgent/QLAgentSettings';
 
 export {
+    QLAgentSettings,
+    SingleAgentEnvironment,
+    Agent,
     Globals,
     TaxiGame,
     Vec2,
@@ -20,9 +25,8 @@ export {
     GameMap,
     Customer,
     Action,
-    Game,
     Tensor,
-    Utils,
+    MathUtils as Utils,
     TaxiUtils,
     type GameState,
     type StepResult,

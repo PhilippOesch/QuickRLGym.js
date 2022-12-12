@@ -1,8 +1,11 @@
 import seedrandom from 'seedrandom';
-import { Utils, Tensor, Game } from '../../../shared/src/';
-import SingleAgentEnvironment from '../rlInterface/Environment';
-import Agent from '../rlInterface/Agent';
-import QLAgentSettings from './QLAgentSettings';
+import {
+    Utils,
+    Tensor,
+    SingleAgentEnvironment,
+    Agent,
+    QLAgentSettings,
+} from '../../index';
 import { writeFile, readFile } from 'node:fs/promises';
 
 /**
