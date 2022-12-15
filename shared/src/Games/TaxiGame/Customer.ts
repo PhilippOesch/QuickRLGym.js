@@ -1,5 +1,5 @@
 import Vec2 from '../../Utils/Vec2';
-import Globals from './Globals';
+import TaxiGlobals from './Globals';
 
 /**
  * The class of the Customer who has to be droped of
@@ -7,7 +7,7 @@ import Globals from './Globals';
  * @property {number} destinationIdx - The index of the destination the customer has to be droped of to
  * @property {number} spawnDestIdx - The index of the destination, the customer started on
  */
-export default class Customer {
+export default class TaxiCustomer {
     private destinationIdx: number;
     private spawnDestIdx: number;
     private customerPickedUp: boolean = false;
@@ -23,7 +23,7 @@ export default class Customer {
     }
 
     public get getPosition(): Vec2 {
-        return Globals.destinations[this.spawnDestIdx];
+        return TaxiGlobals.destinations[this.spawnDestIdx];
     }
 
     public get getDestIdx(): number {

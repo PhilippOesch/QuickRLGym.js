@@ -1,4 +1,4 @@
-export default class GameMap {
+export default class TaxiGameMap {
     /**
      * The map that defines the tile type for the rendering of the map.
      */

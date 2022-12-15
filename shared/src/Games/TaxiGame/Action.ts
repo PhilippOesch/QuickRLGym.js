@@ -1,4 +1,4 @@
-enum Action {
+enum TaxiAction {
     Up,
     Down,
     Left,
@@ -7,4 +7,4 @@ enum Action {
     DropOff,
 }
 
-export default Action;
+export default TaxiAction;

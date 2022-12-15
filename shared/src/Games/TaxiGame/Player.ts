@@ -1,5 +1,5 @@
-import Action from './Action';
-import GameMap from './GameMap';
+import TaxiAction from './Action';
+import TaxiGameMap from './GameMap';
 import Vec2 from '../../Utils/Vec2';
 
 /**
@@ -10,25 +10,25 @@ import Vec2 from '../../Utils/Vec2';
  * @property {TaxiGame} game - reference to the game object
  * @property {boolean} customerPickedUp - is set when the customer was picked up (In the game logic the position of the customer is then ignored)
  */
-export default class Player {
-    private static moveDirMapping: Map<Action, Vec2> = new Map([
-        [Action.Left, new Vec2(-1, 0)],
-        [Action.Right, new Vec2(1, 0)],
-        [Action.Up, new Vec2(0, -1)],
-        [Action.Down, new Vec2(0, 1)],
-        [Action.DropOff, new Vec2(0, 0)],
-        [Action.PickUp, new Vec2(0, 0)],
+export default class TaxiPlayer {
+    private static moveDirMapping: Map<TaxiAction, Vec2> = new Map([
+        [TaxiAction.Left, new Vec2(-1, 0)],
+        [TaxiAction.Right, new Vec2(1, 0)],
+        [TaxiAction.Up, new Vec2(0, -1)],
+        [TaxiAction.Down, new Vec2(0, 1)],
+        [TaxiAction.DropOff, new Vec2(0, 0)],
+        [TaxiAction.PickUp, new Vec2(0, 0)],
     ]);
 
-    private moveState: Action;
+    private moveState: TaxiAction;
     private position: Vec2;
 
     /**
      * @param {TaxiGame} game - The game reference.
      * @param {Vec2} relPos - The spawn position of the player
-     * @param {Action} carMoveState - The current move state (for rendering).
+     * @param {TaxiAction} carMoveState - The current move state (for rendering).
      */
-    constructor(relPos: Vec2, carMoveState: Action = Action.Left) {
+    constructor(relPos: Vec2, carMoveState: TaxiAction = TaxiAction.Left) {
         this.moveState = carMoveState;
         this.position = relPos;
     }
@@ -37,7 +37,7 @@ export default class Player {
         return this.position;
     }
 
-    public get getCarMoveState(): Action {
+    public get getCarMoveState(): TaxiAction {
         return this.moveState;
     }
 
@@ -47,25 +47,25 @@ export default class Player {
 
     /**
      * Collision detection logic for the collision with walls
-     * @param {Action} action - The action that was performed
+     * @param {TaxiAction} action - The action that was performed
      * @returns {boolean} true if a collision with the wall was detected.
      */
-    public detectCollision(action: Action): boolean {
+    public detectCollision(action: TaxiAction): boolean {
         let adjustedPos: Vec2 = new Vec2(
             1 + this.position.getX * 2,
             1 + this.position.getY
         );
-        const moveDir: Vec2 = Player.moveDirMapping.get(action)!.copy();
+        const moveDir: Vec2 = TaxiPlayer.moveDirMapping.get(action)!.copy();
         adjustedPos.add(moveDir);
 
-        return GameMap.wallTiles.has(
-            GameMap.tileMap[adjustedPos.getY][adjustedPos.getX]
+        return TaxiGameMap.wallTiles.has(
+            TaxiGameMap.tileMap[adjustedPos.getY][adjustedPos.getX]
         );
     }
-    public updatePosition(action: Action): void {
+    public updatePosition(action: TaxiAction): void {
         if (!this.detectCollision(action)) {
             this.moveState = action;
-            const moveDir: Vec2 = Player.moveDirMapping
+            const moveDir: Vec2 = TaxiPlayer.moveDirMapping
                 .get(this.moveState)!
                 .copy();
             this.position.add(moveDir);

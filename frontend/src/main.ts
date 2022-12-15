@@ -1,4 +1,5 @@
-import { TaxiGame, TaxiEnv } from '../../shared/src';
+import { TaxiEnv } from '../../shared/src';
+import { TaxiGame } from '../../shared/src/Games/TaxiGame';
 import TaxiGameScene from './TaxiGameScene';
 import QLAgentBrowser from './Agents/QLAgentBrowser';
 import ShowTaxiGameEnv from './ShowAgentEnv';

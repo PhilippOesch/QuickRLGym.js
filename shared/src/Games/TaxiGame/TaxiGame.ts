@@ -1,10 +1,10 @@
-import Action from './Action';
-import GameState from './GameState';
+import TaxiAction from './Action';
+import TaxiGameState from './GameState';
 import TaxiUtils from './TaxiUtils';
-import Customer from './Customer';
-import Player from './Player';
+import TaxiCustomer from './Customer';
+import TaxiPlayer from './Player';
 import Vec2 from '../../Utils/Vec2';
-import Globals from './Globals';
+import TaxiGlobals from './Globals';
 import StepResult from '../../RLInterface/StepResult';
 import seedrandom from 'seedrandom';
 
@@ -15,17 +15,17 @@ import seedrandom from 'seedrandom';
  * @property {Customer} customer - The customer object.
  */
 export default class TaxiGame {
-    public static readonly actionMapping: Map<string, Action> = new Map([
-        ['Up', Action.Up],
-        ['Down', Action.Down],
-        ['Left', Action.Left],
-        ['Right', Action.Right],
-        ['PickUp', Action.PickUp],
-        ['DropOff', Action.DropOff],
+    public static readonly actionMapping: Map<string, TaxiAction> = new Map([
+        ['Up', TaxiAction.Up],
+        ['Down', TaxiAction.Down],
+        ['Left', TaxiAction.Left],
+        ['Right', TaxiAction.Right],
+        ['PickUp', TaxiAction.PickUp],
+        ['DropOff', TaxiAction.DropOff],
     ]);
 
-    private player: Player;
-    private customer: Customer;
+    private player: TaxiPlayer;
+    private customer: TaxiCustomer;
 
     protected rng: seedrandom.PRNG;
     protected isTerminal: boolean = false;
@@ -47,15 +47,15 @@ export default class TaxiGame {
         }
     }
 
-    public get getCustomer(): Customer {
+    public get getCustomer(): TaxiCustomer {
         return this.customer;
     }
 
-    public get getPlayer(): Player {
+    public get getPlayer(): TaxiPlayer {
         return this.player;
     }
 
-    public get getGameState(): GameState {
+    public get getGameState(): TaxiGameState {
         return {
             playerPos: this.player.getPosition.copy(),
             destinationIdx: this.customer.getDestIdx,
@@ -95,18 +95,18 @@ export default class TaxiGame {
      */
     public spawnGameElements(): void {
         const playerPos: Vec2 = TaxiUtils.getRandomPosition(this.rng);
-        this.player = new Player(playerPos, Action.Down);
+        this.player = new TaxiPlayer(playerPos, TaxiAction.Down);
 
         const customerInfo: number[] = TaxiUtils.resetCustomer(
             this.rng,
             playerPos
         );
-        this.customer = new Customer(customerInfo[0], customerInfo[1]);
+        this.customer = new TaxiCustomer(customerInfo[0], customerInfo[1]);
     }
 
     public reset(
         resetGameState: boolean = true,
-        initialGameState?: GameState
+        initialGameState?: TaxiGameState
     ): boolean {
         this.spawnGameElements();
         if (initialGameState) {
@@ -131,12 +131,12 @@ export default class TaxiGame {
      * @param {string} actionString - The action to perform.
      */
     public step(actionString: string): StepResult {
-        const action: Action = TaxiGame.actionMapping.get(actionString)!;
+        const action: TaxiAction = TaxiGame.actionMapping.get(actionString)!;
         this.incrementIterations();
         let stepResult: StepResult;
-        if (action == Action.DropOff) {
+        if (action == TaxiAction.DropOff) {
             stepResult = this.dropOffCustomer();
-        } else if (action == Action.PickUp) {
+        } else if (action == TaxiAction.PickUp) {
             stepResult = this.pickUpCustomer();
         } else {
             stepResult = this.updatePlayerPosition(action);
@@ -159,17 +159,17 @@ export default class TaxiGame {
         let reward: number = 0;
         if (
             this.player.getPosition.isEqual(
-                Globals.destinations[this.getCustomer.getDestIdx]
+                TaxiGlobals.destinations[this.getCustomer.getDestIdx]
             ) &&
             this.customer.isCustomerPickedUp
         ) {
-            this.updatePoints(Globals.dropOffPassangerPoints);
+            this.updatePoints(TaxiGlobals.dropOffPassangerPoints);
             this.customer.dropOffCustomer();
             this.terminateGame();
-            reward = Globals.dropOffPassangerPoints;
+            reward = TaxiGlobals.dropOffPassangerPoints;
         } else {
-            this.updatePoints(Globals.illegalMovePoints);
-            reward = Globals.illegalMovePoints;
+            this.updatePoints(TaxiGlobals.illegalMovePoints);
+            reward = TaxiGlobals.illegalMovePoints;
         }
         return { newState: this.getGameState, reward: reward };
     }
@@ -181,17 +181,17 @@ export default class TaxiGame {
             this.player.getPosition.isEqual(this.getCustomer.getPosition)
         ) {
             this.customer.pickUpCustomer();
-            this.updatePoints(Globals.stepPenaltyPoints);
-            reward = Globals.stepPenaltyPoints;
+            this.updatePoints(TaxiGlobals.stepPenaltyPoints);
+            reward = TaxiGlobals.stepPenaltyPoints;
         } else {
-            this.updatePoints(Globals.illegalMovePoints);
-            reward = Globals.illegalMovePoints;
+            this.updatePoints(TaxiGlobals.illegalMovePoints);
+            reward = TaxiGlobals.illegalMovePoints;
         }
         return { newState: this.getGameState, reward: reward };
     }
 
     public encodeStateToIndices(state: object): number[] {
-        const gameState = state as GameState;
+        const gameState = state as TaxiGameState;
         return [
             gameState.playerPos.getX,
             gameState.playerPos.getY,
@@ -200,12 +200,12 @@ export default class TaxiGame {
         ];
     }
 
-    public updatePlayerPosition(action: Action): StepResult {
-        this.updatePoints(Globals.stepPenaltyPoints);
+    public updatePlayerPosition(action: TaxiAction): StepResult {
+        this.updatePoints(TaxiGlobals.stepPenaltyPoints);
         this.player.updatePosition(action);
         return {
             newState: this.getGameState,
-            reward: Globals.stepPenaltyPoints,
+            reward: TaxiGlobals.stepPenaltyPoints,
         };
     }
 

@@ -1,4 +1,4 @@
-import { Utils, Tensor, TaxiEnv } from '../../../shared/src';
+import { MathUtils, Tensor, TaxiEnv } from '../../../shared/src';
 import BrowserAgent from './BrowserAgent';
 
 export default class QLAgent extends BrowserAgent {
@@ -22,7 +22,7 @@ export default class QLAgent extends BrowserAgent {
     public evalStep(state: object): string {
         const actions: number[] = this.getStateActionValues(state);
 
-        const actionIdx: number = Utils.argMax(actions);
+        const actionIdx: number = MathUtils.argMax(actions);
         return this.actionSpace[actionIdx];
     }
 

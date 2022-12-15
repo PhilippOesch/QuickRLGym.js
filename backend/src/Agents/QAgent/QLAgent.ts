@@ -1,6 +1,6 @@
 import seedrandom from 'seedrandom';
 import {
-    Utils,
+    MathUtils,
     Tensor,
     SingleAgentEnvironment,
     Agent,
@@ -66,7 +66,7 @@ export default class QLAgent extends Agent {
 
     evalStep(state: object): string {
         const actions: number[] = this.getStateActionValues(state);
-        const actionIdx: number = Utils.argMax(actions);
+        const actionIdx: number = MathUtils.argMax(actions);
         return this.actionSpace[actionIdx];
     }
     feed(
@@ -79,7 +79,9 @@ export default class QLAgent extends Agent {
         const takenActionIdx = this.actionSpace.indexOf(takenAction);
         const prevActionQvalues = this.getStateActionValues(prevState);
         const newPossibleActionValues = this.getStateActionValues(newState);
-        const newBestActionIdx: number = Utils.argMax(newPossibleActionValues);
+        const newBestActionIdx: number = MathUtils.argMax(
+            newPossibleActionValues
+        );
 
         // bellmann equation
         const newQValue: number =

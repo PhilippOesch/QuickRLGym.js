@@ -1,6 +1,6 @@
 import Vec2 from '../../Utils/Vec2';
 
-module Globals {
+module TaxiGlobals {
     export const tileWidth: number = 64;
     export const tileHeight: number = 64;
     export const mapWidth: number = 11;
@@ -23,4 +23,4 @@ module Globals {
     ];
 }
 
-export default Globals;
+export default TaxiGlobals;

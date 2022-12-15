@@ -1,18 +1,22 @@
-import { TaxiGame, Globals, GameState } from "../../shared/src";
-import BrowserAgent from "./Agents/BrowserAgent";
-import TaxiGameScene from "./TaxiGameScene";
+import {
+    TaxiGame,
+    TaxiGlobals,
+    TaxiGameState,
+} from '../../shared/src/Games/TaxiGame';
+import BrowserAgent from './Agents/BrowserAgent';
+import TaxiGameScene from './TaxiGameScene';
 
 export default class ShowTaxiGameEnv {
     private agent: BrowserAgent;
     private game: TaxiGame;
     private gameScene: TaxiGameScene;
-    private initialGameState?: GameState;
+    private initialGameState?: TaxiGameState;
 
     constructor(
         agent: BrowserAgent,
         game: TaxiGame,
         gameScene: TaxiGameScene,
-        initialGameState?: GameState
+        initialGameState?: TaxiGameState
     ) {
         this.agent = agent;
         this.game = game;
@@ -26,12 +30,12 @@ export default class ShowTaxiGameEnv {
         this.game.reset(true, this.initialGameState);
         const config: Phaser.Types.Core.GameConfig = {
             type: Phaser.AUTO,
-            parent: "app",
-            width: Globals.tileWidth * 11 * Globals.scale,
-            height: Globals.tileHeight * 7 * Globals.scale,
+            parent: 'app',
+            width: TaxiGlobals.tileWidth * 11 * TaxiGlobals.scale,
+            height: TaxiGlobals.tileHeight * 7 * TaxiGlobals.scale,
             zoom: 1,
             physics: {
-                default: "arcade",
+                default: 'arcade',
                 arcade: {
                     gravity: {
                         y: 0,
@@ -50,7 +54,7 @@ export default class ShowTaxiGameEnv {
     ) {
         if (this.agent == undefined) {
             throw Error(
-                "an agent has to be defined when not running in Interactive mode"
+                'an agent has to be defined when not running in Interactive mode'
             );
         }
 

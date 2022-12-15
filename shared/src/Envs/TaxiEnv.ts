@@ -1,10 +1,11 @@
-import { GameState, StepResult, TaxiGame } from '../index';
+import { TaxiGame, TaxiGameState } from '../Games/TaxiGame/index';
+import { StepResult } from '../index';
 import SingleAgentEnvironment from '../RLInterface/Environment';
 
 export default class TaxiEnv extends SingleAgentEnvironment {
     private game: TaxiGame;
 
-    constructor(game: TaxiGame, initialGameState?: GameState) {
+    constructor(game: TaxiGame, initialGameState?: TaxiGameState) {
         super(initialGameState);
         this.game = game;
     }
@@ -16,8 +17,8 @@ export default class TaxiEnv extends SingleAgentEnvironment {
         return this.game.getIteration;
     }
 
-    public get getState(): GameState {
-        return this.game.getGameState as GameState;
+    public get getState(): TaxiGameState {
+        return this.game.getGameState as TaxiGameState;
     }
 
     public get getReward(): number {
@@ -36,7 +37,7 @@ export default class TaxiEnv extends SingleAgentEnvironment {
     }
 
     public reset(): boolean {
-        return this.game.reset(true, this.initialState as GameState);
+        return this.game.reset(true, this.initialState as TaxiGameState);
     }
 
     public encodeStateToIndices(state: object): number[] {
