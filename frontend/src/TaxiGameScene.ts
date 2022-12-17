@@ -6,6 +6,7 @@ import {
     TaxiGameMap,
     TaxiGame,
 } from '../../shared/src/Games/TaxiGame/';
+import { TaxiEnv } from '../../shared/src';
 import { Vec2 } from '../../shared/src';
 
 export default class TaxiGameScene extends Scene {
@@ -28,13 +29,13 @@ export default class TaxiGameScene extends Scene {
     private loopEndless: boolean;
 
     constructor(
-        taxigame: TaxiGame,
+        taxiEnv: TaxiEnv,
         interactiveMode: boolean,
         loopEndless: boolean = false
     ) {
         super('Taxi Game');
         this.interactiveMode = interactiveMode;
-        this.taxiGame = taxigame;
+        this.taxiGame = taxiEnv.getGame;
         this.loopEndless = loopEndless;
     }
 

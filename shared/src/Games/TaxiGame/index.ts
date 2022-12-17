@@ -11,7 +11,7 @@ export {
     TaxiAction,
     TaxiCustomer,
     TaxiGameMap,
-    TaxiGameState,
+    type TaxiGameState,
     TaxiGlobals,
     TaxiPlayer,
     TaxiGame,

@@ -3,6 +3,7 @@ import {
     TaxiGlobals,
     TaxiGameState,
 } from '../../shared/src/Games/TaxiGame';
+import { TaxiEnv } from '../../shared/src';
 import BrowserAgent from './Agents/BrowserAgent';
 import TaxiGameScene from './TaxiGameScene';
 
@@ -14,12 +15,12 @@ export default class ShowTaxiGameEnv {
 
     constructor(
         agent: BrowserAgent,
-        game: TaxiGame,
+        env: TaxiEnv,
         gameScene: TaxiGameScene,
         initialGameState?: TaxiGameState
     ) {
         this.agent = agent;
-        this.game = game;
+        this.game = env.getGame;
         this.gameScene = gameScene;
         this.initialGameState = initialGameState;
     }

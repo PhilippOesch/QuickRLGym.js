@@ -10,6 +10,10 @@ export default class TaxiEnv extends SingleAgentEnvironment {
         this.game = new TaxiGame(randomSeed);
     }
 
+    public get getGame(): TaxiGame {
+        return this.game;
+    }
+
     public get getActionSpace(): string[] {
         return TaxiGame.getActionSpace;
     }

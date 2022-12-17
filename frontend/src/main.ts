@@ -5,17 +5,16 @@ import QLAgentBrowser from './Agents/QLAgentBrowser';
 import ShowTaxiGameEnv from './ShowAgentEnv';
 
 async function Main() {
-    const game: TaxiGame = new TaxiGame(1234);
-    const env: TaxiEnv = new TaxiEnv(game);
+    const env: TaxiEnv = new TaxiEnv(1234);
     const agent: QLAgentBrowser = new QLAgentBrowser(
         env,
         'models/qTable.json',
         TaxiGame.getActionSpace
     );
-    const gameScene: TaxiGameScene = new TaxiGameScene(game, false, true);
+    const gameScene: TaxiGameScene = new TaxiGameScene(env, false, true);
     const sceneEnv: ShowTaxiGameEnv = new ShowTaxiGameEnv(
         agent,
-        game,
+        env,
         gameScene
     );
     await sceneEnv.init();
