@@ -26,10 +26,10 @@ export default class TaxiGame {
 
     private player: TaxiPlayer;
     private customer: TaxiCustomer;
-    protected rng: seedrandom.PRNG;
-    protected isTerminal: boolean = false;
-    protected points: number = 0;
-    protected iteration: number = 0;
+    private rng: seedrandom.PRNG;
+    private isTerminal: boolean = false;
+    private points: number = 0;
+    private iteration: number = 0;
 
     public static get getActionSpace(): string[] {
         return Array.from(TaxiGame.actionMapping.keys());
@@ -189,13 +189,12 @@ export default class TaxiGame {
         return { newState: this.getGameState, reward: reward };
     }
 
-    public encodeStateToIndices(state: object): number[] {
-        const gameState = state as TaxiGameState;
+    public encodeStateToIndices(state: TaxiGameState): number[] {
         return [
-            gameState.playerPos.getX,
-            gameState.playerPos.getY,
-            gameState.destinationIdx,
-            gameState.customerPosIdx,
+            state.playerPos.getX,
+            state.playerPos.getY,
+            state.destinationIdx,
+            state.customerPosIdx,
         ];
     }
 

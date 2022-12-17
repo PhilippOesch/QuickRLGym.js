@@ -10,7 +10,7 @@ const maxIterationsPerGame: number = 25;
 
 async function main() {
     const env: TaxiEnv = new TaxiEnv(randomSeed);
-    const agent = new QLAgent(
+    const agent: QLAgent = new QLAgent(
         env,
         {
             gameStateDim: [5, 5, 4, 5],
