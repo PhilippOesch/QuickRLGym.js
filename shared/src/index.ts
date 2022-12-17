@@ -3,7 +3,7 @@ import Vec2 from './Utils/Vec2';
 import Tensor from './Utils/Tensor';
 import StepResult from './RLInterface/StepResult';
 import Agent from './RLInterface/Agent';
-import SingleAgentEnvironment from './RLInterface/Environment';
+import SingleAgentEnvironment from './RLInterface/SingleAgentEnvironment';
 import TaxiEnv from './Envs/TaxiEnv';
 
 export {

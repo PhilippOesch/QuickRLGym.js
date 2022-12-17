@@ -1,4 +1,5 @@
-import { TaxiGame, TaxiEnv } from '../../shared/src/';
+import { TaxiEnv } from '../../shared/src/';
+import { TaxiGame } from '../../shared/src/Games/TaxiGame';
 import QLAgent from './Agents/QAgent/QLAgent';
 
 //parameters
@@ -8,8 +9,7 @@ const logEvery: number = 1000;
 const maxIterationsPerGame: number = 25;
 
 async function main() {
-    const game: TaxiGame = new TaxiGame(randomSeed);
-    const env: TaxiEnv = new TaxiEnv(game);
+    const env: TaxiEnv = new TaxiEnv(randomSeed);
     const agent = new QLAgent(
         env,
         {
@@ -21,14 +21,11 @@ async function main() {
             discountFactor: 0.6,
             episodes: numIterations,
         },
-        TaxiGame.getActionSpace,
         randomSeed
     );
     env.setAgent = agent;
-
     env.initEnv();
     env.train(numIterations, logEvery, maxIterationsPerGame);
-
     await agent.saveQTableToFile('./qTables/qTable.json');
 }
 

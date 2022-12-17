@@ -1,13 +1,17 @@
 import { TaxiGame, TaxiGameState } from '../Games/TaxiGame/index';
 import { StepResult } from '../index';
-import SingleAgentEnvironment from '../RLInterface/Environment';
+import SingleAgentEnvironment from '../RLInterface/SingleAgentEnvironment';
 
 export default class TaxiEnv extends SingleAgentEnvironment {
     private game: TaxiGame;
 
-    constructor(game: TaxiGame, initialGameState?: TaxiGameState) {
+    constructor(randomSeed: number, initialGameState?: TaxiGameState) {
         super(initialGameState);
-        this.game = game;
+        this.game = new TaxiGame(randomSeed);
+    }
+
+    public get getActionSpace(): string[] {
+        return TaxiGame.getActionSpace;
     }
 
     public get getIsTerminal(): boolean {
@@ -21,8 +25,8 @@ export default class TaxiEnv extends SingleAgentEnvironment {
         return this.game.getGameState as TaxiGameState;
     }
 
-    public get getReward(): number {
-        return this.game.getPayoff;
+    public get getReturn(): number {
+        return this.game.getReturn;
     }
 
     public step(action: string): StepResult {

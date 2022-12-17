@@ -1,13 +1,17 @@
+import Environment from './Environment';
+
 export default abstract class Agent {
-    protected actionSpace: string[];
+    //protected actionSpace: string[];
+    protected env: Environment;
 
-    constructor(actionSpace: string[]) {
-        this.actionSpace = actionSpace;
+    constructor(env: Environment) {
+        //this.actionSpace = actionSpace;
+        this.env = env;
     }
 
-    public get getActionSpace(): string[] {
-        return this.actionSpace;
-    }
+    // public get getActionSpace(): string[] {
+    //     //return this.actionSpace;
+    // }
 
     /**
      * initialize the agent

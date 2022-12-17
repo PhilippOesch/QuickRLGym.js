@@ -1,13 +1,16 @@
 import { SingleAgentEnvironment, StepResult } from '../index';
 
 export default class BlackJackEnv extends SingleAgentEnvironment {
+    public get getActionSpace(): string[] {
+        throw new Error('Method not implemented.');
+    }
     public initEnv(): void {
         throw new Error('Method not implemented.');
     }
     public step(action: string): StepResult {
         throw new Error('Method not implemented.');
     }
-    public get getReward(): number {
+    public get getReturn(): number {
         throw new Error('Method not implemented.');
     }
     public get getState(): object {

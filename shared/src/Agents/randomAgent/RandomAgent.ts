@@ -1,5 +1,6 @@
 import seedrandom from 'seedrandom';
 import { Agent } from '../../index';
+import Environment from '../../RLInterface/Environment';
 
 /**
  * Agent For selecting Random Actions
@@ -8,8 +9,8 @@ export default class RandomAgent extends Agent {
     private rng: seedrandom.PRNG;
     private randomSeed?: string;
 
-    constructor(actionSpace: string[], randomSeed?: number) {
-        super(actionSpace);
+    constructor(env: Environment, randomSeed?: number) {
+        super(env);
         if (randomSeed != undefined) {
             this.randomSeed = randomSeed.toString();
             this.rng = seedrandom(this.randomSeed);
@@ -24,9 +25,9 @@ export default class RandomAgent extends Agent {
 
     public step(): string {
         const randomActionIdx: number = Math.floor(
-            this.rng() * this.actionSpace.length
+            this.rng() * this.env.getActionSpace.length
         );
-        return this.actionSpace[randomActionIdx];
+        return this.env.getActionSpace[randomActionIdx];
     }
 
     public evalStep(): string {

@@ -10,9 +10,9 @@ import seedrandom from 'seedrandom';
 
 /**
  * The Taxi Game class
- * @property {Map<string, Action>} actionMapping - Static mapping of certain strings to actions.
- * @property {Player} player - The player object.
- * @property {Customer} customer - The customer object.
+ * @property {Map<string, TaxiAction>} actionMapping - Static mapping of certain strings to actions.
+ * @property {TaxiPlayer} player - The player object.
+ * @property {TaxiCustomer} customer - The customer object.
  */
 export default class TaxiGame {
     public static readonly actionMapping: Map<string, TaxiAction> = new Map([
@@ -26,7 +26,6 @@ export default class TaxiGame {
 
     private player: TaxiPlayer;
     private customer: TaxiCustomer;
-
     protected rng: seedrandom.PRNG;
     protected isTerminal: boolean = false;
     protected points: number = 0;
@@ -63,7 +62,7 @@ export default class TaxiGame {
         };
     }
 
-    public get getPayoff(): number {
+    public get getReturn(): number {
         return Number(this.points);
     }
 
