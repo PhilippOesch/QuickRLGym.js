@@ -1,17 +1,15 @@
 import Environment from './Environment';
 
+/**
+ * The Agent Interface
+ * @property env - The Agent has a reference to the environment
+ */
 export default abstract class Agent {
-    //protected actionSpace: string[];
     protected env: Environment;
 
     constructor(env: Environment) {
-        //this.actionSpace = actionSpace;
         this.env = env;
     }
-
-    // public get getActionSpace(): string[] {
-    //     //return this.actionSpace;
-    // }
 
     /**
      * initialize the agent

@@ -59,12 +59,10 @@ export default class BlackJackCard {
         return `${this.rank}-${this.suit}`;
     }
 
-    public getValue(usable: boolean = true): number {
+    public get getValue(): number {
         const value10Set: Set<string> = new Set(['Jack', 'Queen', 'King']);
         if (isNaN(Number(this.rank))) {
             if (value10Set.has(this.rank)) return 10;
-
-            if (usable) return 11;
 
             return 1;
         }

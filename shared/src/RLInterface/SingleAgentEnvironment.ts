@@ -36,7 +36,7 @@ abstract class SingleAgentEnvironment implements Environment {
     public train(
         iterations: number = 100,
         logEvery = 10,
-        maxIterationPerGame: number = 100
+        maxIterationPerGame: number = -1
     ): void {
         this.reset();
 

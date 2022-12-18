@@ -10,11 +10,10 @@ describe('BlackJack', function () {
         const card10: BlackJackCard = new BlackJackCard('Diamonds', '10');
 
         it('cards return the correct value', function () {
-            assert.strictEqual(10, cardJack.getValue());
-            assert.strictEqual(5, card5.getValue());
-            assert.strictEqual(11, cardAce.getValue(true));
-            assert.strictEqual(1, cardAce.getValue(false));
-            assert.strictEqual(10, card10.getValue());
+            assert.strictEqual(10, cardJack.getValue);
+            assert.strictEqual(5, card5.getValue);
+            assert.strictEqual(1, cardAce.getValue);
+            assert.strictEqual(10, card10.getValue);
         });
     });
 });

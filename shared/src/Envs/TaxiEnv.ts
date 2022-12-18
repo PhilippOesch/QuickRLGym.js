@@ -1,6 +1,5 @@
 import { TaxiGame, TaxiGameState } from '../Games/TaxiGame/index';
-import { StepResult } from '../index';
-import SingleAgentEnvironment from '../RLInterface/SingleAgentEnvironment';
+import { StepResult, SingleAgentEnvironment } from '../index';
 
 export default class TaxiEnv extends SingleAgentEnvironment {
     private game: TaxiGame;
@@ -49,6 +48,6 @@ export default class TaxiEnv extends SingleAgentEnvironment {
     }
 
     public encodeStateToIndices(state: object): number[] {
-        return this.game.encodeStateToIndices(state);
+        return this.game.encodeStateToIndices(state as TaxiGameState);
     }
 }
