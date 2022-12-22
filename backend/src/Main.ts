@@ -1,5 +1,4 @@
-import { TaxiEnv } from '../../shared/src/';
-import { TaxiGame } from '../../shared/src/Games/TaxiGame';
+import { QuickRLJS, SingleAgentEnvironment } from '../../shared/src/';
 import QLAgent from './Agents/QAgent/QLAgent';
 
 //parameters
@@ -9,7 +8,10 @@ const logEvery: number = 1000;
 const maxIterationsPerGame: number = 25;
 
 async function main() {
-    const env: TaxiEnv = new TaxiEnv(randomSeed);
+    const env: SingleAgentEnvironment = QuickRLJS.loadEnv('Taxi', {
+        randomSeed: randomSeed,
+    }) as SingleAgentEnvironment;
+    // const env: TaxiEnv = new TaxiEnv({ randomSeed: randomSeed });
     const agent: QLAgent = new QLAgent(
         env,
         {

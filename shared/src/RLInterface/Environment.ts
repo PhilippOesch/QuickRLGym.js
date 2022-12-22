@@ -1,11 +1,18 @@
 import StepResult from '../RLInterface/StepResult';
 
-export default interface Environment {
-    get getActionSpace(): string[];
-    get getState(): object;
-    get getIsTerminal(): boolean;
-    get getIteration(): number;
-    step(action: string): StepResult;
-    reset(): boolean;
-    encodeStateToIndices(state: object): number[];
+export default abstract class Environment {
+    protected options: object;
+    protected initialState?: object;
+
+    constructor(options: object, initialState?: object) {
+        this.options = options;
+        this.initialState = initialState;
+    }
+    public abstract get getActionSpace(): string[];
+    public abstract get getState(): object;
+    public abstract get getIsTerminal(): boolean;
+    public abstract get getIteration(): number;
+    public abstract step(action: string): StepResult;
+    public abstract reset(): boolean;
+    public abstract encodeStateToIndices(state: object): number[];
 }

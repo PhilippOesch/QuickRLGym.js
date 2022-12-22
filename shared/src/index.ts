@@ -4,14 +4,22 @@ import Tensor from './Utils/Tensor';
 import StepResult from './RLInterface/StepResult';
 import Agent from './RLInterface/Agent';
 import SingleAgentEnvironment from './RLInterface/SingleAgentEnvironment';
-import TaxiEnv from './Envs/TaxiEnv';
+import Environment from './RLInterface/Environment';
+import TaxiEnv, { TaxiEnvOptions } from './Envs/TaxiEnv';
+import BlackJackEnv, { BlackJackOptions } from './Envs/BlackJackEnv';
+import QuickRLJS from './RLInterface/QuickRLJS';
 
 export {
-    TaxiEnv,
+    TaxiEnvOptions,
+    BlackJackEnv,
+    BlackJackOptions,
     SingleAgentEnvironment,
+    Environment,
+    TaxiEnv,
     Agent,
     Vec2,
     Tensor,
     MathUtils,
     type StepResult,
+    QuickRLJS,
 };

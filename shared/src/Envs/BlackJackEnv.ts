@@ -1,12 +1,16 @@
 import { SingleAgentEnvironment, StepResult } from '../index';
 import { BlackJackGame, BlackJackGameState } from '../Games/BlackJack/index';
 
+export interface BlackJackOptions {
+    randomSeed: number;
+}
+
 export default class BlackJackEnv extends SingleAgentEnvironment {
     private game: BlackJackGame;
 
-    constructor(randomSeed: number) {
-        super();
-        this.game = new BlackJackGame(randomSeed);
+    constructor(options: BlackJackOptions) {
+        super(options);
+        this.game = new BlackJackGame(options.randomSeed);
     }
 
     public get getGame(): BlackJackGame {

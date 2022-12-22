@@ -2,7 +2,7 @@ import Agent from './Agent';
 import StepResult from './StepResult';
 import Environment from './Environment';
 
-abstract class SingleAgentEnvironment implements Environment {
+abstract class SingleAgentEnvironment extends Environment {
     protected agent?: Agent;
     protected initialState?: object;
 
@@ -10,8 +10,8 @@ abstract class SingleAgentEnvironment implements Environment {
      * Constructor
      * @param initialState - the initial state of the environment.
      */
-    constructor(initialState?: object) {
-        this.initialState = initialState;
+    constructor(options: object, initialState?: object) {
+        super(options, initialState);
     }
 
     /**
