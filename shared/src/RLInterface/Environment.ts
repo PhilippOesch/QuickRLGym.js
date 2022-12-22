@@ -1,10 +1,10 @@
 import StepResult from '../RLInterface/StepResult';
 
 export default abstract class Environment {
-    protected options: object;
+    protected options?: object;
     protected initialState?: object;
 
-    constructor(options: object, initialState?: object) {
+    constructor(options?: object, initialState?: object) {
         this.options = options;
         this.initialState = initialState;
     }

@@ -1,13 +1,12 @@
-import { MathUtils, Tensor, TaxiEnv } from '../../../shared/src';
+import { MathUtils, Tensor, TaxiEnv, Environment } from '../../../shared/src';
 import BrowserAgent from './BrowserAgent';
 
 export default class QLAgent extends BrowserAgent {
     private qTablePath: string;
     private qTable: Tensor;
-    private env: TaxiEnv;
 
-    constructor(env: TaxiEnv, qTablePath: string, actionSpace: string[]) {
-        super(actionSpace);
+    constructor(env: Environment, qTablePath: string) {
+        super(env);
         this.qTablePath = qTablePath;
         this.env = env;
     }
@@ -23,7 +22,7 @@ export default class QLAgent extends BrowserAgent {
         const actions: number[] = this.getStateActionValues(state);
 
         const actionIdx: number = MathUtils.argMax(actions);
-        return this.actionSpace[actionIdx];
+        return this.env.getActionSpace[actionIdx];
     }
 
     private getStateActionValues(state: object): number[] {

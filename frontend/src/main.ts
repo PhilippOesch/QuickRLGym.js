@@ -1,22 +1,16 @@
-import { TaxiEnv } from '../../shared/src';
-import { TaxiGame } from '../../shared/src/Games/TaxiGame';
-import TaxiGameScene from './TaxiGameScene';
 import QLAgentBrowser from './Agents/QLAgentBrowser';
-import ShowTaxiGameEnv from './ShowAgentEnv';
+import ShowTaxiGameEnv, { ShowTaxiOptions } from './ShowTaxiGameEnv';
 
 async function Main() {
-    const env: TaxiEnv = new TaxiEnv(1234);
+    const options: ShowTaxiOptions = {
+        interactiveMode: false,
+    };
+    const sceneEnv: ShowTaxiGameEnv = new ShowTaxiGameEnv(options);
     const agent: QLAgentBrowser = new QLAgentBrowser(
-        env,
-        'models/qTable.json',
-        TaxiGame.getActionSpace
+        sceneEnv.getEnv,
+        'models/qTable.json'
     );
-    const gameScene: TaxiGameScene = new TaxiGameScene(env, false, true);
-    const sceneEnv: ShowTaxiGameEnv = new ShowTaxiGameEnv(
-        agent,
-        env,
-        gameScene
-    );
+    sceneEnv.setAgent = agent;
     await sceneEnv.init();
     sceneEnv.startGame(true);
 }

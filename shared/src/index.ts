@@ -10,9 +10,9 @@ import BlackJackEnv, { BlackJackOptions } from './Envs/BlackJackEnv';
 import QuickRLJS from './RLInterface/QuickRLJS';
 
 export {
-    TaxiEnvOptions,
+    type TaxiEnvOptions,
     BlackJackEnv,
-    BlackJackOptions,
+    type BlackJackOptions,
     SingleAgentEnvironment,
     Environment,
     TaxiEnv,

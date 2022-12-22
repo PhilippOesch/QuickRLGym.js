@@ -1,8 +1,10 @@
-export default abstract class BrowserAgent {
-    protected actionSpace: string[];
+import { Environment, SingleAgentEnvironment } from '../../../shared/src';
 
-    constructor(actionSpace: string[]) {
-        this.actionSpace = actionSpace;
+export default abstract class BrowserAgent {
+    protected env: Environment;
+
+    constructor(env: Environment) {
+        this.env = env;
     }
 
     public abstract load(): Promise<void>;

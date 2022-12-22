@@ -2,7 +2,7 @@ import BlackJackCard from './Card';
 
 interface BlackJackGameState {
     playerScore: number;
-    shownCard: BlackJackCard;
+    shownCard?: BlackJackCard;
     playerHoldsUsableAce: boolean;
 }
 

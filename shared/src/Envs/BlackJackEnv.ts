@@ -8,11 +8,18 @@ export interface BlackJackOptions {
 export default class BlackJackEnv extends SingleAgentEnvironment {
     private game: BlackJackGame;
 
-    constructor(options: BlackJackOptions) {
+    constructor(options?: BlackJackOptions) {
         super(options);
-        this.game = new BlackJackGame(options.randomSeed);
+        if (options) {
+            this.game = new BlackJackGame(options.randomSeed);
+        } else {
+            this.game = new BlackJackGame();
+        }
     }
 
+    /**
+     * @returns The game object
+     */
     public get getGame(): BlackJackGame {
         return this.game;
     }

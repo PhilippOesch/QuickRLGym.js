@@ -2,17 +2,24 @@ import { TaxiGame, TaxiGameState } from '../Games/TaxiGame/index';
 import { StepResult, SingleAgentEnvironment } from '../index';
 
 export interface TaxiEnvOptions {
-    randomSeed: number;
+    randomSeed?: number;
 }
 
 export default class TaxiEnv extends SingleAgentEnvironment {
     private game: TaxiGame;
 
-    constructor(options: TaxiEnvOptions, initialGameState?: TaxiGameState) {
-        super(options, initialGameState);
-        this.game = new TaxiGame(options.randomSeed);
+    constructor(options?: TaxiEnvOptions, initialGameState?: TaxiGameState) {
+        super((options = options), (initialGameState = initialGameState));
+        if (options) {
+            this.game = new TaxiGame(options.randomSeed);
+        } else {
+            this.game = new TaxiGame();
+        }
     }
 
+    /**
+     * @returns The game object
+     */
     public get getGame(): TaxiGame {
         return this.game;
     }

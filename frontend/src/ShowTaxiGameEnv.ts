@@ -7,22 +7,42 @@ import { TaxiEnv } from '../../shared/src';
 import BrowserAgent from './Agents/BrowserAgent';
 import TaxiGameScene from './TaxiGameScene';
 
+export interface ShowTaxiOptions {
+    randomSeed?: number;
+    interactiveMode: boolean;
+    loopEndless?: boolean;
+}
+
 export default class ShowTaxiGameEnv {
     private agent: BrowserAgent;
     private game: TaxiGame;
+    private env: TaxiEnv;
     private gameScene: TaxiGameScene;
     private initialGameState?: TaxiGameState;
 
-    constructor(
-        agent: BrowserAgent,
-        env: TaxiEnv,
-        gameScene: TaxiGameScene,
-        initialGameState?: TaxiGameState
-    ) {
-        this.agent = agent;
-        this.game = env.getGame;
-        this.gameScene = gameScene;
+    constructor(options?: ShowTaxiOptions, initialGameState?: TaxiGameState) {
+        if (options) {
+            this.env = new TaxiEnv({ randomSeed: options.randomSeed });
+            this.gameScene = new TaxiGameScene(
+                this.env,
+                options.interactiveMode,
+                options.loopEndless
+            );
+        } else {
+            this.env = new TaxiEnv();
+            this.gameScene = new TaxiGameScene(this.env, false);
+        }
+        console.log(this.env);
+        this.game = this.env.getGame;
         this.initialGameState = initialGameState;
+    }
+
+    public get getEnv(): TaxiEnv {
+        return this.env;
+    }
+
+    public set setAgent(agent: BrowserAgent) {
+        this.agent = agent;
     }
 
     public async init() {

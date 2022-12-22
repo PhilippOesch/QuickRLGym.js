@@ -8,6 +8,10 @@ import {
     BlackJackCard,
 } from '../BlackJack/index';
 
+/**
+ * The Black Jack implementation is oriented on the logic described in Richard
+ * S. Sutton and Andrew G. Barto 'Reinforcement Learning: An Introduction' Example 5.1..
+ */
 export default class BlackJackGame {
     public static readonly actionMapping: Map<string, BlackJackAction> =
         new Map([
@@ -30,13 +34,21 @@ export default class BlackJackGame {
         this.dealer = new BlackJackDealer(this.rng);
     }
 
+    public get getPlayer(): BlackJackPlayer {
+        return this.player;
+    }
+
+    public get getDealer(): BlackJackDealer {
+        return this.dealer;
+    }
+
     public static get getActionSpace(): string[] {
         return Array.from(BlackJackGame.actionMapping.keys());
     }
 
     public get getReturn(): number {
-        const playerScore = this.player.getScore;
-        const dealerScore = this.dealer.getScore;
+        const playerScore = Math.abs(this.player.getScore - 21);
+        const dealerScore = Math.abs(this.dealer.getScore - 21);
         if (!this.getIsTerminal) return 0;
         if (playerScore > dealerScore) return 1;
         if (playerScore < dealerScore) return -1;
@@ -104,7 +116,7 @@ export default class BlackJackGame {
     public encodeStateToIndices(state: BlackJackGameState): number[] {
         return [
             state.playerScore,
-            state.shownCard.getValue,
+            state.shownCard ? state.shownCard?.getValue : -1,
             Number(state.playerHoldsUsableAce),
         ];
     }

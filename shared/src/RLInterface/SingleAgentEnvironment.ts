@@ -10,8 +10,8 @@ abstract class SingleAgentEnvironment extends Environment {
      * Constructor
      * @param initialState - the initial state of the environment.
      */
-    constructor(options: object, initialState?: object) {
-        super(options, initialState);
+    constructor(options?: object, initialState?: object) {
+        super((options = options), (initialState = initialState));
     }
 
     /**

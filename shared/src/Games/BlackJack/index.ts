@@ -11,5 +11,5 @@ export {
     BlackJackCard,
     BlackJackPlayer,
     BlackJackDealer,
-    BlackJackGameState,
+    type BlackJackGameState,
 };
