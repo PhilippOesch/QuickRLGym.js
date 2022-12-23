@@ -8,11 +8,17 @@ import Environment from './RLInterface/Environment';
 import TaxiEnv, { TaxiEnvOptions } from './Envs/TaxiEnv';
 import BlackJackEnv, { BlackJackOptions } from './Envs/BlackJackEnv';
 import QuickRLJS from './RLInterface/QuickRLJS';
+import FileManager from './RLInterface/FileManager';
+import QLAgent from './Agents/QLAgent/QLAgent';
+import QLAgentSettings from './Agents/QLAgent/QLAgentSettings';
 
 export {
+    type QLAgentSettings,
+    QLAgent,
     type TaxiEnvOptions,
     BlackJackEnv,
     type BlackJackOptions,
+    type FileManager,
     SingleAgentEnvironment,
     Environment,
     TaxiEnv,

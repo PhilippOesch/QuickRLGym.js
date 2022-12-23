@@ -4,16 +4,15 @@ import {
     Tensor,
     SingleAgentEnvironment,
     Agent,
-} from '../../../../shared/src';
-import path from 'path';
+    FileManager,
+} from '../../index';
 import QLAgentSettings from './QLAgentSettings';
-import { writeFile, readFile, mkdir } from 'node:fs/promises';
 
 /**
  * Agent that represents a Q-Learning Algorithm
  */
 export default class QLAgent extends Agent {
-    private config: QLAgentSettings;
+    private config?: QLAgentSettings;
     private rng: seedrandom.PRNG;
     private randomSeed?: string;
     private qTable: Tensor;
@@ -22,7 +21,7 @@ export default class QLAgent extends Agent {
 
     constructor(
         env: SingleAgentEnvironment,
-        config: QLAgentSettings,
+        config?: QLAgentSettings,
         randomSeed?: number
     ) {
         super(env);
@@ -44,12 +43,17 @@ export default class QLAgent extends Agent {
         const qTableDims: number[] = [...this.env.getGameStateDim];
         qTableDims.push(this.env.getActionSpace.length);
         this.qTable = Tensor.Zeros(...qTableDims);
-        this.epsilon = this.config.epsilonStart;
+        if (this.config) {
+            this.epsilon = this.config.epsilonStart;
+        }
         this.epsilonStep = 1;
     }
 
     step(state: object): string {
         const randNum: number = this.rng();
+        if (!this.config) {
+            throw new Error('The Agent has not been configured for training');
+        }
         this.decayEpsilon();
         if (randNum < this.epsilon) {
             const randIdx = Math.floor(
@@ -87,9 +91,9 @@ export default class QLAgent extends Agent {
         // bellmann equation
         const newQValue: number =
             prevActionQvalues[takenActionIdx] +
-            this.config.learningRate *
+            this.config!.learningRate *
                 (payoff +
-                    this.config.discountFactor *
+                    this.config!.discountFactor *
                         (newPossibleActionValues[newBestActionIdx] -
                             prevActionQvalues[takenActionIdx]));
 
@@ -102,12 +106,12 @@ export default class QLAgent extends Agent {
     }
 
     public decayEpsilon(): void {
-        if (this.epsilonStep < this.config.epsilonDecaySteps) {
+        if (this.epsilonStep < this.config!.epsilonDecaySteps) {
             this.epsilonStep++;
             this.epsilon =
-                this.config.epsilonStart -
-                ((this.config.epsilonStart - this.config.epsilonEnd) /
-                    this.config.epsilonDecaySteps) *
+                this.config!.epsilonStart -
+                ((this.config!.epsilonStart - this.config!.epsilonEnd) /
+                    this.config!.epsilonDecaySteps) *
                     this.epsilonStep;
         }
     }
@@ -121,14 +125,18 @@ export default class QLAgent extends Agent {
         return this.qTable.get(...indices) as number[];
     }
 
-    public async saveQTableToFile(pathString: string): Promise<void> {
-        const folderPath = path.dirname(pathString);
-        await mkdir(folderPath, { recursive: true }).catch(console.error);
-        await writeFile(pathString, JSON.stringify(this.qTable));
+    public async saveQTableToFile(
+        pathString: string,
+        fileManager: FileManager
+    ): Promise<void> {
+        await fileManager.save(pathString, this.qTable);
     }
 
-    public async loadQTable(pathString: string): Promise<any> {
-        let qtable: Buffer = await readFile(pathString);
-        return JSON.parse(qtable.toString());
+    public async loadQTable(
+        pathString: string,
+        fileManager: FileManager
+    ): Promise<any> {
+        const qtable: any = await fileManager.load(pathString);
+        this.qTable = new Tensor(qtable.dim, qtable.array);
     }
 }

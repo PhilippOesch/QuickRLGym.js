@@ -1,7 +1,8 @@
-import { QuickRLJS, SingleAgentEnvironment } from '../../shared/src/';
-import QLAgent from './Agents/QAgent/QLAgent';
+import { QuickRLJS, SingleAgentEnvironment, QLAgent } from '../../shared/src/';
+import NodeFileManager from './NodeFileManager';
 
 //parameters
+const fileManager = new NodeFileManager();
 
 async function main() {
     trainTaxi();
@@ -29,7 +30,10 @@ async function trainBlackJack() {
     env.setAgent = agent;
     env.initEnv();
     env.train(numIterations, logEvery);
-    await agent.saveQTableToFile('./qTables/blackjack/qTable.json');
+    await agent.saveQTableToFile(
+        './qTables/blackjack/qTable.json',
+        fileManager
+    );
 }
 
 async function trainTaxi() {
@@ -55,7 +59,7 @@ async function trainTaxi() {
     env.setAgent = agent;
     env.initEnv();
     env.train(numIterations, logEvery, maxIterationsPerGame);
-    await agent.saveQTableToFile('./qTables/taxi/qTable.json');
+    await agent.saveQTableToFile('./qTables/taxi/qTable.json', fileManager);
 }
 
 main();

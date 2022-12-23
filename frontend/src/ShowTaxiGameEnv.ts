@@ -3,8 +3,7 @@ import {
     TaxiGlobals,
     TaxiGameState,
 } from '../../shared/src/Games/TaxiGame';
-import { TaxiEnv } from '../../shared/src';
-import BrowserAgent from './Agents/BrowserAgent';
+import { Agent, TaxiEnv } from '../../shared/src';
 import TaxiGameScene from './TaxiGameScene';
 
 export interface ShowTaxiOptions {
@@ -14,7 +13,7 @@ export interface ShowTaxiOptions {
 }
 
 export default class ShowTaxiGameEnv {
-    private agent: BrowserAgent;
+    private agent: Agent;
     private game: TaxiGame;
     private env: TaxiEnv;
     private gameScene: TaxiGameScene;
@@ -41,12 +40,12 @@ export default class ShowTaxiGameEnv {
         return this.env;
     }
 
-    public set setAgent(agent: BrowserAgent) {
+    public set setAgent(agent: Agent) {
         this.agent = agent;
     }
 
     public async init() {
-        await this.agent.load();
+        //await this.agent.load();
         this.game.initGame();
         this.game.reset(true, this.initialGameState);
         const config: Phaser.Types.Core.GameConfig = {
