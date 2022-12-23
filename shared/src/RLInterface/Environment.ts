@@ -8,6 +8,7 @@ export default abstract class Environment {
         this.options = options;
         this.initialState = initialState;
     }
+    public abstract get getGameStateDim(): number[];
     public abstract get getActionSpace(): string[];
     public abstract get getState(): object;
     public abstract get getIsTerminal(): boolean;

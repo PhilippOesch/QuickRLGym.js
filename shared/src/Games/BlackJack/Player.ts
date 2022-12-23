@@ -35,7 +35,7 @@ export default class BlackJackPlayer {
         const aceInHand = this.cardHistory.find((element) => {
             return element.getValue === 1;
         });
-        return aceInHand !== undefined && cardSum + 10 < 21;
+        return aceInHand !== undefined && cardSum + 10 <= 21;
     }
 
     public get getCardHistory(): BlackJackCard[] {

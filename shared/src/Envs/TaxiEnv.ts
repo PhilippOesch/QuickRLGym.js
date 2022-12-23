@@ -7,6 +7,8 @@ export interface TaxiEnvOptions {
 
 export default class TaxiEnv extends SingleAgentEnvironment {
     private game: TaxiGame;
+    private logIntervalCount: number = 0;
+    private averageGameIterations: number = 0;
 
     constructor(options?: TaxiEnvOptions, initialGameState?: TaxiGameState) {
         super((options = options), (initialGameState = initialGameState));
@@ -15,6 +17,10 @@ export default class TaxiEnv extends SingleAgentEnvironment {
         } else {
             this.game = new TaxiGame();
         }
+    }
+
+    public get getGameStateDim(): number[] {
+        return this.game.getGameStateDim;
     }
 
     /**
@@ -49,9 +55,7 @@ export default class TaxiEnv extends SingleAgentEnvironment {
 
     public initEnv(): void {
         this.game.initGame();
-        if (this.agent) {
-            this.agent.init();
-        }
+        super.initEnv();
     }
 
     public reset(): boolean {
@@ -60,5 +64,20 @@ export default class TaxiEnv extends SingleAgentEnvironment {
 
     public encodeStateToIndices(state: object): number[] {
         return this.game.encodeStateToIndices(state as TaxiGameState);
+    }
+
+    public override onIterationEnd(): void {
+        this.logIntervalCount++;
+        this.averageGameIterations += this.getIteration;
+    }
+
+    public override log(trainIteration: number): void {
+        console.log('Iteration:', trainIteration);
+        console.log(
+            'average Game Iterations:',
+            this.averageGameIterations / this.logIntervalCount
+        );
+        this.averageGameIterations = 0;
+        this.logIntervalCount = 0;
     }
 }

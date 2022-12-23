@@ -15,6 +15,8 @@ import seedrandom from 'seedrandom';
  * @property {TaxiCustomer} customer - The customer object.
  */
 export default class TaxiGame {
+    private static readonly gameStateDim: number[] = [5, 5, 4, 5];
+
     public static readonly actionMapping: Map<string, TaxiAction> = new Map([
         ['Up', TaxiAction.Up],
         ['Down', TaxiAction.Down],
@@ -44,6 +46,10 @@ export default class TaxiGame {
         } else {
             this.rng = seedrandom();
         }
+    }
+
+    public get getGameStateDim(): number[] {
+        return TaxiGame.gameStateDim;
     }
 
     public get getCustomer(): TaxiCustomer {

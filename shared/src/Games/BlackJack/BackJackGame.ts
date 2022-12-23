@@ -13,6 +13,8 @@ import {
  * S. Sutton and Andrew G. Barto 'Reinforcement Learning: An Introduction' Example 5.1..
  */
 export default class BlackJackGame {
+    public static readonly gameStateDim: number[] = [32, 11, 2];
+
     public static readonly actionMapping: Map<string, BlackJackAction> =
         new Map([
             ['Stick', BlackJackAction.Stick],
@@ -34,6 +36,10 @@ export default class BlackJackGame {
         this.dealer = new BlackJackDealer(this.rng);
     }
 
+    public get getGameStateDim(): number[] {
+        return BlackJackGame.gameStateDim;
+    }
+
     public get getPlayer(): BlackJackPlayer {
         return this.player;
     }
@@ -47,11 +53,13 @@ export default class BlackJackGame {
     }
 
     public get getReturn(): number {
+        if (!this.getIsTerminal) return 0;
+        if (this.player.getScore > 21) return -1;
+        if (this.dealer.getScore > 21) return 1;
         const playerScore = Math.abs(this.player.getScore - 21);
         const dealerScore = Math.abs(this.dealer.getScore - 21);
-        if (!this.getIsTerminal) return 0;
-        if (playerScore > dealerScore) return 1;
-        if (playerScore < dealerScore) return -1;
+        if (playerScore < dealerScore) return 1;
+        if (playerScore > dealerScore) return -1;
         return 0;
     }
 
@@ -94,6 +102,9 @@ export default class BlackJackGame {
             case BlackJackAction.Hit:
                 const newCard = BlackJackCard.returnRandomCard(this.rng);
                 this.player.addCard(newCard);
+                if (this.player.getScore > 21) {
+                    this.endGame();
+                }
                 break;
             case BlackJackAction.Stick:
                 this.player.callStick();
@@ -116,7 +127,7 @@ export default class BlackJackGame {
     public encodeStateToIndices(state: BlackJackGameState): number[] {
         return [
             state.playerScore,
-            state.shownCard ? state.shownCard?.getValue : -1,
+            state.shownCard!.getValue,
             Number(state.playerHoldsUsableAce),
         ];
     }
@@ -126,10 +137,13 @@ export default class BlackJackGame {
         this.dealer.callStick();
     }
 
-    public reset(): boolean {
+    public reset(reinit = true): boolean {
         this.iteration = 0;
         this.player.reset();
         this.dealer.reset();
+        if (reinit) {
+            this.initGame();
+        }
         return true;
     }
 }

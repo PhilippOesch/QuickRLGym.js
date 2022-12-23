@@ -24,7 +24,11 @@ abstract class SingleAgentEnvironment extends Environment {
     /**
      * This method can be used to initialize the environment and for example initialize the agents
      */
-    public abstract initEnv(): void;
+    public initEnv(): void {
+        if (this.agent) {
+            this.agent.init();
+        }
+    }
 
     /**
      * The training loop method.
@@ -57,23 +61,32 @@ abstract class SingleAgentEnvironment extends Environment {
                 const { newState, reward } = this.step(nextAction);
                 this.agent.feed(prevState, nextAction, newState, reward);
             }
-            count++;
-            averageGameIterations += this.getIteration;
+            this.onIterationEnd();
             if (i % logEvery == 0) {
-                console.log(
-                    'averageGameIterations:',
-                    averageGameIterations / count
-                );
-                console.log('Iteration:', i);
+                this.log(i);
                 this.agent.log();
-                averageGameIterations = 0;
-                count = 0;
             }
             const isReset = this.reset();
             if (!isReset) {
                 break;
             }
         }
+    }
+
+    /**
+     * Is called each iteration defined by the logEvery parameter in the training method
+     * @param trainIteration - The current training iteration
+     */
+    public log(trainIteration: number): void {
+        console.log('Iteration:', trainIteration);
+    }
+
+    /**
+     * Function called after the training Iteration and before the logging.
+     * This function can be used for example for logging specifig cleanups/ calculations
+     */
+    public onIterationEnd(): void {
+        return;
     }
 
     /**

@@ -5,8 +5,9 @@ import {
     SingleAgentEnvironment,
     Agent,
 } from '../../../../shared/src';
+import path from 'path';
 import QLAgentSettings from './QLAgentSettings';
-import { writeFile, readFile } from 'node:fs/promises';
+import { writeFile, readFile, mkdir } from 'node:fs/promises';
 
 /**
  * Agent that represents a Q-Learning Algorithm
@@ -40,7 +41,7 @@ export default class QLAgent extends Agent {
     }
 
     init(): void {
-        const qTableDims: number[] = [...this.config.gameStateDim];
+        const qTableDims: number[] = [...this.env.getGameStateDim];
         qTableDims.push(this.env.getActionSpace.length);
         this.qTable = Tensor.Zeros(...qTableDims);
         this.epsilon = this.config.epsilonStart;
@@ -120,12 +121,14 @@ export default class QLAgent extends Agent {
         return this.qTable.get(...indices) as number[];
     }
 
-    public async saveQTableToFile(path: string): Promise<void> {
-        await writeFile(path, JSON.stringify(this.qTable));
+    public async saveQTableToFile(pathString: string): Promise<void> {
+        const folderPath = path.dirname(pathString);
+        await mkdir(folderPath, { recursive: true }).catch(console.error);
+        await writeFile(pathString, JSON.stringify(this.qTable));
     }
 
-    public async loadQTable(path: string): Promise<any> {
-        let qtable: Buffer = await readFile(path);
+    public async loadQTable(pathString: string): Promise<any> {
+        let qtable: Buffer = await readFile(pathString);
         return JSON.parse(qtable.toString());
     }
 }

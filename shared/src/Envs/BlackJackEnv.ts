@@ -7,6 +7,10 @@ export interface BlackJackOptions {
 
 export default class BlackJackEnv extends SingleAgentEnvironment {
     private game: BlackJackGame;
+    private logIntervalCount: number = 0;
+    private averagePlayerScore: number = 0;
+    private averageReturn: number = 0;
+    private averageDealerScore: number = 0;
 
     constructor(options?: BlackJackOptions) {
         super(options);
@@ -24,11 +28,16 @@ export default class BlackJackEnv extends SingleAgentEnvironment {
         return this.game;
     }
 
+    public get getGameStateDim(): number[] {
+        return this.game.getGameStateDim;
+    }
+
     public get getActionSpace(): string[] {
         return BlackJackGame.getActionSpace;
     }
     public initEnv(): void {
         this.game.initGame();
+        super.initEnv();
     }
     public step(action: string): StepResult {
         return this.game.step(action);
@@ -50,5 +59,33 @@ export default class BlackJackEnv extends SingleAgentEnvironment {
     }
     public encodeStateToIndices(state: object): number[] {
         return this.game.encodeStateToIndices(state as BlackJackGameState);
+    }
+
+    public override onIterationEnd(): void {
+        this.logIntervalCount++;
+        const currentState = this.getState as BlackJackGameState;
+        this.averagePlayerScore += currentState.playerScore;
+        this.averageReturn += this.getReturn;
+        this.averageDealerScore += this.game.getDealer.getScore;
+    }
+
+    public override log(trainIteration: number): void {
+        console.log('Iteration:', trainIteration);
+        console.log(
+            'Average Player Score:',
+            this.averagePlayerScore / this.logIntervalCount
+        );
+        console.log(
+            'Average Return:',
+            this.averageReturn / this.logIntervalCount
+        );
+        console.log(
+            'Average Dealer Score:',
+            this.averageDealerScore / this.logIntervalCount
+        );
+        this.averagePlayerScore = 0;
+        this.logIntervalCount = 0;
+        this.averageReturn = 0;
+        this.averageDealerScore = 0;
     }
 }
