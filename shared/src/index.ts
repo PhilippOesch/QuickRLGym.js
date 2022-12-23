@@ -9,8 +9,7 @@ import TaxiEnv, { TaxiEnvOptions } from './Envs/TaxiEnv';
 import BlackJackEnv, { BlackJackOptions } from './Envs/BlackJackEnv';
 import QuickRLJS from './RLInterface/QuickRLJS';
 import FileManager from './RLInterface/FileManager';
-import QLAgent from './Agents/QLAgent/QLAgent';
-import QLAgentSettings from './Agents/QLAgent/QLAgentSettings';
+import QLAgent, { QLAgentSettings } from './Agents/QLAgent/QLAgent';
 
 export {
     type QLAgentSettings,

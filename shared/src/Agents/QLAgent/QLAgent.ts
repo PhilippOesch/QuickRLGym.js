@@ -6,7 +6,17 @@ import {
     Agent,
     FileManager,
 } from '../../index';
-import QLAgentSettings from './QLAgentSettings';
+
+/**
+ * Settings for the QLAgent
+ */
+export interface QLAgentSettings {
+    learningRate: number;
+    discountFactor: number;
+    epsilonStart: number;
+    epsilonEnd: number;
+    epsilonDecaySteps: number;
+}
 
 /**
  * Agent that represents a Q-Learning Algorithm
@@ -125,6 +135,11 @@ export default class QLAgent extends Agent {
         return this.qTable.get(...indices) as number[];
     }
 
+    /**
+     * Save the q-table to file
+     * @param pathString - path to save the qtable to
+     * @param fileManager - use of dependency infection to allow for different filemanagement implementations
+     */
     public async saveQTableToFile(
         pathString: string,
         fileManager: FileManager
@@ -132,6 +147,11 @@ export default class QLAgent extends Agent {
         await fileManager.save(pathString, this.qTable);
     }
 
+    /**
+     * load q-table from file
+     * @param pathString - path to load the qtable from
+     * @param fileManager - use of dependency infection to allow for different filemanagement implementations
+     */
     public async loadQTable(
         pathString: string,
         fileManager: FileManager

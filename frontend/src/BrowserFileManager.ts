@@ -4,7 +4,6 @@ class BrowserFileManager implements FileManager {
     public async load(pathString: string): Promise<object> {
         const result: Response = await fetch(pathString);
         const jsonObject = await result.json();
-        // const  = new Tensor(jsonObject.dim, jsonObject.array);
         return jsonObject;
     }
     public async save(
