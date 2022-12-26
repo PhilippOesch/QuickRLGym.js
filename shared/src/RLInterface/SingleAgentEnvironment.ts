@@ -2,6 +2,11 @@ import Agent from './Agent';
 import StepResult from './StepResult';
 import Environment from './Environment';
 
+export interface GameStateContext {
+    isTerminal: boolean;
+    maxIterationReached: boolean;
+}
+
 abstract class SingleAgentEnvironment extends Environment {
     protected agent?: Agent;
     protected initialState?: object;
@@ -47,9 +52,6 @@ abstract class SingleAgentEnvironment extends Environment {
         if (this.agent == undefined) {
             throw new Error('No Agent has been set');
         }
-
-        let averageGameIterations = 0;
-        let count = 0;
         for (let i = 0; i < iterations; i++) {
             while (
                 (!this.getIsTerminal &&
@@ -59,7 +61,16 @@ abstract class SingleAgentEnvironment extends Environment {
                 const prevState: object = this.getState;
                 const nextAction: string = this.agent.step(this.getState);
                 const { newState, reward } = this.step(nextAction);
-                this.agent.feed(prevState, nextAction, newState, reward);
+                // some algorithms need information about weather the game state is terminal
+                const gameStateContext =
+                    this.additionalInfo(maxIterationPerGame);
+                this.agent.feed(
+                    prevState,
+                    nextAction,
+                    newState,
+                    reward,
+                    gameStateContext
+                );
             }
             this.onIterationEnd();
             if (i % logEvery == 0) {
@@ -79,6 +90,16 @@ abstract class SingleAgentEnvironment extends Environment {
      */
     public log(trainIteration: number): void {
         console.log('Iteration:', trainIteration);
+    }
+
+    private additionalInfo(maxIterPerGame: number = -1): object {
+        const isTerminal = this.getIsTerminal;
+        const maxIterationReached =
+            maxIterPerGame != -1 && this.getIteration >= maxIterPerGame;
+        return {
+            isTerminal: isTerminal,
+            maxIterationReached: maxIterationReached,
+        };
     }
 
     /**

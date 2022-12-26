@@ -7,6 +7,11 @@ enum TensorFillType {
     Random,
 }
 
+export interface JSONTensor {
+    dim: number[];
+    array: number[];
+}
+
 /**
  * Represents a multi dimensional number object
  * @property {number} dim - The dimension of the Tensor
@@ -29,6 +34,10 @@ export default class Tensor {
     public static Zeros(...dims: number[]): Tensor {
         const array = Tensor.init(dims, TensorFillType.Zeros);
         return new Tensor(dims, array);
+    }
+
+    public static fromLoadObject(jsonTensor: JSONTensor) {
+        return new Tensor(jsonTensor.dim, jsonTensor.array);
     }
 
     /**

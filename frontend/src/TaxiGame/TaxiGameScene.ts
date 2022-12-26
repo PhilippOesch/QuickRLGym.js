@@ -5,9 +5,9 @@ import {
     TaxiUtils,
     TaxiGameMap,
     TaxiGame,
-} from '../../shared/src/Games/TaxiGame/';
-import { TaxiEnv } from '../../shared/src';
-import { Vec2 } from '../../shared/src';
+} from '../../../shared/src/Games/TaxiGame';
+import { TaxiEnv } from '../../../shared/src';
+import { Vec2 } from '../../../shared/src';
 
 export default class TaxiGameScene extends Scene {
     private static destMapping: string[] = ['red', 'yellow', 'green', 'blue'];
@@ -41,19 +41,19 @@ export default class TaxiGameScene extends Scene {
 
     public preload(): void {
         // load tilemap
-        this.load.image('tiles', 'assets/tiles.png');
+        this.load.image('tiles', 'assets/taxi/tiles.png');
 
         // load player
-        this.load.spritesheet('taxi', 'assets/car.png', {
+        this.load.spritesheet('taxi', 'assets/taxi/car.png', {
             frameWidth: 90,
             frameHeight: 80,
         });
 
         // load customer
-        this.load.image('customer', 'assets/customer.png');
+        this.load.image('customer', 'assets/taxi/customer.png');
     }
 
-    public create() {
+    public create(): void {
         // generate Map
         const map = this.make.tilemap({
             data: TaxiGameMap.tileMap,

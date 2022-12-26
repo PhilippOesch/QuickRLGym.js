@@ -1,23 +1,31 @@
 import MathUtils from './Utils/MathUtils';
 import Vec2 from './Utils/Vec2';
-import Tensor from './Utils/Tensor';
+import Tensor, { JSONTensor } from './Utils/Tensor';
 import StepResult from './RLInterface/StepResult';
 import Agent from './RLInterface/Agent';
-import SingleAgentEnvironment from './RLInterface/SingleAgentEnvironment';
+import SingleAgentEnvironment, {
+    GameStateContext,
+} from './RLInterface/SingleAgentEnvironment';
 import Environment from './RLInterface/Environment';
 import TaxiEnv, { TaxiEnvOptions } from './Envs/TaxiEnv';
 import BlackJackEnv, { BlackJackOptions } from './Envs/BlackJackEnv';
 import QuickRLJS from './RLInterface/QuickRLJS';
 import FileManager from './RLInterface/FileManager';
 import QLAgent, { QLAgentSettings } from './Agents/QLAgent/QLAgent';
+import MCAgent, { MCAgentConfig } from './Agents/MCAgent/MCAgent';
 
 export {
+    type JSONTensor,
+    type MCAgentConfig,
     type QLAgentSettings,
-    QLAgent,
+    type GameStateContext,
     type TaxiEnvOptions,
-    BlackJackEnv,
     type BlackJackOptions,
     type FileManager,
+    type StepResult,
+    QLAgent,
+    MCAgent,
+    BlackJackEnv,
     SingleAgentEnvironment,
     Environment,
     TaxiEnv,
@@ -25,6 +33,5 @@ export {
     Vec2,
     Tensor,
     MathUtils,
-    type StepResult,
     QuickRLJS,
 };

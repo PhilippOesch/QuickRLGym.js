@@ -5,6 +5,7 @@ import {
     SingleAgentEnvironment,
     Agent,
     FileManager,
+    JSONTensor,
 } from '../../index';
 
 /**
@@ -140,7 +141,7 @@ export default class QLAgent extends Agent {
      * @param pathString - path to save the qtable to
      * @param fileManager - use of dependency infection to allow for different filemanagement implementations
      */
-    public async saveQTableToFile(
+    public async save(
         pathString: string,
         fileManager: FileManager
     ): Promise<void> {
@@ -152,11 +153,11 @@ export default class QLAgent extends Agent {
      * @param pathString - path to load the qtable from
      * @param fileManager - use of dependency infection to allow for different filemanagement implementations
      */
-    public async loadQTable(
+    public async load(
         pathString: string,
         fileManager: FileManager
-    ): Promise<any> {
-        const qtable: any = await fileManager.load(pathString);
-        this.qTable = new Tensor(qtable.dim, qtable.array);
+    ): Promise<void> {
+        const loadObject: object = await fileManager.load(pathString);
+        this.qTable = Tensor.fromLoadObject(loadObject as JSONTensor);
     }
 }

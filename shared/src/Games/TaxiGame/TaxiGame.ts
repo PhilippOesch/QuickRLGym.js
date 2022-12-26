@@ -176,7 +176,10 @@ export default class TaxiGame {
             this.updatePoints(TaxiGlobals.illegalMovePoints);
             reward = TaxiGlobals.illegalMovePoints;
         }
-        return { newState: this.getGameState, reward: reward };
+        return {
+            newState: this.getGameState,
+            reward: reward,
+        };
     }
 
     private pickUpCustomer(): StepResult {
@@ -192,7 +195,10 @@ export default class TaxiGame {
             this.updatePoints(TaxiGlobals.illegalMovePoints);
             reward = TaxiGlobals.illegalMovePoints;
         }
-        return { newState: this.getGameState, reward: reward };
+        return {
+            newState: this.getGameState,
+            reward: reward,
+        };
     }
 
     public encodeStateToIndices(state: TaxiGameState): number[] {

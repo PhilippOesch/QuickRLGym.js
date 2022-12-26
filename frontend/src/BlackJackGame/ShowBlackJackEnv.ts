@@ -1,42 +1,37 @@
-import {
-    TaxiGame,
-    TaxiGlobals,
-    TaxiGameState,
-} from '../../shared/src/Games/TaxiGame';
-import { Agent, TaxiEnv } from '../../shared/src';
-import TaxiGameScene from './TaxiGameScene';
+import { Agent, BlackJackEnv } from '../../../shared/src';
+import { BlackJackGame } from '../../../shared/src/Games/BlackJack';
+import BlackJackGameScene from './BlackJackGameScene';
 
-export interface ShowTaxiOptions {
+export interface ShowBlackJackOptions {
     randomSeed?: number;
     interactiveMode: boolean;
     loopEndless?: boolean;
 }
 
-export default class ShowTaxiGameEnv {
+export default class ShowBlackJackEnv {
     private agent: Agent;
-    private game: TaxiGame;
-    private env: TaxiEnv;
-    private gameScene: TaxiGameScene;
-    private initialGameState?: TaxiGameState;
+    private game: BlackJackGame;
+    private env: BlackJackEnv;
+    private gameScene: BlackJackGameScene;
 
-    constructor(options?: ShowTaxiOptions, initialGameState?: TaxiGameState) {
+    constructor(options?: ShowBlackJackOptions) {
         if (options) {
-            this.env = new TaxiEnv({ randomSeed: options.randomSeed });
-            this.gameScene = new TaxiGameScene(
+            this.env = new BlackJackEnv({ randomSeed: options.randomSeed });
+            // set game scene
+            this.gameScene = new BlackJackGameScene(
                 this.env,
                 options.interactiveMode,
                 options.loopEndless
             );
         } else {
-            this.env = new TaxiEnv();
-            this.gameScene = new TaxiGameScene(this.env, false);
+            this.env = new BlackJackEnv();
+            this.gameScene = new BlackJackGameScene(this.env, false);
         }
         console.log(this.env);
         this.game = this.env.getGame;
-        this.initialGameState = initialGameState;
     }
 
-    public get getEnv(): TaxiEnv {
+    public get getEnv(): BlackJackEnv {
         return this.env;
     }
 
@@ -45,14 +40,14 @@ export default class ShowTaxiGameEnv {
     }
 
     public async init() {
-        //await this.agent.load();
         this.game.initGame();
-        this.game.reset(true, this.initialGameState);
+        this.game.reset(true);
         const config: Phaser.Types.Core.GameConfig = {
             type: Phaser.AUTO,
             parent: 'app',
-            width: TaxiGlobals.tileWidth * 11 * TaxiGlobals.scale,
-            height: TaxiGlobals.tileHeight * 7 * TaxiGlobals.scale,
+            width: 500,
+            height: 500,
+            backgroundColor: '#1e4d1f',
             zoom: 1,
             physics: {
                 default: 'arcade',
@@ -70,7 +65,8 @@ export default class ShowTaxiGameEnv {
 
     public async startGame(
         loopEndless = false,
-        timeBetweenMoves: number = 100
+        timeBetweenMoves: number = 100,
+        maxIterations: number = -1
     ) {
         if (this.agent == undefined) {
             throw Error(
@@ -80,16 +76,18 @@ export default class ShowTaxiGameEnv {
 
         await new Promise((f) => setTimeout(f, 1000));
 
-        while (!this.game.getIsTerminal) {
+        while (
+            !this.game.getIsTerminal &&
+            (maxIterations >= this.game.getIteration || maxIterations == -1)
+        ) {
             await new Promise((f) => setTimeout(f, timeBetweenMoves));
             const nextAction = this.agent.evalStep(this.game.getGameState);
             this.game.step(nextAction);
             this.gameScene.reRender();
         }
-
         if (loopEndless) {
-            this.game.reset(false, this.initialGameState);
-            this.startGame(loopEndless, timeBetweenMoves);
+            this.game.reset(true);
+            this.startGame(loopEndless, timeBetweenMoves, maxIterations);
         }
         await new Promise((f) => setTimeout(f, 500));
         this.gameScene.reRender();

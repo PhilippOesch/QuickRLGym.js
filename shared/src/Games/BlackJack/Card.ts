@@ -1,22 +1,8 @@
 import seedrandom from 'seedrandom';
 
 export default class BlackJackCard {
-    public static suits: string[] = ['Clubs', 'Diamonds', 'Hearts', 'Spades'];
-    public static ranks: string[] = [
-        'Ace',
-        '2',
-        '3',
-        '4',
-        '5',
-        '6',
-        '7',
-        '8',
-        '9',
-        '10',
-        'Jack',
-        'Queen',
-        'King',
-    ];
+    public static suits: string[] = ['clubs', 'diamonds', 'hearts', 'spades'];
+    public static ranks: number[] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13];
 
     public static returnRandomCard(rng?: seedrandom.PRNG): BlackJackCard {
         let randomNumSuit;
@@ -40,9 +26,9 @@ export default class BlackJackCard {
     }
 
     private suit: string;
-    private rank: string;
+    private rank: number;
 
-    constructor(suit: string, rank: string) {
+    constructor(suit: string, rank: number) {
         this.suit = suit;
         this.rank = rank;
     }
@@ -51,21 +37,18 @@ export default class BlackJackCard {
         return this.suit;
     }
 
-    public get getRank(): string {
+    public get getRank(): number {
         return this.rank;
     }
 
     public toString(): string {
-        return `${this.rank}-${this.suit}`;
+        return `${this.suit}-${this.rank}`;
     }
 
     public get getValue(): number {
-        const value10Set: Set<string> = new Set(['Jack', 'Queen', 'King']);
-        if (isNaN(Number(this.rank))) {
-            if (value10Set.has(this.rank)) return 10;
-
-            return 1;
+        if (this.rank >= 10) {
+            return 10;
         }
-        return Number(this.rank);
+        return this.rank;
     }
 }

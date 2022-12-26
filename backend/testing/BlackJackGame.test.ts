@@ -8,11 +8,11 @@ import {
 
 describe('BlackJack', function () {
     const game: BlackJackGame = new BlackJackGame();
-    const cardJack: BlackJackCard = new BlackJackCard('Clubs', 'King');
-    const card5: BlackJackCard = new BlackJackCard('Hearts', '5');
-    const cardAce: BlackJackCard = new BlackJackCard('Spades', 'Ace');
-    const card10: BlackJackCard = new BlackJackCard('Diamonds', '10');
-    const card2: BlackJackCard = new BlackJackCard('Diamonds', '2');
+    const cardJack: BlackJackCard = new BlackJackCard('clubs', 13);
+    const card5: BlackJackCard = new BlackJackCard('hearts', 5);
+    const cardAce: BlackJackCard = new BlackJackCard('spades', 1);
+    const card10: BlackJackCard = new BlackJackCard('diamonds', 10);
+    const card2: BlackJackCard = new BlackJackCard('diamonds', 2);
     describe('Cards', function () {
         it('cards return the correct value', function () {
             assert.strictEqual(10, cardJack.getValue);
@@ -84,8 +84,8 @@ describe('BlackJack', function () {
     });
 
     describe('game state', function () {
-        const cardAce: BlackJackCard = new BlackJackCard('Spades', 'Ace');
-        const card5: BlackJackCard = new BlackJackCard('Hearts', '5');
+        const cardAce: BlackJackCard = new BlackJackCard('spades', 1);
+        const card5: BlackJackCard = new BlackJackCard('hearts', 5);
 
         it('returns correct game state', function () {
             game.reset(false);

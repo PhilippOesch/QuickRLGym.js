@@ -2,7 +2,7 @@ import { SingleAgentEnvironment, StepResult } from '../index';
 import { BlackJackGame, BlackJackGameState } from '../Games/BlackJack/index';
 
 export interface BlackJackOptions {
-    randomSeed: number;
+    randomSeed?: number;
 }
 
 export default class BlackJackEnv extends SingleAgentEnvironment {

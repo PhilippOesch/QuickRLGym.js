@@ -29,12 +29,14 @@ export default abstract class Agent {
      * @param {string} takenAction - The action that was taken.
      * @param {object} newState - The new game state
      * @param {number} payoff - The gained payoff for the agent
+     * @param {object} contextInfo - Through this object, additional information can be provided.
      */
     abstract feed(
         prevState: object,
         takenAction: string,
         newState: object,
-        payoff: number
+        payoff: number,
+        contextInfo: object
     ): void;
 
     /**

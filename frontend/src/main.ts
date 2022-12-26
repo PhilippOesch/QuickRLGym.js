@@ -1,20 +1,39 @@
 //import QLAgentBrowser from './Agents/QLAgentBrowser';
-import { QLAgent } from '../../shared/src';
+import { MCAgent, QLAgent } from '../../shared/src';
 import BrowserFileManager from './BrowserFileManager';
-import ShowTaxiGameEnv, { ShowTaxiOptions } from './ShowTaxiGameEnv';
+import ShowBlackJackEnv, {
+    ShowBlackJackOptions,
+} from './BlackJackGame/ShowBlackJackEnv';
+import ShowTaxiGameEnv, { ShowTaxiOptions } from './TaxiGame/ShowTaxiGameEnv';
 
 const fileManager = new BrowserFileManager();
 
-async function Main() {
+async function MainTaxi() {
     const options: ShowTaxiOptions = {
         interactiveMode: false,
     };
     const sceneEnv: ShowTaxiGameEnv = new ShowTaxiGameEnv(options);
     const agent = new QLAgent(sceneEnv.getEnv);
-    await agent.loadQTable('models/qTable.json', fileManager);
+    //const agent = new MCAgent(sceneEnv.getEnv);
+    await agent.load('models/taxi/qTable.json', fileManager);
+    //await agent.load('models/taxi/mcagent.json', fileManager);
+    sceneEnv.setAgent = agent;
+    await sceneEnv.init();
+    sceneEnv.startGame(true, 100, -1);
+}
+
+//MainTaxi();
+
+async function MainBlackJack() {
+    const options: ShowBlackJackOptions = {
+        interactiveMode: false,
+    };
+    const sceneEnv: ShowBlackJackEnv = new ShowBlackJackEnv(options);
+    const agent = new MCAgent(sceneEnv.getEnv);
+    await agent.load('models/blackJack/mcagent.json', fileManager);
     sceneEnv.setAgent = agent;
     await sceneEnv.init();
     sceneEnv.startGame(true);
 }
 
-Main();
+MainBlackJack();
