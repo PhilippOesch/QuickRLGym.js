@@ -1,10 +1,11 @@
 {
-  "name": "shared",
+  "name": "quickrl.core",
   "version": "1.0.0",
   "description": "shared classes between frontend and backend implementation",
-  "main": "index.js",
+  "main": "./out/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "buildModule": "npx tsc"
   },
   "author": "Philipp Oeschger",
   "license": "ISC",
