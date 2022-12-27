@@ -1,6 +1,6 @@
 import { strict as assert } from 'node:assert';
 import { describe } from 'mocha';
-import { Tensor } from '../../shared/src';
+import { Tensor } from '..';
 
 const dims = [4, 6, 8, 7, 2];
 

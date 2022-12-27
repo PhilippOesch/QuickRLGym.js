@@ -1,10 +1,20 @@
 {
-  "name": "shared",
-  "version": "1.0.0",
-  "description": "shared classes between frontend and backend implementation",
-  "main": "index.js",
+  "name": "quickrl.core",
+  "version": "0.5.2",
+  "description": "This is a simple framework for implementing and testing reinforcement learning environments and algorithms",
+  "main": "./out/index.js",
+  "types": "./out/index.d.ts",
+  "keywords": [
+    "reinforcement learning",
+    "javascript",
+    "typescript",
+    "machine learning",
+    "games"
+  ],
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "npx tsc -d; mocha ./out/testing/;",
+    "buildModule": "npx tsc -d",
+    "release": "npx tsc -d; mocha ./out/testing/; npm publish;"
   },
   "author": "Philipp Oeschger",
   "license": "ISC",
@@ -12,8 +22,10 @@
     "seedrandom": "^3.0.5"
   },
   "devDependencies": {
-    "typescript": "^4.8.4",
+    "@types/mocha": "^10.0.1",
     "@types/node": "^18.11.9",
-    "@types/seedrandom": "^3.0.2"
+    "@types/seedrandom": "^3.0.2",
+    "mocha": "^10.2.0",
+    "typescript": "^4.8.4"
   }
 }

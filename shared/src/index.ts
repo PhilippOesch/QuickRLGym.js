@@ -7,31 +7,26 @@ import SingleAgentEnvironment, {
     GameStateContext,
 } from './RLInterface/SingleAgentEnvironment';
 import Environment from './RLInterface/Environment';
-import TaxiEnv, { TaxiEnvOptions } from './Envs/TaxiEnv';
-import BlackJackEnv, { BlackJackOptions } from './Envs/BlackJackEnv';
+import * as Envs from './Envs';
 import QuickRLJS from './RLInterface/QuickRLJS';
 import FileManager from './RLInterface/FileManager';
-import QLAgent, { QLAgentSettings } from './Agents/QLAgent/QLAgent';
-import MCAgent, { MCAgentConfig } from './Agents/MCAgent/MCAgent';
+import * as Agents from './Agents';
+import * as Games from './Games';
 
 export {
     type JSONTensor,
-    type MCAgentConfig,
-    type QLAgentSettings,
+    Agents,
     type GameStateContext,
-    type TaxiEnvOptions,
-    type BlackJackOptions,
+    Envs,
     type FileManager,
     type StepResult,
-    QLAgent,
-    MCAgent,
-    BlackJackEnv,
+    Games,
     SingleAgentEnvironment,
     Environment,
-    TaxiEnv,
     Agent,
     Vec2,
     Tensor,
     MathUtils,
-    QuickRLJS,
 };
+
+export default QuickRLJS;

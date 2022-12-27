@@ -1,16 +1,16 @@
 import { GameObjects, Scene } from 'phaser';
-import { BlackJackEnv } from '../../../shared/src';
-import {
-    BlackJackCard,
-    BlackJackGame,
-} from '../../../shared/src/Games/BlackJack';
+import { Envs, Games } from '../../../shared/src';
+// import {
+//     BlackJackCard,
+//     BlackJackGame,
+// } from '../../../shared/src/Games/BlackJack';
 import BlackJackUtils from './Utils';
 
 export default class BlackJackGameScene extends Scene {
     private interactiveMode: boolean;
     private loopEndless: boolean;
 
-    private blackJackGame: BlackJackGame;
+    private blackJackGame: Games.BlackJack.BlackJackGame;
     //private showDealerCard: GameObjects.Image;
     private lastPlayerCard: GameObjects.Image;
     private dealerUi: GameObjects.Text;
@@ -20,7 +20,7 @@ export default class BlackJackGameScene extends Scene {
     private totalScore: number = 0;
 
     constructor(
-        env: BlackJackEnv,
+        env: Envs.BlackJackEnv,
         interactiveMode: boolean,
         loopEndless: boolean = false
     ) {
@@ -47,7 +47,7 @@ export default class BlackJackGameScene extends Scene {
     }
     public create() {
         // dealer shown card
-        const showCard: BlackJackCard =
+        const showCard: Games.BlackJack.BlackJackCard =
             this.blackJackGame.getDealer.getShownCard;
 
         // dealer hidden card
@@ -56,7 +56,7 @@ export default class BlackJackGameScene extends Scene {
         this.add.image(150, 130, showCard.toString());
 
         // player shown card
-        const lastCard: BlackJackCard =
+        const lastCard: Games.BlackJack.BlackJackCard =
             this.blackJackGame.getPlayer.getCurrentCard!;
         this.lastPlayerCard = this.add.image(230, 370, lastCard.toString());
 
@@ -101,7 +101,7 @@ export default class BlackJackGameScene extends Scene {
 
     public reRender(): void {
         // update cards:
-        const currentCard: BlackJackCard =
+        const currentCard: Games.BlackJack.BlackJackCard =
             this.blackJackGame.getPlayer.getCurrentCard!;
         this.lastPlayerCard.setTexture(currentCard.toString());
         const newPlayerScore = this.blackJackGame.getPlayer.getScore;

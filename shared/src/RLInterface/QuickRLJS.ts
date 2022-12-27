@@ -1,14 +1,14 @@
 import Environment from './Environment';
-import { TaxiEnv, BlackJackEnv } from '../index';
+import { Envs } from '../index';
 
 /**
  * Main Class for Framework
  */
-class QuickRLJS {
+module QuickRLJS {
     /**
      * @property registery - registery for enviroment classes
      */
-    public static registery: Map<string, typeof Environment> = new Map();
+    export const registery: Map<string, typeof Environment> = new Map();
 
     /**
      * load a registered environment class
@@ -17,7 +17,7 @@ class QuickRLJS {
      * @param initialState - initial state of the environment
      * @returns - an instatiated object of the environment
      */
-    public static loadEnv(
+    export function loadEnv(
         name: string,
         options?: object,
         initialState?: object
@@ -34,13 +34,13 @@ class QuickRLJS {
      * @param name - name of the environment to register.
      * @param envtype - The referenct to the environment class
      */
-    public static register(name: string, envtype: typeof Environment): void {
+    export function register(name: string, envtype: typeof Environment): void {
         QuickRLJS.registery.set(name, envtype);
     }
 }
 
 // registering standard enviroments
-QuickRLJS.register('Taxi', TaxiEnv);
-QuickRLJS.register('BlackJack', BlackJackEnv);
+QuickRLJS.register('Taxi', Envs.TaxiEnv);
+QuickRLJS.register('BlackJack', Envs.BlackJackEnv);
 
 export default QuickRLJS;

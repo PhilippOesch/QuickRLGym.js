@@ -1,0 +1,21 @@
+@import 'fontFaces.css';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+    @apply bg-slate-900 text-slate-100;
+}
+
+h1 {
+    @apply text-3xl font-sans;
+}
+
+.mainContainer {
+    @apply container mx-auto px-2 mt-12;
+}
+
+a {
+    @apply duration-300;
+}

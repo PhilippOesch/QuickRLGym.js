@@ -9,7 +9,7 @@ import {
 } from '../../index';
 import seedrandom from 'seedrandom';
 
-export interface MCAgentConfig {
+export interface MCAgentSettings {
     epsilonStart: number;
     discountFactor: number;
     epsilonEnd?: number;
@@ -31,7 +31,7 @@ interface MCSaveFormat {
  * Implementation of First visit Monte Carlo
  */
 export default class MCAgent extends Agent {
-    private config?: MCAgentConfig;
+    private config?: MCAgentSettings;
     private rng: seedrandom.PRNG;
     private randomSeed?: string;
     private valueTable: Tensor;
@@ -41,7 +41,11 @@ export default class MCAgent extends Agent {
     private epsilon: number = 0;
     private epsilonStep: number = 0;
 
-    constructor(env: Environment, config?: MCAgentConfig, randomSeed?: number) {
+    constructor(
+        env: Environment,
+        config?: MCAgentSettings,
+        randomSeed?: number
+    ) {
         super(env);
         if (randomSeed != undefined) {
             this.randomSeed = randomSeed.toString();
@@ -72,9 +76,6 @@ export default class MCAgent extends Agent {
         payoff: number,
         gameStateContext: GameStateContext
     ): void {
-        if (payoff == undefined) {
-            console.log('hoppla');
-        }
         // buffer experience
         this.experience.push({
             state: this.env.encodeStateToIndices(prevState),
@@ -97,7 +98,6 @@ export default class MCAgent extends Agent {
 
     public decayEpsilon(): void {
         if (!this.config!.epsilonDecaySteps || !this.config!.epsilonEnd) {
-            console.log('true');
             return;
         }
 
@@ -149,9 +149,6 @@ export default class MCAgent extends Agent {
                     ...idxExperience.state,
                     idxExperience.actionIdx
                 ) as number;
-                //console.log(g);
-                //console.log(oldMean);
-                //console.log(stateReturnCount);
                 const newMean =
                     (oldMean / stateReturnCount) * (stateReturnCount - 1) +
                     g / stateReturnCount;

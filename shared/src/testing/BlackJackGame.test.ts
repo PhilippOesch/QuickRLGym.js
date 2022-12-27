@@ -1,18 +1,25 @@
 import { strict as assert } from 'node:assert';
 import { describe } from 'mocha';
-import {
-    BlackJackCard,
-    BlackJackGame,
-    BlackJackGameState,
-} from '../../shared/src/Games/BlackJack';
+// import {
+//     BlackJackCard,
+//     BlackJackGame,
+//     BlackJackGameState,
+// } from '../Games/BlackJack';
+import { Games } from '..';
 
 describe('BlackJack', function () {
-    const game: BlackJackGame = new BlackJackGame();
-    const cardJack: BlackJackCard = new BlackJackCard('clubs', 13);
-    const card5: BlackJackCard = new BlackJackCard('hearts', 5);
-    const cardAce: BlackJackCard = new BlackJackCard('spades', 1);
-    const card10: BlackJackCard = new BlackJackCard('diamonds', 10);
-    const card2: BlackJackCard = new BlackJackCard('diamonds', 2);
+    const game: Games.BlackJack.BlackJackGame =
+        new Games.BlackJack.BlackJackGame();
+    const cardJack: Games.BlackJack.BlackJackCard =
+        new Games.BlackJack.BlackJackCard('clubs', 13);
+    const card5: Games.BlackJack.BlackJackCard =
+        new Games.BlackJack.BlackJackCard('hearts', 5);
+    const cardAce: Games.BlackJack.BlackJackCard =
+        new Games.BlackJack.BlackJackCard('spades', 1);
+    const card10: Games.BlackJack.BlackJackCard =
+        new Games.BlackJack.BlackJackCard('diamonds', 10);
+    const card2: Games.BlackJack.BlackJackCard =
+        new Games.BlackJack.BlackJackCard('diamonds', 2);
     describe('Cards', function () {
         it('cards return the correct value', function () {
             assert.strictEqual(10, cardJack.getValue);
@@ -42,7 +49,6 @@ describe('BlackJack', function () {
             game.reset(false);
             game.getPlayer.addCard(cardAce);
             game.getPlayer.addCard(card10);
-            console.log(game.getPlayer.getScore);
             game.getPlayer.callStick();
             game.getDealer.addCard(cardAce);
             game.getDealer.addCard(card5);
@@ -84,16 +90,19 @@ describe('BlackJack', function () {
     });
 
     describe('game state', function () {
-        const cardAce: BlackJackCard = new BlackJackCard('spades', 1);
-        const card5: BlackJackCard = new BlackJackCard('hearts', 5);
+        const cardAce: Games.BlackJack.BlackJackCard =
+            new Games.BlackJack.BlackJackCard('spades', 1);
+        const card5: Games.BlackJack.BlackJackCard =
+            new Games.BlackJack.BlackJackCard('hearts', 5);
 
         it('returns correct game state', function () {
             game.reset(false);
             game.getPlayer.addCard(cardAce);
             game.getPlayer.addCard(card5);
-            const realState: BlackJackGameState = game.getGameState;
+            const realState: Games.BlackJack.BlackJackGameState =
+                game.getGameState;
 
-            const expectedState: BlackJackGameState = {
+            const expectedState: Games.BlackJack.BlackJackGameState = {
                 playerScore: 16,
                 shownCard: undefined,
                 playerHoldsUsableAce: true,
