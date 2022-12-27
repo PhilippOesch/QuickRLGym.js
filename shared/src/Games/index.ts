@@ -1,4 +1,4 @@
 import * as Taxi from './TaxiGame';
 import * as BlackJack from './BlackJack';
 
-export { Taxi };
+export { Taxi, BlackJack };

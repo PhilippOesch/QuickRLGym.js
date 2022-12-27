@@ -1,14 +1,17 @@
-import QuickRLJS, { SingleAgentEnvironment, Agents } from '../../shared/';
+import QuickRLJS, {
+    SingleAgentEnvironment,
+    Agents,
+} from '../../shared/src/index';
 import NodeFileManager from './NodeFileManager';
 
 //parameters
 const fileManager = new NodeFileManager();
 
 async function main() {
-    //trainTaxiQLAgent();
+    trainTaxiQLAgent();
     //trainTaxiMCAgent();
     //trainBlackJack();
-    trainBlackJackMCAgent();
+    //trainBlackJackMCAgent();
 }
 
 async function trainBlackJack() {
