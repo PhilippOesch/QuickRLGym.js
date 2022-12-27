@@ -1,4 +1,4 @@
-import StepResult from '../RLInterface/StepResult';
+import StepResult from './StepResult';
 
 export default abstract class Environment {
     protected options?: object;

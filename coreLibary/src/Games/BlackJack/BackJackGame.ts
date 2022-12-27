@@ -6,7 +6,7 @@ import {
     BlackJackDealer,
     BlackJackGameState,
     BlackJackCard,
-} from '../BlackJack/index';
+} from './index';
 
 /**
  * The Black Jack implementation is oriented on the logic described in Richard

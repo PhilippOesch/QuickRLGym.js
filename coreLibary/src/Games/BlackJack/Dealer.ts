@@ -1,4 +1,4 @@
-import { BlackJackPlayer, BlackJackCard } from '../BlackJack/index';
+import { BlackJackPlayer, BlackJackCard } from './index';
 
 export default class BlackJackDealer extends BlackJackPlayer {
     private shownCard: BlackJackCard;
