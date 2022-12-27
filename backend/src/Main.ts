@@ -1,9 +1,4 @@
-import {
-    QuickRLJS,
-    SingleAgentEnvironment,
-    QLAgent,
-    MCAgent,
-} from '../../shared/src/';
+import QuickRLJS, { SingleAgentEnvironment, Agents } from '../../shared/';
 import NodeFileManager from './NodeFileManager';
 
 //parameters
@@ -11,9 +6,9 @@ const fileManager = new NodeFileManager();
 
 async function main() {
     //trainTaxiQLAgent();
-    trainTaxiMCAgent();
+    //trainTaxiMCAgent();
     //trainBlackJack();
-    //trainBlackJackMCAgent();
+    trainBlackJackMCAgent();
 }
 
 async function trainBlackJack() {
@@ -26,7 +21,7 @@ async function trainBlackJack() {
     }) as SingleAgentEnvironment;
 
     console.log(env);
-    const agent: QLAgent = new QLAgent(env, {
+    const agent: Agents.QLAgent = new Agents.QLAgent(env, {
         epsilonStart: 0.1,
         epsilonEnd: 0.1,
         epsilonDecaySteps: 1000,
@@ -49,7 +44,7 @@ async function trainTaxiQLAgent() {
     const env: SingleAgentEnvironment = QuickRLJS.loadEnv('Taxi', {
         randomSeed: randomSeed,
     }) as SingleAgentEnvironment;
-    const agent: QLAgent = new QLAgent(
+    const agent: Agents.QLAgent = new Agents.QLAgent(
         env,
         {
             epsilonStart: 0.1,
@@ -76,7 +71,7 @@ async function trainTaxiMCAgent() {
         randomSeed: randomSeed,
     }) as SingleAgentEnvironment;
 
-    const agent = new MCAgent(env, {
+    const agent = new Agents.MCAgent(env, {
         epsilonStart: 1,
         discountFactor: 1,
         epsilonDecaySteps: 10000,
@@ -98,7 +93,7 @@ async function trainBlackJackMCAgent() {
     }) as SingleAgentEnvironment;
 
     console.log(env);
-    const agent = new MCAgent(env, {
+    const agent = new Agents.MCAgent(env, {
         epsilonStart: 0.2,
         discountFactor: 1,
     });

@@ -13,6 +13,7 @@ import QuickRLJS from './RLInterface/QuickRLJS';
 import FileManager from './RLInterface/FileManager';
 import QLAgent, { QLAgentSettings } from './Agents/QLAgent/QLAgent';
 import MCAgent, { MCAgentConfig } from './Agents/MCAgent/MCAgent';
+import * as Games from './Games';
 
 export {
     type JSONTensor,
@@ -23,6 +24,7 @@ export {
     type BlackJackOptions,
     type FileManager,
     type StepResult,
+    Games,
     QLAgent,
     MCAgent,
     BlackJackEnv,

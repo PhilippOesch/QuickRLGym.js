@@ -1,9 +1,9 @@
-import {
-    TaxiGame,
-    TaxiGlobals,
-    TaxiGameState,
-} from '../../../shared/src/Games/TaxiGame';
-import { Agent, TaxiEnv } from '../../../shared/src';
+// import {
+//     TaxiGame,
+//     TaxiGlobals,
+//     TaxiGameState,
+// } from '../../../shared/src/Games/TaxiGame';
+import { Agent, Envs, Games } from '../../../shared/src';
 import TaxiGameScene from './TaxiGameScene';
 
 export interface ShowTaxiOptions {
@@ -14,21 +14,24 @@ export interface ShowTaxiOptions {
 
 export default class ShowTaxiGameEnv {
     private agent: Agent;
-    private game: TaxiGame;
-    private env: TaxiEnv;
+    private game: Games.Taxi.TaxiGame;
+    private env: Envs.TaxiEnv;
     private gameScene: TaxiGameScene;
-    private initialGameState?: TaxiGameState;
+    private initialGameState?: Games.Taxi.TaxiGameState;
 
-    constructor(options?: ShowTaxiOptions, initialGameState?: TaxiGameState) {
+    constructor(
+        options?: ShowTaxiOptions,
+        initialGameState?: Games.Taxi.TaxiGameState
+    ) {
         if (options) {
-            this.env = new TaxiEnv({ randomSeed: options.randomSeed });
+            this.env = new Envs.TaxiEnv({ randomSeed: options.randomSeed });
             this.gameScene = new TaxiGameScene(
                 this.env,
                 options.interactiveMode,
                 options.loopEndless
             );
         } else {
-            this.env = new TaxiEnv();
+            this.env = new Envs.TaxiEnv();
             this.gameScene = new TaxiGameScene(this.env, false);
         }
         console.log(this.env);
@@ -36,7 +39,7 @@ export default class ShowTaxiGameEnv {
         this.initialGameState = initialGameState;
     }
 
-    public get getEnv(): TaxiEnv {
+    public get getEnv(): Envs.TaxiEnv {
         return this.env;
     }
 
@@ -51,8 +54,14 @@ export default class ShowTaxiGameEnv {
         const config: Phaser.Types.Core.GameConfig = {
             type: Phaser.AUTO,
             parent: 'app',
-            width: TaxiGlobals.tileWidth * 11 * TaxiGlobals.scale,
-            height: TaxiGlobals.tileHeight * 7 * TaxiGlobals.scale,
+            width:
+                Games.Taxi.TaxiGlobals.tileWidth *
+                11 *
+                Games.Taxi.TaxiGlobals.scale,
+            height:
+                Games.Taxi.TaxiGlobals.tileHeight *
+                7 *
+                Games.Taxi.TaxiGlobals.scale,
             zoom: 1,
             physics: {
                 default: 'arcade',

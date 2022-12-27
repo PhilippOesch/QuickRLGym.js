@@ -1,7 +1,6 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
     ssr: true,
-    modules: ['../shared'],
     css: ['/public/css/main.css'],
     postcss: {
         plugins: {
@@ -12,7 +11,6 @@ export default defineNuxtConfig({
     app: {
         head: {
             title: 'QuickRLJS',
-            script: [{ src: '../shared/src' }],
         },
     },
 });

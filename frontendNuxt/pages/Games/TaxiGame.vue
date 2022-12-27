@@ -7,7 +7,7 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 import QuickRLAlgorithm from '~~/utils/Algorithm';
-import { MathUtils } from '../../../shared/src/';
+import { MathUtils } from 'quickrl.core';
 
 export default defineComponent({
     setup() {
@@ -25,8 +25,8 @@ export default defineComponent({
         };
     },
     mounted() {
-        const res = MathUtils.argMax([0, 2]);
-        //console.log(data);
+        const res = MathUtils.argMax([0, 2, 4, 3]);
+        console.log(res);
     },
 });
 </script>

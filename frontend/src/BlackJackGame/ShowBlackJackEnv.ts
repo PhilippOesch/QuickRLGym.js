@@ -1,5 +1,4 @@
-import { Agent, BlackJackEnv } from '../../../shared/src';
-import { BlackJackGame } from '../../../shared/src/Games/BlackJack';
+import { Agent, Envs, Games } from '../../../shared/src';
 import BlackJackGameScene from './BlackJackGameScene';
 
 export interface ShowBlackJackOptions {
@@ -10,13 +9,15 @@ export interface ShowBlackJackOptions {
 
 export default class ShowBlackJackEnv {
     private agent: Agent;
-    private game: BlackJackGame;
-    private env: BlackJackEnv;
+    private game: Games.BlackJack.BlackJackGame;
+    private env: Envs.BlackJackEnv;
     private gameScene: BlackJackGameScene;
 
     constructor(options?: ShowBlackJackOptions) {
         if (options) {
-            this.env = new BlackJackEnv({ randomSeed: options.randomSeed });
+            this.env = new Envs.BlackJackEnv({
+                randomSeed: options.randomSeed,
+            });
             // set game scene
             this.gameScene = new BlackJackGameScene(
                 this.env,
@@ -24,14 +25,14 @@ export default class ShowBlackJackEnv {
                 options.loopEndless
             );
         } else {
-            this.env = new BlackJackEnv();
+            this.env = new Envs.BlackJackEnv();
             this.gameScene = new BlackJackGameScene(this.env, false);
         }
         console.log(this.env);
         this.game = this.env.getGame;
     }
 
-    public get getEnv(): BlackJackEnv {
+    public get getEnv(): Envs.BlackJackEnv {
         return this.env;
     }
 

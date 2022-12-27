@@ -1,5 +1,5 @@
 //import QLAgentBrowser from './Agents/QLAgentBrowser';
-import { MCAgent, QLAgent } from '../../shared/src';
+import { Agents } from '../../shared/src';
 import BrowserFileManager from './BrowserFileManager';
 import ShowBlackJackEnv, {
     ShowBlackJackOptions,
@@ -13,7 +13,7 @@ async function MainTaxi() {
         interactiveMode: false,
     };
     const sceneEnv: ShowTaxiGameEnv = new ShowTaxiGameEnv(options);
-    const agent = new QLAgent(sceneEnv.getEnv);
+    const agent = new Agents.QLAgent(sceneEnv.getEnv);
     //const agent = new MCAgent(sceneEnv.getEnv);
     await agent.load('models/taxi/qTable.json', fileManager);
     //await agent.load('models/taxi/mcagent.json', fileManager);
@@ -29,7 +29,7 @@ async function MainBlackJack() {
         interactiveMode: false,
     };
     const sceneEnv: ShowBlackJackEnv = new ShowBlackJackEnv(options);
-    const agent = new MCAgent(sceneEnv.getEnv);
+    const agent = new Agents.MCAgent(sceneEnv.getEnv);
     await agent.load('models/blackJack/mcagent.json', fileManager);
     sceneEnv.setAgent = agent;
     await sceneEnv.init();
