@@ -13,14 +13,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/PhilippOesch/TsTaxiRL.git"
+    "url": "git+https://github.com/PhilippOesch/QuickRLGym.js.git"
   },
   "author": "Philipp Oeschger",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/PhilippOesch/TsTaxiRL/issues"
+    "url": "https://github.com/PhilippOesch/QuickRLGym.js/issues"
   },
-  "homepage": "https://github.com/PhilippOesch/TsTaxiRL#readme",
+  "homepage": "https://github.com/PhilippOesch/QuickRLGym.js#readme",
   "devDependencies": {
     "typescript": "^4.8.4"
   }
