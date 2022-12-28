@@ -23,9 +23,12 @@ export default class TaxiEnv extends SingleAgentEnvironment {
 
     public get getStats(): TaxiStats {
         return {
-            averageGameIterations:
-                this.averageGameIterations / this.logIntervalCount,
-            averageGameScore: this.averageGameScore / this.logIntervalCount,
+            averageGameIterations: this.logIntervalCount
+                ? this.averageGameIterations / this.logIntervalCount
+                : 0,
+            averageGameScore: this.logIntervalCount
+                ? this.averageGameScore / this.logIntervalCount
+                : 0,
         };
     }
 

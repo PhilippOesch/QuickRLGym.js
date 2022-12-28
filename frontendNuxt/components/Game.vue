@@ -10,7 +10,7 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import useGameEnv from '../comsosable/useGameEnv';
+import useGameEnv, { TaxiSceneInfo } from '../comsosable/useGameEnv';
 
 export default defineComponent({
     props: {
@@ -30,6 +30,9 @@ export default defineComponent({
         window.Phaser = await import('phaser');
         console.log(window.Phaser);
         this.taxiGameInfo = await useGameEnv(gameContainer);
+        const info = this.taxiGameInfo as TaxiSceneInfo;
+        const stats = info.env.getStats;
+        console.log(stats);
     },
 });
 </script>

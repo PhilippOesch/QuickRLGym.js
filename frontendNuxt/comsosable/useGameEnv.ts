@@ -1,4 +1,4 @@
-import { Envs, Games, Agents, Environment } from 'quickrl.core';
+import { Envs, Games, Agents } from 'quickrl.core';
 import TaxiGameScene from '../utils/GameScenes/TaxiGameScene';
 
 export interface TaxiSceneInfo {

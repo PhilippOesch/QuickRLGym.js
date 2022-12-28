@@ -25,9 +25,15 @@ export default class BlackJackEnv extends SingleAgentEnvironment {
 
     public get getStats(): BlackJackStats {
         return {
-            averageReturn: this.averageReturn / this.logIntervalCount,
-            averageDealerScore: this.averageDealerScore / this.logIntervalCount,
-            averagePlayerScore: this.averagePlayerScore / this.logIntervalCount,
+            averageReturn: this.logIntervalCount
+                ? this.averageReturn / this.logIntervalCount
+                : 0,
+            averageDealerScore: this.logIntervalCount
+                ? this.averageDealerScore / this.logIntervalCount
+                : 0,
+            averagePlayerScore: this.logIntervalCount
+                ? this.averagePlayerScore / this.logIntervalCount
+                : 0,
         };
     }
 
