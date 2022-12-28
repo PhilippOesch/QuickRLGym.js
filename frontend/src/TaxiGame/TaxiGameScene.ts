@@ -1,26 +1,19 @@
 import { Scene, GameObjects } from 'phaser';
-import {
-    TaxiAction,
-    TaxiGlobals,
-    TaxiUtils,
-    TaxiGameMap,
-    TaxiGame,
-} from '../../../shared/src/Games/TaxiGame';
-import { TaxiEnv } from '../../../shared/src';
-import { Vec2 } from '../../../shared/src';
+import { Games, Envs, Vec2 } from '../../../coreLibary/src';
 
 export default class TaxiGameScene extends Scene {
     private static destMapping: string[] = ['red', 'yellow', 'green', 'blue'];
 
-    private static carMoveMapping: Map<TaxiAction, number[]> = new Map([
-        [TaxiAction.Left, [0, 1]],
-        [TaxiAction.Right, [2, 3]],
-        [TaxiAction.Up, [4, 5]],
-        [TaxiAction.Down, [6, 7]],
-    ]);
+    private static carMoveMapping: Map<Games.Taxi.TaxiAction, number[]> =
+        new Map([
+            [Games.Taxi.TaxiAction.Left, [0, 1]],
+            [Games.Taxi.TaxiAction.Right, [2, 3]],
+            [Games.Taxi.TaxiAction.Up, [4, 5]],
+            [Games.Taxi.TaxiAction.Down, [6, 7]],
+        ]);
 
     private interactiveMode: boolean;
-    private taxiGame: TaxiGame;
+    private taxiGame: Games.Taxi.TaxiGame;
 
     //visual component
     private playerSprite: GameObjects.Sprite;
@@ -29,7 +22,7 @@ export default class TaxiGameScene extends Scene {
     private loopEndless: boolean;
 
     constructor(
-        taxiEnv: TaxiEnv,
+        taxiEnv: Envs.TaxiEnv,
         interactiveMode: boolean,
         loopEndless: boolean = false
     ) {
@@ -56,19 +49,22 @@ export default class TaxiGameScene extends Scene {
     public create(): void {
         // generate Map
         const map = this.make.tilemap({
-            data: TaxiGameMap.tileMap,
-            tileWidth: TaxiGlobals.tileWidth,
-            tileHeight: TaxiGlobals.tileHeight,
+            data: Games.Taxi.TaxiGameMap.tileMap,
+            tileWidth: Games.Taxi.TaxiGlobals.tileWidth,
+            tileHeight: Games.Taxi.TaxiGlobals.tileHeight,
         });
         const tiles = map.addTilesetImage('tiles');
         const layer = map.createLayer(0, tiles, 0, 0);
-        layer.setScale(TaxiGlobals.scale, TaxiGlobals.scale);
+        layer.setScale(
+            Games.Taxi.TaxiGlobals.scale,
+            Games.Taxi.TaxiGlobals.scale
+        );
 
         // generate Player
-        const index: number = this.getSpriteIndex(TaxiAction.Left);
+        const index: number = this.getSpriteIndex(Games.Taxi.TaxiAction.Left);
         this.playerSprite = this.add.sprite(92, 92, 'taxi', index);
-        this.playerSprite.setScale(0.7 * TaxiGlobals.scale);
-        const absPositionPlayer = TaxiUtils.adjustedToAbsPos(
+        this.playerSprite.setScale(0.7 * Games.Taxi.TaxiGlobals.scale);
+        const absPositionPlayer = Games.Taxi.TaxiUtils.adjustedToAbsPos(
             this.taxiGame.getPlayer.getPosition
         );
         this.playerSprite.setPosition(
@@ -77,7 +73,7 @@ export default class TaxiGameScene extends Scene {
         );
 
         // generate Customer
-        const absPositionCustomer = TaxiUtils.adjustedToAbsPos(
+        const absPositionCustomer = Games.Taxi.TaxiUtils.adjustedToAbsPos(
             this.taxiGame.getCustomer.getPosition
         );
         this.customerImage = this.add.image(
@@ -86,8 +82,8 @@ export default class TaxiGameScene extends Scene {
             'customer'
         );
         this.customerImage.setScale(
-            2 * TaxiGlobals.scale,
-            2 * TaxiGlobals.scale
+            2 * Games.Taxi.TaxiGlobals.scale,
+            2 * Games.Taxi.TaxiGlobals.scale
         );
 
         // generate UI
@@ -149,7 +145,7 @@ export default class TaxiGameScene extends Scene {
 
     public reRender(): void {
         // Update Player
-        const adjustedToAbsPos: Vec2 = TaxiUtils.adjustedToAbsPos(
+        const adjustedToAbsPos: Vec2 = Games.Taxi.TaxiUtils.adjustedToAbsPos(
             this.taxiGame.getPlayer.getPosition
         );
         const index: number = this.getSpriteIndex(
@@ -172,7 +168,7 @@ export default class TaxiGameScene extends Scene {
             this.customerImage.removeFromDisplayList();
         }
 
-        const absPositionCustomer = TaxiUtils.adjustedToAbsPos(
+        const absPositionCustomer = Games.Taxi.TaxiUtils.adjustedToAbsPos(
             this.taxiGame.getCustomer.getPosition
         );
         this.customerImage.setPosition(
@@ -199,7 +195,7 @@ export default class TaxiGameScene extends Scene {
         }
     }
 
-    private getSpriteIndex(carMoveState: TaxiAction): number {
+    private getSpriteIndex(carMoveState: Games.Taxi.TaxiAction): number {
         const indexes: number[] =
             TaxiGameScene.carMoveMapping.get(carMoveState)!;
         if (this.taxiGame.getCustomer.isCustomerPickedUp) {

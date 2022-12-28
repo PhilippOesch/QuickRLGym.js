@@ -1,5 +1,5 @@
 import { GameObjects, Scene } from 'phaser';
-import { Envs, Games } from '../../../shared/src';
+import { Envs, Games } from '../../../coreLibary/src';
 // import {
 //     BlackJackCard,
 //     BlackJackGame,

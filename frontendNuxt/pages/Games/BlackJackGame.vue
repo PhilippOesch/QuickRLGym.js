@@ -1,6 +1,7 @@
 <template>
     <div class="mainContainer">
-        <h1>BlackJack</h1>
+        <h1>Blackjack</h1>
+        <span>Algorithm Selection</span>
     </div>
 </template>
 

@@ -1,4 +1,4 @@
-import { Agent, Envs, Games } from '../../../shared/src';
+import { Agent, Envs, Games } from '../../../coreLibary/src';
 import BlackJackGameScene from './BlackJackGameScene';
 
 export interface ShowBlackJackOptions {

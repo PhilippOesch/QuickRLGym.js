@@ -1,17 +1,17 @@
 import QuickRLJS, {
     SingleAgentEnvironment,
     Agents,
-} from '../../shared/src/index';
+} from '../../coreLibary/src';
 import NodeFileManager from './NodeFileManager';
 
 //parameters
 const fileManager = new NodeFileManager();
 
 async function main() {
-    trainTaxiQLAgent();
+    //trainTaxiQLAgent();
     //trainTaxiMCAgent();
     //trainBlackJack();
-    //trainBlackJackMCAgent();
+    trainBlackJackMCAgent();
 }
 
 async function trainBlackJack() {
@@ -75,20 +75,19 @@ async function trainTaxiMCAgent() {
     }) as SingleAgentEnvironment;
 
     const agent = new Agents.MCAgent(env, {
-        epsilonStart: 1,
+        epsilonStart: 0.2,
         discountFactor: 1,
         epsilonDecaySteps: 10000,
-        epsilonEnd: 0.1,
     });
     env.setAgent = agent;
     env.initEnv();
     env.train(numIterations, logEvery, maxIterationsPerGame);
-    await agent.save('./MCAgent/taxi/mcagent.json', fileManager);
+    await agent.save('./models/MCAgent/taxi/mcagent.json', fileManager);
 }
 
 async function trainBlackJackMCAgent() {
     const randomSeed: number = 1234;
-    const numIterations: number = 1000000;
+    const numIterations: number = 10000000;
     const logEvery: number = 1000;
 
     const env: SingleAgentEnvironment = QuickRLJS.loadEnv('BlackJack', {

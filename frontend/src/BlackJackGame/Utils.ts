@@ -1,10 +1,10 @@
-import { BlackJackCard } from '../../../shared/src/Games/BlackJack';
+import { Games } from '../../../coreLibary/src';
 
 module BlackJackUtils {
     export function getTotalCardSet(): Set<string> {
         let cardSet: Set<string> = new Set();
-        for (const suit of BlackJackCard.suits) {
-            for (const rank of BlackJackCard.ranks) {
+        for (const suit of Games.BlackJack.BlackJackCard.suits) {
+            for (const rank of Games.BlackJack.BlackJackCard.ranks) {
                 cardSet.add(`${suit}-${rank}`);
             }
         }

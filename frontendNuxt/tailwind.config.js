@@ -11,9 +11,15 @@ module.exports = {
     theme: {
         extend: {
             fontFamily: {
-                sans: ['Work Sans', 'Helvetica', 'sans-serif'],
+                sans: ['Inter', 'Helvetica', 'sans-serif'],
             },
         },
     },
+    safelist: [
+        'text-amber-500',
+        'text-sky-500',
+        'text-green-600',
+        'text-pink-600',
+    ],
     plugins: [],
 };

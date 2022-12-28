@@ -1,11 +1,12 @@
 @import 'fontFaces.css';
+@import 'fontIcons.css';
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 body {
-    @apply bg-slate-900 text-slate-100;
+    @apply bg-gray-900 text-slate-50;
 }
 
 h1 {

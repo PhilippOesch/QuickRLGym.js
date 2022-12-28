@@ -1,0 +1,41 @@
+@font-face {
+    font-family: 'quickrl';
+    src: url('/icons/fonts/quickrl.eot?rr46g9');
+    src: url('/icons/fonts/quickrl.eot?rr46g9#iefix')
+            format('embedded-opentype'),
+        url('/icons/fonts/quickrl.ttf?rr46g9') format('truetype'),
+        url('/icons/fonts/quickrl.woff?rr46g9') format('woff'),
+        url('/icons/fonts/quickrl.svg?rr46g9#quickrl') format('svg');
+    font-weight: normal;
+    font-style: normal;
+    font-display: block;
+}
+
+[class^='quickrl-'],
+[class*=' quickrl-'] {
+    /* use !important to prevent issues with browser extensions that change fonts */
+    font-family: 'quickrl' !important;
+    speak: never;
+    font-style: normal;
+    font-weight: normal;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
+
+    /* Better Font Rendering =========== */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.quickrl-grid:before {
+    content: '\e903';
+}
+.quickrl-tic-tac-toe:before {
+    content: '\e902';
+}
+.quickrl-card:before {
+    content: '\e900';
+}
+.quickrl-car:before {
+    content: '\e901';
+}

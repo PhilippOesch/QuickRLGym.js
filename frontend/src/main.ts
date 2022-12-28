@@ -1,5 +1,5 @@
 //import QLAgentBrowser from './Agents/QLAgentBrowser';
-import { Agents } from '../../shared/src';
+import { Agents } from '../../coreLibary/src';
 import BrowserFileManager from './BrowserFileManager';
 import ShowBlackJackEnv, {
     ShowBlackJackOptions,

@@ -3,7 +3,7 @@
 //     TaxiGlobals,
 //     TaxiGameState,
 // } from '../../../shared/src/Games/TaxiGame';
-import { Agent, Envs, Games } from '../../../shared/src';
+import { Agent, Envs, Games } from '../../../coreLibary/src';
 import TaxiGameScene from './TaxiGameScene';
 
 export interface ShowTaxiOptions {
