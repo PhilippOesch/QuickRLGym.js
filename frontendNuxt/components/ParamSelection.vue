@@ -33,6 +33,21 @@
                 :min="0"
                 :defaultValue="50"
             ></Slider>
+            <NumberInput
+                title="Training Iterations"
+                :min="1"
+                :max="200"
+                defaultValue="2"
+                styleClass=""
+            ></NumberInput>
+            <Toggle title="Activate"></Toggle>
+            <Toggle title="Activate"></Toggle>
+            <Slider
+                title="Parameter 5"
+                :max="200"
+                :min="0"
+                :defaultValue="50"
+            ></Slider>
         </div>
     </div>
 </template>
@@ -57,6 +72,6 @@ h3 {
 }
 
 .settingsContainer {
-    @apply grid lg:grid-cols-3 gap-8 mt-6;
+    @apply grid lg:grid-cols-6 gap-8 mt-6;
 }
 </style>

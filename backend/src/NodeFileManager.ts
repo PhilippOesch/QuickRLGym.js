@@ -1,5 +1,5 @@
 import path from 'path';
-import { FileManager } from '../../shared';
+import { FileManager } from '../../coreLibary/src';
 import { writeFile, readFile, mkdir } from 'node:fs/promises';
 
 class NodeFileManager implements FileManager {

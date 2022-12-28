@@ -1,22 +1,32 @@
 import { TaxiGame, TaxiGameState } from '../Games/TaxiGame/index';
-import { StepResult, SingleAgentEnvironment } from '../index';
+import { StepResult, SingleAgentEnvironment, EnvOptions } from '../index';
 
-export interface TaxiEnvOptions {
-    randomSeed?: number;
+export interface TaxiStats {
+    averageGameIterations: number;
+    averageGameScore: number;
 }
 
 export default class TaxiEnv extends SingleAgentEnvironment {
     private game: TaxiGame;
     private logIntervalCount: number = 0;
     private averageGameIterations: number = 0;
+    private averageGameScore: number = 0;
 
-    constructor(options?: TaxiEnvOptions, initialGameState?: TaxiGameState) {
+    constructor(options?: EnvOptions, initialGameState?: TaxiGameState) {
         super((options = options), (initialGameState = initialGameState));
         if (options) {
             this.game = new TaxiGame(options.randomSeed);
         } else {
             this.game = new TaxiGame();
         }
+    }
+
+    public get getStats(): TaxiStats {
+        return {
+            averageGameIterations:
+                this.averageGameIterations / this.logIntervalCount,
+            averageGameScore: this.averageGameScore / this.logIntervalCount,
+        };
     }
 
     public get getGameStateDim(): number[] {
@@ -69,6 +79,7 @@ export default class TaxiEnv extends SingleAgentEnvironment {
     public override onIterationEnd(): void {
         this.logIntervalCount++;
         this.averageGameIterations += this.getIteration;
+        this.averageGameScore += this.game.getReturn;
     }
 
     public override log(trainIteration: number): void {
@@ -76,6 +87,10 @@ export default class TaxiEnv extends SingleAgentEnvironment {
         console.log(
             'average Game Iterations:',
             this.averageGameIterations / this.logIntervalCount
+        );
+        console.log(
+            'average Game Score:',
+            this.averageGameScore / this.logIntervalCount
         );
         this.averageGameIterations = 0;
         this.logIntervalCount = 0;

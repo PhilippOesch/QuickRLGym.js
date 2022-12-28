@@ -7,23 +7,26 @@
                 type="range"
                 :name="name"
                 :id="name"
-                :value="currentValue"
-                @input="(event) => update(event.target as HTMLInputElement)"
                 :max="max"
                 :min="min"
+                :value="value"
+                @input="(event) => update(event.target as HTMLInputElement)"
                 :step="isfloat ? 0.01 : 1"
             />
             <input
                 type="number"
                 class="sliderNumInput"
                 :id="name + '-input'"
-                :value="currentValue"
-                @input="(event) => update(event.target as HTMLInputElement)"
+                :value="value"
                 :max="max"
                 :min="min"
+                @change="(event)=> finishEdit(event.target as HTMLInputElement)"
+                @input="(event) => update(event.target as HTMLInputElement)"
                 :step="isfloat ? 0.01 : 1"
             />
         </div>
+        <!-- @input="(event) => update(event.target as HTMLInputElement)" -->
+        <!-- :value="value" -->
     </div>
 </template>
 
@@ -47,12 +50,16 @@ export default defineComponent({
     },
     data() {
         return {
-            currentValue: this.defaultValue,
+            value: this.defaultValue ? this.defaultValue : 0,
         };
     },
     methods: {
+        finishEdit(el: HTMLInputElement) {
+            if (Number(el.value) < this.min) this.value = this.min;
+            if (Number(el.value) > this.max) this.value = this.max;
+        },
         update(el: HTMLInputElement) {
-            this.currentValue = el.value;
+            this.value = el.value;
         },
     },
 });
@@ -60,7 +67,7 @@ export default defineComponent({
 
 <style lang="postcss" scoped>
 .sliderWrapper {
-    @apply w-full;
+    @apply w-full col-span-2;
 }
 
 .sliderWrapper .title {

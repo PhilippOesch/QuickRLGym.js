@@ -11,6 +11,9 @@ export default defineNuxtConfig({
     app: {
         head: {
             title: 'QuickRLJS',
+            htmlAttrs: {
+                lang: 'en',
+            },
         },
     },
 });

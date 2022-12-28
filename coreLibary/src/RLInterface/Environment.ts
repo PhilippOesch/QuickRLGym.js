@@ -1,10 +1,14 @@
 import StepResult from './StepResult';
 
+export interface EnvOptions {
+    randomSeed?: number;
+}
+
 export default abstract class Environment {
-    protected options?: object;
+    protected options?: EnvOptions;
     protected initialState?: object;
 
-    constructor(options?: object, initialState?: object) {
+    constructor(options?: EnvOptions, initialState?: object) {
         this.options = options;
         this.initialState = initialState;
     }
@@ -13,6 +17,7 @@ export default abstract class Environment {
     public abstract get getState(): object;
     public abstract get getIsTerminal(): boolean;
     public abstract get getIteration(): number;
+    public abstract get getStats(): object;
     public abstract step(action: string): StepResult;
     public abstract reset(): boolean;
     public abstract encodeStateToIndices(state: object): number[];

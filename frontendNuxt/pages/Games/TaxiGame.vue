@@ -12,6 +12,7 @@ export default defineComponent({
     setup() {
         return {};
     },
+    mounted() {},
 });
 </script>
 

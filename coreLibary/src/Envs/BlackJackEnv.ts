@@ -1,8 +1,10 @@
-import { SingleAgentEnvironment, StepResult } from '../index';
+import { EnvOptions, SingleAgentEnvironment, StepResult } from '../index';
 import { BlackJackGame, BlackJackGameState } from '../Games/BlackJack/index';
 
-export interface BlackJackOptions {
-    randomSeed?: number;
+export interface BlackJackStats {
+    averageReturn: number;
+    averageDealerScore: number;
+    averagePlayerScore: number;
 }
 
 export default class BlackJackEnv extends SingleAgentEnvironment {
@@ -12,13 +14,21 @@ export default class BlackJackEnv extends SingleAgentEnvironment {
     private averageReturn: number = 0;
     private averageDealerScore: number = 0;
 
-    constructor(options?: BlackJackOptions) {
+    constructor(options?: EnvOptions) {
         super(options);
         if (options) {
             this.game = new BlackJackGame(options.randomSeed);
         } else {
             this.game = new BlackJackGame();
         }
+    }
+
+    public get getStats(): BlackJackStats {
+        return {
+            averageReturn: this.averageReturn / this.logIntervalCount,
+            averageDealerScore: this.averageDealerScore / this.logIntervalCount,
+            averagePlayerScore: this.averagePlayerScore / this.logIntervalCount,
+        };
     }
 
     /**

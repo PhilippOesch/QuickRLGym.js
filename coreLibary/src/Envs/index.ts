@@ -1,4 +1,4 @@
-import BlackJackEnv, { BlackJackOptions } from './BlackJackEnv';
-import TaxiEnv, { TaxiEnvOptions } from './TaxiEnv';
+import BlackJackEnv, { BlackJackStats } from './BlackJackEnv';
+import TaxiEnv, { TaxiStats } from './TaxiEnv';
 
-export { TaxiEnv, BlackJackEnv, type BlackJackOptions, type TaxiEnvOptions };
+export { TaxiEnv, BlackJackEnv, type TaxiStats, type BlackJackStats };

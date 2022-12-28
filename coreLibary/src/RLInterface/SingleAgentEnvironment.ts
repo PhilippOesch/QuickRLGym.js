@@ -1,6 +1,6 @@
 import Agent from './Agent';
 import StepResult from './StepResult';
-import Environment from './Environment';
+import Environment, { EnvOptions } from './Environment';
 
 export interface GameStateContext {
     isTerminal: boolean;
@@ -15,7 +15,7 @@ abstract class SingleAgentEnvironment extends Environment {
      * Constructor
      * @param initialState - the initial state of the environment.
      */
-    constructor(options?: object, initialState?: object) {
+    constructor(options?: EnvOptions, initialState?: object) {
         super((options = options), (initialState = initialState));
     }
 
@@ -44,7 +44,7 @@ abstract class SingleAgentEnvironment extends Environment {
      */
     public train(
         iterations: number = 100,
-        logEvery = 10,
+        logEvery = -1,
         maxIterationPerGame: number = -1
     ): void {
         this.reset();
@@ -73,7 +73,7 @@ abstract class SingleAgentEnvironment extends Environment {
                 );
             }
             this.onIterationEnd();
-            if (i % logEvery == 0) {
+            if (logEvery != -1 && i % logEvery == 0) {
                 this.log(i);
                 this.agent.log();
             }

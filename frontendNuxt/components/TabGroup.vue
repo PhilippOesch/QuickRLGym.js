@@ -8,15 +8,47 @@
         <div class="tabContainer">
             <ParamSelection></ParamSelection>
         </div>
+        <div class="freeComponents">
+            <Button
+                value="Start Training"
+                :handler="btnHandler"
+                :size="ButtonSize.Large"
+            />
+            <NumberInput
+                title="Training Iterations"
+                :min="1"
+                defaultValue="1000"
+                styleClasses="w-60"
+                :inputStyle="InputStyleType.Light"
+            ></NumberInput>
+            <NumberInput
+                title="Show Progress Every"
+                :min="1"
+                :max="200"
+                defaultValue="100"
+                styleClasses="w-60"
+                :inputStyle="InputStyleType.Light"
+            ></NumberInput>
+        </div>
+        <ClientOnly fallback-tag="span" fallback="Loading Game...">
+            <div class="mt-8"><Game></Game></div>
+        </ClientOnly>
     </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue';
+import ButtonSize from '../utils/enums/ButtonSize';
+import InputStyleType from '../utils/enums/InputStyleType';
 
 export default defineComponent({
     setup() {
-        return {};
+        return { ButtonSize, InputStyleType };
+    },
+    methods: {
+        btnHandler() {
+            console.log('hallo');
+        },
     },
 });
 </script>
@@ -27,7 +59,7 @@ export default defineComponent({
 }
 
 .tab {
-    @apply px-6 py-3 hover:bg-gray-700 rounded-md duration-300;
+    @apply px-6 py-3 hover:bg-gray-700 rounded-md duration-300 cursor-pointer;
 }
 
 .selected {
@@ -36,5 +68,9 @@ export default defineComponent({
 
 .tabContainer {
     @apply mt-8;
+}
+
+.freeComponents {
+    @apply flex flex-wrap mt-8 gap-8;
 }
 </style>

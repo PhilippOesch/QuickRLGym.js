@@ -23,7 +23,7 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import IconColor from '../utils/IconColors';
+import IconColor from '../utils/enums/IconColors';
 
 export default defineComponent({
     setup() {
