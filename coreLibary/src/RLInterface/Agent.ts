@@ -39,6 +39,8 @@ export default abstract class Agent {
         contextInfo: object
     ): void;
 
+    abstract setOptions(config: object, randomSeed?: number): void;
+
     /**
      * Method to select an action for prediction
      * @param {object} state - The current game state

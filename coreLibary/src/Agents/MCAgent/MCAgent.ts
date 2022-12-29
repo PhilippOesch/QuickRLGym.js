@@ -47,12 +47,7 @@ export default class MCAgent extends Agent {
         randomSeed?: number
     ) {
         super(env);
-        if (randomSeed != undefined) {
-            this.randomSeed = randomSeed.toString();
-            this.rng = seedrandom(this.randomSeed);
-        } else {
-            this.rng = seedrandom();
-        }
+        this.setRandomSeed(randomSeed);
         this.env = env;
         this.config = config;
     }
@@ -66,6 +61,12 @@ export default class MCAgent extends Agent {
             this.epsilon = this.config.epsilonStart;
         }
     }
+
+    public setOptions(config: MCAgentSettings, randomSeed?: number): void {
+        this.setRandomSeed(randomSeed);
+        this.config = config;
+    }
+
     step(state: object): string {
         return this.followEpsGreedyPolicy(state);
     }
@@ -121,6 +122,15 @@ export default class MCAgent extends Agent {
         //console.log('experience', this.experience);
         console.log('epsilon:', this.epsilon);
         console.log('epsilonStep', this.epsilonStep);
+    }
+
+    private setRandomSeed(randomSeed?: number) {
+        if (randomSeed != undefined) {
+            this.randomSeed = randomSeed.toString();
+            this.rng = seedrandom(this.randomSeed);
+        } else {
+            this.rng = seedrandom();
+        }
     }
 
     private mcTrainingStep() {

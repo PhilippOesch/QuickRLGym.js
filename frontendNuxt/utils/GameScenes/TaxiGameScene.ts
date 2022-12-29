@@ -2,7 +2,12 @@ import { Scene, GameObjects } from 'phaser';
 import { Games, Envs, Vec2 } from 'quickrl.core';
 
 export default class TaxiGameScene extends Scene {
-    private static destMapping: string[] = ['red', 'yellow', 'green', 'blue'];
+    public static readonly destMapping: string[] = [
+        'red',
+        'yellow',
+        'green',
+        'blue',
+    ];
 
     private static carMoveMapping: Map<Games.Taxi.TaxiAction, number[]> =
         new Map([

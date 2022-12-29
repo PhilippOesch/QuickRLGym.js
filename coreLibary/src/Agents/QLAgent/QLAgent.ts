@@ -36,13 +36,13 @@ export default class QLAgent extends Agent {
         randomSeed?: number
     ) {
         super(env);
-        if (randomSeed != undefined) {
-            this.randomSeed = randomSeed.toString();
-            this.rng = seedrandom(this.randomSeed);
-        } else {
-            this.rng = seedrandom();
-        }
+        this.setRandomSeed(randomSeed);
         this.env = env;
+        this.config = config;
+    }
+
+    public setOptions(config: QLAgentSettings, randomSeed?: number): void {
+        this.setRandomSeed(randomSeed);
         this.config = config;
     }
 
@@ -159,5 +159,14 @@ export default class QLAgent extends Agent {
     ): Promise<void> {
         const loadObject: object = await fileManager.load(pathString);
         this.qTable = Tensor.fromLoadObject(loadObject as JSONTensor);
+    }
+
+    private setRandomSeed(randomSeed?: number) {
+        if (randomSeed != undefined) {
+            this.randomSeed = randomSeed.toString();
+            this.rng = seedrandom(this.randomSeed);
+        } else {
+            this.rng = seedrandom();
+        }
     }
 }

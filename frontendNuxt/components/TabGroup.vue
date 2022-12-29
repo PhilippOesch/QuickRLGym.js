@@ -29,6 +29,14 @@
                 styleClasses="w-60"
                 :inputStyle="InputStyleType.Light"
             ></NumberInput>
+            <NumberInput
+                title="Random Seed"
+                :min="1"
+                :max="200"
+                defaultValue="100"
+                styleClasses="w-60"
+                :inputStyle="InputStyleType.Light"
+            ></NumberInput>
         </div>
         <ClientOnly fallback-tag="span" fallback="Loading Game...">
             <div class="mt-8"><Game></Game></div>

@@ -1,8 +1,22 @@
 <template>
     <div class="gameWrapper">
         <div class="info">
-            <div class="infoBox gameInfo"><h2>Game Info:</h2></div>
-            <div class="infoBox trainingInfo"><h2>Training Progress:</h2></div>
+            <div class="infoBox gameInfo">
+                <h2>Current Game Info:</h2>
+                <ul class="list" v-if="getGameInfo">
+                    <li class="flex gap-2" v-for="(item, index) in getGameInfo">
+                        <span>{{ index }}:</span><span>{{ item }}</span>
+                    </li>
+                </ul>
+            </div>
+            <div class="infoBox trainingInfo">
+                <h2>Training Progress - Iteration {{ iteration }}</h2>
+                <ul class="list" v-if="stats">
+                    <li class="flex gap-2" v-for="(item, index) in stats">
+                        <span>{{ index }}:</span><span>{{ item }}</span>
+                    </li>
+                </ul>
+            </div>
         </div>
         <div class="gameContainer" ref="gameContainer"></div>
     </div>
@@ -11,6 +25,8 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 import useGameEnv, { TaxiSceneInfo } from '../comsosable/useGameEnv';
+import { Games } from 'quickrl.core';
+import TaxiGameScene from '../utils/GameScenes/TaxiGameScene';
 
 export default defineComponent({
     props: {
@@ -21,33 +37,59 @@ export default defineComponent({
     },
     data() {
         return {
-            taxiGameInfo: null,
+            taxiEnvInfo: null,
+            stats: null,
+            iteration: 0,
         };
+    },
+    computed: {
+        getGameInfo() {
+            if (!this.taxiEnvInfo) return null;
+            const info = this.taxiEnvInfo as TaxiSceneInfo;
+            return {
+                gameIteration: info.env.getIteration,
+                points: info.env.getReturn,
+                destination:
+                    TaxiGameScene.destMapping[
+                        info.env.getGame.getCustomer.getDestIdx
+                    ],
+            };
+        },
     },
     async mounted() {
         const gameContainer: HTMLElement = this.$refs
             .gameContainer as HTMLElement;
         window.Phaser = await import('phaser');
         console.log(window.Phaser);
-        this.taxiGameInfo = await useGameEnv(gameContainer);
-        const info = this.taxiGameInfo as TaxiSceneInfo;
-        const stats = info.env.getStats;
-        console.log(stats);
+        this.taxiEnvInfo = await useGameEnv(gameContainer);
+        this.stats = this.taxiEnvInfo.env.getStats;
     },
 });
 </script>
 
 <style lang="postcss" scoped>
 .gameWrapper .info {
-    @apply grid lg:grid-cols-2 gap-8 mb-4;
+    @apply grid lg:grid-cols-6 gap-8 mb-4;
 }
 
 .gameWrapper .infoBox {
     @apply bg-slate-700 p-4 rounded-md;
 }
 
+.gameInfo {
+    @apply lg:col-span-2;
+}
+
+.trainingInfo {
+    @apply lg:col-span-4;
+}
+
 .infoBox h2 {
-    @apply text-lg;
+    @apply text-lg font-semibold;
+}
+
+.infoBox .list {
+    @apply mt-2;
 }
 
 .gameContainer {

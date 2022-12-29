@@ -19,6 +19,10 @@ export default class RandomAgent extends Agent {
         }
     }
 
+    public setOptions(options: object): void {
+        return;
+    }
+
     public init(): void {
         console.log('Random Agent initialized');
     }
