@@ -124,6 +124,10 @@ export default class MCAgent extends Agent {
         console.log('epsilonStep', this.epsilonStep);
     }
 
+    /**
+     * Set the random Seed for the agent
+     * @param randomSeed - the random seed
+     */
     private setRandomSeed(randomSeed?: number) {
         if (randomSeed != undefined) {
             this.randomSeed = randomSeed.toString();

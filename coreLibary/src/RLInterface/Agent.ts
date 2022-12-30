@@ -39,6 +39,11 @@ export default abstract class Agent {
         contextInfo: object
     ): void;
 
+    /**
+     * set The configuration of the agent after initailizing
+     * @param config - The config object
+     * @param randomSeed - The random Seed
+     */
     abstract setOptions(config: object, randomSeed?: number): void;
 
     /**

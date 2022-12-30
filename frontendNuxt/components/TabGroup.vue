@@ -3,7 +3,7 @@
         <div class="tabSelectContainer">
             <div class="tab selected">Q Learning</div>
             <div class="tab">Monte Carlo</div>
-            <div class="tab">DQN</div>
+            <!-- <div class="tab">DQN</div> -->
         </div>
         <div class="tabContainer">
             <ParamSelection></ParamSelection>
@@ -79,6 +79,6 @@ export default defineComponent({
 }
 
 .freeComponents {
-    @apply flex flex-wrap mt-8 gap-8;
+    @apply flex flex-wrap mt-12 gap-8;
 }
 </style>
