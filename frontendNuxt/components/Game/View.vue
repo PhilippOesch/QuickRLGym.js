@@ -1,23 +1,28 @@
 <template>
     <div class="gameWrapper">
-        <div class="info">
-            <div class="infoBox gameInfo">
-                <h2>Current Game Info:</h2>
-                <ul class="list" v-if="getGameInfo">
-                    <li class="flex gap-2" v-for="(item, index) in getGameInfo">
-                        <span>{{ index }}:</span><span>{{ item }}</span>
-                    </li>
-                </ul>
+        <Tab tabGroup="trainingBenchmarkSwitch" name="Training">
+            <div class="info">
+                <div class="infoBox gameInfo">
+                    <h2>Current Game Info:</h2>
+                    <ul class="list" v-if="getGameInfo">
+                        <li
+                            class="flex gap-2"
+                            v-for="(item, index) in getGameInfo"
+                        >
+                            <span>{{ index }}:</span><span>{{ item }}</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="infoBox trainingInfo">
+                    <h2>Training Progress - Iteration {{ iteration }}</h2>
+                    <ul class="list" v-if="stats">
+                        <li class="flex gap-2" v-for="(item, index) in stats">
+                            <span>{{ index }}:</span><span>{{ item }}</span>
+                        </li>
+                    </ul>
+                </div>
             </div>
-            <div class="infoBox trainingInfo">
-                <h2>Training Progress - Iteration {{ iteration }}</h2>
-                <ul class="list" v-if="stats">
-                    <li class="flex gap-2" v-for="(item, index) in stats">
-                        <span>{{ index }}:</span><span>{{ item }}</span>
-                    </li>
-                </ul>
-            </div>
-        </div>
+        </Tab>
         <div class="gameContainer" ref="gameContainer"></div>
     </div>
 </template>

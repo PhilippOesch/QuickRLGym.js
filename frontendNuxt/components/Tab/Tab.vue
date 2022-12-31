@@ -29,8 +29,4 @@ export default defineComponent({
 });
 </script>
 
-<style lang="postcss" scoped>
-.tabContainer {
-    @apply mt-8;
-}
-</style>
+<style lang="postcss" scoped></style>
