@@ -1,7 +1,7 @@
 <template>
     <div class="mainContainer">
         <h1>Taxi Game</h1>
-        <TabGroup></TabGroup>
+        <GameTaxi></GameTaxi>
     </div>
 </template>
 

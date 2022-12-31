@@ -10,8 +10,9 @@
                 :max="max"
                 :min="min"
                 :value="value"
+                @change="(event)=> finishEdit(event.target as HTMLInputElement)"
                 @input="(event) => update(event.target as HTMLInputElement)"
-                :step="isfloat ? 0.01 : 1"
+                :step="stepSize"
             />
             <input
                 type="number"
@@ -22,7 +23,7 @@
                 :min="min"
                 @change="(event)=> finishEdit(event.target as HTMLInputElement)"
                 @input="(event) => update(event.target as HTMLInputElement)"
-                :step="isfloat ? 0.01 : 1"
+                :step="stepSize"
             />
         </div>
         <!-- @input="(event) => update(event.target as HTMLInputElement)" -->
@@ -34,16 +35,14 @@
 import { defineComponent } from 'vue';
 
 export default defineComponent({
+    expose: ['getValue'],
     props: {
         name: String,
         title: String,
         max: Number,
         min: Number,
         defaultValue: Number,
-        isfloat: {
-            type: Boolean,
-            default: false,
-        },
+        stepSize: Number,
     },
     setup() {
         return {};
@@ -55,11 +54,17 @@ export default defineComponent({
     },
     methods: {
         finishEdit(el: HTMLInputElement) {
-            if (Number(el.value) < this.min) this.value = this.min;
-            if (Number(el.value) > this.max) this.value = this.max;
+            if (this.min !== undefined && Number(el.value) < this.min)
+                this.value = this.min;
+            if (this.max !== undefined && Number(el.value) > this.max)
+                this.value = this.max;
+            this.$emit('updated', this.value);
         },
         update(el: HTMLInputElement) {
-            this.value = el.value;
+            this.value = Number(el.value);
+        },
+        getValue() {
+            return this.value;
         },
     },
 });

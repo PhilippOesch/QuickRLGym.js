@@ -23,7 +23,7 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import IconColor from '../utils/enums/IconColors';
+import IconColor from '~~/utils/enums/IconColors';
 
 export default defineComponent({
     setup() {
@@ -34,14 +34,14 @@ export default defineComponent({
             links: [
                 {
                     title: 'Taxi Game',
-                    link: '/Games/TaxiGame',
+                    link: '/Games/Taxi',
                     description: 'Game Based on the Taxi Problem',
                     icon: 'car',
                     color: IconColor.Amber,
                 },
                 {
                     title: 'Blackjack',
-                    link: '/Games/BlackJackGame',
+                    link: '/Games/BlackJack',
                     description: 'Basic Implementation of Blackjack',
                     icon: 'card',
                     color: IconColor.Green,

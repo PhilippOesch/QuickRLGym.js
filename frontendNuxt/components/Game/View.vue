@@ -24,9 +24,15 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import useGameEnv, { TaxiSceneInfo } from '../comsosable/useGameEnv';
+import useGameEnv, { TaxiSceneInfo } from '../../comsosable/useGameEnv';
 import { Games } from 'quickrl.core';
-import TaxiGameScene from '../utils/GameScenes/TaxiGameScene';
+import TaxiGameScene from '../../utils/GameScenes/TaxiGameScene';
+
+interface initialData {
+    taxiEnvInfo?: TaxiSceneInfo;
+    stats?: object;
+    iteration: number;
+}
 
 export default defineComponent({
     props: {
@@ -35,10 +41,10 @@ export default defineComponent({
     setup() {
         return {};
     },
-    data() {
+    data(): initialData {
         return {
-            taxiEnvInfo: null,
-            stats: null,
+            taxiEnvInfo: undefined,
+            stats: undefined,
             iteration: 0,
         };
     },

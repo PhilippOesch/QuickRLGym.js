@@ -10,6 +10,7 @@
             :class="inputStyle"
             @change="(event) => finishEdit(event.target as HTMLInputElement)"
             @input="(event) => update(event.target as HTMLInputElement)"
+            :step="stepSize"
         />
     </div>
 </template>
@@ -19,6 +20,7 @@ import { defineComponent, PropType } from 'vue';
 import InputStyleType from '../utils/enums/InputStyleType';
 
 export default defineComponent({
+    expose: ['getValue'],
     props: {
         name: String,
         title: String,
@@ -26,6 +28,7 @@ export default defineComponent({
         max: Number,
         defaultValue: Number,
         styleClasses: String,
+        stepSize: Number,
         inputStyle: {
             type: Object as PropType<InputStyleType>,
             default: InputStyleType.Dark,
@@ -41,11 +44,17 @@ export default defineComponent({
     },
     methods: {
         finishEdit(el: HTMLInputElement) {
-            if (this.min && Number(el.value) < this.min) this.value = this.min;
-            if (this.max && Number(el.value) > this.max) this.value = this.max;
+            if (this.min !== undefined && Number(el.value) < this.min)
+                this.value = this.min;
+            if (this.max !== undefined && Number(el.value) > this.max)
+                this.value = this.max;
+            this.$emit('updated', this.value);
         },
         update(el: HTMLInputElement) {
-            this.value = el.value;
+            this.value = Number(el.value);
+        },
+        getValue() {
+            return this.value;
         },
     },
 });

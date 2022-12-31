@@ -2,7 +2,12 @@
     <div class="toggleContainer">
         <h3 class="title">{{ title }}</h3>
         <label class="switch">
-            <input type="checkbox" />
+            <input
+                type="checkbox"
+                :checked="value"
+                @change="finishEdit"
+                ref="checkBoxRef"
+            />
             <span class="slider round"></span>
         </label>
     </div>
@@ -12,12 +17,23 @@
 import { defineComponent } from 'vue';
 
 export default defineComponent({
+    expose: ['value'],
     props: {
         title: String,
         name: String,
+        defaultValue: Boolean,
     },
     setup() {
         return {};
+    },
+    data() {
+        return { value: this.defaultValue ? this.defaultValue : false };
+    },
+    methods: {
+        finishEdit() {
+            this.value = !this.value;
+            this.$emit('updated', this.value);
+        },
     },
 });
 </script>

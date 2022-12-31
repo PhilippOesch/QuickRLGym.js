@@ -22,7 +22,7 @@ export default defineComponent({
     },
     methods: {
         clickHandler() {
-            this.handler();
+            if (this.handler) this.handler();
         },
     },
 });
