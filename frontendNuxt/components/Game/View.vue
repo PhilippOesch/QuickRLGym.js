@@ -105,4 +105,8 @@ export default defineComponent({
 .gameWrapper {
     @apply w-full relative p-4 bg-gray-800 rounded-md drop-shadow;
 }
+
+.gameContainer :deep(canvas) {
+    @apply pointer-events-none;
+}
 </style>

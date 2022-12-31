@@ -1,29 +1,29 @@
 import { defineStore } from 'pinia';
+//import { useStorage } from '@vueuse/core';
+import { useStorage } from '@vueuse/core';
+import { defaultSettings } from './useDefaultSettings';
 
 const useSettingsStore = defineStore('algSettings', {
     state: () => ({
-        settings: new Map<string, Map<string, any>>(),
+        settings: useStorage('settings', defaultSettings),
+        // settings: defaultSettings,
     }),
     getters: {
         getSetting: (state) => {
             return (game: string, algorithm: string) => {
-                if (state.settings.has(game)) return;
-                const gameSetting = state.settings.get(game);
-                if (gameSetting!.has(algorithm)) return;
-                return gameSetting!.get(algorithm);
+                const gameSetting = (state.settings as any)[game];
+                return gameSetting[algorithm];
             };
         },
     },
     actions: {
         updateSetting(game: string, algorithm: string, setting: any) {
-            if (!this.settings.has(game)) {
-                this.settings.set(game, new Map<string, any>());
-            }
-            const gameSetting = this.settings.get(game);
-            if (!gameSetting!.has(algorithm)) {
-                gameSetting?.set(algorithm, new Map());
-            }
-            gameSetting!.set(algorithm, setting);
+            const settings = this.settings as any;
+            settings[game][algorithm] = {
+                ...settings[game][algorithm],
+                ...setting,
+            };
+            console.log(settings[game][algorithm]);
         },
     },
 });

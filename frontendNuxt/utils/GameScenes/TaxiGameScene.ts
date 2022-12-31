@@ -21,9 +21,9 @@ export default class TaxiGameScene extends Scene {
     private taxiGame: Games.Taxi.TaxiGame;
 
     //visual component
-    private playerSprite: GameObjects.Sprite;
-    private customerImage: GameObjects.Image;
-    private uidata: GameObjects.Text;
+    private playerSprite: GameObjects.Sprite | undefined;
+    private customerImage: GameObjects.Image | undefined;
+    private uidata: GameObjects.Text | undefined;
 
     constructor(taxiEnv: Envs.TaxiEnv, interactiveMode: boolean) {
         super('Taxi Game');
@@ -85,33 +85,16 @@ export default class TaxiGameScene extends Scene {
             2 * Games.Taxi.TaxiGlobals.scale
         );
 
-        // generate UI
-        // this.uidata = this.add.text(10, 10, '', {
-        //     font: '18px Courier',
-        //     color: '#22ff22',
-        // });
-        // this.uidata.setDataEnabled();
-        // this.uidata.setScale(1, 1);
-        // this.uidata.data.set('points', 0);
-        // this.uidata.data.set('iterations', 0);
-        // this.uidata.data.set('destination', 'none');
-
-        // this.uidata.setText([
-        //     'Points: ' + this.uidata.data.get('points'),
-        //     'Iteration: ' + this.uidata.data.get('iterations'),
-        //     'Destination: ' + this.uidata.data.get('destination'),
-        // ]);
-
         if (this.interactiveMode) {
             this.setupControlls();
         }
     }
 
     private updateUIText(): void {
-        this.uidata.setText([
-            'Points: ' + this.uidata.data.get('points'),
-            'Iteration: ' + this.uidata.data.get('iterations'),
-            'Destination: ' + this.uidata.data.get('destination'),
+        this.uidata!.setText([
+            'Points: ' + this.uidata!.data.get('points'),
+            'Iteration: ' + this.uidata!.data.get('iterations'),
+            'Destination: ' + this.uidata!.data.get('destination'),
         ]);
     }
 
@@ -150,7 +133,7 @@ export default class TaxiGameScene extends Scene {
         const index: number = this.getSpriteIndex(
             this.taxiGame.getPlayer.getCarMoveState
         );
-        this.playerSprite.setTexture('taxi', index);
+        this.playerSprite!.setTexture('taxi', index);
 
         // for smooth movements
         this.tweens.add({
@@ -164,23 +147,16 @@ export default class TaxiGameScene extends Scene {
 
         // Update Customer
         if (this.taxiGame.getCustomer.isCustomerPickedUp) {
-            this.customerImage.removeFromDisplayList();
+            this.customerImage!.removeFromDisplayList();
         }
 
         const absPositionCustomer = Games.Taxi.TaxiUtils.adjustedToAbsPos(
             this.taxiGame.getCustomer.getPosition
         );
-        this.customerImage.setPosition(
+        this.customerImage!.setPosition(
             absPositionCustomer.getX,
             absPositionCustomer.getY
         );
-
-        // Update UI
-        // this.uidata.data.values.iterations = this.taxiGame.getIteration;
-        // this.uidata.data.values.points = this.taxiGame.getReturn;
-        // this.uidata.data.values.destination =
-        //     TaxiGameScene.destMapping[this.taxiGame.getCustomer.getDestIdx];
-        //this.updateUIText();
 
         this.checkIfTerminated();
     }
@@ -190,7 +166,7 @@ export default class TaxiGameScene extends Scene {
             if (this.interactiveMode) {
                 this.input.keyboard.destroy();
             }
-            this.customerImage.addToDisplayList();
+            this.customerImage!.addToDisplayList();
         }
     }
 

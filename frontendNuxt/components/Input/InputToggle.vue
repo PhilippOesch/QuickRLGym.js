@@ -40,7 +40,7 @@ export default defineComponent({
 
 <style lang="postcss" scoped>
 .toggleContainer {
-    @apply w-full flex place-items-center gap-3;
+    @apply w-full flex place-items-center gap-3 col-span-2;
 }
 
 .toggleContainer .title {

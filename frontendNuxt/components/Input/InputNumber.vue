@@ -17,7 +17,7 @@
 
 <script lang="ts">
 import { defineComponent, PropType } from 'vue';
-import InputStyleType from '../utils/enums/InputStyleType';
+import InputStyleType from '../../utils/enums/InputStyleType';
 
 export default defineComponent({
     expose: ['getValue'],

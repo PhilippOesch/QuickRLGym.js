@@ -1,4 +1,4 @@
-import { Envs, Games, Agents } from 'quickrl.core';
+import QuickRLJS, { Envs, Games, Agents } from 'quickrl.core';
 import TaxiGameScene from '../utils/GameScenes/TaxiGameScene';
 
 export interface TaxiSceneInfo {
@@ -9,7 +9,8 @@ export interface TaxiSceneInfo {
 export default async function useGameEnv(
     parent: HTMLElement
 ): Promise<TaxiSceneInfo> {
-    const env = new Envs.TaxiEnv();
+    //const env = Q;
+    const env = QuickRLJS.loadEnv('Taxi') as Envs.TaxiEnv;
     const randAgent = new Agents.RandomAgent(env);
     env.setAgent = randAgent;
     env.initEnv();

@@ -7,7 +7,7 @@ export interface TabItem {
 
 const useTabStore = defineStore('tabs', {
     state: () => ({
-        initialized: false,
+        initialized: new Set<string>(),
         tabGroups: new Map<string, Array<TabItem>>(),
     }),
     getters: {
@@ -28,7 +28,7 @@ const useTabStore = defineStore('tabs', {
                     const tabGroup: TabItem[] =
                         state.tabGroups.get(tabGroupName)!;
                     const found = tabGroup.find((value) => value.selected);
-                    return Object.assign({}, found);
+                    return { ...found };
                 }
                 return undefined;
             };
@@ -67,9 +67,9 @@ const useTabStore = defineStore('tabs', {
             }
         },
         initialize(groupName: string, tabName: string) {
-            if (!this.initialized) {
+            if (!this.initialized.has(groupName)) {
                 this.switchTab(groupName, tabName);
-                this.initialized = true;
+                this.initialized.add(groupName);
             }
         },
     },

@@ -2,44 +2,44 @@
     <div class="tabContainer">
         <h3 ref="einElement">Parameters:</h3>
         <div class="settingsContainer">
-            <div v-for="(item, index) in settingsObject">
-                <Slider
+            <template v-for="(item, index) in settingsObject">
+                <InputSlider
                     v-if="getType(item) == 'Slider'"
                     :name="index"
                     :title="item.displayName"
                     :max="item.setting.max"
                     :min="item.setting.min"
-                    :defaultValue="item.setting.value"
+                    :defaultValue="settings[index]"
                     :stepSize="item.setting.stepSize"
                     @updated="(value) => updateSettings(value, index)"
-                ></Slider>
-                <NumberInput
+                ></InputSlider>
+                <InputNumber
                     v-if="getType(item) == 'Number'"
                     :name="index"
                     :title="item.displayName"
                     :max="item.setting.max"
                     :min="item.setting.min"
-                    :defaultValue="item.setting.value"
+                    :defaultValue="settings[index]"
                     :stepSize="item.setting.stepSize"
                     @updated="(value) => updateSettings(value, index)"
                 >
-                </NumberInput>
-                <Toggle
+                </InputNumber>
+                <InputToggle
                     v-if="getType(item) == 'Toggle'"
                     :name="index"
                     :title="item.displayName"
-                    :defaultValue="item.setting"
+                    :defaultValue="settings[index]"
                     @updated="(value) => updateSettings(value, index)"
                 >
-                </Toggle>
-            </div>
+                </InputToggle>
+            </template>
         </div>
     </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import { AlgSetting, SettingNumber } from '~~/utils/settingsInterfaces/general';
+import { Setting, SettingNumber } from '~~/utils/settingsInterfaces/general';
 import useSettingsStore from '~~/comsosable/useSettingsStore';
 
 export default defineComponent({
@@ -57,28 +57,29 @@ export default defineComponent({
             required: true,
         },
     },
-    setup() {
+    setup(props) {
         const settingsStore = useSettingsStore();
 
-        return { settingsStore };
-    },
-    data() {
-        return {
-            settings: {},
-        };
+        const settings = settingsStore.getSetting(
+            props.gameID,
+            props.algorithmName
+        );
+        console.log(settings);
+
+        return { settingsStore, settings };
     },
     methods: {
         getType(item: any) {
-            if ((item as AlgSetting<SettingNumber>) !== undefined) {
+            if ((item as Setting<SettingNumber>) !== undefined) {
                 if (
                     item.setting.max !== undefined &&
                     item.setting.min !== undefined
                 ) {
                     return 'Slider';
                 }
-                if (item.setting.value !== undefined) return 'Number';
+                if (item.setting.stepSize !== undefined) return 'Number';
             }
-            if ((item as AlgSetting<boolean>) !== undefined) {
+            if ((item as Setting<boolean>) !== undefined) {
                 return 'Toggle';
             }
         },
@@ -90,17 +91,6 @@ export default defineComponent({
                 this.settings
             );
         },
-    },
-    mounted() {
-        for (const index in this.settingsObject) {
-            const el = this.settingsObject[index];
-            const elType = this.getType(this.settingsObject[index]);
-            if (elType === 'Slider' || elType === 'Number') {
-                this.updateSettings(el.setting.value, index);
-            } else {
-                this.updateSettings(el.setting, index);
-            }
-        }
     },
 });
 </script>

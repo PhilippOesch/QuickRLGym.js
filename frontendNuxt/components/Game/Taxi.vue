@@ -1,6 +1,10 @@
 <template>
     <div>
-        <TabGroup :tabs="['Q Learning', 'Monte Carlo']" groupName="taxiAlgTab">
+        <TabGroup
+            :tabs="['Q Learning', 'Monte Carlo']"
+            groupName="taxiAlgTab"
+        />
+        <ClientOnly>
             <Tab tabGroup="taxiAlgTab" name="Q Learning">
                 <ParamSelector
                     gameID="Taxi"
@@ -11,44 +15,55 @@
             <Tab tabGroup="taxiAlgTab" name="Monte Carlo">
                 <ParamSelector
                     gameID="Taxi"
-                    algorithmName="Monte Carlo"
+                    algorithmName="MCLearning"
                     :settingsObject="mcSettingsDefault"
                 />
             </Tab>
-            <div class="freeComponents">
-                <Button
-                    value="Start Training"
-                    :handler="btnHandler"
-                    :size="ButtonSize.Large"
-                />
-                <NumberInput
-                    title="Training Iterations"
-                    :min="1"
-                    :defaultValue="1000"
-                    styleClasses="w-60"
-                    :inputStyle="InputStyleType.Light"
-                ></NumberInput>
-                <NumberInput
-                    title="Show Progress Every"
-                    :min="1"
-                    :max="200"
-                    :defaultValue="100"
-                    styleClasses="w-60"
-                    :inputStyle="InputStyleType.Light"
-                ></NumberInput>
-                <NumberInput
-                    title="Random Seed"
-                    :min="1"
-                    :max="200"
-                    :defaultValue="100"
-                    styleClasses="w-60"
-                    :inputStyle="InputStyleType.Light"
-                ></NumberInput>
-            </div>
-            <ClientOnly fallback-tag="span" fallback="Loading Game...">
-                <div class="mt-8"><GameView></GameView></div>
-            </ClientOnly>
-        </TabGroup>
+            <TabGroup
+                class="mt-12"
+                :tabs="['Training', 'Benchmark']"
+                groupName="trainingBenchmarkSwitch"
+            />
+            <Tab tabGroup="trainingBenchmarkSwitch" name="Training">
+                <div class="freeComponents">
+                    <Button
+                        value="Start Training"
+                        :handler="btnHandler"
+                        :size="ButtonSize.Large"
+                    />
+                    <InputNumber
+                        title="Training Iterations"
+                        :min="1"
+                        :defaultValue="1000"
+                        styleClasses="w-60"
+                        :inputStyle="InputStyleType.Light"
+                    ></InputNumber>
+                    <InputNumber
+                        title="Show Progress Every"
+                        :min="1"
+                        :max="200"
+                        :defaultValue="100"
+                        styleClasses="w-60"
+                        :inputStyle="InputStyleType.Light"
+                    ></InputNumber>
+                    <InputNumber
+                        title="Random Seed"
+                        :min="1"
+                        :max="200"
+                        :defaultValue="100"
+                        styleClasses="w-60"
+                        :inputStyle="InputStyleType.Light"
+                    ></InputNumber></div
+            ></Tab>
+            <Tab tabGroup="trainingBenchmarkSwitch" name="Benchmark"
+                >Benchmark</Tab
+            >
+            <div class="mt-8"><GameView></GameView></div>
+            <template #fallback>
+                <!-- this will be rendered on server side -->
+                <div class="mt-8 text-lg">Loading...</div>
+            </template>
+        </ClientOnly>
     </div>
 </template>
 
@@ -95,6 +110,6 @@ export default defineComponent({
 }
 
 .freeComponents {
-    @apply flex flex-wrap mt-12 gap-8;
+    @apply flex flex-wrap mt-8 gap-8;
 }
 </style>
