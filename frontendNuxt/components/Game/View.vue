@@ -30,7 +30,7 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 import useGameEnv, { TaxiSceneInfo } from '../../comsosable/useGameEnv';
-import { Games } from 'quickrl.core';
+//import { Games } from 'quickrl.core';
 import TaxiGameScene from '../../utils/GameScenes/TaxiGameScene';
 
 interface initialData {
@@ -58,12 +58,10 @@ export default defineComponent({
             if (!this.taxiEnvInfo) return null;
             const info = this.taxiEnvInfo as TaxiSceneInfo;
             return {
-                gameIteration: info.env.getIteration,
+                gameIteration: info.env.iteration,
                 points: info.env.getReturn,
                 destination:
-                    TaxiGameScene.destMapping[
-                        info.env.getGame.getCustomer.getDestIdx
-                    ],
+                    TaxiGameScene.destMapping[info.env.game.customer.destIdx],
             };
         },
     },
@@ -73,7 +71,7 @@ export default defineComponent({
         window.Phaser = await import('phaser');
         console.log(window.Phaser);
         this.taxiEnvInfo = await useGameEnv(gameContainer);
-        this.stats = this.taxiEnvInfo.env.getStats;
+        this.stats = this.taxiEnvInfo.env.stats;
     },
 });
 </script>

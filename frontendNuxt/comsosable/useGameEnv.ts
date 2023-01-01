@@ -13,7 +13,7 @@ export default async function useGameEnv(
     const env = QuickRLJS.loadEnv('Taxi') as Envs.TaxiEnv;
     const randAgent = new Agents.RandomAgent(env);
     env.setAgent = randAgent;
-    env.initEnv();
+    env.initAgent();
 
     const gameScene = new TaxiGameScene(env, false);
     const config: Phaser.Types.Core.GameConfig = {

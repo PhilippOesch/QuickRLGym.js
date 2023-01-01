@@ -7,6 +7,7 @@
         <ClientOnly>
             <Tab tabGroup="taxiAlgTab" name="Q Learning">
                 <ParamSelector
+                    title="Parameters:"
                     gameID="Taxi"
                     algorithmName="QLearning"
                     :settingsObject="qlSettingsDefault"
@@ -25,7 +26,7 @@
                 groupName="trainingBenchmarkSwitch"
             />
             <Tab tabGroup="trainingBenchmarkSwitch" name="Training">
-                <div class="freeComponents">
+                <!-- <div class="freeComponents">
                     <Button
                         value="Start Training"
                         :handler="btnHandler"
@@ -54,7 +55,21 @@
                         styleClasses="w-60"
                         :inputStyle="InputStyleType.Light"
                     ></InputNumber></div
-            ></Tab>
+            > -->
+                <div class="freeComponents">
+                    <Button
+                        value="Start Training"
+                        :handler="btnHandler"
+                        :size="ButtonSize.Large"
+                    />
+                    <ParamSelector
+                        gameID="Taxi"
+                        algorithmName="gameSettings"
+                        :settingsObject="defaultTrainingSettings"
+                        :selectionType="SelectionType.FreeStanding"
+                    />
+                </div>
+            </Tab>
             <Tab tabGroup="trainingBenchmarkSwitch" name="Benchmark"
                 >Benchmark</Tab
             >
@@ -72,15 +87,18 @@ import { defineComponent } from 'vue';
 import ButtonSize from '~~/utils/enums/ButtonSize';
 import { qlSettingsDefault } from '~~/utils/settingsInterfaces/QLSettings';
 import { mcSettingsDefault } from '~~/utils/settingsInterfaces/MCSettings';
-import InputStyleType from '~~/utils/enums/InputStyleType';
+import defaultTrainingSettings from '~~/utils/settingsInterfaces/trainingSettings';
+import InputStyleTyp, { SelectionType } from '~~/utils/enums/InputStyleType';
 
 export default defineComponent({
     setup() {
         return {
             qlSettingsDefault,
-            InputStyleType,
+            InputStyleTyp,
+            SelectionType,
             ButtonSize,
             mcSettingsDefault,
+            defaultTrainingSettings,
         };
     },
     mounted() {},

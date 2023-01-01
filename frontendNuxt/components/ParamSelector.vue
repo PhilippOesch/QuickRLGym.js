@@ -1,6 +1,6 @@
 <template>
-    <div class="tabContainer">
-        <h3 ref="einElement">Parameters:</h3>
+    <div :class="['paramContainer', selectionType]">
+        <h3 v-if="title">{{ title }}</h3>
         <div class="settingsContainer">
             <template v-for="(item, index) in settingsObject">
                 <InputSlider
@@ -22,6 +22,11 @@
                     :defaultValue="settings[index]"
                     :stepSize="item.setting.stepSize"
                     @updated="(value) => updateSettings(value, index)"
+                    :inputStyle="
+                        selectionType === SelectionType.Grid
+                            ? InputStyleType.Dark
+                            : InputStyleType.Light
+                    "
                 >
                 </InputNumber>
                 <InputToggle
@@ -38,8 +43,9 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, PropType } from 'vue';
 import { Setting, SettingNumber } from '~~/utils/settingsInterfaces/general';
+import InputStyleType, { SelectionType } from '~~/utils/enums/InputStyleType';
 import useSettingsStore from '~~/comsosable/useSettingsStore';
 
 export default defineComponent({
@@ -56,6 +62,13 @@ export default defineComponent({
             type: Object,
             required: true,
         },
+        selectionType: {
+            type: Object as PropType<SelectionType>,
+            default: SelectionType.Grid,
+        },
+        title: {
+            type: String,
+        },
     },
     setup(props) {
         const settingsStore = useSettingsStore();
@@ -64,9 +77,15 @@ export default defineComponent({
             props.gameID,
             props.algorithmName
         );
+
         console.log(settings);
 
-        return { settingsStore, settings };
+        return {
+            settingsStore,
+            settings,
+            SelectionType,
+            InputStyleType,
+        };
     },
     methods: {
         getType(item: any) {
@@ -96,8 +115,16 @@ export default defineComponent({
 </script>
 
 <style lang="postcss" scoped>
-.tabContainer {
-    @apply drop-shadow bg-slate-800 rounded-md px-4 py-3;
+.paramContainer {
+    @apply drop-shadow rounded-md px-4 py-3;
+}
+
+.selectionGrid {
+    @apply bg-slate-800;
+}
+
+.SelectionFree {
+    @apply mt-0;
 }
 
 h3 {
@@ -105,6 +132,14 @@ h3 {
 }
 
 .settingsContainer {
-    @apply grid lg:grid-cols-6 gap-8 mt-6;
+    @apply gap-8;
+}
+
+.selectionGrid .settingsContainer {
+    @apply grid mt-6 lg:grid-cols-6 gap-8;
+}
+
+.SelectionFree .settingsContainer {
+    @apply flex flex-wrap;
 }
 </style>
