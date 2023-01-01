@@ -139,9 +139,9 @@ export default class TaxiGame {
         const action: TaxiAction = TaxiGame.actionMapping.get(actionString)!;
         this.incrementIterations();
         let stepResult: StepResult;
-        if (action == TaxiAction.DropOff) {
+        if (action === TaxiAction.DropOff) {
             stepResult = this.dropOffCustomer();
-        } else if (action == TaxiAction.PickUp) {
+        } else if (action === TaxiAction.PickUp) {
             stepResult = this.pickUpCustomer();
         } else {
             stepResult = this.updatePlayerPosition(action);

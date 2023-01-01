@@ -47,6 +47,6 @@ export default class Vec2 {
      * @returns {boolean} True if the compared vectors are equal.
      */
     isEqual(other: Vec2): boolean {
-        return this.x == other.x && this.y == other.y;
+        return this.x === other.x && this.y === other.y;
     }
 }

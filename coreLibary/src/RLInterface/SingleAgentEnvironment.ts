@@ -73,7 +73,7 @@ abstract class SingleAgentEnvironment extends Environment {
                 );
             }
             this.onIterationEnd();
-            if (logEvery != -1 && i % logEvery == 0) {
+            if (logEvery !== -1 && i % logEvery === 0) {
                 this.log(i);
                 this.agent.log();
             }

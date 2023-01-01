@@ -70,7 +70,7 @@ export default class Tensor {
         dims: number[],
         filltype: TensorFillType = TensorFillType.Zeros
     ): Array<any> {
-        if (dims.length == 1) {
+        if (dims.length === 1) {
             return Tensor.fillArray(new Array<number>(dims[0]), filltype);
         }
         let array = new Array(dims[0]);
@@ -132,7 +132,7 @@ export default class Tensor {
     public set(indices: number[], value: any) {
         this.validate(indices);
         if (
-            !(indices.length == this.dim.length) &&
+            !(indices.length === this.dim.length) &&
             !this.isSameDimesion(this.get(...indices), value)
         ) {
             throw new Error(
@@ -170,7 +170,7 @@ export default class Tensor {
         }
         const dimComp1 = this.getArrayDim(comp1);
         const dimComp2 = this.getArrayDim(comp2);
-        if (dimComp1.length != dimComp2.length) {
+        if (dimComp1.length !== dimComp2.length) {
             return false;
         }
         for (let i = 0; i < dimComp1.length; i++) {

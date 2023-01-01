@@ -54,7 +54,7 @@ export default class TaxiCustomer {
     public setNewPosition(spawnIdx: number, destIdx: number): void {
         this.spawnDestIdx = spawnIdx;
         this.destinationIdx = destIdx;
-        if (spawnIdx == 4) {
+        if (spawnIdx === 4) {
             this.customerPickedUp = true;
         } else {
             this.customerPickedUp = false;

@@ -89,7 +89,7 @@ export default class BlackJackGame {
     }
 
     public playerHasNatural(): boolean {
-        if (this.player.getScore == 21) return true;
+        if (this.player.getScore === 21) return true;
         return false;
     }
 
