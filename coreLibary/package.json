@@ -1,6 +1,6 @@
 {
   "name": "quickrl.core",
-  "version": "0.5.5",
+  "version": "0.5.7",
   "description": "This is a simple framework for implementing and testing reinforcement learning environments and algorithms",
   "main": "./out/index.js",
   "types": "./out/index.d.ts",
@@ -14,7 +14,8 @@
   "scripts": {
     "test": "npx tsc -d; mocha ./out/testing/;",
     "buildModule": "npx tsc -d",
-    "release": "npx tsc -d; mocha ./out/testing/; npm publish;"
+    "buildRelease": "npx tsc -d --project tsconfig.build.json; jsmin --level 3 --overwrite out/index.js;",
+    "release": "npx tsc -d; mocha ./out/testing/; npm run buildRelease; npm publish;"
   },
   "author": "Philipp Oeschger",
   "license": "ISC",
@@ -25,7 +26,9 @@
     "@types/mocha": "^10.0.1",
     "@types/node": "^18.11.9",
     "@types/seedrandom": "^3.0.2",
+    "jsmin": "^1.0.1",
     "mocha": "^10.2.0",
+    "npx": "^10.2.2",
     "typescript": "^4.8.4"
   }
 }

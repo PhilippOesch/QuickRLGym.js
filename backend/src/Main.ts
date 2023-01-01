@@ -1,7 +1,7 @@
 import QuickRLJS, {
     SingleAgentEnvironment,
     Agents,
-} from '../../coreLibary/src';
+} from '../../coreLibary/out/index';
 import NodeFileManager from './NodeFileManager';
 
 //parameters
@@ -11,7 +11,7 @@ async function main() {
     //trainTaxiQLAgent();
     //trainTaxiMCAgent();
     //trainBlackJack();
-    trainBlackJackMCAgent();
+    //trainBlackJackMCAgent();
 }
 
 async function trainBlackJack() {
