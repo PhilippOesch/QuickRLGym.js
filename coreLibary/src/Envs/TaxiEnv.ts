@@ -12,13 +12,14 @@ export default class TaxiEnv extends SingleAgentEnvironment {
     private averageGameIterations: number = 0;
     private averageGameScore: number = 0;
 
-    constructor(options?: EnvOptions, initialGameState?: TaxiGameState) {
-        super((options = options), (initialGameState = initialGameState));
+    public init(options?: EnvOptions, initialState?: TaxiGameState): void {
+        super.init(options, initialState);
         if (options) {
             this._game = new TaxiGame(options.randomSeed);
         } else {
             this._game = new TaxiGame();
         }
+        this._game.initGame();
     }
 
     public get stats(): TaxiStats {
@@ -66,9 +67,9 @@ export default class TaxiEnv extends SingleAgentEnvironment {
         return this._game.step(action);
     }
 
-    public initEnv(): void {
+    public initAgent(): void {
         this._game.initGame();
-        super.initEnv();
+        super.initAgent();
     }
 
     public reset(): boolean {

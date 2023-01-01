@@ -13,9 +13,8 @@
   ],
   "scripts": {
     "test": "npx tsc -d; mocha ./out/testing/;",
-    "buildModule": "npx tsc -d",
-    "buildRelease": "npx tsc -d --project tsconfig.build.json; jsmin --level 3 --overwrite out/index.js;",
-    "release": "npx tsc -d; mocha ./out/testing/; npm run buildRelease; npm publish;"
+    "build": "npx tsc -d",
+    "release": "npm run build; mocha ./out/testing/; npm publish;"
   },
   "author": "Philipp Oeschger",
   "license": "ISC",

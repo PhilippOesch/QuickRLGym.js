@@ -14,15 +14,6 @@ export default class BlackJackEnv extends SingleAgentEnvironment {
     private averageReturn: number = 0;
     private averageDealerScore: number = 0;
 
-    constructor(options?: EnvOptions) {
-        super(options);
-        if (options) {
-            this._game = new BlackJackGame(options.randomSeed);
-        } else {
-            this._game = new BlackJackGame();
-        }
-    }
-
     public get stats(): BlackJackStats {
         return {
             averageReturn: this.logIntervalCount
@@ -51,9 +42,22 @@ export default class BlackJackEnv extends SingleAgentEnvironment {
     public get actionSpace(): string[] {
         return BlackJackGame.getActionSpace;
     }
-    public initEnv(): void {
+
+    public setOptions(options: EnvOptions): void {
+        this.options = options;
+    }
+
+    public init(
+        options?: EnvOptions,
+        initialGameState?: BlackJackGameState
+    ): void {
+        super.init(options, initialGameState);
+        if (options) {
+            this._game = new BlackJackGame(options.randomSeed);
+        } else {
+            this._game = new BlackJackGame();
+        }
         this._game.initGame();
-        super.initEnv();
     }
     public step(action: string): StepResult {
         return this._game.step(action);

@@ -7,16 +7,17 @@ export interface GameStateContext {
     maxIterationReached: boolean;
 }
 
-abstract class SingleAgentEnvironment extends Environment {
+abstract class SingleAgentEnvironment implements Environment {
     protected agent?: Agent;
     protected initialState?: object;
+    protected options?: EnvOptions;
+    protected randomSeed?: number;
 
-    /**
-     * Constructor
-     * @param initialState - the initial state of the environment.
-     */
-    constructor(options?: EnvOptions, initialState?: object) {
-        super((options = options), (initialState = initialState));
+    get gameStateDim(): number[] {
+        throw new Error('Method not implemented.');
+    }
+    get stats(): object {
+        throw new Error('Method not implemented.');
     }
 
     /**
@@ -29,10 +30,23 @@ abstract class SingleAgentEnvironment extends Environment {
     /**
      * This method can be used to initialize the environment and for example initialize the agents
      */
-    public initEnv(): void {
+    public initAgent(): void {
         if (this.agent) {
             this.agent.init();
         }
+    }
+
+    init(
+        options?: EnvOptions | undefined,
+        initialState?: object | undefined
+    ): void {
+        this.options = options;
+        this.initialState = initialState;
+    }
+
+    public setOptions(options: EnvOptions, randomSeed?: number): void {
+        this.options = options;
+        this.randomSeed = randomSeed;
     }
 
     /**

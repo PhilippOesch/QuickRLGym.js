@@ -8,5 +8,5 @@
         "outDir": "./out" /* Specify an output folder for all emitted files. */,
         "strict": true /* Enable all strict type-checking options. */
     },
-    "include": ["./src", "../shared/src", "../shared/src/testing"]
+    "include": ["./src", "../coreLibary/out"]
 }

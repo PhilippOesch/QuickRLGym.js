@@ -21,19 +21,19 @@ export default class BlackJackGame {
             ['Hit', BlackJackAction.Hit],
         ]);
 
-    private rng: seedrandom.PRNG;
+    private _rng: seedrandom.PRNG;
     private player: BlackJackPlayer;
     private dealer: BlackJackDealer;
     private iteration: number = 0;
 
     constructor(randomSeed?: number) {
         if (randomSeed) {
-            this.rng = seedrandom(randomSeed.toString());
+            this._rng = seedrandom(randomSeed.toString());
         } else {
-            this.rng = seedrandom();
+            this._rng = seedrandom();
         }
-        this.player = new BlackJackPlayer(this.rng);
-        this.dealer = new BlackJackDealer(this.rng);
+        this.player = new BlackJackPlayer(this._rng);
+        this.dealer = new BlackJackDealer(this._rng);
     }
 
     public get getGameStateDim(): number[] {
@@ -88,6 +88,11 @@ export default class BlackJackGame {
         }
     }
 
+    public set setRng(randomSeed: number) {
+        this._rng = seedrandom(randomSeed.toString());
+        this.reset(true);
+    }
+
     public playerHasNatural(): boolean {
         if (this.player.getScore === 21) return true;
         return false;
@@ -100,7 +105,7 @@ export default class BlackJackGame {
 
         switch (action) {
             case BlackJackAction.Hit:
-                const newCard = BlackJackCard.returnRandomCard(this.rng);
+                const newCard = BlackJackCard.returnRandomCard(this._rng);
                 this.player.addCard(newCard);
                 if (this.player.getScore > 21) {
                     this.endGame();

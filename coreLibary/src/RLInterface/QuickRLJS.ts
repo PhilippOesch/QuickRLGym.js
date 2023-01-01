@@ -24,7 +24,9 @@ module QuickRLJS {
     ): Environment | undefined {
         if (QuickRLJS.registery.has(name)) {
             const env = QuickRLJS.registery.get(name) as any;
-            return new env((options = options), (initialState = initialState));
+            const newEnv: Environment = new env();
+            newEnv.init((options = options), (initialState = initialState));
+            return newEnv;
         }
         return undefined;
     }

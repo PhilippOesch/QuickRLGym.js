@@ -1,7 +1,7 @@
 import QuickRLJS, {
     SingleAgentEnvironment,
     Agents,
-} from '../../coreLibary/out/index';
+} from '../../coreLibary/src';
 import NodeFileManager from './NodeFileManager';
 
 //parameters
@@ -11,7 +11,7 @@ async function main() {
     //trainTaxiQLAgent();
     //trainTaxiMCAgent();
     //trainBlackJack();
-    //trainBlackJackMCAgent();
+    trainBlackJackMCAgent();
 }
 
 async function trainBlackJack() {
@@ -33,9 +33,9 @@ async function trainBlackJack() {
     });
 
     env.setAgent = agent;
-    env.initEnv();
+    env.initAgent();
     env.train(numIterations, logEvery);
-    await agent.save('./qTables/blackjack/qTable.json', fileManager);
+    await agent.save('./models/qTables/blackjack/qTable.json', fileManager);
 }
 
 async function trainTaxiQLAgent() {
@@ -59,9 +59,9 @@ async function trainTaxiQLAgent() {
         randomSeed
     );
     env.setAgent = agent;
-    env.initEnv();
+    env.initAgent();
     env.train(numIterations, logEvery, maxIterationsPerGame);
-    await agent.save('./qTables/taxi/qTable.json', fileManager);
+    await agent.save('./models/qTables/taxi/qTable.json', fileManager);
 }
 
 async function trainTaxiMCAgent() {
@@ -80,7 +80,7 @@ async function trainTaxiMCAgent() {
         epsilonDecaySteps: 10000,
     });
     env.setAgent = agent;
-    env.initEnv();
+    env.initAgent();
     env.train(numIterations, logEvery, maxIterationsPerGame);
     await agent.save('./models/MCAgent/taxi/mcagent.json', fileManager);
 }
@@ -101,9 +101,9 @@ async function trainBlackJackMCAgent() {
     });
 
     env.setAgent = agent;
-    env.initEnv();
+    env.initAgent();
     env.train(numIterations, logEvery);
-    await agent.save('./MCAgent/blackjack/mcagent.json', fileManager);
+    await agent.save('./models/MCAgent/blackjack/mcagent.json', fileManager);
 }
 
 main();

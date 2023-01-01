@@ -48,6 +48,11 @@ export default class TaxiGame {
         }
     }
 
+    public set setRng(randomSeed: number) {
+        this._rng = seedrandom(randomSeed.toString());
+        this.reset();
+    }
+
     public get gameStateDim(): number[] {
         return TaxiGame._gameStateDim;
     }

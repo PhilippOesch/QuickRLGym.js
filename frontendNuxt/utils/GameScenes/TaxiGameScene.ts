@@ -28,7 +28,7 @@ export default class TaxiGameScene extends Scene {
     constructor(taxiEnv: Envs.TaxiEnv, interactiveMode: boolean) {
         super('Taxi Game');
         this.interactiveMode = interactiveMode;
-        this.taxiGame = taxiEnv.getGame;
+        this.taxiGame = taxiEnv.game;
     }
 
     public preload(): void {
@@ -64,7 +64,7 @@ export default class TaxiGameScene extends Scene {
         this.playerSprite = this.add.sprite(92, 92, 'taxi', index);
         this.playerSprite.setScale(0.7 * Games.Taxi.TaxiGlobals.scale);
         const absPositionPlayer = Games.Taxi.TaxiUtils.adjustedToAbsPos(
-            this.taxiGame.getPlayer.getPosition
+            this.taxiGame.player.position
         );
         this.playerSprite.setPosition(
             absPositionPlayer.getX,
@@ -73,7 +73,7 @@ export default class TaxiGameScene extends Scene {
 
         // generate Customer
         const absPositionCustomer = Games.Taxi.TaxiUtils.adjustedToAbsPos(
-            this.taxiGame.getCustomer.getPosition
+            this.taxiGame.customer.position
         );
         this.customerImage = this.add.image(
             absPositionCustomer.getX,
@@ -128,10 +128,10 @@ export default class TaxiGameScene extends Scene {
     public reRender(): void {
         // Update Player
         const adjustedToAbsPos: Vec2 = Games.Taxi.TaxiUtils.adjustedToAbsPos(
-            this.taxiGame.getPlayer.getPosition
+            this.taxiGame.player.position
         );
         const index: number = this.getSpriteIndex(
-            this.taxiGame.getPlayer.getCarMoveState
+            this.taxiGame.player.carMoveState
         );
         this.playerSprite!.setTexture('taxi', index);
 
@@ -146,12 +146,12 @@ export default class TaxiGameScene extends Scene {
         });
 
         // Update Customer
-        if (this.taxiGame.getCustomer.isCustomerPickedUp) {
+        if (this.taxiGame.customer.isCustomerPickedUp) {
             this.customerImage!.removeFromDisplayList();
         }
 
         const absPositionCustomer = Games.Taxi.TaxiUtils.adjustedToAbsPos(
-            this.taxiGame.getCustomer.getPosition
+            this.taxiGame.customer.position
         );
         this.customerImage!.setPosition(
             absPositionCustomer.getX,
@@ -162,7 +162,7 @@ export default class TaxiGameScene extends Scene {
     }
 
     private checkIfTerminated(): void {
-        if (this.taxiGame.getIsTerminal) {
+        if (this.taxiGame.isTerminal) {
             if (this.interactiveMode) {
                 this.input.keyboard.destroy();
             }
@@ -173,7 +173,7 @@ export default class TaxiGameScene extends Scene {
     private getSpriteIndex(carMoveState: Games.Taxi.TaxiAction): number {
         const indexes: number[] =
             TaxiGameScene.carMoveMapping.get(carMoveState)!;
-        if (this.taxiGame.getCustomer.isCustomerPickedUp) {
+        if (this.taxiGame.customer.isCustomerPickedUp) {
             return indexes[1];
         }
         return indexes[0];
