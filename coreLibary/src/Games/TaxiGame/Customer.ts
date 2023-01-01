@@ -8,9 +8,9 @@ import TaxiGlobals from './Globals';
  * @property {number} spawnDestIdx - The index of the destination, the customer started on
  */
 export default class TaxiCustomer {
-    private destinationIdx: number;
-    private spawnDestIdx: number;
-    private customerPickedUp: boolean = false;
+    private _destinationIdx: number;
+    private _spawnDestIdx: number;
+    private _isCustomerPickedUp: boolean = false;
 
     /**
      * @constructor
@@ -18,32 +18,32 @@ export default class TaxiCustomer {
      * @param {number} destIdx - The indes of the drop off destination
      */
     constructor(spawnIdx: number, destIdx: number) {
-        this.spawnDestIdx = spawnIdx;
-        this.destinationIdx = destIdx;
+        this._spawnDestIdx = spawnIdx;
+        this._destinationIdx = destIdx;
     }
 
-    public get getPosition(): Vec2 {
-        return TaxiGlobals.destinations[this.spawnDestIdx];
+    public get position(): Vec2 {
+        return TaxiGlobals.destinations[this._spawnDestIdx];
     }
 
-    public get getDestIdx(): number {
-        return this.destinationIdx;
+    public get destIdx(): number {
+        return this._destinationIdx;
     }
 
-    public get getSpawnDestIdx(): number {
-        return this.spawnDestIdx;
+    public get spawnDestIdx(): number {
+        return this._spawnDestIdx;
     }
 
     public get isCustomerPickedUp(): boolean {
-        return this.customerPickedUp;
+        return this._isCustomerPickedUp;
     }
 
     public pickUpCustomer(): void {
-        this.customerPickedUp = true;
+        this._isCustomerPickedUp = true;
     }
 
     public dropOffCustomer(): void {
-        this.customerPickedUp = false;
+        this._isCustomerPickedUp = false;
     }
 
     /**
@@ -52,12 +52,12 @@ export default class TaxiCustomer {
      * @param {number} destIdx - The indes of the drop off destination
      */
     public setNewPosition(spawnIdx: number, destIdx: number): void {
-        this.spawnDestIdx = spawnIdx;
-        this.destinationIdx = destIdx;
+        this._spawnDestIdx = spawnIdx;
+        this._destinationIdx = destIdx;
         if (spawnIdx === 4) {
-            this.customerPickedUp = true;
+            this._isCustomerPickedUp = true;
         } else {
-            this.customerPickedUp = false;
+            this._isCustomerPickedUp = false;
         }
     }
 }

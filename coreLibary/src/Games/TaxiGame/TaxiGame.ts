@@ -15,7 +15,7 @@ import seedrandom from 'seedrandom';
  * @property {TaxiCustomer} customer - The customer object.
  */
 export default class TaxiGame {
-    private static readonly gameStateDim: number[] = [5, 5, 4, 5];
+    private static readonly _gameStateDim: number[] = [5, 5, 4, 5];
 
     public static readonly actionMapping: Map<string, TaxiAction> = new Map([
         ['Up', TaxiAction.Up],
@@ -26,12 +26,12 @@ export default class TaxiGame {
         ['DropOff', TaxiAction.DropOff],
     ]);
 
-    private player: TaxiPlayer;
-    private customer: TaxiCustomer;
-    private rng: seedrandom.PRNG;
-    private isTerminal: boolean = false;
-    private points: number = 0;
-    private iteration: number = 0;
+    private _player: TaxiPlayer;
+    private _customer: TaxiCustomer;
+    private _rng: seedrandom.PRNG;
+    private _isTerminal: boolean = false;
+    private _points: number = 0;
+    private _iteration: number = 0;
 
     public static get getActionSpace(): string[] {
         return Array.from(TaxiGame.actionMapping.keys());
@@ -42,42 +42,42 @@ export default class TaxiGame {
      */
     constructor(randomSeed?: number) {
         if (randomSeed) {
-            this.rng = seedrandom(randomSeed.toString());
+            this._rng = seedrandom(randomSeed.toString());
         } else {
-            this.rng = seedrandom();
+            this._rng = seedrandom();
         }
     }
 
-    public get getGameStateDim(): number[] {
-        return TaxiGame.gameStateDim;
+    public get gameStateDim(): number[] {
+        return TaxiGame._gameStateDim;
     }
 
-    public get getCustomer(): TaxiCustomer {
-        return this.customer;
+    public get customer(): TaxiCustomer {
+        return this._customer;
     }
 
-    public get getPlayer(): TaxiPlayer {
-        return this.player;
+    public get player(): TaxiPlayer {
+        return this._player;
     }
 
-    public get getGameState(): TaxiGameState {
+    public get gameState(): TaxiGameState {
         return {
-            playerPos: this.player.getPosition.copy(),
-            destinationIdx: this.customer.getDestIdx,
+            playerPos: this._player.position.copy(),
+            destinationIdx: this._customer.destIdx,
             customerPosIdx: this.getEncodedCustomerPos(),
         };
     }
 
-    public get getReturn(): number {
-        return Number(this.points);
+    public get return(): number {
+        return Number(this._points);
     }
 
-    public get getIsTerminal(): boolean {
-        return this.isTerminal;
+    public get isTerminal(): boolean {
+        return this._isTerminal;
     }
 
     public continue(): void {
-        this.isTerminal = false;
+        this._isTerminal = false;
     }
 
     /**
@@ -88,25 +88,25 @@ export default class TaxiGame {
     }
 
     public updatePoints(points: number): void {
-        this.points += points;
+        this._points += points;
     }
 
     public terminateGame(): void {
-        this.isTerminal = true;
+        this._isTerminal = true;
     }
 
     /**
      * Spawn the player and customer object
      */
     public spawnGameElements(): void {
-        const playerPos: Vec2 = TaxiUtils.getRandomPosition(this.rng);
-        this.player = new TaxiPlayer(playerPos, TaxiAction.Down);
+        const playerPos: Vec2 = TaxiUtils.getRandomPosition(this._rng);
+        this._player = new TaxiPlayer(playerPos, TaxiAction.Down);
 
         const customerInfo: number[] = TaxiUtils.resetCustomer(
-            this.rng,
+            this._rng,
             playerPos
         );
-        this.customer = new TaxiCustomer(customerInfo[0], customerInfo[1]);
+        this._customer = new TaxiCustomer(customerInfo[0], customerInfo[1]);
     }
 
     public reset(
@@ -115,18 +115,18 @@ export default class TaxiGame {
     ): boolean {
         this.spawnGameElements();
         if (initialGameState) {
-            this.player.setPosition = initialGameState.playerPos.copy();
-            this.customer.setNewPosition(
+            this._player.position = initialGameState.playerPos.copy();
+            this._customer.setNewPosition(
                 initialGameState.customerPosIdx,
                 initialGameState.destinationIdx
             );
         }
         if (resetGameState) {
-            this.points = 0;
-            this.isTerminal = false;
-            this.iteration = 0;
+            this._points = 0;
+            this._isTerminal = false;
+            this._iteration = 0;
         } else {
-            this.isTerminal = false;
+            this._isTerminal = false;
         }
         return true;
     }
@@ -154,22 +154,22 @@ export default class TaxiGame {
      * @returns {number} - [0<=x<=3] if customer hasn't been picked up or 4 if the customer has been picked up.
      */
     private getEncodedCustomerPos(): number {
-        if (this.getCustomer.isCustomerPickedUp) {
+        if (this.customer.isCustomerPickedUp) {
             return 4;
         }
-        return this.getCustomer.getSpawnDestIdx;
+        return this.customer.spawnDestIdx;
     }
 
     private dropOffCustomer(): StepResult {
         let reward: number = 0;
         if (
-            this.player.getPosition.isEqual(
-                TaxiGlobals.destinations[this.getCustomer.getDestIdx]
+            this._player.position.isEqual(
+                TaxiGlobals.destinations[this.customer.destIdx]
             ) &&
-            this.customer.isCustomerPickedUp
+            this._customer.isCustomerPickedUp
         ) {
             this.updatePoints(TaxiGlobals.dropOffPassangerPoints);
-            this.customer.dropOffCustomer();
+            this._customer.dropOffCustomer();
             this.terminateGame();
             reward = TaxiGlobals.dropOffPassangerPoints;
         } else {
@@ -177,7 +177,7 @@ export default class TaxiGame {
             reward = TaxiGlobals.illegalMovePoints;
         }
         return {
-            newState: this.getGameState,
+            newState: this.gameState,
             reward: reward,
         };
     }
@@ -185,10 +185,10 @@ export default class TaxiGame {
     private pickUpCustomer(): StepResult {
         let reward: number = 0;
         if (
-            !this.customer.isCustomerPickedUp &&
-            this.player.getPosition.isEqual(this.getCustomer.getPosition)
+            !this._customer.isCustomerPickedUp &&
+            this._player.position.isEqual(this.customer.position)
         ) {
-            this.customer.pickUpCustomer();
+            this._customer.pickUpCustomer();
             this.updatePoints(TaxiGlobals.stepPenaltyPoints);
             reward = TaxiGlobals.stepPenaltyPoints;
         } else {
@@ -196,7 +196,7 @@ export default class TaxiGame {
             reward = TaxiGlobals.illegalMovePoints;
         }
         return {
-            newState: this.getGameState,
+            newState: this.gameState,
             reward: reward,
         };
     }
@@ -212,22 +212,22 @@ export default class TaxiGame {
 
     public updatePlayerPosition(action: TaxiAction): StepResult {
         this.updatePoints(TaxiGlobals.stepPenaltyPoints);
-        this.player.updatePosition(action);
+        this._player.updatePosition(action);
         return {
-            newState: this.getGameState,
+            newState: this.gameState,
             reward: TaxiGlobals.stepPenaltyPoints,
         };
     }
 
     public incrementIterations(): void {
-        this.iteration++;
+        this._iteration++;
     }
 
-    public get getIteration(): number {
-        return this.iteration;
+    public get iteration(): number {
+        return this._iteration;
     }
 
-    public get getRng(): seedrandom.PRNG {
-        return this.rng;
+    public get rng(): seedrandom.PRNG {
+        return this._rng;
     }
 }

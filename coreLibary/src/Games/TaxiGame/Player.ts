@@ -20,8 +20,8 @@ export default class TaxiPlayer {
         [TaxiAction.PickUp, new Vec2(0, 0)],
     ]);
 
-    private moveState: TaxiAction;
-    private position: Vec2;
+    private _moveState: TaxiAction;
+    private _position: Vec2;
 
     /**
      * @param {TaxiGame} game - The game reference.
@@ -29,20 +29,20 @@ export default class TaxiPlayer {
      * @param {TaxiAction} carMoveState - The current move state (for rendering).
      */
     constructor(relPos: Vec2, carMoveState: TaxiAction = TaxiAction.Left) {
-        this.moveState = carMoveState;
-        this.position = relPos;
+        this._moveState = carMoveState;
+        this._position = relPos;
     }
 
-    public get getPosition(): Vec2 {
-        return this.position;
+    public get position(): Vec2 {
+        return this._position;
     }
 
-    public get getCarMoveState(): TaxiAction {
-        return this.moveState;
+    public get carMoveState(): TaxiAction {
+        return this._moveState;
     }
 
-    public set setPosition(pos: Vec2) {
-        this.position = pos;
+    public set position(pos: Vec2) {
+        this._position = pos;
     }
 
     /**
@@ -52,8 +52,8 @@ export default class TaxiPlayer {
      */
     public detectCollision(action: TaxiAction): boolean {
         let adjustedPos: Vec2 = new Vec2(
-            1 + this.position.getX * 2,
-            1 + this.position.getY
+            1 + this._position.getX * 2,
+            1 + this._position.getY
         );
         const moveDir: Vec2 = TaxiPlayer.moveDirMapping.get(action)!.copy();
         adjustedPos.add(moveDir);
@@ -64,11 +64,11 @@ export default class TaxiPlayer {
     }
     public updatePosition(action: TaxiAction): void {
         if (!this.detectCollision(action)) {
-            this.moveState = action;
+            this._moveState = action;
             const moveDir: Vec2 = TaxiPlayer.moveDirMapping
-                .get(this.moveState)!
+                .get(this._moveState)!
                 .copy();
-            this.position.add(moveDir);
+            this._position.add(moveDir);
         }
     }
 }

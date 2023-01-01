@@ -7,7 +7,7 @@ export interface TaxiStats {
 }
 
 export default class TaxiEnv extends SingleAgentEnvironment {
-    private game: TaxiGame;
+    private _game: TaxiGame;
     private logIntervalCount: number = 0;
     private averageGameIterations: number = 0;
     private averageGameScore: number = 0;
@@ -15,13 +15,13 @@ export default class TaxiEnv extends SingleAgentEnvironment {
     constructor(options?: EnvOptions, initialGameState?: TaxiGameState) {
         super((options = options), (initialGameState = initialGameState));
         if (options) {
-            this.game = new TaxiGame(options.randomSeed);
+            this._game = new TaxiGame(options.randomSeed);
         } else {
-            this.game = new TaxiGame();
+            this._game = new TaxiGame();
         }
     }
 
-    public get getStats(): TaxiStats {
+    public get stats(): TaxiStats {
         return {
             averageGameIterations: this.logIntervalCount
                 ? this.averageGameIterations / this.logIntervalCount
@@ -32,57 +32,57 @@ export default class TaxiEnv extends SingleAgentEnvironment {
         };
     }
 
-    public get getGameStateDim(): number[] {
-        return this.game.getGameStateDim;
+    public get gameStateDim(): number[] {
+        return this._game.gameStateDim;
     }
 
     /**
      * @returns The game object
      */
-    public get getGame(): TaxiGame {
-        return this.game;
+    public get game(): TaxiGame {
+        return this._game;
     }
 
-    public get getActionSpace(): string[] {
+    public get actionSpace(): string[] {
         return TaxiGame.getActionSpace;
     }
 
-    public get getIsTerminal(): boolean {
-        return this.game.getIsTerminal;
+    public get isTerminal(): boolean {
+        return this._game.isTerminal;
     }
-    public get getIteration(): number {
-        return this.game.getIteration;
+    public get iteration(): number {
+        return this._game.iteration;
     }
 
-    public get getState(): TaxiGameState {
-        return this.game.getGameState as TaxiGameState;
+    public get state(): TaxiGameState {
+        return this._game.gameState as TaxiGameState;
     }
 
     public get getReturn(): number {
-        return this.game.getReturn;
+        return this._game.return;
     }
 
     public step(action: string): StepResult {
-        return this.game.step(action);
+        return this._game.step(action);
     }
 
     public initEnv(): void {
-        this.game.initGame();
+        this._game.initGame();
         super.initEnv();
     }
 
     public reset(): boolean {
-        return this.game.reset(true, this.initialState as TaxiGameState);
+        return this._game.reset(true, this.initialState as TaxiGameState);
     }
 
     public encodeStateToIndices(state: object): number[] {
-        return this.game.encodeStateToIndices(state as TaxiGameState);
+        return this._game.encodeStateToIndices(state as TaxiGameState);
     }
 
     public override onIterationEnd(): void {
         this.logIntervalCount++;
-        this.averageGameIterations += this.getIteration;
-        this.averageGameScore += this.game.getReturn;
+        this.averageGameIterations += this.iteration;
+        this.averageGameScore += this._game.return;
     }
 
     public override log(trainIteration: number): void {

@@ -29,9 +29,9 @@ export default class RandomAgent extends Agent {
 
     public step(): string {
         const randomActionIdx: number = Math.floor(
-            this.rng() * this.env.getActionSpace.length
+            this.rng() * this.env.actionSpace.length
         );
-        return this.env.getActionSpace[randomActionIdx];
+        return this.env.actionSpace[randomActionIdx];
     }
 
     public evalStep(): string {

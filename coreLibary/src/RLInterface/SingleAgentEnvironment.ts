@@ -54,12 +54,11 @@ abstract class SingleAgentEnvironment extends Environment {
         }
         for (let i = 0; i < iterations; i++) {
             while (
-                (!this.getIsTerminal &&
-                    this.getIteration < maxIterationPerGame) ||
-                (!this.getIsTerminal && maxIterationPerGame == -1)
+                (!this.isTerminal && this.iteration < maxIterationPerGame) ||
+                (!this.isTerminal && maxIterationPerGame == -1)
             ) {
-                const prevState: object = this.getState;
-                const nextAction: string = this.agent.step(this.getState);
+                const prevState: object = this.state;
+                const nextAction: string = this.agent.step(this.state);
                 const { newState, reward } = this.step(nextAction);
                 // some algorithms need information about weather the game state is terminal
                 const gameStateContext =
@@ -93,9 +92,9 @@ abstract class SingleAgentEnvironment extends Environment {
     }
 
     private additionalInfo(maxIterPerGame: number = -1): object {
-        const isTerminal = this.getIsTerminal;
+        const isTerminal = this.isTerminal;
         const maxIterationReached =
-            maxIterPerGame != -1 && this.getIteration >= maxIterPerGame;
+            maxIterPerGame != -1 && this.iteration >= maxIterPerGame;
         return {
             isTerminal: isTerminal,
             maxIterationReached: maxIterationReached,
@@ -113,7 +112,7 @@ abstract class SingleAgentEnvironment extends Environment {
     /**
      * @returns - The action space of the environment an array of strings (actions possible to select)
      */
-    public abstract get getActionSpace(): string[];
+    public abstract get actionSpace(): string[];
 
     /**
      * Perform an action within the environment
@@ -130,7 +129,7 @@ abstract class SingleAgentEnvironment extends Environment {
     /**
      * @returns The state of the environment.
      */
-    public abstract get getState(): object;
+    public abstract get state(): object;
 
     /**
      * @returns reset the environment.
@@ -140,12 +139,12 @@ abstract class SingleAgentEnvironment extends Environment {
     /**
      * @returns Return True if the environment has reached a final state.
      */
-    public abstract get getIsTerminal(): boolean;
+    public abstract get isTerminal(): boolean;
 
     /**
      * @returns Get The current iteration count of the environment
      */
-    public abstract get getIteration(): number;
+    public abstract get iteration(): number;
 
     /**
      * Returns the game state as a number encoded array.

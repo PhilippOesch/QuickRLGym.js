@@ -15,7 +15,7 @@ describe('TaxiGame', function () {
         };
         game.reset(true, initialState);
         it('check initial Game state', function () {
-            const state = game.getGameState as Games.Taxi.TaxiGameState;
+            const state = game.gameState as Games.Taxi.TaxiGameState;
             assert.strict(initialState.playerPos.isEqual(state.playerPos));
             assert.strictEqual(
                 state.destinationIdx,
@@ -28,7 +28,7 @@ describe('TaxiGame', function () {
         });
 
         it('check initial Game state index encoding', function () {
-            const encoding = game.encodeStateToIndices(game.getGameState);
+            const encoding = game.encodeStateToIndices(game.gameState);
             assert.strictEqual(encoding[0], initialState.playerPos.getX);
             assert.strictEqual(encoding[1], initialState.playerPos.getY);
             assert.strictEqual(encoding[2], initialState.destinationIdx);
@@ -41,7 +41,7 @@ describe('TaxiGame', function () {
         it(`The initial customer Position is never 4 (Inside the Taxi) over ${episodes} iterations`, function () {
             for (let i = 0; i < episodes; i++) {
                 game.reset(true);
-                const gameState = game.getGameState as Games.Taxi.TaxiGameState;
+                const gameState = game.gameState as Games.Taxi.TaxiGameState;
                 assert.notStrictEqual(gameState.customerPosIdx, 4);
             }
         });
@@ -157,10 +157,10 @@ describe('TaxiGame', function () {
         const stepResult = game.step('DropOff') as StepResult;
         const newState = stepResult.newState as Games.Taxi.TaxiGameState;
         it('check game termination', function () {
-            assert.strict(game.getIsTerminal);
+            assert.strict(game.isTerminal);
         });
         it('check end points', function () {
-            assert.strictEqual(game.getReturn, 14);
+            assert.strictEqual(game.return, 14);
         });
     });
 });

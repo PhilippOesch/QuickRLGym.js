@@ -53,8 +53,8 @@ export default class MCAgent extends Agent {
     }
 
     init(): void {
-        const valueTableDims: number[] = [...this.env.getGameStateDim];
-        valueTableDims.push(this.env.getActionSpace.length);
+        const valueTableDims: number[] = [...this.env.gameStateDim];
+        valueTableDims.push(this.env.actionSpace.length);
         this.valueTable = Tensor.Zeros(...valueTableDims);
         this.stateReturnCountTable = Tensor.Zeros(...valueTableDims);
         if (this.config) {
@@ -80,7 +80,7 @@ export default class MCAgent extends Agent {
         // buffer experience
         this.experience.push({
             state: this.env.encodeStateToIndices(prevState),
-            actionIdx: this.env.getActionSpace.indexOf(takenAction),
+            actionIdx: this.env.actionSpace.indexOf(takenAction),
             reward: payoff,
         });
         if (gameStateContext.isTerminal) {
@@ -115,7 +115,7 @@ export default class MCAgent extends Agent {
     evalStep(state: object): string {
         const actions: number[] = this.getStateActionValues(state);
         const actionIdx: number = MathUtils.argMax(actions);
-        return this.env.getActionSpace[actionIdx];
+        return this.env.actionSpace[actionIdx];
     }
 
     log(): void {
@@ -194,9 +194,9 @@ export default class MCAgent extends Agent {
         const randNum: number = this.rng();
         if (randNum < this.epsilon) {
             const randIdx = Math.floor(
-                this.rng() * this.env.getActionSpace.length
+                this.rng() * this.env.actionSpace.length
             );
-            return this.env.getActionSpace[randIdx];
+            return this.env.actionSpace[randIdx];
         } else {
             return this.evalStep(state);
         }

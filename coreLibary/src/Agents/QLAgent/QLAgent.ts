@@ -51,8 +51,8 @@ export default class QLAgent extends Agent {
     }
 
     init(): void {
-        const qTableDims: number[] = [...this.env.getGameStateDim];
-        qTableDims.push(this.env.getActionSpace.length);
+        const qTableDims: number[] = [...this.env.gameStateDim];
+        qTableDims.push(this.env.actionSpace.length);
         this.qTable = Tensor.Zeros(...qTableDims);
         if (this.config) {
             this.epsilon = this.config.epsilonStart;
@@ -68,9 +68,9 @@ export default class QLAgent extends Agent {
         this.decayEpsilon();
         if (randNum < this.epsilon) {
             const randIdx = Math.floor(
-                this.rng() * this.env.getActionSpace.length
+                this.rng() * this.env.actionSpace.length
             );
-            return this.env.getActionSpace[randIdx];
+            return this.env.actionSpace[randIdx];
         } else {
             return this.evalStep(state);
         }
@@ -83,7 +83,7 @@ export default class QLAgent extends Agent {
     evalStep(state: object): string {
         const actions: number[] = this.getStateActionValues(state);
         const actionIdx: number = MathUtils.argMax(actions);
-        return this.env.getActionSpace[actionIdx];
+        return this.env.actionSpace[actionIdx];
     }
     feed(
         prevState: object,
@@ -92,7 +92,7 @@ export default class QLAgent extends Agent {
         payoff: number
     ): void {
         //lookups
-        const takenActionIdx = this.env.getActionSpace.indexOf(takenAction);
+        const takenActionIdx = this.env.actionSpace.indexOf(takenAction);
         const prevActionQvalues = this.getStateActionValues(prevState);
         const newPossibleActionValues = this.getStateActionValues(newState);
         const newBestActionIdx: number = MathUtils.argMax(

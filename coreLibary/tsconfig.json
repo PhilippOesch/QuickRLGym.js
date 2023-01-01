@@ -7,5 +7,7 @@
         ] /* Specify type package names to be included without being referenced in a source file. */ /* Specify a file that bundles all outputs into one JavaScript file. If 'declaration' is true, also designates a file that bundles all .d.ts output. */,
         "outDir": "./out" /* Specify an output folder for all emitted files. */,
         "strict": true /* Enable all strict type-checking options. */
-    }
+    },
+    "include": ["src"],
+    "exclude": ["node_modules"]
 }
