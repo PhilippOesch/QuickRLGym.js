@@ -28,15 +28,12 @@
 </template>
 
 <script lang="ts">
-import { Agent } from 'quickrl.core';
-import { updateSpreadAssignment } from 'typescript';
+import { Agent, Envs, SingleAgentEnvironment } from 'quickrl.core';
 import { defineComponent } from 'vue';
 import useGameEnv, { TaxiSceneInfo } from '~~/comsosable/useGameEnv';
 import useSettingsStore from '~~/comsosable/useSettingsStore';
 import useAgent from '~~/comsosable/useAgent';
-//import { Games } from 'quickrl.core';
 import TaxiGameScene from '~~/utils/GameScenes/TaxiGameScene';
-import { Tab } from '~~/.nuxt/components';
 import { GameTrainingSettings } from '~~/comsosable/useDefaultSettings';
 import { Environment } from 'quickrl.core';
 
@@ -74,9 +71,9 @@ export default defineComponent({
             if (!this.taxiEnvInfo) {
                 return;
             }
-            const env: Environment = this.taxiEnvInfo.env;
-
             this.settingsStore.setActiveState('Taxi', false);
+
+            const env: SingleAgentEnvironment = this.taxiEnvInfo.env as any;
 
             const gameSettings: GameTrainingSettings =
                 this.settingsStore.getSetting('Taxi', 'gameSettings');
@@ -86,7 +83,7 @@ export default defineComponent({
                 'Taxi',
                 activeAlgorithm
             );
-            env.setOptions();
+            env.setOptions(gameSettings);
 
             const agent: Agent = await useAgent(
                 activeAlgorithm,
@@ -94,8 +91,19 @@ export default defineComponent({
                 getAgentSettings,
                 gameSettings.randomSeed
             );
-            console.log(agent);
+            env.setAgent = agent;
+            env.initAgent();
+            this.trainingLoop(
+                env,
+                gameSettings.episodes,
+                gameSettings.showProgressEvery
+            );
         },
+        async trainingLoop(
+            env: SingleAgentEnvironment,
+            iterationsLeft: number,
+            trainingIterations: number
+        ) {},
     },
     computed: {
         getGameInfo() {
