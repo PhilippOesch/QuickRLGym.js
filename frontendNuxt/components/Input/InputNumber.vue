@@ -11,13 +11,14 @@
             @change="(event) => finishEdit(event.target as HTMLInputElement)"
             @input="(event) => update(event.target as HTMLInputElement)"
             :step="stepSize"
+            :disabled="disabled"
         />
     </div>
 </template>
 
 <script lang="ts">
 import { defineComponent, PropType } from 'vue';
-import InputStyleType from '../../utils/enums/InputStyleType';
+import { InputStyleType } from '../../utils/enums';
 
 export default defineComponent({
     expose: ['getValue'],
@@ -28,6 +29,7 @@ export default defineComponent({
         max: Number,
         defaultValue: Number,
         styleClasses: String,
+        disabled: Boolean,
         stepSize: Number,
         inputStyle: {
             type: Object as PropType<InputStyleType>,
@@ -62,7 +64,7 @@ export default defineComponent({
 
 <style lang="postcss" scoped>
 .numberInputContainer input {
-    @apply w-full py-1 px-2 rounded-md mt-2;
+    @apply w-full py-1 px-2 rounded-md mt-2 disabled:opacity-40;
 }
 
 .numberInputContainer h3 {

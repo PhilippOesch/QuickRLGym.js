@@ -7,6 +7,7 @@
                 :checked="value"
                 @change="finishEdit"
                 ref="checkBoxRef"
+                :disabled="disabled"
             />
             <span class="slider round"></span>
         </label>
@@ -22,6 +23,7 @@ export default defineComponent({
         title: String,
         name: String,
         defaultValue: Boolean,
+        disabled: Boolean,
     },
     setup() {
         return {};
@@ -64,6 +66,10 @@ export default defineComponent({
 .slider:before {
     content: '';
     @apply absolute left-1 bottom-1 h-7 w-7 bg-gray-50 duration-300;
+}
+
+input:disabled + .slider {
+    @apply opacity-40;
 }
 
 input:checked + .slider {

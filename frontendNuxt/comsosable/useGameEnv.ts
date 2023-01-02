@@ -1,5 +1,5 @@
 import QuickRLJS, { Envs, Games, Agents } from 'quickrl.core';
-import TaxiGameScene from '../utils/GameScenes/TaxiGameScene';
+import TaxiGameScene from '~~/utils/GameScenes/TaxiGameScene';
 
 export interface TaxiSceneInfo {
     gameScene: TaxiGameScene;

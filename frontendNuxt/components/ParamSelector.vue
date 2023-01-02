@@ -12,6 +12,7 @@
                     :defaultValue="settings[index]"
                     :stepSize="item.setting.stepSize"
                     @updated="(value) => updateSettings(value, index)"
+                    :disabled="isDisabled"
                 ></InputSlider>
                 <InputNumber
                     v-if="getType(item) == 'Number'"
@@ -27,6 +28,7 @@
                             ? InputStyleType.Dark
                             : InputStyleType.Light
                     "
+                    :disabled="isDisabled"
                 >
                 </InputNumber>
                 <InputToggle
@@ -35,6 +37,7 @@
                     :title="item.displayName"
                     :defaultValue="settings[index]"
                     @updated="(value) => updateSettings(value, index)"
+                    :disabled="isDisabled"
                 >
                 </InputToggle>
             </template>
@@ -45,7 +48,7 @@
 <script lang="ts">
 import { defineComponent, PropType } from 'vue';
 import { Setting, SettingNumber } from '~~/utils/settingsInterfaces/general';
-import InputStyleType, { SelectionType } from '~~/utils/enums/InputStyleType';
+import { InputStyleType, SelectionType } from '~~/utils/enums';
 import useSettingsStore from '~~/comsosable/useSettingsStore';
 
 export default defineComponent({
@@ -87,6 +90,12 @@ export default defineComponent({
             InputStyleType,
         };
     },
+    computed: {
+        isDisabled() {
+            const isActive = this.settingsStore.getIsActive(this.gameID);
+            return !isActive;
+        },
+    },
     methods: {
         getType(item: any) {
             if ((item as Setting<SettingNumber>) !== undefined) {
@@ -116,11 +125,11 @@ export default defineComponent({
 
 <style lang="postcss" scoped>
 .paramContainer {
-    @apply drop-shadow rounded-md px-4 py-3;
+    @apply drop-shadow rounded-md py-3;
 }
 
 .selectionGrid {
-    @apply bg-slate-800;
+    @apply bg-slate-800 px-4;
 }
 
 .SelectionFree {

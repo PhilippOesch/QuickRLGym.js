@@ -1,4 +1,12 @@
-//import { MCAgentSettings, QLAgentSettings } from 'quickrl.core/out/Agents';
+export interface ISettingsStore {
+    [x: string]: SettingsEntry;
+}
+
+export interface SettingsEntry {
+    settingsActive: boolean;
+    gameSettings: object;
+    [x: string]: any;
+}
 
 const qLDefaultSettings: any = {
     learningRate: 0.001,
@@ -21,8 +29,9 @@ const defaultGameSettings: any = {
     randomSeed: 1234,
 };
 
-export const defaultSettings = {
+export const defaultSettings: ISettingsStore = {
     Taxi: {
+        settingsActive: false,
         QLearning: qLDefaultSettings,
         MCLearning: mCDefaultSettings,
         gameSettings: defaultGameSettings,

@@ -13,6 +13,7 @@
                 @change="(event)=> finishEdit(event.target as HTMLInputElement)"
                 @input="(event) => update(event.target as HTMLInputElement)"
                 :step="stepSize"
+                :disabled="disabled"
             />
             <input
                 type="number"
@@ -24,6 +25,7 @@
                 @change="(event)=> finishEdit(event.target as HTMLInputElement)"
                 @input="(event) => update(event.target as HTMLInputElement)"
                 :step="stepSize"
+                :disabled="disabled"
             />
         </div>
         <!-- @input="(event) => update(event.target as HTMLInputElement)" -->
@@ -43,6 +45,7 @@ export default defineComponent({
         min: Number,
         defaultValue: Number,
         stepSize: Number,
+        disabled: Boolean,
     },
     setup() {
         return {};
@@ -86,27 +89,27 @@ export default defineComponent({
 .sliderInput {
     -webkit-appearance: none; /* Override default look */
     appearance: none;
-    @apply h-4 rounded-full bg-gray-600;
+    @apply h-4 rounded-full bg-gray-600 disabled:opacity-40;
 }
 
 .sliderInput::-webkit-slider-thumb {
     -webkit-appearance: none;
     appearance: none;
-    @apply bg-sky-400 rounded-full w-7 h-7 border;
+    @apply bg-sky-400 rounded-full w-7 h-7 border disabled:opacity-40;
     cursor: pointer;
 }
 
 .sliderInput::-moz-range-thumb {
-    @apply bg-sky-400 rounded-full w-7 h-7;
+    @apply bg-sky-400 rounded-full w-7 h-7 disabled:opacity-40;
     cursor: pointer;
 }
 
 .sliderNumInput {
-    @apply w-28 ml-4 bg-gray-900 py-1 px-2 rounded-md;
+    @apply w-28 ml-4 bg-gray-900 py-1 px-2 rounded-md disabled:opacity-40;
 }
 
 .sliderWrapper .container {
-    @apply flex mt-2 place-content-center place-items-center;
+    @apply flex mt-2 place-content-center place-items-center disabled:opacity-40;
 }
 
 .sliderWrapper .container p {

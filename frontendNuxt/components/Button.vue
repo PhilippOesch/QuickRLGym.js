@@ -6,7 +6,7 @@
 
 <script lang="ts">
 import { defineComponent, PropType } from 'vue';
-import ButtonSize from '../utils/enums/ButtonSize';
+import { ButtonSize } from '~~/utils/enums';
 
 export default defineComponent({
     props: {

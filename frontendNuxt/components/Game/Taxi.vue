@@ -15,6 +15,7 @@
             </Tab>
             <Tab tabGroup="taxiAlgTab" name="Monte Carlo">
                 <ParamSelector
+                    title="Parameters:"
                     gameID="Taxi"
                     algorithmName="MCLearning"
                     :settingsObject="mcSettingsDefault"
@@ -26,42 +27,8 @@
                 groupName="trainingBenchmarkSwitch"
             />
             <Tab tabGroup="trainingBenchmarkSwitch" name="Training">
-                <!-- <div class="freeComponents">
-                    <Button
-                        value="Start Training"
-                        :handler="btnHandler"
-                        :size="ButtonSize.Large"
-                    />
-                    <InputNumber
-                        title="Training Iterations"
-                        :min="1"
-                        :defaultValue="1000"
-                        styleClasses="w-60"
-                        :inputStyle="InputStyleType.Light"
-                    ></InputNumber>
-                    <InputNumber
-                        title="Show Progress Every"
-                        :min="1"
-                        :max="200"
-                        :defaultValue="100"
-                        styleClasses="w-60"
-                        :inputStyle="InputStyleType.Light"
-                    ></InputNumber>
-                    <InputNumber
-                        title="Random Seed"
-                        :min="1"
-                        :max="200"
-                        :defaultValue="100"
-                        styleClasses="w-60"
-                        :inputStyle="InputStyleType.Light"
-                    ></InputNumber></div
-            > -->
                 <div class="freeComponents">
-                    <Button
-                        value="Start Training"
-                        :handler="btnHandler"
-                        :size="ButtonSize.Large"
-                    />
+                    <Button value="Start Training" :size="ButtonSize.Large" />
                     <ParamSelector
                         gameID="Taxi"
                         algorithmName="gameSettings"
@@ -75,7 +42,6 @@
             >
             <div class="mt-8"><GameView></GameView></div>
             <template #fallback>
-                <!-- this will be rendered on server side -->
                 <div class="mt-8 text-lg">Loading...</div>
             </template>
         </ClientOnly>
@@ -84,17 +50,16 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import ButtonSize from '~~/utils/enums/ButtonSize';
 import { qlSettingsDefault } from '~~/utils/settingsInterfaces/QLSettings';
 import { mcSettingsDefault } from '~~/utils/settingsInterfaces/MCSettings';
 import defaultTrainingSettings from '~~/utils/settingsInterfaces/trainingSettings';
-import InputStyleTyp, { SelectionType } from '~~/utils/enums/InputStyleType';
+import { InputStyleType, SelectionType, ButtonSize } from '~~/utils/enums';
 
 export default defineComponent({
     setup() {
         return {
             qlSettingsDefault,
-            InputStyleTyp,
+            InputStyleType,
             SelectionType,
             ButtonSize,
             mcSettingsDefault,
@@ -102,11 +67,6 @@ export default defineComponent({
         };
     },
     mounted() {},
-    methods: {
-        btnHandler() {
-            console.log('hallo');
-        },
-    },
 });
 </script>
 
