@@ -44,7 +44,10 @@ export default class BlackJackEnv extends SingleAgentEnvironment {
     }
 
     public setOptions(options: EnvOptions): void {
-        this.options = options;
+        super.setOptions(options);
+        if (this.randomSeed) {
+            this.game.setRng = this.randomSeed;
+        }
     }
 
     public init(

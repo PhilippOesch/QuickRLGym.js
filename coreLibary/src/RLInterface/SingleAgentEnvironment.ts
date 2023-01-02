@@ -44,9 +44,9 @@ abstract class SingleAgentEnvironment implements Environment {
         this.initialState = initialState;
     }
 
-    public setOptions(options: EnvOptions, randomSeed?: number): void {
+    public setOptions(options: EnvOptions): void {
         this.options = options;
-        this.randomSeed = randomSeed;
+        this.randomSeed = options.randomSeed;
     }
 
     /**

@@ -72,6 +72,13 @@ export default class TaxiEnv extends SingleAgentEnvironment {
         super.initAgent();
     }
 
+    public setOptions(options: EnvOptions): void {
+        super.setOptions(options);
+        if (this.randomSeed) {
+            this.game.setRng = this.randomSeed;
+        }
+    }
+
     public reset(): boolean {
         return this._game.reset(true, this.initialState as TaxiGameState);
     }

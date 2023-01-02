@@ -28,7 +28,11 @@
             />
             <Tab tabGroup="trainingBenchmarkSwitch" name="Training">
                 <div class="freeComponents">
-                    <Button value="Start Training" :size="ButtonSize.Large" />
+                    <Button
+                        :handler="startTrainingHander"
+                        value="Start Training"
+                        :size="ButtonSize.Large"
+                    />
                     <ParamSelector
                         gameID="Taxi"
                         algorithmName="gameSettings"
@@ -40,7 +44,7 @@
             <Tab tabGroup="trainingBenchmarkSwitch" name="Benchmark"
                 >Benchmark</Tab
             >
-            <div class="mt-8"><GameView></GameView></div>
+            <div class="mt-8"><GameView ref="gameView"></GameView></div>
             <template #fallback>
                 <div class="mt-8 text-lg">Loading...</div>
             </template>
@@ -65,6 +69,11 @@ export default defineComponent({
             mcSettingsDefault,
             defaultTrainingSettings,
         };
+    },
+    methods: {
+        startTrainingHander() {
+            (this.$refs.gameView as any).startTraining();
+        },
     },
     mounted() {},
 });

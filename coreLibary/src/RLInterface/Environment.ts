@@ -20,6 +20,6 @@ export default abstract class Environment {
     abstract init(options?: EnvOptions, initialState?: object): void;
     abstract step(action: string): StepResult;
     abstract reset(): boolean;
-    abstract setOptions(options?: EnvOptions, randomSeed?: number): void;
+    abstract setOptions(options?: EnvOptions): void;
     abstract encodeStateToIndices(state: object): number[];
 }

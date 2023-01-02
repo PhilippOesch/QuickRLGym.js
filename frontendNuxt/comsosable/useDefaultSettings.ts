@@ -3,8 +3,16 @@ export interface ISettingsStore {
 }
 
 export interface SettingsEntry {
+    algorithmActive: string;
     settingsActive: boolean;
     gameSettings: object;
+    [x: string]: any;
+}
+
+export interface GameTrainingSettings {
+    episodes: number;
+    showProgressEvery: number;
+    randomSeed: number;
     [x: string]: any;
 }
 
@@ -23,7 +31,7 @@ const mCDefaultSettings: any = {
     epsilonDecaySteps: 100,
 };
 
-const defaultGameSettings: any = {
+const defaultGameSettings: GameTrainingSettings = {
     episodes: 10000,
     showProgressEvery: 1000,
     randomSeed: 1234,
@@ -31,6 +39,7 @@ const defaultGameSettings: any = {
 
 export const defaultSettings: ISettingsStore = {
     Taxi: {
+        algorithmActive: 'random',
         settingsActive: false,
         QLearning: qLDefaultSettings,
         MCLearning: mCDefaultSettings,

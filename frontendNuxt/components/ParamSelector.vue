@@ -81,6 +81,10 @@ export default defineComponent({
             props.algorithmName
         );
 
+        if (props.algorithmName !== 'gameSettings') {
+            settingsStore.setActiveAlgorithm(props.gameID, props.algorithmName);
+        }
+
         console.log(settings);
 
         return {

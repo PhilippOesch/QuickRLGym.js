@@ -28,30 +28,74 @@
 </template>
 
 <script lang="ts">
+import { Agent } from 'quickrl.core';
+import { updateSpreadAssignment } from 'typescript';
 import { defineComponent } from 'vue';
 import useGameEnv, { TaxiSceneInfo } from '~~/comsosable/useGameEnv';
+import useSettingsStore from '~~/comsosable/useSettingsStore';
+import useAgent from '~~/comsosable/useAgent';
 //import { Games } from 'quickrl.core';
 import TaxiGameScene from '~~/utils/GameScenes/TaxiGameScene';
+import { Tab } from '~~/.nuxt/components';
+import { GameTrainingSettings } from '~~/comsosable/useDefaultSettings';
+import { Environment } from 'quickrl.core';
 
-interface initialData {
+interface InitialData {
     taxiEnvInfo?: TaxiSceneInfo;
     stats?: object;
+    agent?: Agent;
     iteration: number;
+    isTraining: false;
 }
 
 export default defineComponent({
+    expose: ['startTraining'],
     props: {
         id: String,
     },
     setup() {
-        return {};
+        const settingsStore = useSettingsStore();
+
+        return { settingsStore };
     },
-    data(): initialData {
+    data(): InitialData {
         return {
             taxiEnvInfo: undefined,
             stats: undefined,
+            agent: undefined,
             iteration: 0,
+            isTraining: false,
         };
+    },
+    methods: {
+        async startTraining() {
+            console.log('startTraining');
+
+            if (!this.taxiEnvInfo) {
+                return;
+            }
+            const env: Environment = this.taxiEnvInfo.env;
+
+            this.settingsStore.setActiveState('Taxi', false);
+
+            const gameSettings: GameTrainingSettings =
+                this.settingsStore.getSetting('Taxi', 'gameSettings');
+            const activeAlgorithm: string =
+                this.settingsStore.getActiveAlgorithm('Taxi');
+            const getAgentSettings = this.settingsStore.getSetting(
+                'Taxi',
+                activeAlgorithm
+            );
+            env.setOptions();
+
+            const agent: Agent = await useAgent(
+                activeAlgorithm,
+                this.taxiEnvInfo.env,
+                getAgentSettings,
+                gameSettings.randomSeed
+            );
+            console.log(agent);
+        },
     },
     computed: {
         getGameInfo() {
@@ -72,6 +116,7 @@ export default defineComponent({
         console.log(window.Phaser);
         this.taxiEnvInfo = await useGameEnv(gameContainer);
         this.stats = this.taxiEnvInfo.env.stats;
+        this.settingsStore.setActiveState('Taxi', true);
     },
 });
 </script>
