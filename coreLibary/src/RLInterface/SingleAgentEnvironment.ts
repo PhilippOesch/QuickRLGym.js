@@ -108,7 +108,7 @@ abstract class SingleAgentEnvironment implements Environment {
         iterations: number = 100,
         logEvery = -1,
         maxIterationPerGame: number = -1
-    ): Promise<void> {
+    ): Promise<number> {
         this.reset();
 
         if (this.agent == undefined) {
@@ -143,6 +143,9 @@ abstract class SingleAgentEnvironment implements Environment {
                 break;
             }
         }
+        this.log(iterations);
+        this.agent.log();
+        return iterations;
     }
 
     /**

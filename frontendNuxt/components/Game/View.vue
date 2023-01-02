@@ -42,7 +42,6 @@ interface InitialData {
     stats?: object;
     agent?: Agent;
     iteration: number;
-    isTraining: false;
 }
 
 export default defineComponent({
@@ -61,7 +60,6 @@ export default defineComponent({
             stats: undefined,
             agent: undefined,
             iteration: 0,
-            isTraining: false,
         };
     },
     methods: {
@@ -96,26 +94,34 @@ export default defineComponent({
             await this.trainingLoop(
                 env,
                 gameSettings.episodes,
-                gameSettings.showProgressEvery
+                gameSettings.showProgressEvery,
+                25
             );
         },
         async trainingLoop(
             env: SingleAgentEnvironment,
             iterationsLeft: number,
-            trainingIterations: number
+            trainingIterations: number,
+            maxIterations: number
         ) {
             if (iterationsLeft > trainingIterations) {
                 const newIterationsLeft = iterationsLeft - trainingIterations;
-                env.train(trainingIterations);
+                env.train(trainingIterations, -1, maxIterations);
+                this.stats = env.stats;
+                this.iteration = env.iteration;
                 console.log('iteration');
                 await this.trainingLoop(
                     env,
                     newIterationsLeft,
-                    trainingIterations
+                    trainingIterations,
+                    maxIterations
                 );
             } else {
-                env.train(iterationsLeft);
-                console.log('end');
+                env.train(iterationsLeft, -1, maxIterations);
+                this.stats = env.stats;
+                this.iteration = env.iteration;
+                this.settingsStore.setActiveState('Taxi', true);
+                console.log('end Training');
             }
         },
         async renderGame() {},
