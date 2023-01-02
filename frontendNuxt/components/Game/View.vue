@@ -93,7 +93,7 @@ export default defineComponent({
             );
             env.setAgent = agent;
             env.initAgent();
-            this.trainingLoop(
+            await this.trainingLoop(
                 env,
                 gameSettings.episodes,
                 gameSettings.showProgressEvery
@@ -103,7 +103,22 @@ export default defineComponent({
             env: SingleAgentEnvironment,
             iterationsLeft: number,
             trainingIterations: number
-        ) {},
+        ) {
+            if (iterationsLeft > trainingIterations) {
+                const newIterationsLeft = iterationsLeft - trainingIterations;
+                env.train(trainingIterations);
+                console.log('iteration');
+                await this.trainingLoop(
+                    env,
+                    newIterationsLeft,
+                    trainingIterations
+                );
+            } else {
+                env.train(iterationsLeft);
+                console.log('end');
+            }
+        },
+        async renderGame() {},
     },
     computed: {
         getGameInfo() {
