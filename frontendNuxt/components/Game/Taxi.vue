@@ -72,7 +72,7 @@ export default defineComponent({
     },
     methods: {
         startTrainingHander() {
-            (this.$refs.gameView as any).startTraining();
+            (this.$refs.gameView as any).initializeTraining();
         },
     },
     mounted() {},

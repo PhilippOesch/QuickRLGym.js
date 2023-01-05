@@ -6,12 +6,12 @@ const agentMapping: Map<string, typeof Agent> = new Map<string, typeof Agent>([
     ['MCLearning', Agents.MCAgent],
 ]);
 
-export default async function useAgent(
+export default function useAgent(
     agentName: string,
     env: Environment,
     options: object,
     randomSeed?: number
-): Promise<Agent> {
+): Agent {
     const agentType = agentMapping.get(agentName) as any;
     const agent: Agent = new agentType(env) as Agent;
     agent.setOptions(options, randomSeed);

@@ -1,7 +1,7 @@
 <template>
     <div class="gameWrapper">
         <Tab tabGroup="trainingBenchmarkSwitch" name="Training">
-            <div class="info">
+            <div class="info" :key="counter">
                 <div class="infoBox gameInfo">
                     <h2>Current Game Info:</h2>
                     <ul class="list" v-if="getGameInfo">
@@ -28,48 +28,56 @@
 </template>
 
 <script lang="ts">
-import { Agent, Envs, SingleAgentEnvironment } from 'quickrl.core';
-import { defineComponent } from 'vue';
+import { Agent, Environment, Envs, SingleAgentEnvironment } from 'quickrl.core';
+import { defineComponent, Ref } from 'vue';
 import useGameEnv, { TaxiSceneInfo } from '~~/comsosable/useGameEnv';
 import useSettingsStore from '~~/comsosable/useSettingsStore';
 import useAgent from '~~/comsosable/useAgent';
 import TaxiGameScene from '~~/utils/GameScenes/TaxiGameScene';
 import { GameTrainingSettings } from '~~/comsosable/useDefaultSettings';
-import { Environment } from 'quickrl.core';
+import { TaxiEnv } from 'quickrl.core/out/Envs';
 
 interface InitialData {
     taxiEnvInfo?: TaxiSceneInfo;
     stats?: object;
     agent?: Agent;
     iteration: number;
+    isTraining: boolean;
 }
 
 export default defineComponent({
-    expose: ['startTraining'],
+    expose: ['initializeTraining'],
     props: {
         id: String,
     },
     setup() {
         const settingsStore = useSettingsStore();
 
-        return { settingsStore };
+        const counter = useState('counter', () => 0);
+
+        return { settingsStore, counter };
     },
-    data(): InitialData {
+    data() {
         return {
-            taxiEnvInfo: undefined,
-            stats: undefined,
-            agent: undefined,
+            taxiEnvInfo: undefined as undefined | TaxiSceneInfo,
+            stats: undefined as undefined | object,
+            agent: undefined as undefined | Agent,
             iteration: 0,
+            isTraining: false,
+            lastAction: undefined as undefined | string,
         };
     },
     methods: {
-        async startTraining() {
+        async initializeTraining() {
+            this.iteration = 0;
             console.log('startTraining');
 
             if (!this.taxiEnvInfo) {
                 return;
             }
             this.settingsStore.setActiveState('Taxi', false);
+
+            await new Promise((f) => setTimeout(f, 50));
 
             const env: SingleAgentEnvironment = this.taxiEnvInfo.env as any;
 
@@ -83,15 +91,16 @@ export default defineComponent({
             );
             env.setOptions(gameSettings);
 
-            const agent: Agent = await useAgent(
+            this.agent = useAgent(
                 activeAlgorithm,
                 this.taxiEnvInfo.env,
                 getAgentSettings,
                 gameSettings.randomSeed
             );
-            env.setAgent = agent;
+            env.setAgent = this.agent as Agent;
             env.initAgent();
-            await this.trainingLoop(
+
+            this.trainingLoop(
                 env,
                 gameSettings.episodes,
                 gameSettings.showProgressEvery,
@@ -108,9 +117,13 @@ export default defineComponent({
                 const newIterationsLeft = iterationsLeft - trainingIterations;
                 env.train(trainingIterations, -1, maxIterations);
                 this.stats = env.stats;
-                this.iteration = env.iteration;
-                console.log('iteration');
-                await this.trainingLoop(
+                console.log(this.stats);
+                this.iteration += trainingIterations;
+
+                console.log('iteration', this.iteration);
+
+                await this.renderGame();
+                this.trainingLoop(
                     env,
                     newIterationsLeft,
                     trainingIterations,
@@ -118,13 +131,31 @@ export default defineComponent({
                 );
             } else {
                 env.train(iterationsLeft, -1, maxIterations);
+                this.iteration += iterationsLeft;
                 this.stats = env.stats;
-                this.iteration = env.iteration;
+                console.log('iteration', env.iteration);
                 this.settingsStore.setActiveState('Taxi', true);
                 console.log('end Training');
             }
         },
-        async renderGame() {},
+        async renderGame() {
+            const env: Envs.TaxiEnv = this.taxiEnvInfo!.env as Envs.TaxiEnv;
+            const gameScene: TaxiGameScene = this.taxiEnvInfo!
+                .gameScene as TaxiGameScene;
+
+            env.reset();
+            gameScene.reRender();
+            await new Promise((f) => setTimeout(f, 1000));
+
+            while (!env.isTerminal && env.iteration <= 25) {
+                await new Promise((f) => setTimeout(f, 100));
+                const nextAction = this.agent!.evalStep(env.state);
+                this.lastAction = nextAction;
+                env.step(nextAction);
+                gameScene.reRender();
+            }
+            await new Promise((f) => setTimeout(f, 200));
+        },
     },
     computed: {
         getGameInfo() {
@@ -135,17 +166,18 @@ export default defineComponent({
                 points: info.env.getReturn,
                 destination:
                     TaxiGameScene.destMapping[info.env.game.customer.destIdx],
+                lastAction: this.lastAction,
             };
         },
     },
     async mounted() {
+        if (!this.isTraining) this.settingsStore.setActiveState('Taxi', true);
+
         const gameContainer: HTMLElement = this.$refs
             .gameContainer as HTMLElement;
         window.Phaser = await import('phaser');
-        console.log(window.Phaser);
         this.taxiEnvInfo = await useGameEnv(gameContainer);
         this.stats = this.taxiEnvInfo.env.stats;
-        this.settingsStore.setActiveState('Taxi', true);
     },
 });
 </script>
