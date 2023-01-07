@@ -28,22 +28,20 @@
 </template>
 
 <script lang="ts">
-import { Agent, Environment, Envs, SingleAgentEnvironment } from 'quickrl.core';
-import { defineComponent, Ref } from 'vue';
-import useGameEnv, { TaxiSceneInfo } from '~~/comsosable/useGameEnv';
+import {
+    QuickRLJS,
+    Agent,
+    Agents,
+    Envs,
+    SingleAgentEnvironment,
+} from 'quickrl.core';
+import { defineComponent } from 'vue';
+import useStartScene, { TaxiSceneInfo } from '~~/comsosable/useGameEnv';
 import useSettingsStore from '~~/comsosable/useSettingsStore';
 import useAgent from '~~/comsosable/useAgent';
 import TaxiGameScene from '~~/utils/GameScenes/TaxiGameScene';
 import { GameTrainingSettings } from '~~/comsosable/useDefaultSettings';
-import { TaxiEnv } from 'quickrl.core/out/Envs';
-
-interface InitialData {
-    taxiEnvInfo?: TaxiSceneInfo;
-    stats?: object;
-    agent?: Agent;
-    iteration: number;
-    isTraining: boolean;
-}
+import { Tab } from '~~/.nuxt/components';
 
 export default defineComponent({
     expose: ['initializeTraining'],
@@ -65,7 +63,16 @@ export default defineComponent({
             iteration: 0,
             isTraining: false,
             lastAction: undefined as undefined | string,
+            phaserLoaded: false,
         };
+    },
+    unmounted() {
+        console.log('unmounted');
+        this.taxiEnvInfo?.game.destroy(true);
+    },
+    deactivated() {
+        console.log('deactivated');
+        this.taxiEnvInfo?.game.destroy(true);
     },
     methods: {
         async initializeTraining() {
@@ -156,6 +163,13 @@ export default defineComponent({
             }
             await new Promise((f) => setTimeout(f, 200));
         },
+        loadEnv() {
+            const env = QuickRLJS.loadEnv('Taxi') as Envs.TaxiEnv;
+            const randAgent = new Agents.RandomAgent(env);
+            env.setAgent = randAgent;
+            env.initAgent();
+            return env;
+        },
     },
     computed: {
         getGameInfo() {
@@ -172,11 +186,15 @@ export default defineComponent({
     },
     async mounted() {
         if (!this.isTraining) this.settingsStore.setActiveState('Taxi', true);
-
         const gameContainer: HTMLElement = this.$refs
             .gameContainer as HTMLElement;
+        const env = this.loadEnv();
         window.Phaser = await import('phaser');
-        this.taxiEnvInfo = await useGameEnv(gameContainer);
+        const taxiGameScene: any = (
+            await import('~~/utils/GameScenes/TaxiGameScene')
+        ).default;
+        const gameScene: TaxiGameScene = new taxiGameScene(env, false);
+        this.taxiEnvInfo = useStartScene(gameScene, env, gameContainer);
         this.stats = this.taxiEnvInfo.env.stats;
     },
 });

@@ -28,6 +28,5 @@ export {
     Vec2,
     Tensor,
     MathUtils,
+    QuickRLJS,
 };
-
-export default QuickRLJS;

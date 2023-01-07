@@ -1,21 +1,17 @@
-import QuickRLJS, { Envs, Games, Agents } from 'quickrl.core';
+import { Envs, Games } from 'quickrl.core';
 import TaxiGameScene from '~~/utils/GameScenes/TaxiGameScene';
 
 export interface TaxiSceneInfo {
     gameScene: TaxiGameScene;
     env: Envs.TaxiEnv;
+    game: Phaser.Game;
 }
 
-export default async function useGameEnv(
+export default function useStartScene(
+    scene: TaxiGameScene,
+    env: Envs.TaxiEnv,
     parent: HTMLElement
-): Promise<TaxiSceneInfo> {
-    //const env = Q;
-    const env = QuickRLJS.loadEnv('Taxi') as Envs.TaxiEnv;
-    const randAgent = new Agents.RandomAgent(env);
-    env.setAgent = randAgent;
-    env.initAgent();
-
-    const gameScene = new TaxiGameScene(env, false);
+): TaxiSceneInfo {
     const config: Phaser.Types.Core.GameConfig = {
         type: Phaser.AUTO,
         parent: parent,
@@ -41,11 +37,12 @@ export default async function useGameEnv(
                 },
             },
         },
-        scene: gameScene,
+        scene: scene,
     };
-    new Phaser.Game(config);
+    const game = new Phaser.Game(config);
     return {
-        gameScene: gameScene,
+        gameScene: scene,
         env: env,
+        game: game,
     };
 }

@@ -4,11 +4,11 @@ import { Envs } from '../index';
 /**
  * Main Class for Framework
  */
-module QuickRLJS {
+class QuickRLJS {
     /**
      * @property registery - registery for enviroment classes
      */
-    export const registery: Map<string, typeof Environment> = new Map();
+    private static registery: Map<string, typeof Environment> = new Map();
 
     /**
      * load a registered environment class
@@ -17,7 +17,7 @@ module QuickRLJS {
      * @param initialState - initial state of the environment
      * @returns - an instatiated object of the environment
      */
-    export function loadEnv(
+    static loadEnv(
         name: string,
         options?: object,
         initialState?: object
@@ -36,7 +36,7 @@ module QuickRLJS {
      * @param name - name of the environment to register.
      * @param envtype - The referenct to the environment class
      */
-    export function register(name: string, envtype: typeof Environment): void {
+    static register(name: string, envtype: typeof Environment): void {
         QuickRLJS.registery.set(name, envtype);
     }
 }

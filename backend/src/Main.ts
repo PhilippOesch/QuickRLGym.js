@@ -1,7 +1,4 @@
-import QuickRLJS, {
-    SingleAgentEnvironment,
-    Agents,
-} from '../../coreLibary/src';
+import QuickRLJS, { SingleAgentEnvironment, Agents } from 'quickrl.core';
 import NodeFileManager from './NodeFileManager';
 
 //parameters

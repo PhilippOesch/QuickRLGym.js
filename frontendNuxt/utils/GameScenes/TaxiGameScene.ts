@@ -23,7 +23,6 @@ export default class TaxiGameScene extends Scene {
     //visual component
     private playerSprite: GameObjects.Sprite | undefined;
     private customerImage: GameObjects.Image | undefined;
-    private uidata: GameObjects.Text | undefined;
 
     constructor(taxiEnv: Envs.TaxiEnv, interactiveMode: boolean) {
         super('Taxi Game');
@@ -88,14 +87,6 @@ export default class TaxiGameScene extends Scene {
         if (this.interactiveMode) {
             this.setupControlls();
         }
-    }
-
-    private updateUIText(): void {
-        this.uidata!.setText([
-            'Points: ' + this.uidata!.data.get('points'),
-            'Iteration: ' + this.uidata!.data.get('iterations'),
-            'Destination: ' + this.uidata!.data.get('destination'),
-        ]);
     }
 
     private setupControlls(): void {

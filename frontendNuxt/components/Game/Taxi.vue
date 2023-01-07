@@ -4,51 +4,46 @@
             :tabs="['Q Learning', 'Monte Carlo']"
             groupName="taxiAlgTab"
         />
-        <ClientOnly>
-            <Tab tabGroup="taxiAlgTab" name="Q Learning">
-                <ParamSelector
-                    title="Parameters:"
-                    gameID="Taxi"
-                    algorithmName="QLearning"
-                    :settingsObject="qlSettingsDefault"
-                />
-            </Tab>
-            <Tab tabGroup="taxiAlgTab" name="Monte Carlo">
-                <ParamSelector
-                    title="Parameters:"
-                    gameID="Taxi"
-                    algorithmName="MCLearning"
-                    :settingsObject="mcSettingsDefault"
-                />
-            </Tab>
-            <TabGroup
-                class="mt-12"
-                :tabs="['Training', 'Benchmark']"
-                groupName="trainingBenchmarkSwitch"
+        <Tab tabGroup="taxiAlgTab" name="Q Learning">
+            <ParamSelector
+                title="Parameters:"
+                gameID="Taxi"
+                algorithmName="QLearning"
+                :settingsObject="qlSettingsDefault"
             />
-            <Tab tabGroup="trainingBenchmarkSwitch" name="Training">
-                <div class="freeComponents">
-                    <Button
-                        :handler="startTrainingHander"
-                        value="Start Training"
-                        :size="ButtonSize.Large"
-                    />
-                    <ParamSelector
-                        gameID="Taxi"
-                        algorithmName="gameSettings"
-                        :settingsObject="defaultTrainingSettings"
-                        :selectionType="SelectionType.FreeStanding"
-                    />
-                </div>
-            </Tab>
-            <Tab tabGroup="trainingBenchmarkSwitch" name="Benchmark"
-                >Benchmark</Tab
-            >
-            <div class="mt-8"><GameView ref="gameView"></GameView></div>
-            <template #fallback>
-                <div class="mt-8 text-lg">Loading...</div>
-            </template>
-        </ClientOnly>
+        </Tab>
+        <Tab tabGroup="taxiAlgTab" name="Monte Carlo">
+            <ParamSelector
+                title="Parameters:"
+                gameID="Taxi"
+                algorithmName="MCLearning"
+                :settingsObject="mcSettingsDefault"
+            />
+        </Tab>
+        <TabGroup
+            class="mt-12"
+            :tabs="['Training', 'Benchmark']"
+            groupName="trainingBenchmarkSwitch"
+        />
+        <Tab tabGroup="trainingBenchmarkSwitch" name="Training">
+            <div class="freeComponents">
+                <Button
+                    :handler="startTrainingHander"
+                    value="Start Training"
+                    :size="ButtonSize.Large"
+                />
+                <ParamSelector
+                    gameID="Taxi"
+                    algorithmName="gameSettings"
+                    :settingsObject="defaultTrainingSettings"
+                    :selectionType="SelectionType.FreeStanding"
+                />
+            </div>
+        </Tab>
+        <Tab tabGroup="trainingBenchmarkSwitch" name="Benchmark">Benchmark</Tab>
+        <div class="mt-8">
+            <GameView ref="gameView"></GameView>
+        </div>
     </div>
 </template>
 
