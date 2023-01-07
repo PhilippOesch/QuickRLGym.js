@@ -1,7 +1,7 @@
 <template>
     <div class="mainContainer">
         <h1>Blackjack</h1>
-        <span>Algorithm Selection</span>
+        <GameBlackJack></GameBlackJack>
     </div>
 </template>
 

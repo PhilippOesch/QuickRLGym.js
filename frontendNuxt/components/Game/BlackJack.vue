@@ -2,20 +2,20 @@
     <div>
         <TabGroup
             :tabs="['Q Learning', 'Monte Carlo']"
-            groupName="taxiAlgTab"
+            groupName="blackJackAlgTab"
         />
-        <Tab tabGroup="taxiAlgTab" name="Q Learning">
+        <Tab tabGroup="blackJackAlgTab" name="Q Learning">
             <ParamSelector
                 title="Parameters:"
-                gameID="Taxi"
+                gameID="BlackJack"
                 algorithmName="QLearning"
                 :settingsObject="qlSettingsDefault"
             />
         </Tab>
-        <Tab tabGroup="taxiAlgTab" name="Monte Carlo">
+        <Tab tabGroup="blackJackAlgTab" name="Monte Carlo">
             <ParamSelector
                 title="Parameters:"
-                gameID="Taxi"
+                gameID="BlackJack"
                 algorithmName="MCLearning"
                 :settingsObject="mcSettingsDefault"
             />
@@ -33,7 +33,7 @@
                     :size="ButtonSize.Large"
                 />
                 <ParamSelector
-                    gameID="Taxi"
+                    gameID="BlackJack"
                     algorithmName="gameSettings"
                     :settingsObject="defaultTrainingSettings"
                     :selectionType="SelectionType.FreeStanding"
@@ -44,7 +44,7 @@
         <div class="mt-8">
             <GameView
                 :training-iteration="25"
-                id="Taxi"
+                id="BlackJack"
                 ref="gameView"
             ></GameView>
         </div>
@@ -56,15 +56,11 @@ import { defineComponent } from 'vue';
 import { qlSettingsDefault } from '~~/utils/settingsInterfaces/QLSettings';
 import { mcSettingsDefault } from '~~/utils/settingsInterfaces/MCSettings';
 import defaultTrainingSettings from '~~/utils/settingsInterfaces/trainingSettings';
-import { InputStyleType, SelectionType, ButtonSize } from '~~/utils/enums';
 
 export default defineComponent({
     setup() {
         return {
             qlSettingsDefault,
-            InputStyleType,
-            SelectionType,
-            ButtonSize,
             mcSettingsDefault,
             defaultTrainingSettings,
         };

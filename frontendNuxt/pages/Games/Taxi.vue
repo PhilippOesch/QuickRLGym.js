@@ -4,16 +4,3 @@
         <GameTaxi></GameTaxi>
     </div>
 </template>
-
-<script lang="ts">
-import { defineComponent } from 'vue';
-
-export default defineComponent({
-    setup() {
-        return {};
-    },
-    mounted() {},
-});
-</script>
-
-<style scoped></style>

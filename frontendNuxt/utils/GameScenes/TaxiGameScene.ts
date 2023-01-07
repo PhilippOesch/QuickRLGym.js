@@ -20,6 +20,7 @@ export default class TaxiGameScene extends StaticRenderScene {
 
     private interactiveMode: boolean;
     private taxiGame: Games.Taxi.TaxiGame;
+    private env: Envs.TaxiEnv;
 
     //visual component
     private playerSprite: GameObjects.Sprite | undefined;
@@ -29,6 +30,7 @@ export default class TaxiGameScene extends StaticRenderScene {
         super('Taxi Game');
         this.interactiveMode = interactiveMode;
         this.taxiGame = taxiEnv.game;
+        this.env = taxiEnv;
     }
 
     public preload(): void {
@@ -46,7 +48,13 @@ export default class TaxiGameScene extends StaticRenderScene {
     }
 
     public get gameInfo(): object {
-        return {};
+        return {
+            gameIteration: this.env.iteration,
+            points: this.env.getReturn,
+            destination:
+                TaxiGameScene.destMapping[this.env.game.customer.destIdx],
+            lastAction: this.env.lastAction,
+        };
     }
 
     public create(): void {

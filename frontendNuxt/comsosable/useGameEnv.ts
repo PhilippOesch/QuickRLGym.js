@@ -61,9 +61,9 @@ function useBlackJackScene(
     env.game.reset(true);
     const config: Phaser.Types.Core.GameConfig = {
         type: Phaser.AUTO,
-        parent: 'app',
-        width: 500,
-        height: 500,
+        parent: parent,
+        width: 700,
+        height: 250,
         backgroundColor: '#1e4d1f',
         zoom: 1,
         physics: {
@@ -73,6 +73,12 @@ function useBlackJackScene(
                     y: 0,
                 },
             },
+        },
+        scale: {
+            // Fit to window
+            mode: Phaser.Scale.WIDTH_CONTROLS_HEIGHT,
+            // Center vertically and horizontally
+            autoCenter: Phaser.Scale.CENTER_BOTH,
         },
         scene: scene,
     };

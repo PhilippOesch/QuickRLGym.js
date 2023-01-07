@@ -15,6 +15,7 @@ export default class BlackJackGameScene extends StaticRenderScene {
     private totalScoreUi: GameObjects.Text | undefined;
 
     private totalScore: number = 0;
+    private env: Envs.BlackJackEnv;
 
     constructor(
         env: Envs.BlackJackEnv,
@@ -25,6 +26,7 @@ export default class BlackJackGameScene extends StaticRenderScene {
         this.blackJackGame = env.game;
         this.interactiveMode = interactiveMode;
         this.loopEndless = loopEndless;
+        this.env = env;
     }
 
     public preload(): void {
@@ -32,14 +34,14 @@ export default class BlackJackGameScene extends StaticRenderScene {
         for (const card of BlackJackUtils.getTotalCardSet()) {
             this.load.image(
                 card,
-                `assets/blackJack/Playing Cards/card-${card}.png`
+                `/gameAssets/blackJack/Playing Cards/card-${card}.png`
             );
         }
 
         // load backside of card:
         this.load.image(
             'back',
-            'assets/blackJack/Playing Cards/card-back2.png'
+            '/gameAssets/blackJack/Playing Cards/card-back2.png'
         );
     }
     public create() {
@@ -48,25 +50,25 @@ export default class BlackJackGameScene extends StaticRenderScene {
             this.blackJackGame.getDealer.getShownCard;
 
         // dealer hidden card
-        this.add.image(300, 130, 'back');
+        this.add.image(210, 130, 'back');
 
-        this.add.image(150, 130, showCard.toString());
+        this.add.image(100, 130, showCard.toString());
 
         // player shown card
         const lastCard: Games.BlackJack.BlackJackCard =
             this.blackJackGame.getPlayer.getCurrentCard!;
-        this.lastPlayerCard = this.add.image(230, 370, lastCard.toString());
+        this.lastPlayerCard = this.add.image(450, 130, lastCard.toString());
 
         // dealerUI
         const dealerTitle = this.add.text(20, 20, '', {
-            font: '24px Courier',
+            font: '20px Courier',
             color: '#ffffff',
         });
         dealerTitle.setText('Dealer');
 
-        this.dealerUi = this.add.text(250, 26, '', {
-            font: '18px Courier',
-            color: '#ffffff',
+        this.dealerUi = this.add.text(200, 24, '', {
+            font: '16px Courier',
+            color: '#ffff00',
         });
         this.dealerUi.setDataEnabled();
         this.dealerUi.data.set('score', 0);
@@ -76,16 +78,16 @@ export default class BlackJackGameScene extends StaticRenderScene {
                 : ''
         );
 
-        const playerTitle = this.add.text(20, 250, '', {
-            font: '24px Courier',
+        const playerTitle = this.add.text(400, 20, '', {
+            font: '20px Courier',
             color: '#ffffff',
         });
         playerTitle.setText('Player');
 
         const playerScore = this.blackJackGame.getPlayer.getScore;
-        this.playerUi = this.add.text(250, 250, '', {
-            font: '18px Courier',
-            color: '#ffffff',
+        this.playerUi = this.add.text(550, 24, '', {
+            font: '16px Courier',
+            color: '#ffff00',
         });
         this.playerUi.setDataEnabled();
         this.playerUi.data.set('score', playerScore);
@@ -94,6 +96,10 @@ export default class BlackJackGameScene extends StaticRenderScene {
                 ? 'Score: ' + this.playerUi.data.get('score')
                 : ''
         );
+    }
+
+    public get gameInfo(): object {
+        return {};
     }
 
     public reRender(): void {

@@ -45,4 +45,11 @@ export const defaultSettings: ISettingsStore = {
         MCLearning: mCDefaultSettings,
         gameSettings: defaultGameSettings,
     },
+    BlackJack: {
+        algorithmActive: 'random',
+        settingsActive: false,
+        QLearning: qLDefaultSettings,
+        MCLearning: mCDefaultSettings,
+        gameSettings: defaultGameSettings,
+    },
 };
