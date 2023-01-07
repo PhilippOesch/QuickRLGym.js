@@ -1,7 +1,7 @@
 <template>
     <div class="sliderWrapper">
         <h3 class="title">{{ title }}</h3>
-        <div class="container">
+        <div class="sliderContainer">
             <input
                 class="sliderInput"
                 type="range"
@@ -108,11 +108,11 @@ export default defineComponent({
     @apply w-28 ml-4 bg-gray-900 py-1 px-2 rounded-md disabled:opacity-40;
 }
 
-.sliderWrapper .container {
+.sliderWrapper .sliderContainer {
     @apply flex mt-2 place-content-center place-items-center disabled:opacity-40;
 }
 
-.sliderWrapper .container p {
+.sliderWrapper .sliderContainer p {
     @apply bg-gray-900;
 }
 </style>

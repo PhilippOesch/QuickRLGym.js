@@ -1,7 +1,8 @@
 import { Scene, GameObjects } from 'phaser';
 import { Games, Envs, Vec2 } from 'quickrl.core';
+import StaticRenderScene from '~~/utils/GameScenes/StaticRenderScene';
 
-export default class TaxiGameScene extends Scene {
+export default class TaxiGameScene extends StaticRenderScene {
     public static readonly destMapping: string[] = [
         'red',
         'yellow',

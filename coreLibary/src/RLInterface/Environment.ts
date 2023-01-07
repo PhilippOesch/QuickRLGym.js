@@ -17,6 +17,7 @@ export default abstract class Environment {
     abstract get isTerminal(): boolean;
     abstract get iteration(): number;
     abstract get stats(): object;
+    abstract get name(): string;
     abstract init(options?: EnvOptions, initialState?: object): void;
     abstract step(action: string): StepResult;
     abstract reset(): boolean;

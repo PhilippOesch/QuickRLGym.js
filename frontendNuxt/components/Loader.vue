@@ -1,0 +1,31 @@
+<template>
+    <div class="loadingElement">
+        <div class="loadingContentWrapper">{{ text }}</div>
+    </div>
+</template>
+
+<script lang="ts">
+import { defineComponent } from 'vue';
+
+export default defineComponent({
+    props: {
+        text: {
+            type: String,
+            default: 'Loading',
+        },
+    },
+    setup() {
+        return {};
+    },
+});
+</script>
+
+<style lang="postcss" scoped>
+.loadingElement {
+    @apply text-lg absolute w-full h-full bg-gray-900 bg-opacity-50;
+}
+
+.loadingContentWrapper {
+    @apply w-full h-full flex place-content-center place-items-center mb-2;
+}
+</style>

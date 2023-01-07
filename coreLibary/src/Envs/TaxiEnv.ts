@@ -11,6 +11,7 @@ export default class TaxiEnv extends SingleAgentEnvironment {
     private logIntervalCount: number = 0;
     private averageGameIterations: number = 0;
     private averageGameScore: number = 0;
+    private static _name = 'Taxi';
 
     public init(options?: EnvOptions, initialState?: TaxiGameState): void {
         super.init(options, initialState);
@@ -20,6 +21,10 @@ export default class TaxiEnv extends SingleAgentEnvironment {
             this._game = new TaxiGame();
         }
         this._game.initGame();
+    }
+
+    public get name(): string {
+        return TaxiEnv._name;
     }
 
     public get stats(): TaxiStats {

@@ -13,6 +13,7 @@ export default class BlackJackEnv extends SingleAgentEnvironment {
     private averagePlayerScore: number = 0;
     private averageReturn: number = 0;
     private averageDealerScore: number = 0;
+    private static _name: string = 'BlackJack';
 
     public get stats(): BlackJackStats {
         return {
@@ -26,6 +27,10 @@ export default class BlackJackEnv extends SingleAgentEnvironment {
                 ? this.averagePlayerScore / this.logIntervalCount
                 : 0,
         };
+    }
+
+    public get name(): string {
+        return BlackJackEnv._name;
     }
 
     /**

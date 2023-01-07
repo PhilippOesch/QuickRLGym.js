@@ -23,7 +23,9 @@
                 </div>
             </div>
         </Tab>
-        <div class="gameContainer" ref="gameContainer"></div>
+        <div ref="gameContainer" class="gameContainer">
+            <Loader text="Training..." v-if="isTraining"></Loader>
+        </div>
     </div>
 </template>
 
@@ -36,12 +38,14 @@ import {
     SingleAgentEnvironment,
 } from 'quickrl.core';
 import { defineComponent } from 'vue';
-import useStartScene, { TaxiSceneInfo } from '~~/comsosable/useGameEnv';
+import { TaxiSceneInfo } from '~~/comsosable/useGameEnv';
 import useSettingsStore from '~~/comsosable/useSettingsStore';
 import useAgent from '~~/comsosable/useAgent';
 import TaxiGameScene from '~~/utils/GameScenes/TaxiGameScene';
 import { GameTrainingSettings } from '~~/comsosable/useDefaultSettings';
-import { Tab } from '~~/.nuxt/components';
+import { Loader, Tab } from '~~/.nuxt/components';
+import useStartScene from '~~/comsosable/useGameEnv';
+import StaticRenderScene from '~~/utils/GameScenes/StaticRenderScene';
 
 export default defineComponent({
     expose: ['initializeTraining'],
@@ -66,16 +70,9 @@ export default defineComponent({
             phaserLoaded: false,
         };
     },
-    unmounted() {
-        console.log('unmounted');
-        this.taxiEnvInfo?.game.destroy(true);
-    },
-    deactivated() {
-        console.log('deactivated');
-        this.taxiEnvInfo?.game.destroy(true);
-    },
     methods: {
         async initializeTraining() {
+            this.isTraining = true;
             this.iteration = 0;
             console.log('startTraining');
 
@@ -120,6 +117,7 @@ export default defineComponent({
             trainingIterations: number,
             maxIterations: number
         ) {
+            this.isTraining = true;
             if (iterationsLeft > trainingIterations) {
                 const newIterationsLeft = iterationsLeft - trainingIterations;
                 env.train(trainingIterations, -1, maxIterations);
@@ -146,8 +144,9 @@ export default defineComponent({
             }
         },
         async renderGame() {
-            const env: Envs.TaxiEnv = this.taxiEnvInfo!.env as Envs.TaxiEnv;
-            const gameScene: TaxiGameScene = this.taxiEnvInfo!
+            this.isTraining = false;
+            const env: SingleAgentEnvironment = this.taxiEnvInfo!.env as any;
+            const gameScene: StaticRenderScene = this.taxiEnvInfo!
                 .gameScene as TaxiGameScene;
 
             env.reset();
@@ -164,7 +163,9 @@ export default defineComponent({
             await new Promise((f) => setTimeout(f, 200));
         },
         loadEnv() {
-            const env = QuickRLJS.loadEnv('Taxi') as Envs.TaxiEnv;
+            const env: SingleAgentEnvironment = QuickRLJS.loadEnv(
+                'Taxi'
+            ) as SingleAgentEnvironment;
             const randAgent = new Agents.RandomAgent(env);
             env.setAgent = randAgent;
             env.initAgent();
@@ -186,14 +187,11 @@ export default defineComponent({
     },
     async mounted() {
         if (!this.isTraining) this.settingsStore.setActiveState('Taxi', true);
-        const gameContainer: HTMLElement = this.$refs
-            .gameContainer as HTMLElement;
+        // wait for components to be rendered
+        await nextTick();
+        const gameContainer = this.$refs.gameContainer as HTMLElement;
         const env = this.loadEnv();
-        window.Phaser = await import('phaser');
-        const taxiGameScene: any = (
-            await import('~~/utils/GameScenes/TaxiGameScene')
-        ).default;
-        const gameScene: TaxiGameScene = new taxiGameScene(env, false);
+        const gameScene: TaxiGameScene = new TaxiGameScene(env, false);
         this.taxiEnvInfo = useStartScene(gameScene, env, gameContainer);
         this.stats = this.taxiEnvInfo.env.stats;
     },
@@ -206,7 +204,11 @@ export default defineComponent({
 }
 
 .gameWrapper .infoBox {
-    @apply bg-slate-700 p-4 rounded-md;
+    @apply bg-slate-800 p-4 rounded-md;
+}
+
+.gameWrapperContainer {
+    @apply grid lg:grid-cols-6;
 }
 
 .gameInfo {
@@ -226,11 +228,7 @@ export default defineComponent({
 }
 
 .gameContainer {
-    @apply w-full bg-gray-800 rounded-md max-h-fit;
-}
-
-.gameWrapper {
-    @apply w-full relative p-4 bg-gray-800 rounded-md drop-shadow;
+    @apply w-full bg-gray-800 rounded-md max-h-fit relative;
 }
 
 .gameContainer :deep(canvas) {

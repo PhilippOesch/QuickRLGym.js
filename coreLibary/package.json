@@ -1,6 +1,6 @@
 {
   "name": "quickrl.core",
-  "version": "0.5.13",
+  "version": "0.5.14",
   "description": "This is a simple framework for implementing and testing reinforcement learning environments and algorithms",
   "main": "./out/index.js",
   "types": "./out/index.d.ts",

@@ -13,6 +13,10 @@ abstract class SingleAgentEnvironment implements Environment {
     protected options?: EnvOptions;
     protected randomSeed?: number;
 
+    get name(): string {
+        throw new Error('Method not implemented.');
+    }
+
     get gameStateDim(): number[] {
         throw new Error('Method not implemented.');
     }
