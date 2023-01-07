@@ -7,7 +7,7 @@ export interface TaxiSceneInfo {
     game: Phaser.Game;
 }
 
-export default function useStartScene(
+export default function useTaxiScene(
     scene: TaxiGameScene,
     env: Envs.TaxiEnv,
     parent: HTMLElement

@@ -44,7 +44,7 @@ import useAgent from '~~/comsosable/useAgent';
 import TaxiGameScene from '~~/utils/GameScenes/TaxiGameScene';
 import { GameTrainingSettings } from '~~/comsosable/useDefaultSettings';
 import { Loader, Tab } from '~~/.nuxt/components';
-import useStartScene from '~~/comsosable/useGameEnv';
+import useTaxiScene from '~~/comsosable/useGameEnv';
 import StaticRenderScene from '~~/utils/GameScenes/StaticRenderScene';
 
 export default defineComponent({
@@ -192,7 +192,7 @@ export default defineComponent({
         const gameContainer = this.$refs.gameContainer as HTMLElement;
         const env = this.loadEnv();
         const gameScene: TaxiGameScene = new TaxiGameScene(env, false);
-        this.taxiEnvInfo = useStartScene(gameScene, env, gameContainer);
+        this.taxiEnvInfo = useTaxiScene(gameScene, env, gameContainer);
         this.stats = this.taxiEnvInfo.env.stats;
     },
 });
