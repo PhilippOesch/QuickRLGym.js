@@ -42,7 +42,7 @@
         </Tab>
         <Tab tabGroup="trainingBenchmarkSwitch" name="Benchmark">Benchmark</Tab>
         <div class="mt-8">
-            <GameView ref="gameView"></GameView>
+            <GameView id="Taxi" ref="gameView"></GameView>
         </div>
     </div>
 </template>

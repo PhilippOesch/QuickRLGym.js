@@ -8,6 +8,7 @@ export interface GameStateContext {
 }
 
 abstract class SingleAgentEnvironment implements Environment {
+    protected lastAction?: string;
     protected agent?: Agent;
     protected initialState?: object;
     protected options?: EnvOptions;
@@ -77,6 +78,7 @@ abstract class SingleAgentEnvironment implements Environment {
             ) {
                 const prevState: object = this.state;
                 const nextAction: string = this.agent.step(this.state);
+                this.lastAction = nextAction;
                 const { newState, reward } = this.step(nextAction);
                 // some algorithms need information about weather the game state is terminal
                 const gameStateContext =

@@ -30,27 +30,24 @@
 </template>
 
 <script lang="ts">
-import {
-    QuickRLJS,
-    Agent,
-    Agents,
-    Envs,
-    SingleAgentEnvironment,
-} from 'quickrl.core';
+import { QuickRLJS, Agent, Agents, SingleAgentEnvironment } from 'quickrl.core';
 import { defineComponent } from 'vue';
-import { TaxiSceneInfo } from '~~/comsosable/useGameEnv';
+import { SceneInfo } from '~~/comsosable/useGameEnv';
 import useSettingsStore from '~~/comsosable/useSettingsStore';
 import useAgent from '~~/comsosable/useAgent';
 import TaxiGameScene from '~~/utils/GameScenes/TaxiGameScene';
 import { GameTrainingSettings } from '~~/comsosable/useDefaultSettings';
 import { Loader, Tab } from '~~/.nuxt/components';
-import useTaxiScene from '~~/comsosable/useGameEnv';
+import useGetGameScene from '~~/comsosable/useGameEnv';
 import StaticRenderScene from '~~/utils/GameScenes/StaticRenderScene';
 
 export default defineComponent({
     expose: ['initializeTraining'],
     props: {
-        id: String,
+        id: {
+            type: String,
+            required: true,
+        },
     },
     setup() {
         const settingsStore = useSettingsStore();
@@ -61,7 +58,7 @@ export default defineComponent({
     },
     data() {
         return {
-            taxiEnvInfo: undefined as undefined | TaxiSceneInfo,
+            envInfo: undefined as undefined | SceneInfo,
             stats: undefined as undefined | object,
             agent: undefined as undefined | Agent,
             iteration: 0,
@@ -76,14 +73,14 @@ export default defineComponent({
             this.iteration = 0;
             console.log('startTraining');
 
-            if (!this.taxiEnvInfo) {
+            if (!this.envInfo) {
                 return;
             }
             this.settingsStore.setActiveState('Taxi', false);
 
             await new Promise((f) => setTimeout(f, 50));
 
-            const env: SingleAgentEnvironment = this.taxiEnvInfo.env as any;
+            const env: SingleAgentEnvironment = this.envInfo.env as any;
 
             const gameSettings: GameTrainingSettings =
                 this.settingsStore.getSetting('Taxi', 'gameSettings');
@@ -97,7 +94,7 @@ export default defineComponent({
 
             this.agent = useAgent(
                 activeAlgorithm,
-                this.taxiEnvInfo.env,
+                this.envInfo.env,
                 getAgentSettings,
                 gameSettings.randomSeed
             );
@@ -145,8 +142,8 @@ export default defineComponent({
         },
         async renderGame() {
             this.isTraining = false;
-            const env: SingleAgentEnvironment = this.taxiEnvInfo!.env as any;
-            const gameScene: StaticRenderScene = this.taxiEnvInfo!
+            const env: SingleAgentEnvironment = this.envInfo!.env as any;
+            const gameScene: StaticRenderScene = this.envInfo!
                 .gameScene as TaxiGameScene;
 
             env.reset();
@@ -174,15 +171,16 @@ export default defineComponent({
     },
     computed: {
         getGameInfo() {
-            if (!this.taxiEnvInfo) return null;
-            const info = this.taxiEnvInfo as TaxiSceneInfo;
-            return {
-                gameIteration: info.env.iteration,
-                points: info.env.getReturn,
-                destination:
-                    TaxiGameScene.destMapping[info.env.game.customer.destIdx],
-                lastAction: this.lastAction,
-            };
+            // if (!this.taxiEnvInfo) return null;
+            // const info = this.taxiEnvInfo as SceneInfo;
+            // return {
+            //     gameIteration: info.env.iteration,
+            //     points: info.env.getReturn,
+            //     destination:
+            //         TaxiGameScene.destMapping[info.env.game.customer.destIdx],
+            //     lastAction: this.lastAction,
+            // };
+            return {};
         },
     },
     async mounted() {
@@ -190,10 +188,12 @@ export default defineComponent({
         // wait for components to be rendered
         await nextTick();
         const gameContainer = this.$refs.gameContainer as HTMLElement;
-        const env = this.loadEnv();
-        const gameScene: TaxiGameScene = new TaxiGameScene(env, false);
-        this.taxiEnvInfo = useTaxiScene(gameScene, env, gameContainer);
-        this.stats = this.taxiEnvInfo.env.stats;
+        // const env = this.loadEnv();
+        // const gameScene: TaxiGameScene = new TaxiGameScene(env, false);
+        // this.taxiEnvInfo = useTaxiScene(gameScene, env, gameContainer);
+        // this.stats = this.taxiEnvInfo.env.stats;
+        this.envInfo = useGetGameScene(this.id, gameContainer);
+        this.stats = this.envInfo?.env.stats;
     },
 });
 </script>

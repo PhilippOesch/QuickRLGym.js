@@ -1,17 +1,95 @@
-import { Envs, Games } from 'quickrl.core';
+import {
+    Envs,
+    Games,
+    SingleAgentEnvironment,
+    QuickRLJS,
+    Agents,
+} from 'quickrl.core';
+import BlackJackGameScene from '~~/utils/GameScenes/BlackJackGameScene';
+import StaticRenderScene from '~~/utils/GameScenes/StaticRenderScene';
 import TaxiGameScene from '~~/utils/GameScenes/TaxiGameScene';
 
-export interface TaxiSceneInfo {
-    gameScene: TaxiGameScene;
-    env: Envs.TaxiEnv;
+export interface SceneInfo {
+    gameScene: StaticRenderScene;
+    env: SingleAgentEnvironment;
     game: Phaser.Game;
 }
 
-export default function useTaxiScene(
+function loadEnv(name: string) {
+    const env: SingleAgentEnvironment = QuickRLJS.loadEnv(
+        name
+    ) as SingleAgentEnvironment;
+    const randAgent = new Agents.RandomAgent(env);
+    env.setAgent = randAgent;
+    env.initAgent();
+    return env;
+}
+
+export default function useGetGameScene(
+    name: string,
+    parent: HTMLElement
+): SceneInfo | undefined {
+    const env = loadEnv(name);
+
+    switch (name) {
+        case 'Taxi':
+            const taxiScene: TaxiGameScene = new TaxiGameScene(
+                env as Envs.TaxiEnv,
+                false
+            );
+            return useTaxiScene(taxiScene, env as Envs.TaxiEnv, parent);
+        case 'BlackJack':
+            const blackJackScene: BlackJackGameScene = new BlackJackGameScene(
+                env as Envs.BlackJackEnv,
+                false
+            );
+            return useBlackJackScene(
+                blackJackScene,
+                env as Envs.BlackJackEnv,
+                parent
+            );
+    }
+    return undefined;
+}
+
+function useBlackJackScene(
+    scene: BlackJackGameScene,
+    env: Envs.BlackJackEnv,
+    parent: HTMLElement
+): SceneInfo {
+    env.game.initGame();
+    env.game.reset(true);
+    const config: Phaser.Types.Core.GameConfig = {
+        type: Phaser.AUTO,
+        parent: 'app',
+        width: 500,
+        height: 500,
+        backgroundColor: '#1e4d1f',
+        zoom: 1,
+        physics: {
+            default: 'arcade',
+            arcade: {
+                gravity: {
+                    y: 0,
+                },
+            },
+        },
+        scene: scene,
+    };
+    // console.log(this.game.getGameState);
+    const game = new Phaser.Game(config);
+    return {
+        gameScene: scene,
+        env: env,
+        game: game,
+    };
+}
+
+function useTaxiScene(
     scene: TaxiGameScene,
     env: Envs.TaxiEnv,
     parent: HTMLElement
-): TaxiSceneInfo {
+): SceneInfo {
     const config: Phaser.Types.Core.GameConfig = {
         type: Phaser.AUTO,
         parent: parent,

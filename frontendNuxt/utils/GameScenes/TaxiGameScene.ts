@@ -45,6 +45,10 @@ export default class TaxiGameScene extends StaticRenderScene {
         this.load.image('customer', '/gameAssets/taxi/customer.png');
     }
 
+    public get gameInfo(): object {
+        return {};
+    }
+
     public create(): void {
         // generate Map
         const map = this.make.tilemap({
