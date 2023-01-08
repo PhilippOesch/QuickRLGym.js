@@ -1,11 +1,11 @@
 @font-face {
     font-family: 'quickrl';
-    src: url('/icons/fonts/quickrl.eot?rr46g9');
-    src: url('/icons/fonts/quickrl.eot?rr46g9#iefix')
+    src: url('/icons/fonts/quickrl.eot?8qrxn7');
+    src: url('/icons/fonts/quickrl.eot?8qrxn7#iefix')
             format('embedded-opentype'),
-        url('/icons/fonts/quickrl.ttf?rr46g9') format('truetype'),
-        url('/icons/fonts/quickrl.woff?rr46g9') format('woff'),
-        url('/icons/fonts/quickrl.svg?rr46g9#quickrl') format('svg');
+        url('/icons/fonts/quickrl.ttf?8qrxn7') format('truetype'),
+        url('/icons/fonts/quickrl.woff?8qrxn7') format('woff'),
+        url('/icons/fonts/quickrl.svg?8qrxn7#quickrl') format('svg');
     font-weight: normal;
     font-style: normal;
     font-display: block;
@@ -25,6 +25,14 @@
     /* Better Font Rendering =========== */
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+}
+
+.quickrl-home:before {
+    content: '\e905';
+}
+
+.quickrl-menu:before {
+    content: '\e904';
 }
 
 .quickrl-grid:before {

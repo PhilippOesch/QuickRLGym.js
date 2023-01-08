@@ -1,23 +1,28 @@
 <template>
-    <div class="mainContainer">
-        <h1 class="title">Select A Game</h1>
-        <div class="gameSelectContainer">
+    <MenuButton :clickHandler="toggleMenu"></MenuButton>
+    <div v-if="menuOpen" class="MenuWrapper">
+        <div class="menuContainer">
+            <NuxtLink class="menuLink" to="/">
+                <i class="icon quickrl-home" alt="Home" />
+                <div class="rightSide">
+                    <span>Home</span>
+                </div>
+            </NuxtLink>
             <template v-for="link in links" :key="link.link">
-                <NuxtLink class="linkButton" :to="link.link">
+                <NuxtLink class="menuLink" :to="link.link">
                     <i :class="setClasses(link)" :alt="link.title" />
                     <div class="rightSide">
-                        <h2>{{ link.title }}</h2>
-                        <p>{{ link.description }}</p>
+                        <span>{{ link.title }}</span>
                     </div>
                 </NuxtLink>
             </template>
         </div>
     </div>
+    <div v-if="menuOpen" class="MenuOverlay" @click="toggleMenu"></div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import { IconColor } from '~~/utils/enums';
 
 export default defineComponent({
     setup() {
@@ -29,35 +34,35 @@ export default defineComponent({
                 {
                     title: 'Taxi Game',
                     link: '/Games/Taxi',
-                    description: 'Game Based on the Taxi Problem',
                     icon: 'car',
                     color: IconColor.Amber,
                 },
                 {
                     title: 'Blackjack',
                     link: '/Games/BlackJack',
-                    description: 'Basic Implementation of Blackjack',
                     icon: 'card',
                     color: IconColor.Green,
                 },
                 {
                     title: 'Grid World',
-                    link: '/Games/Taxi',
-                    description: 'A Grid World Implementation',
+                    link: '/Games/TaxiGame',
                     icon: 'grid',
                     color: IconColor.Sky,
                 },
                 {
                     title: 'Tic-Tac-Toe',
-                    link: '/Games/BlackJack',
-                    description: 'Standard Tic-Tac-Toe Implementation',
+                    link: '/Games/BlackJackGame',
                     icon: 'tic-tac-toe',
                     color: IconColor.Pink,
                 },
             ],
+            menuOpen: false,
         };
     },
     methods: {
+        toggleMenu() {
+            this.menuOpen = !this.menuOpen;
+        },
         setClasses(link: any) {
             return ['icon', 'quickrl-' + link.icon, link.color];
         },
@@ -66,37 +71,23 @@ export default defineComponent({
 </script>
 
 <style lang="postcss" scoped>
-.gameSelectContainer {
-    @apply mt-8 grid lg:grid-cols-2 grid-cols-1 gap-[2px] rounded-md drop-shadow;
+.MenuOverlay {
+    @apply w-full h-full bg-black bg-opacity-50 fixed top-0 left-0 z-10;
 }
 
-.linkButton {
-    @apply first:rounded-t-md 
-        lg:first:rounded-tr-none 
-        last:rounded-b-md 
-        lg:last:rounded-bl-none 
-        px-6 py-6 text-lg
-        bg-gray-800 
-        hover:bg-gray-700
-        flex;
+.MenuWrapper {
+    @apply fixed top-0 left-0 min-w-max w-96 min-h-full bg-gray-900 z-20 drop-shadow-md border-gray-500;
 }
 
-.icon {
-    @apply text-5xl mr-4 grid justify-center align-middle;
+.menuContainer {
+    @apply mt-8;
 }
 
-h2 {
-    @apply text-xl;
-}
-p {
-    @apply text-sm mt-1;
+.menuLink {
+    @apply min-w-full flex px-5 py-3 gap-3 flex-wrap place-items-center text-xl cursor-pointer hover:bg-gray-800;
 }
 
-.linkButton:nth-child(2) {
-    @apply lg:rounded-tr-md;
-}
-
-.linkButton:nth-last-child(2) {
-    @apply lg:rounded-bl-md;
+.menuLink .icon {
+    @apply text-4xl;
 }
 </style>
