@@ -84,18 +84,25 @@ export default class BlackJackGameScene extends StaticRenderScene {
         });
         playerTitle.setText('Player');
 
+        const hasUsableAce: string = this.mapUsableAce(
+            this.blackJackGame.getPlayer.hasUsableAce
+        );
         const playerScore = this.blackJackGame.getPlayer.getScore;
-        this.playerUi = this.add.text(550, 24, '', {
-            font: '16px Courier',
+
+        this.playerUi = this.add.text(520, 70, '', {
+            font: '14px Courier',
             color: '#ffff00',
         });
         this.playerUi.setDataEnabled();
+        this.playerUi.data.set('usableAce', hasUsableAce);
         this.playerUi.data.set('score', playerScore);
-        this.playerUi.setText(
+        this.playerUi.setText([
             this.playerUi.data.get('score')
                 ? 'Score: ' + this.playerUi.data.get('score')
-                : ''
-        );
+                : '',
+            'Has Usable Ace: \n\t' + this.playerUi.data.get('usableAce'),
+        ]);
+        console.log(hasUsableAce);
     }
 
     public get gameInfo(): object {
@@ -109,8 +116,12 @@ export default class BlackJackGameScene extends StaticRenderScene {
         this.lastPlayerCard!.setTexture(currentCard.toString());
         const newPlayerScore = this.blackJackGame.getPlayer.getScore;
         const newDealerScore = this.blackJackGame.getDealer.getScore;
+        const hasUsableAce: string = this.mapUsableAce(
+            this.blackJackGame.getPlayer.hasUsableAce
+        );
 
         this.playerUi!.data.set('score', newPlayerScore);
+        this.playerUi!.data.set('usableAce', hasUsableAce);
 
         if (this.blackJackGame.getPlayer.getStick) {
             this.dealerUi!.data.set('score', newDealerScore);
@@ -124,10 +135,15 @@ export default class BlackJackGameScene extends StaticRenderScene {
                 : ''
         );
 
-        this.playerUi!.setText(
+        this.playerUi!.setText([
             this.playerUi!.data.get('score')
                 ? 'Score: ' + this.playerUi!.data.get('score')
-                : ''
-        );
+                : '',
+            'Has Usable Ace: ' + this.playerUi!.data.get('usableAce'),
+        ]);
+    }
+
+    private mapUsableAce(hasUsableAce: boolean): string {
+        return hasUsableAce ? 'Yes' : 'No';
     }
 }

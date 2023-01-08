@@ -57,7 +57,7 @@ export default defineComponent({
 
 <style lang="postcss" scoped>
 .tabSelectContainer {
-    @apply bg-gray-800 px-2 py-2 rounded-md flex gap-4 drop-shadow mt-6 max-w-fit;
+    @apply bg-gray-800 px-2 py-2 rounded-md flex gap-2 drop-shadow mt-6 max-w-fit;
 }
 
 .tab {

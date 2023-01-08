@@ -51,6 +51,10 @@ export default defineComponent({
             type: Number,
             required: true,
         },
+        renderBetweenMoves: {
+            type: Number,
+            default: 100,
+        },
     },
     setup() {
         const settingsStore = useSettingsStore();
@@ -155,7 +159,9 @@ export default defineComponent({
             await new Promise((f) => setTimeout(f, 1000));
 
             while (!env.isTerminal && env.iteration <= 25) {
-                await new Promise((f) => setTimeout(f, 100));
+                await new Promise((f) =>
+                    setTimeout(f, this.renderBetweenMoves)
+                );
                 const nextAction = this.agent!.evalStep(env.state);
                 this.lastAction = nextAction;
                 env.step(nextAction);

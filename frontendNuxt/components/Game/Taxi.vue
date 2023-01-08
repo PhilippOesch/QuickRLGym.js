@@ -41,7 +41,7 @@
             </div>
         </Tab>
         <Tab tabGroup="trainingBenchmarkSwitch" name="Benchmark">Benchmark</Tab>
-        <div class="mt-8">
+        <div class="pt-8 pb-2">
             <GameView
                 :training-iteration="25"
                 id="Taxi"
