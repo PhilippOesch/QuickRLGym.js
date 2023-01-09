@@ -1,12 +1,5 @@
 import seedrandom from 'seedrandom';
-import {
-    MathUtils,
-    Tensor,
-    SingleAgentEnvironment,
-    Agent,
-    FileManager,
-    JSONTensor,
-} from '../../index';
+import { Utils, SingleAgentEnvironment, Agent, FileManager } from '../../index';
 
 /**
  * Settings for the QLAgent
@@ -26,7 +19,7 @@ export default class QLAgent extends Agent {
     private config?: QLAgentSettings;
     private rng: seedrandom.PRNG;
     private randomSeed?: string;
-    private qTable: Tensor;
+    private qTable: Utils.Tensor;
     private epsilon: number;
     private epsilonStep: number;
 
@@ -46,14 +39,14 @@ export default class QLAgent extends Agent {
         this.config = config;
     }
 
-    public get getQTable(): Tensor {
+    public get getQTable(): Utils.Tensor {
         return this.qTable;
     }
 
     init(): void {
         const qTableDims: number[] = [...this.env.gameStateDim];
         qTableDims.push(this.env.actionSpace.length);
-        this.qTable = Tensor.Zeros(...qTableDims);
+        this.qTable = Utils.Tensor.Zeros(...qTableDims);
         if (this.config) {
             this.epsilon = this.config.epsilonStart;
         }
@@ -82,7 +75,7 @@ export default class QLAgent extends Agent {
 
     evalStep(state: object): string {
         const actions: number[] = this.getStateActionValues(state);
-        const actionIdx: number = MathUtils.argMax(actions);
+        const actionIdx: number = Utils.MathUtils.argMax(actions);
         return this.env.actionSpace[actionIdx];
     }
     feed(
@@ -95,7 +88,7 @@ export default class QLAgent extends Agent {
         const takenActionIdx = this.env.actionSpace.indexOf(takenAction);
         const prevActionQvalues = this.getStateActionValues(prevState);
         const newPossibleActionValues = this.getStateActionValues(newState);
-        const newBestActionIdx: number = MathUtils.argMax(
+        const newBestActionIdx: number = Utils.MathUtils.argMax(
             newPossibleActionValues
         );
 
@@ -158,7 +151,9 @@ export default class QLAgent extends Agent {
         fileManager: FileManager
     ): Promise<void> {
         const loadObject: object = await fileManager.load(pathString);
-        this.qTable = Tensor.fromLoadObject(loadObject as JSONTensor);
+        this.qTable = Utils.Tensor.fromLoadObject(
+            loadObject as Utils.JSONTensor
+        );
     }
 
     /**

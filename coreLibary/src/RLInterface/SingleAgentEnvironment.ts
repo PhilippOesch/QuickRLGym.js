@@ -81,7 +81,7 @@ abstract class SingleAgentEnvironment implements Environment {
                 (!this.isTerminal && maxIterationPerGame == -1)
             ) {
                 const prevState: object = this.state;
-                const nextAction: string = this.agent.step(this.state);
+                const nextAction: string = this.agent.step(prevState);
                 this._lastAction = nextAction;
                 const { newState, reward } = this.step(nextAction);
                 // some algorithms need information about weather the game state is terminal
@@ -182,6 +182,10 @@ abstract class SingleAgentEnvironment implements Environment {
      */
     public onIterationEnd(): void {
         return;
+    }
+
+    public resetStats(): boolean {
+        throw new Error('Method not implemented.');
     }
 
     /**

@@ -8,7 +8,7 @@ export interface TaxiStats {
 
 export default class TaxiEnv extends SingleAgentEnvironment {
     private _game: TaxiGame;
-    private logIntervalCount: number = 0;
+    private intervalCount: number = 0;
     private averageGameIterations: number = 0;
     private averageGameScore: number = 0;
     private static _name = 'Taxi';
@@ -29,11 +29,11 @@ export default class TaxiEnv extends SingleAgentEnvironment {
 
     public get stats(): TaxiStats {
         return {
-            averageGameIterations: this.logIntervalCount
-                ? this.averageGameIterations / this.logIntervalCount
+            averageGameIterations: this.intervalCount
+                ? this.averageGameIterations / this.intervalCount
                 : 0,
-            averageGameScore: this.logIntervalCount
-                ? this.averageGameScore / this.logIntervalCount
+            averageGameScore: this.intervalCount
+                ? this.averageGameScore / this.intervalCount
                 : 0,
         };
     }
@@ -83,12 +83,18 @@ export default class TaxiEnv extends SingleAgentEnvironment {
         return this._game.reset(true, this.initialState as TaxiGameState);
     }
 
+    public resetStats(): boolean {
+        this.averageGameIterations = 0;
+        this.intervalCount = 0;
+        return true;
+    }
+
     public encodeStateToIndices(state: object): number[] {
         return this._game.encodeStateToIndices(state as TaxiGameState);
     }
 
     public override onIterationEnd(): void {
-        this.logIntervalCount++;
+        this.intervalCount++;
         this.averageGameIterations += this.iteration;
         this.averageGameScore += this._game.return;
     }
@@ -97,13 +103,12 @@ export default class TaxiEnv extends SingleAgentEnvironment {
         console.log('Iteration:', trainIteration);
         console.log(
             'average Game Iterations:',
-            this.averageGameIterations / this.logIntervalCount
+            this.averageGameIterations / this.intervalCount
         );
         console.log(
             'average Game Score:',
-            this.averageGameScore / this.logIntervalCount
+            this.averageGameScore / this.intervalCount
         );
-        this.averageGameIterations = 0;
-        this.logIntervalCount = 0;
+        this.resetStats();
     }
 }

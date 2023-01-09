@@ -17,7 +17,7 @@ export interface JSONTensor {
  * @property {number} dim - The dimension of the Tensor
  * @property {Array<any>} array - The actual managed array element
  */
-export default class Tensor {
+export class Tensor {
     private dim: number[];
     private array: Array<any>;
 

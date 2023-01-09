@@ -9,7 +9,7 @@ export interface BlackJackStats {
 
 export default class BlackJackEnv extends SingleAgentEnvironment {
     private _game: BlackJackGame;
-    private logIntervalCount: number = 0;
+    private intervalCount: number = 0;
     private averagePlayerScore: number = 0;
     private averageReturn: number = 0;
     private averageDealerScore: number = 0;
@@ -17,14 +17,14 @@ export default class BlackJackEnv extends SingleAgentEnvironment {
 
     public get stats(): BlackJackStats {
         return {
-            averageReturn: this.logIntervalCount
-                ? this.averageReturn / this.logIntervalCount
+            averageReturn: this.intervalCount
+                ? this.averageReturn / this.intervalCount
                 : 0,
-            averageDealerScore: this.logIntervalCount
-                ? this.averageDealerScore / this.logIntervalCount
+            averageDealerScore: this.intervalCount
+                ? this.averageDealerScore / this.intervalCount
                 : 0,
-            averagePlayerScore: this.logIntervalCount
-                ? this.averagePlayerScore / this.logIntervalCount
+            averagePlayerScore: this.intervalCount
+                ? this.averagePlayerScore / this.intervalCount
                 : 0,
         };
     }
@@ -90,9 +90,9 @@ export default class BlackJackEnv extends SingleAgentEnvironment {
     }
 
     public override onIterationEnd(): void {
-        this.logIntervalCount++;
-        const currentState = this.state as BlackJackGameState;
-        this.averagePlayerScore += currentState.playerScore;
+        this.intervalCount++;
+        const currentStats = this.state as BlackJackGameState;
+        this.averagePlayerScore += currentStats.playerScore;
         this.averageReturn += this.getReturn;
         this.averageDealerScore += this._game.getDealer.getScore;
     }
@@ -101,19 +101,21 @@ export default class BlackJackEnv extends SingleAgentEnvironment {
         console.log('Iteration:', trainIteration);
         console.log(
             'Average Player Score:',
-            this.averagePlayerScore / this.logIntervalCount
+            this.averagePlayerScore / this.intervalCount
         );
-        console.log(
-            'Average Return:',
-            this.averageReturn / this.logIntervalCount
-        );
+        console.log('Average Return:', this.averageReturn / this.intervalCount);
         console.log(
             'Average Dealer Score:',
-            this.averageDealerScore / this.logIntervalCount
+            this.averageDealerScore / this.intervalCount
         );
+        this.resetStats();
+    }
+
+    public resetStats(): boolean {
         this.averagePlayerScore = 0;
-        this.logIntervalCount = 0;
+        this.intervalCount = 0;
         this.averageReturn = 0;
         this.averageDealerScore = 0;
+        return true;
     }
 }

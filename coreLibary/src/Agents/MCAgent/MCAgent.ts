@@ -1,11 +1,9 @@
 import {
     Agent,
     Environment,
-    Tensor,
     GameStateContext,
-    MathUtils,
     FileManager,
-    JSONTensor,
+    Utils,
 } from '../../index';
 import seedrandom from 'seedrandom';
 
@@ -23,8 +21,8 @@ interface ExperienceEntry {
 }
 
 interface MCSaveFormat {
-    valueTable: JSONTensor;
-    stateReturnCountTable: JSONTensor;
+    valueTable: Utils.JSONTensor;
+    stateReturnCountTable: Utils.JSONTensor;
 }
 
 /**
@@ -34,8 +32,8 @@ export default class MCAgent extends Agent {
     private config?: MCAgentSettings;
     private rng: seedrandom.PRNG;
     private randomSeed?: string;
-    private valueTable: Tensor;
-    private stateReturnCountTable: Tensor;
+    private valueTable: Utils.Tensor;
+    private stateReturnCountTable: Utils.Tensor;
     private experience: ExperienceEntry[] = [];
 
     private epsilon: number = 0;
@@ -55,8 +53,8 @@ export default class MCAgent extends Agent {
     init(): void {
         const valueTableDims: number[] = [...this.env.gameStateDim];
         valueTableDims.push(this.env.actionSpace.length);
-        this.valueTable = Tensor.Zeros(...valueTableDims);
-        this.stateReturnCountTable = Tensor.Zeros(...valueTableDims);
+        this.valueTable = Utils.Tensor.Zeros(...valueTableDims);
+        this.stateReturnCountTable = Utils.Tensor.Zeros(...valueTableDims);
         if (this.config) {
             this.epsilon = this.config.epsilonStart;
         }
@@ -114,7 +112,7 @@ export default class MCAgent extends Agent {
 
     evalStep(state: object): string {
         const actions: number[] = this.getStateActionValues(state);
-        const actionIdx: number = MathUtils.argMax(actions);
+        const actionIdx: number = Utils.MathUtils.argMax(actions);
         return this.env.actionSpace[actionIdx];
     }
 
@@ -209,8 +207,8 @@ export default class MCAgent extends Agent {
         const loadObject: MCSaveFormat = (await fileManager.load(
             pathString
         )) as MCSaveFormat;
-        this.valueTable = Tensor.fromLoadObject(loadObject.valueTable);
-        this.stateReturnCountTable = Tensor.fromLoadObject(
+        this.valueTable = Utils.Tensor.fromLoadObject(loadObject.valueTable);
+        this.stateReturnCountTable = Utils.Tensor.fromLoadObject(
             loadObject.stateReturnCountTable
         );
     }

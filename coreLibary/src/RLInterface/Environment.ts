@@ -23,4 +23,5 @@ export default abstract class Environment {
     abstract reset(): boolean;
     abstract setOptions(options?: EnvOptions): void;
     abstract encodeStateToIndices(state: object): number[];
+    abstract resetStats(): boolean;
 }
