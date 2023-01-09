@@ -14,55 +14,41 @@
         </div>
     </div>
 </template>
+<script setup lang="ts">
+const links = [
+    {
+        title: 'Taxi Game',
+        link: '/Games/Taxi',
+        description: 'Game Based on the Taxi Problem',
+        icon: 'car',
+        color: IconColor.Amber,
+    },
+    {
+        title: 'Blackjack',
+        link: '/Games/BlackJack',
+        description: 'Basic Implementation of Blackjack',
+        icon: 'card',
+        color: IconColor.Green,
+    },
+    {
+        title: 'Grid World',
+        link: '/Games/Taxi',
+        description: 'A Grid World Implementation',
+        icon: 'grid',
+        color: IconColor.Sky,
+    },
+    {
+        title: 'Tic-Tac-Toe',
+        link: '/Games/BlackJack',
+        description: 'Standard Tic-Tac-Toe Implementation',
+        icon: 'tic-tac-toe',
+        color: IconColor.Pink,
+    },
+];
 
-<script lang="ts">
-import { defineComponent } from 'vue';
-import { IconColor } from '~~/utils/enums';
-
-export default defineComponent({
-    setup() {
-        return {};
-    },
-    data() {
-        return {
-            links: [
-                {
-                    title: 'Taxi Game',
-                    link: '/Games/Taxi',
-                    description: 'Game Based on the Taxi Problem',
-                    icon: 'car',
-                    color: IconColor.Amber,
-                },
-                {
-                    title: 'Blackjack',
-                    link: '/Games/BlackJack',
-                    description: 'Basic Implementation of Blackjack',
-                    icon: 'card',
-                    color: IconColor.Green,
-                },
-                {
-                    title: 'Grid World',
-                    link: '/Games/Taxi',
-                    description: 'A Grid World Implementation',
-                    icon: 'grid',
-                    color: IconColor.Sky,
-                },
-                {
-                    title: 'Tic-Tac-Toe',
-                    link: '/Games/BlackJack',
-                    description: 'Standard Tic-Tac-Toe Implementation',
-                    icon: 'tic-tac-toe',
-                    color: IconColor.Pink,
-                },
-            ],
-        };
-    },
-    methods: {
-        setClasses(link: any) {
-            return ['icon', 'quickrl-' + link.icon, link.color];
-        },
-    },
-});
+function setClasses(link: any) {
+    return ['icon', 'quickrl-' + link.icon, link.color];
+}
 </script>
 
 <style lang="postcss" scoped>
