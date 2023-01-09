@@ -57,11 +57,11 @@ export default defineComponent({
 
 <style lang="postcss" scoped>
 .tabSelectContainer {
-    @apply bg-gray-800 px-2 py-2 rounded-md flex gap-2 drop-shadow mt-6 max-w-fit;
+    @apply bg-slate-800 px-2 py-2 rounded-md flex gap-2 drop-shadow mt-6 max-w-fit;
 }
 
 .tab {
-    @apply px-6 py-3 hover:bg-gray-700 rounded-md duration-300 cursor-pointer;
+    @apply px-6 py-3 hover:bg-slate-700 rounded-md duration-300 cursor-pointer;
 }
 
 .selected {

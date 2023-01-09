@@ -60,12 +60,12 @@ export default defineComponent({
 
 /* The slider */
 .slider {
-    @apply bg-gray-600 absolute cursor-pointer top-0 left-0 right-0 bottom-0 duration-300;
+    @apply bg-slate-600 absolute cursor-pointer top-0 left-0 right-0 bottom-0 duration-300;
 }
 
 .slider:before {
     content: '';
-    @apply absolute left-1 bottom-1 h-7 w-7 bg-gray-50 duration-300;
+    @apply absolute left-1 bottom-1 h-7 w-7 bg-slate-50 duration-300;
 }
 
 input:disabled + .slider {

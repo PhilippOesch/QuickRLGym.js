@@ -6,7 +6,7 @@
 @tailwind utilities;
 
 body {
-    @apply text-slate-50 bg-gray-900;
+    @apply text-slate-50 bg-slate-900;
 }
 
 h1 {

@@ -225,7 +225,7 @@ export default defineComponent({
 }
 
 .gameContainer {
-    @apply w-full bg-gray-800 rounded-md max-h-fit relative;
+    @apply w-full bg-slate-800 rounded-md max-h-fit relative;
 }
 
 .gameContainer :deep(canvas) {

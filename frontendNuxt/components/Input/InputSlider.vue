@@ -89,7 +89,7 @@ export default defineComponent({
 .sliderInput {
     -webkit-appearance: none; /* Override default look */
     appearance: none;
-    @apply h-4 rounded-full bg-gray-600 disabled:opacity-40;
+    @apply h-4 rounded-full bg-slate-600 disabled:opacity-40;
 }
 
 .sliderInput::-webkit-slider-thumb {
@@ -105,7 +105,7 @@ export default defineComponent({
 }
 
 .sliderNumInput {
-    @apply w-28 ml-4 bg-gray-900 py-1 px-2 rounded-md disabled:opacity-40;
+    @apply w-28 ml-4 bg-slate-900 py-1 px-2 rounded-md disabled:opacity-40;
 }
 
 .sliderWrapper .sliderContainer {
@@ -113,6 +113,6 @@ export default defineComponent({
 }
 
 .sliderWrapper .sliderContainer p {
-    @apply bg-gray-900;
+    @apply bg-slate-900;
 }
 </style>

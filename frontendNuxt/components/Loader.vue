@@ -22,7 +22,7 @@ export default defineComponent({
 
 <style lang="postcss" scoped>
 .loadingElement {
-    @apply text-lg absolute w-full h-full bg-gray-900 bg-opacity-50;
+    @apply text-lg absolute w-full h-full bg-slate-900 bg-opacity-50;
 }
 
 .loadingContentWrapper {

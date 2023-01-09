@@ -1,5 +1,5 @@
 <template>
-    <MenuButton :clickHandler="toggleMenu"></MenuButton>
+    <MenuButton :clickHandler="toggleMenu" :opened="menuOpen"></MenuButton>
     <div v-if="menuOpen" class="MenuWrapper">
         <div class="menuContainer">
             <NuxtLink class="menuLink" to="/">
@@ -76,7 +76,7 @@ export default defineComponent({
 }
 
 .MenuWrapper {
-    @apply fixed top-0 left-0 min-w-max w-96 min-h-full bg-gray-900 z-20 drop-shadow-md border-gray-500;
+    @apply fixed top-0 left-0 min-w-max w-80 min-h-full bg-slate-900 z-20 drop-shadow-md;
 }
 
 .menuContainer {
@@ -84,7 +84,7 @@ export default defineComponent({
 }
 
 .menuLink {
-    @apply min-w-full flex px-5 py-3 gap-3 flex-wrap place-items-center text-xl cursor-pointer hover:bg-gray-800;
+    @apply min-w-full flex px-5 py-3 gap-3 flex-wrap place-items-center text-xl cursor-pointer hover:bg-slate-800;
 }
 
 .menuLink .icon {

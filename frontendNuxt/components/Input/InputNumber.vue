@@ -76,10 +76,10 @@ export default defineComponent({
 }
 
 .inputDark {
-    @apply bg-gray-900;
+    @apply bg-slate-900;
 }
 
 .inputLight {
-    @apply bg-gray-700;
+    @apply bg-slate-700;
 }
 </style>
