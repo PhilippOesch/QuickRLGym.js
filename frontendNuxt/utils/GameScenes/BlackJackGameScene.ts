@@ -1,4 +1,4 @@
-import { GameObjects, Scene } from 'phaser';
+import { GameObjects } from 'phaser';
 import { Envs, Games } from 'quickrl.core';
 import BlackJackUtils from './BlackJackUtils';
 import StaticRenderScene from './StaticRenderScene';
