@@ -21,53 +21,45 @@
     <div v-if="menuOpen" class="MenuOverlay" @click="toggleMenu"></div>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue';
+<script setup lang="ts">
+import { Ref } from 'vue';
+const links = [
+    {
+        title: 'Taxi Game',
+        link: '/Games/Taxi',
+        icon: 'car',
+        color: IconColor.Amber,
+    },
+    {
+        title: 'Blackjack',
+        link: '/Games/BlackJack',
+        icon: 'card',
+        color: IconColor.Green,
+    },
+    {
+        title: 'Grid World',
+        link: '/Games/TaxiGame',
+        icon: 'grid',
+        color: IconColor.Sky,
+    },
+    {
+        title: 'Tic-Tac-Toe',
+        link: '/Games/BlackJackGame',
+        icon: 'tic-tac-toe',
+        color: IconColor.Pink,
+    },
+];
 
-export default defineComponent({
-    setup() {
-        return {};
-    },
-    data() {
-        return {
-            links: [
-                {
-                    title: 'Taxi Game',
-                    link: '/Games/Taxi',
-                    icon: 'car',
-                    color: IconColor.Amber,
-                },
-                {
-                    title: 'Blackjack',
-                    link: '/Games/BlackJack',
-                    icon: 'card',
-                    color: IconColor.Green,
-                },
-                {
-                    title: 'Grid World',
-                    link: '/Games/TaxiGame',
-                    icon: 'grid',
-                    color: IconColor.Sky,
-                },
-                {
-                    title: 'Tic-Tac-Toe',
-                    link: '/Games/BlackJackGame',
-                    icon: 'tic-tac-toe',
-                    color: IconColor.Pink,
-                },
-            ],
-            menuOpen: false,
-        };
-    },
-    methods: {
-        toggleMenu() {
-            this.menuOpen = !this.menuOpen;
-        },
-        setClasses(link: any) {
-            return ['icon', 'quickrl-' + link.icon, link.color];
-        },
-    },
-});
+const menuOpen: Ref<boolean> = ref(false);
+
+function toggleMenu(): void {
+    console.log(menuOpen);
+    menuOpen.value = !menuOpen.value;
+}
+
+function setClasses(link: any): string[] {
+    return ['icon', 'quickrl-' + link.icon, link.color];
+}
 </script>
 
 <style lang="postcss" scoped>

@@ -3,29 +3,21 @@
         <slot></slot>
     </div>
 </template>
-
-<script lang="ts">
-import { defineComponent } from 'vue';
+<script setup lang="ts">
+import { defineProps, computed } from 'vue';
 import useTabStore from '~~/comsosable/useTabStore';
 
-export default defineComponent({
-    props: {
-        tabGroup: { type: String, required: true },
-        name: { type: String, required: true },
-    },
-    setup() {
-        const tabStore = useTabStore();
+const props = defineProps({
+    tabGroup: { type: String, required: true },
+    name: { type: String, required: true },
+});
 
-        return { tabStore };
-    },
-    mounted() {},
-    computed: {
-        isVisible(): boolean {
-            const tab = this.tabStore.getTab(this.tabGroup, this.name);
-            if (!tab) return false;
-            return tab.selected;
-        },
-    },
+const tabStore = useTabStore();
+
+const isVisible = computed(() => {
+    const tab = tabStore.getTab(props.tabGroup, props.name);
+    if (!tab) return false;
+    return tab.selected;
 });
 </script>
 

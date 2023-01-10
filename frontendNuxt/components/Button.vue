@@ -4,7 +4,7 @@
     </div>
 </template>
 
-<script lang="ts">
+<!-- <script lang="ts">
 import { defineComponent, PropType } from 'vue';
 import { ButtonSize } from '~~/utils/enums';
 
@@ -26,6 +26,23 @@ export default defineComponent({
         },
     },
 });
+</script> -->
+<script lang="ts" setup>
+import { defineProps, PropType } from 'vue';
+import { ButtonSize } from '~~/utils/enums';
+
+const props = defineProps({
+    handler: Function,
+    value: String,
+    size: {
+        type: Object as PropType<ButtonSize>,
+        default: ButtonSize.Normal,
+    },
+});
+
+function clickHandler() {
+    if (props.handler) props.handler();
+}
 </script>
 
 <style lang="postcss" scoped>

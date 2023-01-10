@@ -17,42 +17,35 @@
     </div>
 </template>
 
-<script lang="ts">
-import { defineComponent, PropType } from 'vue';
-
+<script setup lang="ts">
+import { defineProps, PropType, computed } from 'vue';
 import useTabStore from '~~/comsosable/useTabStore';
 
-export default defineComponent({
-    props: {
-        tabs: {
-            type: Object as PropType<string[]>,
-            required: true,
-        },
-        groupName: {
-            type: String,
-            required: true,
-        },
+const props = defineProps({
+    tabs: {
+        type: Object as PropType<string[]>,
+        required: true,
     },
-    setup(props) {
-        const tabStore = useTabStore();
-
-        for (const tab of props.tabs) {
-            tabStore.add(props.groupName, tab);
-        }
-        tabStore.initialize(props.groupName, props.tabs[0]);
-        return { tabStore };
-    },
-    computed: {
-        getOpenTab() {
-            return this.tabStore.getOpenTab(this.groupName)?.name;
-        },
-    },
-    methods: {
-        switchTab(idx: number) {
-            this.tabStore.switchTab(this.groupName, this.tabs[idx]);
-        },
+    groupName: {
+        type: String,
+        required: true,
     },
 });
+
+const tabStore = useTabStore();
+
+for (const tab of props.tabs) {
+    tabStore.add(props.groupName, tab);
+}
+tabStore.initialize(props.groupName, props.tabs[0]);
+
+const getOpenTab = computed(() => {
+    return tabStore.getOpenTab(props.groupName)?.name;
+});
+
+function switchTab(idx: number) {
+    tabStore.switchTab(props.groupName, props.tabs[idx]);
+}
 </script>
 
 <style lang="postcss" scoped>

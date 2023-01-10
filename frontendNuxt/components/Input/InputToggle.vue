@@ -14,7 +14,7 @@
     </div>
 </template>
 
-<script lang="ts">
+<!-- <script lang="ts">
 import { defineComponent } from 'vue';
 
 export default defineComponent({
@@ -38,6 +38,25 @@ export default defineComponent({
         },
     },
 });
+</script> -->
+<script setup lang="ts">
+import { defineProps } from 'vue';
+
+const props = defineProps({
+    title: String,
+    name: String,
+    defaultValue: Boolean,
+    disabled: Boolean,
+});
+
+let value = props.defaultValue ? props.defaultValue : false;
+
+const emit = defineEmits(['updated']);
+
+function finishEdit(): void {
+    value = !value;
+    emit('updated', value);
+}
 </script>
 
 <style lang="postcss" scoped>

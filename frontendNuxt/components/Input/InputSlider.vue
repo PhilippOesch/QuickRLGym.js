@@ -9,7 +9,7 @@
                 :id="name"
                 :max="max"
                 :min="min"
-                :value="value"
+                :value="valueRef"
                 @change="(event)=> finishEdit(event.target as HTMLInputElement)"
                 @input="(event) => update(event.target as HTMLInputElement)"
                 :step="stepSize"
@@ -19,7 +19,7 @@
                 type="number"
                 class="sliderNumInput"
                 :id="name + '-input'"
-                :value="value"
+                :value="valueRef"
                 :max="max"
                 :min="min"
                 @change="(event)=> finishEdit(event.target as HTMLInputElement)"
@@ -28,49 +28,37 @@
                 :disabled="disabled"
             />
         </div>
-        <!-- @input="(event) => update(event.target as HTMLInputElement)" -->
-        <!-- :value="value" -->
     </div>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue';
+<script setup lang="ts">
+import { defineProps, Ref } from 'vue';
 
-export default defineComponent({
-    expose: ['getValue'],
-    props: {
-        name: String,
-        title: String,
-        max: Number,
-        min: Number,
-        defaultValue: Number,
-        stepSize: Number,
-        disabled: Boolean,
-    },
-    setup() {
-        return {};
-    },
-    data() {
-        return {
-            value: this.defaultValue ? this.defaultValue : 0,
-        };
-    },
-    methods: {
-        finishEdit(el: HTMLInputElement) {
-            if (this.min !== undefined && Number(el.value) < this.min)
-                this.value = this.min;
-            if (this.max !== undefined && Number(el.value) > this.max)
-                this.value = this.max;
-            this.$emit('updated', this.value);
-        },
-        update(el: HTMLInputElement) {
-            this.value = Number(el.value);
-        },
-        getValue() {
-            return this.value;
-        },
-    },
+const props = defineProps({
+    name: String,
+    title: String,
+    max: Number,
+    min: Number,
+    defaultValue: Number,
+    stepSize: Number,
+    disabled: Boolean,
 });
+
+const valueRef: Ref<number> = ref(props.defaultValue ? props.defaultValue : 0);
+
+const emit = defineEmits(['updated']);
+
+function finishEdit(el: HTMLInputElement): void {
+    if (props.min !== undefined && Number(el.value) < props.min)
+        valueRef.value = props.min;
+    if (props.max !== undefined && Number(el.value) > props.max)
+        valueRef.value = props.max;
+    emit('updated', valueRef.value);
+}
+
+function update(el: HTMLInputElement): void {
+    valueRef.value = Number(el.value);
+}
 </script>
 
 <style lang="postcss" scoped>

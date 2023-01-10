@@ -45,86 +45,62 @@
     </div>
 </template>
 
-<script lang="ts">
-import { defineComponent, PropType } from 'vue';
+<script setup lang="ts">
+import { defineProps, PropType, computed } from 'vue';
 import { Setting, SettingNumber } from '~~/utils/settingsInterfaces/general';
 import { InputStyleType, SelectionType } from '~~/utils/enums';
 import useSettingsStore from '~~/comsosable/useSettingsStore';
 
-export default defineComponent({
-    props: {
-        gameID: {
-            type: String,
-            required: true,
-        },
-        algorithmName: {
-            type: String,
-            required: true,
-        },
-        settingsObject: {
-            type: Object,
-            required: true,
-        },
-        selectionType: {
-            type: Object as PropType<SelectionType>,
-            default: SelectionType.Grid,
-        },
-        title: {
-            type: String,
-        },
+const props = defineProps({
+    gameID: {
+        type: String,
+        required: true,
     },
-    setup(props) {
-        const settingsStore = useSettingsStore();
-
-        const settings = settingsStore.getSetting(
-            props.gameID,
-            props.algorithmName
-        );
-
-        if (props.algorithmName !== 'gameSettings') {
-            settingsStore.setActiveAlgorithm(props.gameID, props.algorithmName);
-        }
-
-        console.log(settings);
-
-        return {
-            settingsStore,
-            settings,
-            SelectionType,
-            InputStyleType,
-        };
+    algorithmName: {
+        type: String,
+        required: true,
     },
-    computed: {
-        isDisabled() {
-            const isActive = this.settingsStore.getIsActive(this.gameID);
-            return !isActive;
-        },
+    settingsObject: {
+        type: Object,
+        required: true,
     },
-    methods: {
-        getType(item: any) {
-            if ((item as Setting<SettingNumber>) !== undefined) {
-                if (
-                    item.setting.max !== undefined &&
-                    item.setting.min !== undefined
-                ) {
-                    return 'Slider';
-                }
-                if (item.setting.stepSize !== undefined) return 'Number';
-            }
-            if ((item as Setting<boolean>) !== undefined) {
-                return 'Toggle';
-            }
-        },
-        updateSettings(value: any, index: string) {
-            this.settings = { ...this.settings, [index]: value };
-            this.settingsStore.updateSetting(
-                this.gameID,
-                this.algorithmName,
-                this.settings
-            );
-        },
+    selectionType: {
+        type: Object as PropType<SelectionType>,
+        default: SelectionType.Grid,
+    },
+    title: {
+        type: String,
     },
 });
+
+const settingsStore = useSettingsStore();
+
+let isDisabled = computed(() => !settingsStore.getIsActive(props.gameID));
+
+let settings = settingsStore.getSetting(props.gameID, props.algorithmName);
+console.log('settings', settings);
+
+if (props.algorithmName !== 'gameSettings') {
+    settingsStore.setActiveAlgorithm(props.gameID, props.algorithmName);
+    console.log(props);
+}
+
+function getType(item: any) {
+    if ((item as Setting<SettingNumber>) !== undefined) {
+        if (item.setting.max !== undefined && item.setting.min !== undefined) {
+            return 'Slider';
+        }
+        if (item.setting.stepSize !== undefined) return 'Number';
+    }
+    if ((item as Setting<boolean>) !== undefined) {
+        return 'Toggle';
+    }
+}
+
+function updateSettings(value: any, index: string): void {
+    settings = { ...settings, [index]: value };
+    settingsStore.updateSetting(props.gameID, props.algorithmName, settings);
+}
 </script>
 
 <style lang="postcss" scoped>
