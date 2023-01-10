@@ -52,26 +52,18 @@
     </div>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue';
+<script lang="ts" setup>
 import { qlSettingsDefault } from '~~/utils/settingsInterfaces/QLSettings';
 import { mcSettingsDefault } from '~~/utils/settingsInterfaces/MCSettings';
 import defaultTrainingSettings from '~~/utils/settingsInterfaces/trainingSettings';
+import { SelectionType, ButtonSize } from '~~/utils/enums';
+import { Ref } from 'vue';
 
-export default defineComponent({
-    setup() {
-        return {
-            qlSettingsDefault,
-            mcSettingsDefault,
-            defaultTrainingSettings,
-        };
-    },
-    methods: {
-        startTrainingHander() {
-            (this.$refs.gameView as any).initializeTraining();
-        },
-    },
-});
+const gameViewRef: Ref<any> = ref(null);
+
+function startTrainingHander() {
+    console.log(gameViewRef.value.initializeTraining());
+}
 </script>
 
 <style lang="postcss" scoped>

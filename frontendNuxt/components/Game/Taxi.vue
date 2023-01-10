@@ -45,36 +45,23 @@
             <GameView
                 :training-iteration="25"
                 id="Taxi"
-                ref="gameView"
+                ref="gameViewRef"
             ></GameView>
         </div>
     </div>
 </template>
-
-<script lang="ts">
-import { defineComponent } from 'vue';
+<script lang="ts" setup>
 import { qlSettingsDefault } from '~~/utils/settingsInterfaces/QLSettings';
 import { mcSettingsDefault } from '~~/utils/settingsInterfaces/MCSettings';
 import defaultTrainingSettings from '~~/utils/settingsInterfaces/trainingSettings';
-import { InputStyleType, SelectionType, ButtonSize } from '~~/utils/enums';
+import { SelectionType, ButtonSize } from '~~/utils/enums';
+import { Ref } from 'vue';
 
-export default defineComponent({
-    setup() {
-        return {
-            qlSettingsDefault,
-            InputStyleType,
-            SelectionType,
-            ButtonSize,
-            mcSettingsDefault,
-            defaultTrainingSettings,
-        };
-    },
-    methods: {
-        startTrainingHander() {
-            (this.$refs.gameView as any).initializeTraining();
-        },
-    },
-});
+const gameViewRef: Ref<any> = ref(null);
+
+function startTrainingHander() {
+    console.log(gameViewRef.value.initializeTraining());
+}
 </script>
 
 <style lang="postcss" scoped>
