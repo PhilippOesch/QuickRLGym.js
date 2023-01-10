@@ -34,7 +34,7 @@ function callClickHandler() {
 }
 
 .menuFriesContainer {
-    @apply w-12 h-8 bg-slate-800 grid;
+    @apply w-12 h-8 grid;
 }
 
 .menuFriesContainer .menuFrie {

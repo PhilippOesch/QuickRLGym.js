@@ -29,169 +29,155 @@
     </div>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import { QuickRLJS, Agent, Agents, SingleAgentEnvironment } from 'quickrl.core';
-import { defineComponent } from 'vue';
+import { defineProps, Ref } from 'vue';
 import { SceneInfo } from '~~/comsosable/useGameEnv';
 import useSettingsStore from '~~/comsosable/useSettingsStore';
 import useAgent from '~~/comsosable/useAgent';
 import { GameTrainingSettings } from '~~/comsosable/useDefaultSettings';
-import { Loader, Tab } from '~~/.nuxt/components';
 import useGetGameScene from '~~/comsosable/useGameEnv';
 import StaticRenderScene from '~~/utils/GameScenes/StaticRenderScene';
+import { Loader } from 'phaser';
 
-export default defineComponent({
-    expose: ['initializeTraining'],
-    props: {
-        id: {
-            type: String,
-            required: true,
-        },
-        trainingIteration: {
-            type: Number,
-            required: true,
-        },
-        renderBetweenMoves: {
-            type: Number,
-            default: 100,
-        },
+const gameContainer: any = ref(null);
+
+async function initializeTraining() {
+    isTraining = true;
+    iteration = 0;
+    console.log('startTraining');
+
+    if (!envInfo) {
+        return;
+    }
+    settingsStore.setActiveState(props.id, false);
+
+    await new Promise((f) => setTimeout(f, 50));
+
+    const env: SingleAgentEnvironment = envInfo.env as any;
+
+    const gameSettings: GameTrainingSettings = settingsStore.getSetting(
+        props.id,
+        'gameSettings'
+    );
+    const activeAlgorithm: string = settingsStore.getActiveAlgorithm(props.id);
+    const getAgentSettings = settingsStore.getSetting(
+        props.id,
+        activeAlgorithm
+    );
+    env.setOptions(gameSettings);
+
+    agent = useAgent(
+        activeAlgorithm,
+        envInfo.env,
+        getAgentSettings,
+        gameSettings.randomSeed
+    );
+    env.setAgent = agent as Agent;
+    env.initAgent();
+
+    trainingLoop(
+        env,
+        gameSettings.episodes,
+        gameSettings.showProgressEvery,
+        props.trainingIteration
+    );
+}
+
+defineExpose({ initializeTraining });
+const props = defineProps({
+    id: {
+        type: String,
+        required: true,
     },
-    setup() {
-        const settingsStore = useSettingsStore();
-
-        const counter = useState('counter', () => 0);
-
-        return { settingsStore, counter };
+    trainingIteration: {
+        type: Number,
+        required: true,
     },
-    data() {
-        return {
-            envInfo: undefined as undefined | SceneInfo,
-            stats: undefined as undefined | object,
-            agent: undefined as undefined | Agent,
-            iteration: 0,
-            isTraining: false,
-            lastAction: undefined as undefined | string,
-            phaserLoaded: false,
-        };
+    renderBetweenMoves: {
+        type: Number,
+        default: 100,
     },
-    methods: {
-        async initializeTraining() {
-            this.isTraining = true;
-            this.iteration = 0;
-            console.log('startTraining');
+});
+const settingsStore = useSettingsStore();
 
-            if (!this.envInfo) {
-                return;
-            }
-            this.settingsStore.setActiveState(this.id, false);
+const counter = ref(0);
 
-            await new Promise((f) => setTimeout(f, 50));
+let envInfo: undefined | SceneInfo;
+let stats: Ref<any> = ref(null);
+let agent: undefined | Agent;
+let iteration: number = 0;
+let isTraining: boolean = false;
 
-            const env: SingleAgentEnvironment = this.envInfo.env as any;
+async function trainingLoop(
+    env: SingleAgentEnvironment,
+    iterationsLeft: number,
+    trainingIterations: number,
+    maxIterations: number
+) {
+    isTraining = true;
+    if (iterationsLeft > trainingIterations) {
+        const newIterationsLeft = iterationsLeft - trainingIterations;
+        env.train(trainingIterations, -1, maxIterations);
+        stats.value = env.stats;
+        console.log(stats);
+        iteration += trainingIterations;
 
-            const gameSettings: GameTrainingSettings =
-                this.settingsStore.getSetting(this.id, 'gameSettings');
-            const activeAlgorithm: string =
-                this.settingsStore.getActiveAlgorithm(this.id);
-            const getAgentSettings = this.settingsStore.getSetting(
-                this.id,
-                activeAlgorithm
-            );
-            env.setOptions(gameSettings);
+        console.log('iteration', iteration);
 
-            this.agent = useAgent(
-                activeAlgorithm,
-                this.envInfo.env,
-                getAgentSettings,
-                gameSettings.randomSeed
-            );
-            env.setAgent = this.agent as Agent;
-            env.initAgent();
+        await renderGame();
+        trainingLoop(env, newIterationsLeft, trainingIterations, maxIterations);
+    } else {
+        env.train(iterationsLeft, -1, maxIterations);
+        iteration += iterationsLeft;
+        stats.value = env.stats;
+        console.log('iteration', env.iteration);
+        settingsStore.setActiveState(props.id, true);
+        console.log('end Training');
+        isTraining = false;
+    }
+}
+async function renderGame() {
+    isTraining = false;
+    const env: SingleAgentEnvironment = envInfo!.env as any;
+    const gameScene: StaticRenderScene = envInfo!
+        .gameScene as StaticRenderScene;
 
-            this.trainingLoop(
-                env,
-                gameSettings.episodes,
-                gameSettings.showProgressEvery,
-                this.trainingIteration
-            );
-        },
-        async trainingLoop(
-            env: SingleAgentEnvironment,
-            iterationsLeft: number,
-            trainingIterations: number,
-            maxIterations: number
-        ) {
-            this.isTraining = true;
-            if (iterationsLeft > trainingIterations) {
-                const newIterationsLeft = iterationsLeft - trainingIterations;
-                env.train(trainingIterations, -1, maxIterations);
-                this.stats = env.stats;
-                console.log(this.stats);
-                this.iteration += trainingIterations;
+    env.reset();
+    gameScene.reRender();
+    getGameInfo.value = envInfo?.gameScene.gameInfo;
+    await new Promise((f) => setTimeout(f, 1000));
 
-                console.log('iteration', this.iteration);
-
-                await this.renderGame();
-                this.trainingLoop(
-                    env,
-                    newIterationsLeft,
-                    trainingIterations,
-                    maxIterations
-                );
-            } else {
-                env.train(iterationsLeft, -1, maxIterations);
-                this.iteration += iterationsLeft;
-                this.stats = env.stats;
-                console.log('iteration', env.iteration);
-                this.settingsStore.setActiveState(this.id, true);
-                console.log('end Training');
-                this.isTraining = false;
-            }
-        },
-        async renderGame() {
-            this.isTraining = false;
-            const env: SingleAgentEnvironment = this.envInfo!.env as any;
-            const gameScene: StaticRenderScene = this.envInfo!
-                .gameScene as StaticRenderScene;
-
-            env.reset();
-            gameScene.reRender();
-            await new Promise((f) => setTimeout(f, 1000));
-
-            while (!env.isTerminal && env.iteration <= 25) {
-                await new Promise((f) =>
-                    setTimeout(f, this.renderBetweenMoves)
-                );
-                const nextAction = this.agent!.evalStep(env.state);
-                this.lastAction = nextAction;
-                env.step(nextAction);
-                gameScene.reRender();
-            }
-            await new Promise((f) => setTimeout(f, 200));
-        },
-        loadEnv() {
-            const env: SingleAgentEnvironment = QuickRLJS.loadEnv(
-                this.id
-            ) as SingleAgentEnvironment;
-            const randAgent = new Agents.RandomAgent(env);
-            env.setAgent = randAgent;
-            env.initAgent();
-            return env;
-        },
-    },
-    computed: {
-        getGameInfo() {
-            return this.envInfo?.gameScene.gameInfo;
-        },
-    },
-    async mounted() {
-        if (!this.isTraining) this.settingsStore.setActiveState(this.id, true);
-        // wait for components to be rendered
-        await nextTick();
-        const gameContainer = this.$refs.gameContainer as HTMLElement;
-        this.envInfo = useGetGameScene(this.id, gameContainer);
-        this.stats = this.envInfo?.env.stats;
-    },
+    while (!env.isTerminal && env.iteration <= 25) {
+        await new Promise((f) => setTimeout(f, props.renderBetweenMoves));
+        const nextAction = agent!.evalStep(env.state);
+        env.step(nextAction);
+        gameScene.reRender();
+        getGameInfo.value = envInfo?.gameScene.gameInfo;
+    }
+    await new Promise((f) => setTimeout(f, 200));
+}
+function loadEnv() {
+    const env: SingleAgentEnvironment = QuickRLJS.loadEnv(
+        props.id
+    ) as SingleAgentEnvironment;
+    const randAgent = new Agents.RandomAgent(env);
+    env.setAgent = randAgent;
+    env.initAgent();
+    return env;
+}
+// const getGameInfo = computed(() => {
+//     return envInfo?.gameScene.gameInfo;
+// });
+const getGameInfo = ref();
+onMounted(async () => {
+    if (!isTraining) settingsStore.setActiveState(props.id, true);
+    // wait for components to be rendered
+    await nextTick();
+    const parent = gameContainer.value as HTMLElement;
+    envInfo = useGetGameScene(props.id, parent);
+    stats.value = envInfo?.env.stats;
+    getGameInfo.value = envInfo?.gameScene.gameInfo;
 });
 </script>
 

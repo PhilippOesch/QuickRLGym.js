@@ -53,7 +53,6 @@ const links = [
 const menuOpen: Ref<boolean> = ref(false);
 
 function toggleMenu(): void {
-    console.log(menuOpen);
     menuOpen.value = !menuOpen.value;
 }
 
