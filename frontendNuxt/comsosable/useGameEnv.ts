@@ -10,9 +10,9 @@ import StaticRenderScene from '~~/utils/GameScenes/StaticRenderScene';
 import TaxiGameScene from '~~/utils/GameScenes/TaxiGameScene';
 
 export interface SceneInfo {
-    gameScene: StaticRenderScene;
-    env: SingleAgentEnvironment;
-    game: Phaser.Game;
+    gameScene?: StaticRenderScene;
+    env?: SingleAgentEnvironment;
+    game?: Phaser.Game;
 }
 
 function loadEnv(name: string) {

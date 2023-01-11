@@ -4,10 +4,10 @@
             <div class="info" :key="counter">
                 <div class="infoBox gameInfo">
                     <h2>Current Game Info:</h2>
-                    <ul class="list" v-if="getGameInfo">
+                    <ul class="list" v-if="reactiveInfo.gameInfo">
                         <li
                             class="flex gap-2"
-                            v-for="(item, index) in getGameInfo"
+                            v-for="(item, index) in reactiveInfo.gameInfo"
                         >
                             <span>{{ index }}:</span><span>{{ item }}</span>
                         </li>
@@ -15,8 +15,11 @@
                 </div>
                 <div class="infoBox trainingInfo">
                     <h2>Training Progress - Iteration {{ iteration }}</h2>
-                    <ul class="list" v-if="stats">
-                        <li class="flex gap-2" v-for="(item, index) in stats">
+                    <ul class="list" v-if="reactiveInfo.stats">
+                        <li
+                            class="flex gap-2"
+                            v-for="(item, index) in reactiveInfo.stats"
+                        >
                             <span>{{ index }}:</span><span>{{ item }}</span>
                         </li>
                     </ul>
@@ -30,8 +33,8 @@
 </template>
 
 <script lang="ts" setup>
-import { QuickRLJS, Agent, Agents, SingleAgentEnvironment } from 'quickrl.core';
-import { defineProps, Ref } from 'vue';
+import { Agent, Environment, SingleAgentEnvironment } from 'quickrl.core';
+import { Ref } from 'vue';
 import { SceneInfo } from '~~/comsosable/useGameEnv';
 import useSettingsStore from '~~/comsosable/useSettingsStore';
 import useAgent from '~~/comsosable/useAgent';
@@ -42,19 +45,21 @@ import { Loader } from 'phaser';
 
 const gameContainer: any = ref(null);
 
+let isTraining: Ref<boolean> = ref(false);
+
 async function initializeTraining() {
-    isTraining = true;
-    iteration = 0;
+    isTraining.value = true;
+    iteration.value = 0;
     console.log('startTraining');
 
-    if (!envInfo) {
+    if (!sceneInfo) {
         return;
     }
     settingsStore.setActiveState(props.id, false);
 
     await new Promise((f) => setTimeout(f, 50));
 
-    const env: SingleAgentEnvironment = envInfo.env as any;
+    const env: SingleAgentEnvironment = sceneInfo?.env as any;
 
     const gameSettings: GameTrainingSettings = settingsStore.getSetting(
         props.id,
@@ -69,7 +74,7 @@ async function initializeTraining() {
 
     agent = useAgent(
         activeAlgorithm,
-        envInfo.env,
+        sceneInfo?.env as Environment,
         getAgentSettings,
         gameSettings.randomSeed
     );
@@ -103,11 +108,13 @@ const settingsStore = useSettingsStore();
 
 const counter = ref(0);
 
-let envInfo: undefined | SceneInfo;
-let stats: Ref<any> = ref(null);
+let reactiveInfo = reactive({
+    gameInfo: null as object | null,
+    stats: null as object | null,
+});
 let agent: undefined | Agent;
-let iteration: number = 0;
-let isTraining: boolean = false;
+let iteration: Ref<number> = ref(0);
+let sceneInfo: SceneInfo | undefined;
 
 async function trainingLoop(
     env: SingleAgentEnvironment,
@@ -115,37 +122,36 @@ async function trainingLoop(
     trainingIterations: number,
     maxIterations: number
 ) {
-    isTraining = true;
+    isTraining.value = true;
     if (iterationsLeft > trainingIterations) {
         const newIterationsLeft = iterationsLeft - trainingIterations;
         env.train(trainingIterations, -1, maxIterations);
-        stats.value = env.stats;
-        console.log(stats);
-        iteration += trainingIterations;
+        iteration.value += trainingIterations;
+        reactiveInfo.stats = sceneInfo!.env!.stats;
 
-        console.log('iteration', iteration);
+        console.log('iteration', iteration.value);
 
         await renderGame();
         trainingLoop(env, newIterationsLeft, trainingIterations, maxIterations);
     } else {
         env.train(iterationsLeft, -1, maxIterations);
-        iteration += iterationsLeft;
-        stats.value = env.stats;
+        iteration.value += iterationsLeft;
+        // stats.value = env.stats;
         console.log('iteration', env.iteration);
         settingsStore.setActiveState(props.id, true);
         console.log('end Training');
-        isTraining = false;
+        isTraining.value = false;
+        reactiveInfo.stats = sceneInfo!.env!.stats;
     }
 }
 async function renderGame() {
-    isTraining = false;
-    const env: SingleAgentEnvironment = envInfo!.env as any;
-    const gameScene: StaticRenderScene = envInfo!
+    isTraining.value = false;
+    const env: SingleAgentEnvironment = sceneInfo!.env as any;
+    const gameScene: StaticRenderScene = sceneInfo!
         .gameScene as StaticRenderScene;
 
     env.reset();
     gameScene.reRender();
-    getGameInfo.value = envInfo?.gameScene.gameInfo;
     await new Promise((f) => setTimeout(f, 1000));
 
     while (!env.isTerminal && env.iteration <= 25) {
@@ -153,31 +159,21 @@ async function renderGame() {
         const nextAction = agent!.evalStep(env.state);
         env.step(nextAction);
         gameScene.reRender();
-        getGameInfo.value = envInfo?.gameScene.gameInfo;
+        reactiveInfo.gameInfo = sceneInfo!.gameScene!.gameInfo;
     }
     await new Promise((f) => setTimeout(f, 200));
 }
-function loadEnv() {
-    const env: SingleAgentEnvironment = QuickRLJS.loadEnv(
-        props.id
-    ) as SingleAgentEnvironment;
-    const randAgent = new Agents.RandomAgent(env);
-    env.setAgent = randAgent;
-    env.initAgent();
-    return env;
-}
-// const getGameInfo = computed(() => {
-//     return envInfo?.gameScene.gameInfo;
-// });
-const getGameInfo = ref();
+
+//const getGameInfo = ref();
+
 onMounted(async () => {
-    if (!isTraining) settingsStore.setActiveState(props.id, true);
-    // wait for components to be rendered
+    if (!isTraining.value) settingsStore.setActiveState(props.id, true);
     await nextTick();
     const parent = gameContainer.value as HTMLElement;
-    envInfo = useGetGameScene(props.id, parent);
-    stats.value = envInfo?.env.stats;
-    getGameInfo.value = envInfo?.gameScene.gameInfo;
+    sceneInfo = useGetGameScene(props.id, parent) as SceneInfo;
+
+    reactiveInfo.gameInfo = sceneInfo.gameScene!.gameInfo;
+    reactiveInfo.stats = sceneInfo.env!.stats;
 });
 </script>
 

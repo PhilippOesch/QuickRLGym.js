@@ -1,5 +1,5 @@
-import { Scene, GameObjects } from 'phaser';
-import { Games, Envs, Vec2 } from 'quickrl.core';
+import { GameObjects } from 'phaser';
+import { Games, Envs, Utils } from 'quickrl.core';
 import StaticRenderScene from '~~/utils/GameScenes/StaticRenderScene';
 
 export default class TaxiGameScene extends StaticRenderScene {
@@ -131,9 +131,10 @@ export default class TaxiGameScene extends StaticRenderScene {
 
     public reRender(): void {
         // Update Player
-        const adjustedToAbsPos: Vec2 = Games.Taxi.TaxiUtils.adjustedToAbsPos(
-            this.taxiGame.player.position
-        );
+        const adjustedToAbsPos: Utils.Vec2 =
+            Games.Taxi.TaxiUtils.adjustedToAbsPos(
+                this.taxiGame.player.position
+            );
         const index: number = this.getSpriteIndex(
             this.taxiGame.player.carMoveState
         );

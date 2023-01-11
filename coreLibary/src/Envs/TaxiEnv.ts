@@ -69,6 +69,7 @@ export default class TaxiEnv extends SingleAgentEnvironment {
     }
 
     public step(action: string): StepResult {
+        this._lastAction = action;
         return this._game.step(action);
     }
 

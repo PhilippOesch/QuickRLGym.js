@@ -18,7 +18,7 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps, PropType, computed } from 'vue';
+import { PropType, computed } from 'vue';
 import useTabStore from '~~/comsosable/useTabStore';
 
 const props = defineProps({

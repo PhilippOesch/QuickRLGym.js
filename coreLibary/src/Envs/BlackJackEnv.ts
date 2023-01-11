@@ -68,6 +68,7 @@ export default class BlackJackEnv extends SingleAgentEnvironment {
         this._game.initGame();
     }
     public step(action: string): StepResult {
+        this._lastAction = action;
         return this._game.step(action);
     }
     public get getReturn(): number {

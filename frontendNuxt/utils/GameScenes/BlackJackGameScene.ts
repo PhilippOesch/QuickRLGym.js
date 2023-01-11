@@ -8,13 +8,10 @@ export default class BlackJackGameScene extends StaticRenderScene {
     private loopEndless: boolean;
 
     private blackJackGame: Games.BlackJack.BlackJackGame;
-    //private showDealerCard: GameObjects.Image;
     private lastPlayerCard: GameObjects.Image | undefined;
     private dealerUi: GameObjects.Text | undefined;
     private playerUi: GameObjects.Text | undefined;
-    private totalScoreUi: GameObjects.Text | undefined;
 
-    private totalScore: number = 0;
     private env: Envs.BlackJackEnv;
 
     constructor(

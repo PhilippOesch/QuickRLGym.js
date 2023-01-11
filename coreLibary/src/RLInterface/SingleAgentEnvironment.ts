@@ -82,7 +82,6 @@ abstract class SingleAgentEnvironment implements Environment {
             ) {
                 const prevState: object = this.state;
                 const nextAction: string = this.agent.step(prevState);
-                this._lastAction = nextAction;
                 const { newState, reward } = this.step(nextAction);
                 // some algorithms need information about weather the game state is terminal
                 const gameStateContext =

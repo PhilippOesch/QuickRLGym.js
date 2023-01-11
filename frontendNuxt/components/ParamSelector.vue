@@ -46,7 +46,7 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps, PropType, computed } from 'vue';
+import { PropType, computed } from 'vue';
 import { Setting, SettingNumber } from '~~/utils/settingsInterfaces/general';
 import { InputStyleType, SelectionType } from '~~/utils/enums';
 import useSettingsStore from '~~/comsosable/useSettingsStore';
