@@ -6,7 +6,7 @@
   "scripts": {
     "test": "npm run test --prefix ./backend",
     "dependencies": "npm i; npm i --prefix ./shared; npm i --prefix ./backend; npm i --prefix ./frontend;",
-    "frontend": "npm run dev --prefix ./frontend",
+    "frontend": "npm run dev --prefix ./frontendNuxt",
     "backend": "npm run buildrun --prefix ./backend",
     "deployFrontend": "npm run deploy --prefix ./frontend",
     "buildCore": "npm run build --prefix ./coreLibary"

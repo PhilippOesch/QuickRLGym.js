@@ -13,6 +13,13 @@ module.exports = {
             fontFamily: {
                 sans: ['Inter', 'Helvetica', 'sans-serif'],
             },
+            colors: {
+                darkPurple: {
+                    900: '#181528',
+                    800: '#282343',
+                    700: '#38315e',
+                },
+            },
         },
     },
     safelist: [

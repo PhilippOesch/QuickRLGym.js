@@ -1,13 +1,18 @@
 <template>
     <MenuButton :clickHandler="toggleMenu" :opened="menuOpen"></MenuButton>
-    <div v-if="menuOpen" class="MenuWrapper">
+    <div
+        class="MenuWrapper"
+        :class="[menuOpen ? 'menuOpenStyle' : 'menuClosedStyle']"
+    >
         <div class="menuContainer">
-            <NuxtLink class="menuLink" to="/">
+            <NuxtLink class="menuLink home" to="/">
                 <i class="icon quickrl-home" alt="Home" />
                 <div class="rightSide">
                     <span>Home</span>
                 </div>
             </NuxtLink>
+            <hr />
+            <h2 class="menuTitle">Games</h2>
             <template v-for="link in links" :key="link.link">
                 <NuxtLink class="menuLink" :to="link.link">
                     <i :class="setClasses(link)" :alt="link.title" />
@@ -18,7 +23,7 @@
             </template>
         </div>
     </div>
-    <div v-if="menuOpen" class="MenuOverlay" @click="toggleMenu"></div>
+    <div class="MenuOverlay" v-if="menuOpen" @click="toggleMenu"></div>
 </template>
 
 <script setup lang="ts">
@@ -63,11 +68,11 @@ function setClasses(link: any): string[] {
 
 <style lang="postcss" scoped>
 .MenuOverlay {
-    @apply w-full h-full bg-black bg-opacity-50 fixed top-0 left-0 z-10;
+    @apply w-full h-full bg-slate-900 bg-opacity-70 fixed top-0 left-0 z-10;
 }
 
 .MenuWrapper {
-    @apply fixed top-0 left-0 min-w-max w-80 min-h-full bg-slate-900 z-20 drop-shadow-md;
+    @apply fixed top-0 left-0 w-80 min-h-full bg-slate-900 z-20 drop-shadow-md duration-300 transition-all;
 }
 
 .menuContainer {
@@ -75,10 +80,38 @@ function setClasses(link: any): string[] {
 }
 
 .menuLink {
-    @apply min-w-full flex px-5 py-3 gap-3 flex-wrap place-items-center text-xl cursor-pointer hover:bg-slate-800;
+    @apply w-full flex px-5 py-2 gap-3 flex-wrap place-items-center text-lg cursor-pointer hover:bg-darkPurple-800 duration-300 text-slate-400;
+}
+
+.menuLink.home {
+    @apply text-slate-50 font-bold;
+}
+
+.menuTitle {
+    @apply text-lg font-bold px-5 py-2;
 }
 
 .menuLink .icon {
-    @apply text-4xl;
+    @apply text-2xl;
+}
+
+.menuOpenStyle {
+    @apply border-r-2 border-slate-700;
+}
+
+.menuOpenStyle .menuLink {
+    @apply opacity-100;
+}
+
+.menuClosedStyle .menuLink {
+    @apply opacity-0 -translate-x-80;
+}
+
+.menuClosedStyle {
+    @apply -translate-x-80;
+}
+
+.menuContainer hr {
+    @apply border border-slate-700 mx-6 my-4;
 }
 </style>

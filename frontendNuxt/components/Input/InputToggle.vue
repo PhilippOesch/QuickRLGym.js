@@ -79,7 +79,7 @@ function finishEdit(): void {
 
 /* The slider */
 .slider {
-    @apply bg-slate-600 absolute cursor-pointer top-0 left-0 right-0 bottom-0 duration-300;
+    @apply bg-darkPurple-700 absolute cursor-pointer top-0 left-0 right-0 bottom-0 duration-300;
 }
 
 .slider:before {
