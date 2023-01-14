@@ -1,5 +1,11 @@
 import seedrandom from 'seedrandom';
-import { Utils, SingleAgentEnvironment, Agent, FileManager } from '../../index';
+import {
+    Utils,
+    SingleAgentEnvironment,
+    Agent,
+    FileManager,
+    GameStateContext,
+} from '../../index';
 
 /**
  * Settings for the QLAgent
@@ -54,19 +60,7 @@ export default class QLAgent extends Agent {
     }
 
     step(state: object): string {
-        const randNum: number = this.rng();
-        if (!this.config) {
-            throw new Error('The Agent has not been configured for training');
-        }
-        this.decayEpsilon();
-        if (randNum < this.epsilon) {
-            const randIdx = Math.floor(
-                this.rng() * this.env.actionSpace.length
-            );
-            return this.env.actionSpace[randIdx];
-        } else {
-            return this.evalStep(state);
-        }
+        return this.followEpsGreedyPolicy(state);
     }
 
     log(): void {
@@ -82,7 +76,8 @@ export default class QLAgent extends Agent {
         prevState: object,
         takenAction: string,
         newState: object,
-        payoff: number
+        payoff: number,
+        gameStateContext: GameStateContext
     ): void {
         //lookups
         const takenActionIdx = this.env.actionSpace.indexOf(takenAction);
@@ -91,6 +86,9 @@ export default class QLAgent extends Agent {
         const newBestActionIdx: number = Utils.MathUtils.argMax(
             newPossibleActionValues
         );
+
+        if (gameStateContext.isTerminal || gameStateContext.maxIterationReached)
+            this.decayEpsilon();
 
         // bellmann equation
         const newQValue: number =
@@ -110,6 +108,10 @@ export default class QLAgent extends Agent {
     }
 
     public decayEpsilon(): void {
+        if (!this.config!.epsilonDecaySteps || !this.config!.epsilonEnd) {
+            return;
+        }
+
         if (this.epsilonStep < this.config!.epsilonDecaySteps) {
             this.epsilonStep++;
             this.epsilon =
@@ -167,5 +169,19 @@ export default class QLAgent extends Agent {
         } else {
             this.rng = seedrandom();
         }
+    }
+
+    private followEpsGreedyPolicy(state: object): string {
+        const randNum: number = this.rng();
+        if (randNum < this.epsilon) {
+            return this.sampleRandomAction();
+        } else {
+            return this.evalStep(state);
+        }
+    }
+
+    private sampleRandomAction(): string {
+        const randIdx = Math.floor(this.rng() * this.env.actionSpace.length);
+        return this.env.actionSpace[randIdx];
     }
 }

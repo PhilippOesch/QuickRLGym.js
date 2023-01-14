@@ -191,13 +191,15 @@ export default class MCAgent extends Agent {
     private followEpsGreedyPolicy(state: object): string {
         const randNum: number = this.rng();
         if (randNum < this.epsilon) {
-            const randIdx = Math.floor(
-                this.rng() * this.env.actionSpace.length
-            );
-            return this.env.actionSpace[randIdx];
+            return this.sampleRandomAction();
         } else {
             return this.evalStep(state);
         }
+    }
+
+    private sampleRandomAction() {
+        const randIdx = Math.floor(this.rng() * this.env.actionSpace.length);
+        return this.env.actionSpace[randIdx];
     }
 
     public async load(
