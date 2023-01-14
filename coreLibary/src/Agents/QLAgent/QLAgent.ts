@@ -36,7 +36,6 @@ export default class QLAgent extends Agent {
     ) {
         super(env);
         this.setRandomSeed(randomSeed);
-        this.env = env;
         this.config = config;
     }
 
@@ -50,7 +49,7 @@ export default class QLAgent extends Agent {
     }
 
     init(): void {
-        const qTableDims: number[] = [...this.env.gameStateDim];
+        const qTableDims: number[] = [...this.env.stateDim];
         qTableDims.push(this.env.actionSpace.length);
         this.qTable = Utils.Tensor.Zeros(...qTableDims);
         if (this.config) {

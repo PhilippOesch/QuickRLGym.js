@@ -46,12 +46,11 @@ export default class MCAgent extends Agent {
     ) {
         super(env);
         this.setRandomSeed(randomSeed);
-        this.env = env;
         this.config = config;
     }
 
     init(): void {
-        const valueTableDims: number[] = [...this.env.gameStateDim];
+        const valueTableDims: number[] = [...this.env.stateDim];
         valueTableDims.push(this.env.actionSpace.length);
         this.valueTable = Utils.Tensor.Zeros(...valueTableDims);
         this.stateReturnCountTable = Utils.Tensor.Zeros(...valueTableDims);

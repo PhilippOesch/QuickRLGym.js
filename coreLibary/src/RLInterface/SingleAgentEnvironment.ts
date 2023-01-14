@@ -18,7 +18,7 @@ abstract class SingleAgentEnvironment implements Environment {
         throw new Error('Method not implemented.');
     }
 
-    get gameStateDim(): number[] {
+    get stateDim(): number[] {
         throw new Error('Method not implemented.');
     }
     get stats(): object {

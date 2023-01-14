@@ -38,7 +38,7 @@ export default class TaxiEnv extends SingleAgentEnvironment {
         };
     }
 
-    public get gameStateDim(): number[] {
+    public get stateDim(): number[] {
         return this._game.gameStateDim;
     }
 

@@ -40,7 +40,7 @@ export default class BlackJackEnv extends SingleAgentEnvironment {
         return this._game;
     }
 
-    public get gameStateDim(): number[] {
+    public get stateDim(): number[] {
         return this._game.getGameStateDim;
     }
 
