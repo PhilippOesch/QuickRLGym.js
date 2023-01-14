@@ -13,6 +13,7 @@
                     :stepSize="item.setting.stepSize"
                     @updated="(value) => updateSettings(value, index)"
                     :disabled="isDisabled"
+                    :accentColor="accentColor"
                 ></InputSlider>
                 <InputNumber
                     v-if="getType(item) == 'Number'"
@@ -48,7 +49,7 @@
 <script setup lang="ts">
 import { PropType, computed } from 'vue';
 import { Setting, SettingNumber } from '~~/utils/settingsInterfaces/general';
-import { InputStyleType, SelectionType } from '~~/utils/enums';
+import { IconColor, InputStyleType, SelectionType } from '~~/utils/enums';
 import useSettingsStore from '~~/comsosable/useSettingsStore';
 
 const props = defineProps({
@@ -70,6 +71,9 @@ const props = defineProps({
     },
     title: {
         type: String,
+    },
+    accentColor: {
+        type: Object as PropType<IconColor>,
     },
 });
 
@@ -109,7 +113,7 @@ function updateSettings(value: any, index: string): void {
 }
 
 .selectionGrid {
-    @apply bg-slate-800 px-4;
+    @apply bg-darkPurple-800 px-4;
 }
 
 .SelectionFree {

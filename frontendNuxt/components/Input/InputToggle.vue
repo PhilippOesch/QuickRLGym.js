@@ -84,7 +84,7 @@ function finishEdit(): void {
 
 .slider:before {
     content: '';
-    @apply absolute left-1 bottom-1 h-7 w-7 bg-slate-50 duration-300;
+    @apply absolute left-1 bottom-1 h-7 w-7 bg-gray-50 duration-300;
 }
 
 input:disabled + .slider {

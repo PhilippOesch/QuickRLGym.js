@@ -47,7 +47,7 @@ function clickHandler() {
 
 <style lang="postcss" scoped>
 .buttonContainer {
-    @apply py-2 px-4 bg-slate-700 flex place-items-center text-base rounded-md drop-shadow hover:bg-slate-600 duration-300 cursor-pointer;
+    @apply py-2 px-4 bg-darkPurple-700 flex place-items-center text-base rounded-md drop-shadow hover:bg-darkPurple-600 duration-300 cursor-pointer;
 }
 
 .btn-large {

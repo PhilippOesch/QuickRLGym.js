@@ -4,7 +4,14 @@
             <template v-for="(item, index) in tabs">
                 <div
                     class="tab"
-                    :class="{ selected: getOpenTab == item }"
+                    :class="[
+                        getOpenTab == item
+                            ? [
+                                  `hover:bg-${accentColor}-700`,
+                                  `bg-${accentColor}-700`,
+                              ]
+                            : '',
+                    ]"
                     @click="switchTab(index)"
                 >
                     {{ item }}
@@ -20,6 +27,7 @@
 <script setup lang="ts">
 import { PropType, computed } from 'vue';
 import useTabStore from '~~/comsosable/useTabStore';
+import { IconColor } from '~~/utils/enums';
 
 const props = defineProps({
     tabs: {
@@ -30,6 +38,7 @@ const props = defineProps({
         type: String,
         required: true,
     },
+    accentColor: Object as PropType<IconColor>,
 });
 
 const tabStore = useTabStore();
@@ -50,14 +59,10 @@ function switchTab(idx: number) {
 
 <style lang="postcss" scoped>
 .tabSelectContainer {
-    @apply bg-slate-800 px-2 py-2 rounded-md flex gap-2 drop-shadow mt-6 max-w-fit;
+    @apply bg-darkPurple-800 px-2 py-2 rounded-md flex gap-2 drop-shadow mt-6 max-w-fit;
 }
 
 .tab {
-    @apply px-6 py-3 hover:bg-slate-700 rounded-md duration-300 cursor-pointer;
-}
-
-.selected {
-    @apply bg-sky-600 hover:bg-sky-600;
+    @apply px-6 py-3 hover:bg-darkPurple-700 rounded-md duration-300 cursor-pointer;
 }
 </style>

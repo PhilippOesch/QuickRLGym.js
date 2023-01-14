@@ -38,7 +38,7 @@ function callClickHandler() {
 }
 
 .menuFriesContainer .menuFrie {
-    @apply h-1 bg-slate-50 rounded-full relative block duration-300 transition-all;
+    @apply h-1 bg-gray-50 rounded-full relative block duration-300 transition-all;
 }
 
 .menuFriesContainer .topFrie {

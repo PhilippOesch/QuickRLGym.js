@@ -2,28 +2,32 @@
     <div>
         <TabGroup
             :tabs="['Q Learning', 'Monte Carlo']"
-            groupName="taxiAlgTab"
+            :groupName="`${gameId}-AlgTab`"
+            :accentColor="accentColor"
         />
-        <Tab tabGroup="taxiAlgTab" name="Q Learning">
+        <Tab :tabGroup="`${gameId}-AlgTab`" name="Q Learning">
             <ParamSelector
                 title="Parameters:"
-                gameID="Taxi"
+                :gameID="gameId"
                 algorithmName="QLearning"
                 :settingsObject="qlSettingsDefault"
+                :accentColor="accentColor"
             />
         </Tab>
-        <Tab tabGroup="taxiAlgTab" name="Monte Carlo">
+        <Tab :tabGroup="`${gameId}-AlgTab`" name="Monte Carlo">
             <ParamSelector
                 title="Parameters:"
-                gameID="Taxi"
+                :gameID="gameId"
                 algorithmName="MCLearning"
                 :settingsObject="mcSettingsDefault"
+                :accentColor="accentColor"
             />
         </Tab>
         <TabGroup
             class="mt-12"
             :tabs="['Training', 'Benchmark']"
             groupName="trainingBenchmarkSwitch"
+            :accentColor="accentColor"
         />
         <Tab tabGroup="trainingBenchmarkSwitch" name="Training">
             <div class="freeComponents">
@@ -33,7 +37,7 @@
                     :size="ButtonSize.Large"
                 />
                 <ParamSelector
-                    gameID="Taxi"
+                    :gameID="gameId"
                     algorithmName="gameSettings"
                     :settingsObject="defaultTrainingSettings"
                     :selectionType="SelectionType.FreeStanding"
@@ -44,7 +48,7 @@
         <div class="pt-8 pb-2">
             <GameView
                 :training-iteration="25"
-                id="Taxi"
+                :id="gameId"
                 ref="gameViewRef"
             ></GameView>
         </div>
@@ -54,27 +58,31 @@
 import { qlSettingsDefault } from '~~/utils/settingsInterfaces/QLSettings';
 import { mcSettingsDefault } from '~~/utils/settingsInterfaces/MCSettings';
 import defaultTrainingSettings from '~~/utils/settingsInterfaces/trainingSettings';
-import { SelectionType, ButtonSize } from '~~/utils/enums';
-import { Ref } from 'vue';
+import { SelectionType, ButtonSize, IconColor } from '~~/utils/enums';
+import { PropType, Ref } from 'vue';
 
 const gameViewRef: Ref<any> = ref(null);
 
+defineProps({
+    gameId: {
+        type: String,
+        required: true,
+    },
+    accentColor: Object as PropType<IconColor>,
+});
+
 function startTrainingHander() {
-    console.log(gameViewRef.value.initializeTraining());
+    gameViewRef.value.initializeTraining();
 }
 </script>
 
 <style lang="postcss" scoped>
 .tabSelectContainer {
-    @apply bg-slate-800 px-2 py-2 rounded-md flex gap-4 drop-shadow mt-6 max-w-fit;
+    @apply bg-darkPurple-800 px-2 py-2 rounded-md flex gap-4 drop-shadow mt-6 max-w-fit;
 }
 
 .tab {
-    @apply px-6 py-3 hover:bg-slate-700 rounded-md duration-300 cursor-pointer;
-}
-
-.selected {
-    @apply bg-sky-600 hover:bg-sky-600;
+    @apply px-6 py-3 hover:bg-darkPurple-700 rounded-md duration-300 cursor-pointer;
 }
 
 .tabContainer {

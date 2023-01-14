@@ -183,7 +183,7 @@ onMounted(async () => {
 }
 
 .gameWrapper .infoBox {
-    @apply bg-slate-800 p-4 rounded-md;
+    @apply bg-darkPurple-800 p-4 rounded-md;
 }
 
 .gameWrapperContainer {
@@ -207,7 +207,7 @@ onMounted(async () => {
 }
 
 .gameContainer {
-    @apply w-full bg-slate-800 rounded-md max-h-fit relative;
+    @apply w-full bg-darkPurple-800 rounded-md max-h-fit relative;
 }
 
 .gameContainer :deep(canvas) {

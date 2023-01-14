@@ -2,6 +2,9 @@
     <div class="mainContainer">
         <Menu></Menu>
         <h1>Blackjack</h1>
-        <GameBlackJack></GameBlackJack>
+        <Game gameId="BlackJack" :accentColor="IconColor.Green"></Game>
     </div>
 </template>
+<script setup lang="ts">
+import { IconColor } from '~~/utils/enums';
+</script>

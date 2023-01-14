@@ -47,7 +47,7 @@ const links = [
 ];
 
 function setClasses(link: any) {
-    return ['icon', 'quickrl-' + link.icon, link.color];
+    return ['icon', 'quickrl-' + link.icon, `text-${link.color}-500`];
 }
 </script>
 
@@ -62,8 +62,8 @@ function setClasses(link: any) {
         last:rounded-b-md 
         lg:last:rounded-bl-none 
         px-6 py-6 text-lg
-        bg-gray-800 
-        hover:bg-gray-700
+        bg-darkPurple-800 
+        hover:bg-darkPurple-700
         flex;
 }
 

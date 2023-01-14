@@ -62,17 +62,17 @@ function toggleMenu(): void {
 }
 
 function setClasses(link: any): string[] {
-    return ['icon', 'quickrl-' + link.icon, link.color];
+    return ['icon', 'quickrl-' + link.icon, `text-${link.color}-500`];
 }
 </script>
 
 <style lang="postcss" scoped>
 .MenuOverlay {
-    @apply w-full h-full bg-slate-900 bg-opacity-70 fixed top-0 left-0 z-10;
+    @apply w-full h-full bg-darkPurple-900 bg-opacity-70 fixed top-0 left-0 z-10;
 }
 
 .MenuWrapper {
-    @apply fixed top-0 left-0 w-80 min-h-full bg-slate-900 z-20 drop-shadow-md duration-300 transition-all;
+    @apply fixed top-0 left-0 w-80 min-h-full bg-darkPurple-900 z-20 drop-shadow-md duration-300 transition-all;
 }
 
 .menuContainer {
@@ -80,15 +80,15 @@ function setClasses(link: any): string[] {
 }
 
 .menuLink {
-    @apply w-full flex px-5 py-2 gap-3 flex-wrap place-items-center text-lg cursor-pointer hover:bg-darkPurple-800 duration-300 text-slate-400;
+    @apply w-full flex px-6 py-2 gap-3 flex-wrap place-items-center text-lg cursor-pointer hover:bg-darkPurple-800 duration-300 text-gray-400;
 }
 
 .menuLink.home {
-    @apply text-slate-50 font-bold;
+    @apply text-gray-50 font-bold;
 }
 
 .menuTitle {
-    @apply text-lg font-bold px-5 py-2;
+    @apply text-lg font-bold px-6 py-2;
 }
 
 .menuLink .icon {
@@ -96,7 +96,7 @@ function setClasses(link: any): string[] {
 }
 
 .menuOpenStyle {
-    @apply border-r-2 border-slate-700;
+    @apply border-r-2 border-darkPurple-700;
 }
 
 .menuOpenStyle .menuLink {
@@ -112,6 +112,6 @@ function setClasses(link: any): string[] {
 }
 
 .menuContainer hr {
-    @apply border border-slate-700 mx-6 my-4;
+    @apply border border-darkPurple-700 mx-6 my-4;
 }
 </style>

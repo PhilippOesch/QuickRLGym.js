@@ -5,10 +5,10 @@ export enum ButtonSize {
 }
 
 export enum IconColor {
-    Amber = 'text-amber-500',
-    Sky = 'text-sky-500',
-    Green = 'text-green-600',
-    Pink = 'text-pink-600',
+    Amber = 'amber',
+    Sky = 'sky',
+    Green = 'green',
+    Pink = 'pink',
 }
 
 export enum SelectionType {

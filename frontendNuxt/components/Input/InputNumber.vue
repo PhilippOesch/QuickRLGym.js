@@ -64,10 +64,10 @@ function update(el: HTMLInputElement): void {
 }
 
 .inputDark {
-    @apply bg-slate-900;
+    @apply bg-darkPurple-900;
 }
 
 .inputLight {
-    @apply bg-slate-700;
+    @apply bg-darkPurple-700;
 }
 </style>
