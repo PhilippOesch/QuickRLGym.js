@@ -134,7 +134,7 @@ abstract class SingleAgentEnvironment implements Environment {
                 // some algorithms need information about weather the game state is terminal
                 const gameStateContext =
                     this.additionalInfo(maxIterationPerGame);
-                this.agent.feed(
+                await this.agent.feed(
                     prevState,
                     nextAction,
                     newState,

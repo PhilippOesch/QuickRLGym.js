@@ -71,13 +71,13 @@ export default class QLAgent extends Agent {
         const actionIdx: number = Utils.MathUtils.argMax(actions);
         return this.env.actionSpace[actionIdx];
     }
-    feed(
+    async feed(
         prevState: object,
         takenAction: string,
         newState: object,
         payoff: number,
         gameStateContext: GameStateContext
-    ): void {
+    ): Promise<void> {
         //lookups
         const takenActionIdx = this.env.actionSpace.indexOf(takenAction);
         const prevActionQvalues = this.getStateActionValues(prevState);

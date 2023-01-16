@@ -1,3 +1,4 @@
+import { DQNAgentSettings } from '../../coreLibary/src/Agents';
 import {
     Agents,
     SingleAgentEnvironment,
@@ -20,7 +21,7 @@ const env: SingleAgentEnvironment = QuickRLJS.loadEnv('Taxi', {
 //     hiddenLayerActivation?: string;
 // }
 
-const agentConfig = {
+const agentConfig: DQNAgentSettings = {
     learningRate: 0.001,
     discountFactor: 0.5,
     nnLayer: [64, 64],
@@ -28,7 +29,11 @@ const agentConfig = {
     epsilonEnd: 0.1,
     epsilonDecaySteps: 1000,
     hiddenLayerActivation: 'relu',
+    batchSize: 32,
+    replayMemorySize: 1000,
+    replayMemoryInitSize: 100,
 };
 
 const agent = new Agents.DQNAgent(env, agentConfig);
 agent.init();
+agent.evalStep(env.state);

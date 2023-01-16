@@ -20,6 +20,7 @@
   },
   "dependencies": {
     "@tensorflow/tfjs-node": "^4.2.0",
+    "@tensorflow/tfjs-node-gpu": "^4.2.0",
     "quickrl.core": "^0.5.10",
     "seedrandom": "^3.0.5"
   }

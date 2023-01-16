@@ -67,13 +67,13 @@ export default class MCAgent extends Agent {
     step(state: object): string {
         return this.followEpsGreedyPolicy(state);
     }
-    feed(
+    async feed(
         prevState: object,
         takenAction: string,
         newState: object,
         payoff: number,
         gameStateContext: GameStateContext
-    ): void {
+    ): Promise<void> {
         // buffer experience
         this.experience.push({
             state: this.env.encodeStateToIndices(prevState),
