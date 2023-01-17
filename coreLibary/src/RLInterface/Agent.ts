@@ -37,7 +37,7 @@ export default abstract class Agent {
         newState: object,
         payoff: number,
         contextInfo: object
-    ): void;
+    ): Promise<void>;
 
     /**
      * set The configuration of the agent after initailizing

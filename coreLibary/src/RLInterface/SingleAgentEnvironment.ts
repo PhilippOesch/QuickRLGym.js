@@ -18,7 +18,7 @@ abstract class SingleAgentEnvironment implements Environment {
         throw new Error('Method not implemented.');
     }
 
-    get gameStateDim(): number[] {
+    get stateDim(): number[] {
         throw new Error('Method not implemented.');
     }
     get stats(): object {
@@ -59,61 +59,13 @@ abstract class SingleAgentEnvironment implements Environment {
     }
 
     /**
-     * The training loop method.
-     * @param iterations - numbers of iterations to iterate.
-     * @param logEvery - loging interval relative to training iterations.
-     * @param maxIterationPerGame - how many iterations for a game until it automatically terminates.
-     * If maxIterationPerGame = -1, the game iterates endless.
-     */
-    public train(
-        iterations: number = 100,
-        logEvery = -1,
-        maxIterationPerGame: number = -1
-    ): void {
-        this.reset();
-
-        if (this.agent == undefined) {
-            throw new Error('No Agent has been set');
-        }
-        for (let i = 0; i < iterations; i++) {
-            while (
-                (!this.isTerminal && this.iteration < maxIterationPerGame) ||
-                (!this.isTerminal && maxIterationPerGame == -1)
-            ) {
-                const prevState: object = this.state;
-                const nextAction: string = this.agent.step(prevState);
-                const { newState, reward } = this.step(nextAction);
-                // some algorithms need information about weather the game state is terminal
-                const gameStateContext =
-                    this.additionalInfo(maxIterationPerGame);
-                this.agent.feed(
-                    prevState,
-                    nextAction,
-                    newState,
-                    reward,
-                    gameStateContext
-                );
-            }
-            this.onIterationEnd();
-            if (logEvery !== -1 && i % logEvery === 0) {
-                this.log(i);
-                this.agent.log();
-            }
-            const isReset = this.reset();
-            if (!isReset) {
-                break;
-            }
-        }
-    }
-
-    /**
      * The training loop method as Async Version.
      * @param iterations - numbers of iterations to iterate.
      * @param logEvery - loging interval relative to training iterations.
      * @param maxIterationPerGame - how many iterations for a game until it automatically terminates.
      * If maxIterationPerGame = -1, the game iterates endless.
      */
-    public async trainAsync(
+    public async train(
         iterations: number = 100,
         logEvery = -1,
         maxIterationPerGame: number = -1
@@ -131,14 +83,19 @@ abstract class SingleAgentEnvironment implements Environment {
                 const prevState: object = this.state;
                 const nextAction: string = this.agent.step(this.state);
                 const { newState, reward } = this.step(nextAction);
-                // some algorithms need information about weather the game state is terminal
                 const gameStateContext =
                     this.additionalInfo(maxIterationPerGame);
-                this.agent.feed(
+                let rewardAdjusted =
+                    this.options?.penaltyOnUnfinished &&
+                    gameStateContext.maxIterationReached &&
+                    !gameStateContext.isTerminal
+                        ? this.options?.penaltyOnUnfinished + reward
+                        : reward;
+                await this.agent.feed(
                     prevState,
                     nextAction,
                     newState,
-                    reward,
+                    rewardAdjusted,
                     gameStateContext
                 );
             }
@@ -165,7 +122,7 @@ abstract class SingleAgentEnvironment implements Environment {
         console.log('Iteration:', trainIteration);
     }
 
-    private additionalInfo(maxIterPerGame: number = -1): object {
+    private additionalInfo(maxIterPerGame: number = -1): GameStateContext {
         const isTerminal = this.isTerminal;
         const maxIterationReached =
             maxIterPerGame != -1 && this.iteration >= maxIterPerGame;

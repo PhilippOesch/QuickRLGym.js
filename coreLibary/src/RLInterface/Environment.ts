@@ -5,13 +5,14 @@ import StepResult from './StepResult';
  */
 export interface EnvOptions {
     randomSeed?: number;
+    penaltyOnUnfinished?: number;
 }
 
 /**
  * The Environment Interface
  */
 export default abstract class Environment {
-    abstract get gameStateDim(): number[];
+    abstract get stateDim(): number[];
     abstract get actionSpace(): string[];
     abstract get state(): object;
     abstract get isTerminal(): boolean;

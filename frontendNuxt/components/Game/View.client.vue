@@ -125,7 +125,7 @@ async function trainingLoop(
     isTraining.value = true;
     if (iterationsLeft > trainingIterations) {
         const newIterationsLeft = iterationsLeft - trainingIterations;
-        env.train(trainingIterations, -1, maxIterations);
+        await env.train(trainingIterations, -1, maxIterations);
         iteration.value += trainingIterations;
         reactiveInfo.stats = sceneInfo!.env!.stats;
 
@@ -134,7 +134,7 @@ async function trainingLoop(
         await renderGame();
         trainingLoop(env, newIterationsLeft, trainingIterations, maxIterations);
     } else {
-        env.train(iterationsLeft, -1, maxIterations);
+        await env.train(iterationsLeft, -1, maxIterations);
         iteration.value += iterationsLeft;
         // stats.value = env.stats;
         console.log('iteration', env.iteration);

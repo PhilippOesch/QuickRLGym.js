@@ -1,5 +1,12 @@
-import { SingleAgentEnvironment, Agents, QuickRLJS } from 'quickrl.core';
+//import { SingleAgentEnvironment, Agents, QuickRLJS } from 'quickrl.core';
+import {
+    Agent,
+    SingleAgentEnvironment,
+    Agents,
+    QuickRLJS,
+} from '../../coreLibary/src';
 import NodeFileManager from './NodeFileManager';
+require('@tensorflow/tfjs-node-gpu');
 
 //parameters
 const fileManager = new NodeFileManager();
@@ -8,7 +15,8 @@ async function main() {
     //trainTaxiQLAgent();
     //trainTaxiMCAgent();
     //trainBlackJack();
-    trainBlackJackMCAgent();
+    //trainBlackJackMCAgent();
+    trainTaxiDQN();
 }
 
 async function trainBlackJack() {
@@ -31,7 +39,7 @@ async function trainBlackJack() {
 
     env.setAgent = agent;
     env.initAgent();
-    env.train(numIterations, logEvery);
+    await env.train(numIterations, logEvery);
     await agent.save('./models/qTables/blackjack/qTable.json', fileManager);
 }
 
@@ -57,7 +65,7 @@ async function trainTaxiQLAgent() {
     );
     env.setAgent = agent;
     env.initAgent();
-    env.train(numIterations, logEvery, maxIterationsPerGame);
+    await env.train(numIterations, logEvery, maxIterationsPerGame);
     await agent.save('./models/qTables/taxi/qTable.json', fileManager);
 }
 
@@ -71,14 +79,14 @@ async function trainTaxiMCAgent() {
         randomSeed: randomSeed,
     }) as SingleAgentEnvironment;
 
-    const agent = new Agents.MCAgent(env, {
+    const agent: Agents.MCAgent = new Agents.MCAgent(env, {
         epsilonStart: 0.2,
         discountFactor: 1,
         epsilonDecaySteps: 10000,
     });
     env.setAgent = agent;
     env.initAgent();
-    env.train(numIterations, logEvery, maxIterationsPerGame);
+    await env.train(numIterations, logEvery, maxIterationsPerGame);
     await agent.save('./models/MCAgent/taxi/mcagent.json', fileManager);
 }
 
@@ -92,7 +100,7 @@ async function trainBlackJackMCAgent() {
     }) as SingleAgentEnvironment;
 
     console.log(env);
-    const agent = new Agents.MCAgent(env, {
+    const agent: Agents.MCAgent = new Agents.MCAgent(env, {
         epsilonStart: 0.2,
         discountFactor: 1,
     });
@@ -101,6 +109,40 @@ async function trainBlackJackMCAgent() {
     env.initAgent();
     env.train(numIterations, logEvery);
     await agent.save('./models/MCAgent/blackjack/mcagent.json', fileManager);
+}
+
+async function trainTaxiDQN() {
+    const randomSeed: number = 12;
+    const numEpisodes: number = 25000;
+    const logEvery: number = 20;
+    const maxIterationsPerGame: number = 100;
+
+    const env: SingleAgentEnvironment = QuickRLJS.loadEnv('Taxi', {
+        randomSeed: randomSeed,
+        penaltyOnUnfinished: 0,
+    }) as SingleAgentEnvironment;
+    const agent: Agents.DQNAgent = new Agents.DQNAgent(env, {
+        learningRate: 0.0001,
+        discountFactor: 0.99,
+        nnLayer: [128, 128, 64],
+        epsilonStart: 1,
+        epsilonEnd: 0.01,
+        epsilonDecaySteps: 10000,
+        hiddenLayerActivation: 'relu',
+        batchSize: 32,
+        replayMemorySize: 10000,
+        replayMemoryInitSize: 1000,
+        activateDoubleDQN: true,
+        updateTargetEvery: 10000,
+        layerNorm: false,
+    });
+
+    env.setAgent = agent;
+    env.initAgent();
+    await env.train(numEpisodes, logEvery, maxIterationsPerGame);
+    await agent.save(
+        'file:///Users/philippoeschger/Documents/projects/QuickRLGym.js/backend/models/DQN/Taxi'
+    );
 }
 
 main();

@@ -46,12 +46,11 @@ export default class MCAgent extends Agent {
     ) {
         super(env);
         this.setRandomSeed(randomSeed);
-        this.env = env;
         this.config = config;
     }
 
     init(): void {
-        const valueTableDims: number[] = [...this.env.gameStateDim];
+        const valueTableDims: number[] = [...this.env.stateDim];
         valueTableDims.push(this.env.actionSpace.length);
         this.valueTable = Utils.Tensor.Zeros(...valueTableDims);
         this.stateReturnCountTable = Utils.Tensor.Zeros(...valueTableDims);
@@ -68,13 +67,13 @@ export default class MCAgent extends Agent {
     step(state: object): string {
         return this.followEpsGreedyPolicy(state);
     }
-    feed(
+    async feed(
         prevState: object,
         takenAction: string,
         newState: object,
         payoff: number,
         gameStateContext: GameStateContext
-    ): void {
+    ): Promise<void> {
         // buffer experience
         this.experience.push({
             state: this.env.encodeStateToIndices(prevState),
@@ -191,13 +190,15 @@ export default class MCAgent extends Agent {
     private followEpsGreedyPolicy(state: object): string {
         const randNum: number = this.rng();
         if (randNum < this.epsilon) {
-            const randIdx = Math.floor(
-                this.rng() * this.env.actionSpace.length
-            );
-            return this.env.actionSpace[randIdx];
+            return this.sampleRandomAction();
         } else {
             return this.evalStep(state);
         }
+    }
+
+    private sampleRandomAction() {
+        const randIdx = Math.floor(this.rng() * this.env.actionSpace.length);
+        return this.env.actionSpace[randIdx];
     }
 
     public async load(

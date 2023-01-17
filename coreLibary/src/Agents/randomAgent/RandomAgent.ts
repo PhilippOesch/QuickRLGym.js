@@ -42,7 +42,7 @@ export default class RandomAgent extends Agent {
         return;
     }
 
-    feed(): void {
+    async feed(): Promise<void> {
         return;
     }
 }
