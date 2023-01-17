@@ -5,6 +5,7 @@ import StepResult from './StepResult';
  */
 export interface EnvOptions {
     randomSeed?: number;
+    penaltyOnUnfinished?: number;
 }
 
 /**

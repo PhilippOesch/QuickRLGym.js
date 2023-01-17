@@ -5,6 +5,7 @@ import SingleAgentEnvironment, {
 } from '../../RLInterface/SingleAgentEnvironment';
 import * as tf from '@tensorflow/tfjs';
 import { MathUtils } from '../../Utils';
+import { layers } from '@tensorflow/tfjs';
 
 interface Experience {
     prevState: number[];
@@ -24,7 +25,10 @@ export interface DQNAgentSettings {
     epsilonStart: number;
     epsilonEnd: number;
     epsilonDecaySteps: number;
+    activateDoubleDQN?: boolean;
+    updateTargetEvery?: number;
     hiddenLayerActivation?: string;
+    layerNorm?: boolean;
 }
 
 export default class DQNAgent extends Agent {
@@ -32,9 +36,12 @@ export default class DQNAgent extends Agent {
     private rng: seedrandom.PRNG;
     private experienceReplay: ReplayMemory;
     private randomSeed?: string;
-    private qNetwork: tf.Sequential;
+    private qNetworkLocal: tf.Sequential;
+    private qNetworkTarget: tf.Sequential;
     private epsilon: number;
     private epsilonStep: number = 0;
+    private timeStep: number = 0;
+    private loss: any;
 
     constructor(
         env: SingleAgentEnvironment,
@@ -70,9 +77,12 @@ export default class DQNAgent extends Agent {
                 this.config.replayMemorySize
             );
         }
-        this.qNetwork = this.createNetwork();
+        this.qNetworkLocal = this.createNetwork();
         if (this.config) {
             this.epsilon = this.config.epsilonStart;
+
+            if (this.config.activateDoubleDQN)
+                this.qNetworkTarget = this.createNetwork();
         }
     }
     step(state: object): string {
@@ -110,7 +120,7 @@ export default class DQNAgent extends Agent {
             this.env.encodeStateToIndices(state),
             [1, this.env.stateDim.length]
         );
-        const result: tf.Tensor<tf.Rank> = this.qNetwork.predict(
+        const result: tf.Tensor<tf.Rank> = this.qNetworkLocal.predict(
             encodedState
         ) as tf.Tensor<tf.Rank>;
         const qValues = result.arraySync() as number[][];
@@ -127,23 +137,41 @@ export default class DQNAgent extends Agent {
         const hiddenLayerAct = this.config?.hiddenLayerActivation
             ? this.config?.hiddenLayerActivation
             : 'relu';
+
         // hidden layer
         model.add(
             tf.layers.dense({
                 inputShape: [this.env.stateDim.length],
                 activation: hiddenLayerAct as any,
                 units: this.config!.nnLayer[0],
-                useBias: true,
+                kernelInitializer: 'heUniform',
             })
         );
+        if (this.config!.layerNorm) {
+            model.add(
+                tf.layers.layerNormalization({
+                    center: true,
+                    scale: true,
+                })
+            );
+        }
+
         for (let i = 1; i < this.config!.nnLayer.length; i++) {
             model.add(
                 tf.layers.dense({
                     units: this.config!.nnLayer[i],
                     activation: hiddenLayerAct as any,
-                    useBias: true,
+                    kernelInitializer: 'heUniform',
                 })
             );
+            if (this.config!.layerNorm) {
+                model.add(
+                    tf.layers.layerNormalization({
+                        center: true,
+                        scale: true,
+                    })
+                );
+            }
         }
 
         // output layer
@@ -155,7 +183,6 @@ export default class DQNAgent extends Agent {
         );
 
         const adamOptimizer = tf.train.adam(this.config!.learningRate);
-        const rmspropOptimizer = tf.train.rmsprop(this.config!.learningRate);
 
         model.compile({
             optimizer: adamOptimizer,
@@ -183,23 +210,37 @@ export default class DQNAgent extends Agent {
         }
     }
 
+    public async save(path: string): Promise<void> {
+        const saveResults = await this.qNetworkLocal.save(path);
+    }
+
     private async train(): Promise<void> {
+        this.timeStep++;
+
         const miniBatch: BatchSample = this.experienceReplay.sample(
             this.config!.batchSize,
             this.rng
         );
-        //console.log(miniBatch);
+
+        let targetNetwork: tf.Sequential;
+
+        // use target network when in double DQN mode
+        if (this.config!.activateDoubleDQN) {
+            targetNetwork = this.qNetworkTarget;
+        } else {
+            targetNetwork = this.qNetworkLocal;
+        }
 
         //get target prediction
         let target: number[][] = (
-            this.qNetwork.predict(
+            targetNetwork.predict(
                 tf.tensor(miniBatch.stateBatch)
             ) as tf.Tensor<tf.Rank>
         ).arraySync() as number[][];
 
         // get nextStateTarget prediction
         let targetNext: number[][] = (
-            this.qNetwork.predict(
+            targetNetwork.predict(
                 tf.tensor(miniBatch.newStateBatch)
             ) as tf.Tensor<tf.Rank>
         ).arraySync() as number[][];
@@ -227,11 +268,21 @@ export default class DQNAgent extends Agent {
         ]);
         //stateTensor.print();
         //targetTensor.print();
-        const loss = await this.qNetwork.fit(stateTensor, targetTensor, {
+        this.loss = await this.qNetworkLocal.fit(stateTensor, targetTensor, {
             batchSize: this.config!.batchSize,
             verbose: 0,
         });
-        //console.log('loss', loss);
+
+        // update target network every "updateTargetEvery" steps
+        if (
+            this.config!.activateDoubleDQN &&
+            this.timeStep >= this.config!.updateTargetEvery!
+        ) {
+            this.qNetworkTarget.setWeights(this.qNetworkLocal.getWeights());
+            console.log('target weights updated');
+            console.log('loss', this.loss);
+            this.timeStep = 0;
+        }
     }
 
     private toExperience(
@@ -292,8 +343,6 @@ class ReplayMemory {
             batchSize,
             rng
         );
-        // console.log('memory', this.memory[0]);
-        // console.log('samples', samples[0]);
         return this.toBatch(samples);
     }
 
