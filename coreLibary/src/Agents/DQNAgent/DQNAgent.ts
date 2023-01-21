@@ -77,10 +77,12 @@ export default class DQNAgent extends Agent {
                 this.config.replayMemorySize
             );
         }
+        // create local qNetwork
         this.qNetworkLocal = this.createNetwork();
         if (this.config) {
             this.epsilon = this.config.epsilonStart;
 
+            // when active create target network for DDQN
             if (this.config.activateDoubleDQN)
                 this.qNetworkTarget = this.createNetwork();
         }
@@ -104,10 +106,8 @@ export default class DQNAgent extends Agent {
                 contextInfo
             )
         );
-        if (
-            this.experienceReplay.getSize >= this.config!.replayMemoryInitSize
-        ) {
-            //console.log('size', this.experienceReplay.getSize);
+        // wait untily replay memory is large enougth
+        if (this.replayMemoryLargeEnougth()) {
             await this.train();
         }
 
@@ -115,6 +115,12 @@ export default class DQNAgent extends Agent {
             this.decayEpsilon();
         }
     }
+    private replayMemoryLargeEnougth() {
+        return (
+            this.experienceReplay.getSize >= this.config!.replayMemoryInitSize
+        );
+    }
+
     evalStep(state: object): string {
         const encodedState: tf.Tensor<tf.Rank> = tf.tensor(
             this.env.encodeStateToIndices(state),

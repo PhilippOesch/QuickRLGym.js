@@ -39,8 +39,19 @@
                     :defaultValue="settings[index]"
                     @updated="(value) => updateSettings(value, index)"
                     :disabled="isDisabled"
+                    :accentColor="accentColor"
                 >
                 </InputToggle>
+                <InputArray
+                    v-if="getType(item) == 'Array'"
+                    :name="index"
+                    :delimiter="item.setting.delimiter"
+                    :title="item.displayName"
+                    :defaultValue="settings[index]"
+                    @updated="(value) => updateSettings(value, index)"
+                    :disabled="isDisabled"
+                >
+                </InputArray>
             </template>
         </div>
     </div>
@@ -48,7 +59,11 @@
 
 <script setup lang="ts">
 import { PropType, computed } from 'vue';
-import { Setting, SettingNumber } from '~~/utils/settingsInterfaces/general';
+import {
+    SettingArray,
+    SettingBoolean,
+    SettingNumber,
+} from '~~/utils/settingsInterfaces/general';
 import { IconColor, InputStyleType, SelectionType } from '~~/utils/enums';
 import useSettingsStore from '~~/comsosable/useSettingsStore';
 
@@ -89,16 +104,20 @@ if (props.algorithmName !== 'gameSettings') {
     console.log(props);
 }
 
-function getType(item: any) {
-    if ((item as Setting<SettingNumber>) !== undefined) {
+function getType(item: any): string {
+    if ((item.setting as any) instanceof SettingNumber) {
         if (item.setting.max !== undefined && item.setting.min !== undefined) {
             return 'Slider';
         }
         if (item.setting.stepSize !== undefined) return 'Number';
     }
-    if ((item as Setting<boolean>) !== undefined) {
+    if (item.setting instanceof SettingArray) {
+        return 'Array';
+    }
+    if (item.setting instanceof SettingBoolean) {
         return 'Toggle';
     }
+    return '';
 }
 
 function updateSettings(value: any, index: string): void {

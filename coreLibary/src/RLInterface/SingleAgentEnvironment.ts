@@ -68,8 +68,10 @@ abstract class SingleAgentEnvironment implements Environment {
     public async train(
         iterations: number = 100,
         logEvery = -1,
-        maxIterationPerGame: number = -1
+        maxIterationPerGame: number = -1,
+        resetStatsOnLog: boolean = true
     ): Promise<number> {
+        this.resetStats();
         this.reset();
 
         if (this.agent == undefined) {
@@ -103,6 +105,7 @@ abstract class SingleAgentEnvironment implements Environment {
             if (logEvery !== -1 && i % logEvery === 0) {
                 this.log(i);
                 this.agent.log();
+                if (resetStatsOnLog) this.resetStats();
             }
             const isReset = this.reset();
             if (!isReset) {

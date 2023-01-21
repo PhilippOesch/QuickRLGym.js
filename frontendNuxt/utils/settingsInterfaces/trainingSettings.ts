@@ -9,24 +9,15 @@ export interface TrainingSettings {
 const defaultTrainingSettings: TrainingSettings = {
     episodes: {
         displayName: 'Episodes',
-        setting: {
-            min: 1,
-            stepSize: 1,
-        },
+        setting: new SettingNumber(1, 1),
     },
     showProgressEvery: {
         displayName: 'Simulate Every',
-        setting: {
-            min: 1,
-            stepSize: 1,
-        },
+        setting: new SettingNumber(1, 1),
     },
     randomSeed: {
         displayName: 'Random Seed',
-        setting: {
-            min: 1,
-            stepSize: 1,
-        },
+        setting: new SettingNumber(1, 1),
     },
 };
 

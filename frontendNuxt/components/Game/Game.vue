@@ -1,7 +1,7 @@
 <template>
     <div>
         <TabGroup
-            :tabs="['Q Learning', 'Monte Carlo']"
+            :tabs="['Q Learning', 'Monte Carlo', 'DQN']"
             :groupName="`${gameId}-AlgTab`"
             :accentColor="accentColor"
         />
@@ -20,6 +20,15 @@
                 :gameID="gameId"
                 algorithmName="MCLearning"
                 :settingsObject="mcSettingsDefault"
+                :accentColor="accentColor"
+            />
+        </Tab>
+        <Tab :tabGroup="`${gameId}-AlgTab`" name="DQN">
+            <ParamSelector
+                title="Parameters:"
+                :gameID="gameId"
+                algorithmName="DQN"
+                :settingsObject="dqnSettingsDefault"
                 :accentColor="accentColor"
             />
         </Tab>
@@ -42,6 +51,8 @@
                     :settingsObject="defaultTrainingSettings"
                     :selectionType="SelectionType.FreeStanding"
                 />
+                <FileLoader></FileLoader>
+                <Saver :agentObject="agent"></Saver>
             </div>
         </Tab>
         <Tab tabGroup="trainingBenchmarkSwitch" name="Benchmark"></Tab>
@@ -50,6 +61,7 @@
                 :training-iteration="25"
                 :id="gameId"
                 ref="gameViewRef"
+                @passAgent="updateAgent"
             ></GameView>
         </div>
     </div>
@@ -57,9 +69,11 @@
 <script lang="ts" setup>
 import { qlSettingsDefault } from '~~/utils/settingsInterfaces/QLSettings';
 import { mcSettingsDefault } from '~~/utils/settingsInterfaces/MCSettings';
+import { dqnSettingsDefault } from '~~/utils/settingsInterfaces/DQNSettings';
 import defaultTrainingSettings from '~~/utils/settingsInterfaces/trainingSettings';
 import { SelectionType, ButtonSize, IconColor } from '~~/utils/enums';
 import { PropType, Ref } from 'vue';
+import { TrainableAgent } from 'quickrl.core';
 
 const gameViewRef: Ref<any> = ref(null);
 
@@ -73,6 +87,13 @@ defineProps({
 
 function startTrainingHander() {
     gameViewRef.value.initializeTraining();
+}
+
+let agent: TrainableAgent;
+
+function updateAgent(passedAgent: TrainableAgent) {
+    agent = passedAgent;
+    console.log(agent);
 }
 </script>
 

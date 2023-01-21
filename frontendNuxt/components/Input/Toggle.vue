@@ -1,7 +1,7 @@
 <template>
     <div class="toggleContainer">
         <h3 class="title">{{ title }}</h3>
-        <label class="switch">
+        <label class="switch" :class="[accentColor]">
             <input
                 type="checkbox"
                 :checked="value"
@@ -14,39 +14,16 @@
     </div>
 </template>
 
-<!-- <script lang="ts">
-import { defineComponent } from 'vue';
-
-export default defineComponent({
-    expose: ['value'],
-    props: {
-        title: String,
-        name: String,
-        defaultValue: Boolean,
-        disabled: Boolean,
-    },
-    setup() {
-        return {};
-    },
-    data() {
-        return { value: this.defaultValue ? this.defaultValue : false };
-    },
-    methods: {
-        finishEdit() {
-            this.value = !this.value;
-            this.$emit('updated', this.value);
-        },
-    },
-});
-</script> -->
 <script setup lang="ts">
-import { defineProps } from 'vue';
+import { defineProps, PropType } from 'vue';
+import { IconColor } from '~~/utils/enums';
 
 const props = defineProps({
     title: String,
     name: String,
     defaultValue: Boolean,
     disabled: Boolean,
+    accentColor: Object as PropType<IconColor>,
 });
 
 let value = props.defaultValue ? props.defaultValue : false;
@@ -91,12 +68,36 @@ input:disabled + .slider {
     @apply opacity-40;
 }
 
-input:checked + .slider {
-    @apply bg-sky-400;
+.green input:checked + .slider {
+    @apply bg-green-600;
 }
 
-input:focus + .slider {
-    @apply shadow-sky-400;
+.green input:focus + .slider {
+    @apply shadow-green-600;
+}
+
+.amber input:checked + .slider {
+    @apply bg-amber-600;
+}
+
+.amber input:focus + .slider {
+    @apply shadow-amber-600;
+}
+
+.sky input:checked + .slider {
+    @apply bg-sky-600;
+}
+
+.sky input:focus + .slider {
+    @apply shadow-sky-600;
+}
+
+.sky input:checked + .slider {
+    @apply bg-pink-600;
+}
+
+.sky input:focus + .slider {
+    @apply shadow-pink-600;
 }
 
 input:checked + .slider:before {

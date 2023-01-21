@@ -113,6 +113,5 @@ export default class TaxiEnv extends SingleAgentEnvironment {
             'average Game Score:',
             this.averageGameScore / this.intervalCount
         );
-        this.resetStats();
     }
 }

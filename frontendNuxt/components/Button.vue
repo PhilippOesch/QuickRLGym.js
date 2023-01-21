@@ -4,29 +4,6 @@
     </div>
 </template>
 
-<!-- <script lang="ts">
-import { defineComponent, PropType } from 'vue';
-import { ButtonSize } from '~~/utils/enums';
-
-export default defineComponent({
-    props: {
-        handler: Function,
-        value: String,
-        size: {
-            type: Object as PropType<ButtonSize>,
-            default: ButtonSize.Normal,
-        },
-    },
-    setup() {
-        return {};
-    },
-    methods: {
-        clickHandler() {
-            if (this.handler) this.handler();
-        },
-    },
-});
-</script> -->
 <script lang="ts" setup>
 import { defineProps, PropType } from 'vue';
 import { ButtonSize } from '~~/utils/enums';

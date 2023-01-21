@@ -11,42 +11,23 @@ interface IQLSettings {
 export const qlSettingsDefault: IQLSettings = {
     learningRate: {
         displayName: 'Learning Rate',
-        setting: {
-            max: 1,
-            min: 0,
-            stepSize: 0.000001,
-        },
+        setting: new SettingNumber(0.000001, 0, 1),
     },
     discountFactor: {
         displayName: 'Discount Factor',
-        setting: {
-            max: 1,
-            min: 0,
-            stepSize: 0.001,
-        },
+        setting: new SettingNumber(0.001, 0, 1),
     },
     epsilonStart: {
         displayName: 'Epsilon Start',
-        setting: {
-            max: 1,
-            min: 0,
-            stepSize: 0.01,
-        },
+        setting: new SettingNumber(0.01, 0, 1),
     },
     epsilonEnd: {
         displayName: 'Epsilon End',
-        setting: {
-            max: 1,
-            min: 0,
-            stepSize: 0.01,
-        },
+        setting: new SettingNumber(0.01, 0, 1),
     },
     epsilonDecaySteps: {
         displayName: 'Epsilon Decay Steps',
-        setting: {
-            min: 0,
-            stepSize: 1,
-        },
+        setting: new SettingNumber(1, 0),
     },
 };
 

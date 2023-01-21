@@ -7,6 +7,7 @@ import Environment, { EnvOptions } from './RLInterface/Environment';
 import * as Envs from './Envs';
 import QuickRLJS from './RLInterface/QuickRLJS';
 import FileManager from './RLInterface/FileManager';
+import TrainableAgent from './RLInterface/TrainableAgent';
 import * as Agents from './Agents';
 import * as Games from './Games';
 import * as Utils from './Utils';
@@ -16,6 +17,7 @@ export {
     type FileManager,
     type StepResult,
     type EnvOptions,
+    type TrainableAgent,
     Agents,
     Envs,
     Games,

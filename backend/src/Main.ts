@@ -39,6 +39,7 @@ async function trainBlackJack() {
 
     env.setAgent = agent;
     env.initAgent();
+    fileManager.path = './models/qTables/blackjack/qTable.json';
     await env.train(numIterations, logEvery);
     await agent.save('./models/qTables/blackjack/qTable.json', fileManager);
 }
@@ -65,6 +66,7 @@ async function trainTaxiQLAgent() {
     );
     env.setAgent = agent;
     env.initAgent();
+    fileManager.path = './models/qTables/taxi/qTable.json';
     await env.train(numIterations, logEvery, maxIterationsPerGame);
     await agent.save('./models/qTables/taxi/qTable.json', fileManager);
 }
@@ -86,6 +88,7 @@ async function trainTaxiMCAgent() {
     });
     env.setAgent = agent;
     env.initAgent();
+    fileManager.path = './models/qTables/taxi/qTable.json';
     await env.train(numIterations, logEvery, maxIterationsPerGame);
     await agent.save('./models/MCAgent/taxi/mcagent.json', fileManager);
 }
@@ -108,6 +111,7 @@ async function trainBlackJackMCAgent() {
     env.setAgent = agent;
     env.initAgent();
     env.train(numIterations, logEvery);
+    fileManager.path = './models/MCAgent/blackjack/mcagent.json';
     await agent.save('./models/MCAgent/blackjack/mcagent.json', fileManager);
 }
 

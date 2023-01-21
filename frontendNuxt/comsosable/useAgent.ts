@@ -4,6 +4,7 @@ const agentMapping: Map<string, typeof Agent> = new Map<string, typeof Agent>([
     ['random', Agents.MCAgent],
     ['QLearning', Agents.QLAgent],
     ['MCLearning', Agents.MCAgent],
+    ['DQN', Agents.DQNAgent],
 ]);
 
 export default function useAgent(

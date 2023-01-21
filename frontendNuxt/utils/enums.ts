@@ -20,3 +20,10 @@ export enum InputStyleType {
     Dark = 'inputDark',
     Light = 'inputLight',
 }
+
+export enum InputType {
+    Toggle = 'Toggle',
+    Slider = 'Slider',
+    Number = 'Number',
+    Array = 'Array',
+}

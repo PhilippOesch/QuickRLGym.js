@@ -1,6 +1,6 @@
 import { strict as assert } from 'node:assert';
 import { describe } from 'mocha';
-import { Vec2, StepResult } from '..';
+import { Utils, StepResult } from '..';
 //import { TaxiGame, TaxiGameState } from '../Games/TaxiGame';
 import { Games } from '..';
 
@@ -9,7 +9,7 @@ describe('TaxiGame', function () {
     game.initGame();
     describe('initial State', function () {
         const initialState: Games.Taxi.TaxiGameState = {
-            playerPos: new Vec2(2, 3),
+            playerPos: new Utils.Vec2(2, 3),
             destinationIdx: 0,
             customerPosIdx: 2,
         };
@@ -49,7 +49,7 @@ describe('TaxiGame', function () {
 
     describe('Movement pos (0, 1)', function () {
         const initialState: Games.Taxi.TaxiGameState = {
-            playerPos: new Vec2(0, 1),
+            playerPos: new Utils.Vec2(0, 1),
             destinationIdx: 0,
             customerPosIdx: 2,
         };
@@ -65,28 +65,28 @@ describe('TaxiGame', function () {
             const stepResult = game.step('Right') as StepResult;
             const newState = stepResult.newState as Games.Taxi.TaxiGameState;
             assert.strictEqual(stepResult.reward, -1);
-            assert.strict(newState.playerPos.isEqual(new Vec2(1, 1)));
+            assert.strict(newState.playerPos.isEqual(new Utils.Vec2(1, 1)));
         });
         it('move Up to (0,0)', function () {
             game.reset(true, initialState);
             const stepResult = game.step('Up') as StepResult;
             const newState = stepResult.newState as Games.Taxi.TaxiGameState;
             assert.strictEqual(stepResult.reward, -1);
-            assert.strict(newState.playerPos.isEqual(new Vec2(0, 0)));
+            assert.strict(newState.playerPos.isEqual(new Utils.Vec2(0, 0)));
         });
         it('move Down to (0,2)', function () {
             game.reset(true, initialState);
             const stepResult = game.step('Down') as StepResult;
             const newState = stepResult.newState as Games.Taxi.TaxiGameState;
             assert.strictEqual(stepResult.reward, -1);
-            assert.strict(newState.playerPos.isEqual(new Vec2(0, 2)));
+            assert.strict(newState.playerPos.isEqual(new Utils.Vec2(0, 2)));
         });
     });
 
     describe('pickup', function () {
         it('successfull pickup', function () {
             const initialState: Games.Taxi.TaxiGameState = {
-                playerPos: new Vec2(0, 0),
+                playerPos: new Utils.Vec2(0, 0),
                 destinationIdx: 1,
                 customerPosIdx: 0,
             };
@@ -99,7 +99,7 @@ describe('TaxiGame', function () {
 
         it('unsuccessfull pickup', function () {
             const initialState: Games.Taxi.TaxiGameState = {
-                playerPos: new Vec2(0, 3),
+                playerPos: new Utils.Vec2(0, 3),
                 destinationIdx: 1,
                 customerPosIdx: 0,
             };
@@ -114,7 +114,7 @@ describe('TaxiGame', function () {
     describe('dropoff', function () {
         it('successfull dropoff', function () {
             const initialState: Games.Taxi.TaxiGameState = {
-                playerPos: new Vec2(0, 4),
+                playerPos: new Utils.Vec2(0, 4),
                 destinationIdx: 1,
                 customerPosIdx: 4,
             };
@@ -127,7 +127,7 @@ describe('TaxiGame', function () {
 
         it('unsuccessfull dropoff', function () {
             const initialState: Games.Taxi.TaxiGameState = {
-                playerPos: new Vec2(0, 3),
+                playerPos: new Utils.Vec2(0, 3),
                 destinationIdx: 1,
                 customerPosIdx: 0,
             };
@@ -143,7 +143,7 @@ describe('TaxiGame', function () {
         const game: Games.Taxi.TaxiGame = new Games.Taxi.TaxiGame();
         game.initGame();
         const initialState: Games.Taxi.TaxiGameState = {
-            playerPos: new Vec2(0, 1),
+            playerPos: new Utils.Vec2(0, 1),
             destinationIdx: 1,
             customerPosIdx: 0,
         };

@@ -116,6 +116,8 @@ let agent: undefined | Agent;
 let iteration: Ref<number> = ref(0);
 let sceneInfo: SceneInfo | undefined;
 
+const emit = defineEmits(['passAgent']);
+
 async function trainingLoop(
     env: SingleAgentEnvironment,
     iterationsLeft: number,
@@ -129,6 +131,7 @@ async function trainingLoop(
         iteration.value += trainingIterations;
         reactiveInfo.stats = sceneInfo!.env!.stats;
 
+        console.log(reactiveInfo.stats);
         console.log('iteration', iteration.value);
 
         await renderGame();
@@ -139,9 +142,11 @@ async function trainingLoop(
         // stats.value = env.stats;
         console.log('iteration', env.iteration);
         settingsStore.setActiveState(props.id, true);
+        await renderGame();
         console.log('end Training');
         isTraining.value = false;
         reactiveInfo.stats = sceneInfo!.env!.stats;
+        emit('passAgent', agent);
     }
 }
 async function renderGame() {
