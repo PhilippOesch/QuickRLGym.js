@@ -14,12 +14,12 @@
             <hr />
             <h2 class="menuTitle">Games</h2>
             <template v-for="link in links" :key="link.link">
-                <NuxtLink class="menuLink" :to="link.link">
+                <div class="menuLink" @click="navigate(link.link)">
                     <i :class="setClasses(link)" :alt="link.title" />
                     <div class="rightSide">
                         <span>{{ link.title }}</span>
                     </div>
-                </NuxtLink>
+                </div>
             </template>
         </div>
     </div>
@@ -41,18 +41,18 @@ const links = [
         icon: 'card',
         color: IconColor.Green,
     },
-    {
-        title: 'Grid World',
-        link: '/Games/TaxiGame',
-        icon: 'grid',
-        color: IconColor.Sky,
-    },
-    {
-        title: 'Tic-Tac-Toe',
-        link: '/Games/BlackJackGame',
-        icon: 'tic-tac-toe',
-        color: IconColor.Pink,
-    },
+    // {
+    //     title: 'Grid World',
+    //     link: '/Games/TaxiGame',
+    //     icon: 'grid',
+    //     color: IconColor.Sky,
+    // },
+    // {
+    //     title: 'Tic-Tac-Toe',
+    //     link: '/Games/BlackJackGame',
+    //     icon: 'tic-tac-toe',
+    //     color: IconColor.Pink,
+    // },
 ];
 
 const menuOpen: Ref<boolean> = ref(false);
@@ -63,6 +63,11 @@ function toggleMenu(): void {
 
 function setClasses(link: any): string[] {
     return ['icon', 'quickrl-' + link.icon, `text-${link.color}-500`];
+}
+
+function navigate(link: string) {
+    menuOpen.value = false;
+    navigateTo(link);
 }
 </script>
 

@@ -30,20 +30,20 @@ const links = [
         icon: 'card',
         color: IconColor.Green,
     },
-    {
-        title: 'Grid World',
-        link: '/Games/Taxi',
-        description: 'A Grid World Implementation',
-        icon: 'grid',
-        color: IconColor.Sky,
-    },
-    {
-        title: 'Tic-Tac-Toe',
-        link: '/Games/BlackJack',
-        description: 'Standard Tic-Tac-Toe Implementation',
-        icon: 'tic-tac-toe',
-        color: IconColor.Pink,
-    },
+    // {
+    //     title: 'Grid World',
+    //     link: '/Games/Taxi',
+    //     description: 'A Grid World Implementation',
+    //     icon: 'grid',
+    //     color: IconColor.Sky,
+    // },
+    // {
+    //     title: 'Tic-Tac-Toe',
+    //     link: '/Games/BlackJack',
+    //     description: 'Standard Tic-Tac-Toe Implementation',
+    //     icon: 'tic-tac-toe',
+    //     color: IconColor.Pink,
+    // },
 ];
 
 function setClasses(link: any) {

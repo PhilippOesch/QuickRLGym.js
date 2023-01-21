@@ -1,6 +1,6 @@
 <template>
     <div class="mainContainer">
-        <Menu></Menu>
+        <!-- <Menu></Menu> -->
         <h1>Taxi Game</h1>
         <!-- <GameTaxi></GameTaxi> -->
         <Game gameId="Taxi" :accentColor="IconColor.Amber"></Game>
@@ -8,4 +8,8 @@
 </template>
 <script setup lang="ts">
 import { IconColor } from '~~/utils/enums';
+
+definePageMeta({
+    layout: 'game-page',
+});
 </script>

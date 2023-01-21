@@ -136,11 +136,8 @@ export default class QLAgent extends Agent implements TrainableAgent {
      * @param pathString - path to save the qtable to
      * @param fileManager - use of dependency infection to allow for different filemanagement implementations
      */
-    public async save(
-        pathString: string,
-        fileManager: FileManager
-    ): Promise<void> {
-        await fileManager.save(pathString, this.qTable);
+    public async save(fileManager: FileManager): Promise<void> {
+        await fileManager.save(this.qTable);
     }
 
     /**
@@ -148,11 +145,8 @@ export default class QLAgent extends Agent implements TrainableAgent {
      * @param pathString - path to load the qtable from
      * @param fileManager - use of dependency infection to allow for different filemanagement implementations
      */
-    public async load(
-        pathString: string,
-        fileManager: FileManager
-    ): Promise<void> {
-        const loadObject: object = await fileManager.load(pathString);
+    public async load(fileManager: FileManager): Promise<void> {
+        const loadObject: object = await fileManager.load();
         this.qTable = Utils.Tensor.fromLoadObject(
             loadObject as Utils.JSONTensor
         );
