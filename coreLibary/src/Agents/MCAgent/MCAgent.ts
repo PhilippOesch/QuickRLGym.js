@@ -205,8 +205,8 @@ export default class MCAgent extends Agent implements TrainableAgent {
     public async load(fileManager: FileManager): Promise<void> {
         const loadObject: MCSaveFormat =
             (await fileManager.load()) as MCSaveFormat;
-        this.valueTable = Utils.Tensor.fromLoadObject(loadObject.valueTable);
-        this.stateReturnCountTable = Utils.Tensor.fromLoadObject(
+        this.valueTable = Utils.Tensor.fromJSONObject(loadObject.valueTable);
+        this.stateReturnCountTable = Utils.Tensor.fromJSONObject(
             loadObject.stateReturnCountTable
         );
     }

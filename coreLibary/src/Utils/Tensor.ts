@@ -36,7 +36,7 @@ export class Tensor {
         return new Tensor(dims, array);
     }
 
-    public static fromLoadObject(jsonTensor: JSONTensor) {
+    public static fromJSONObject(jsonTensor: JSONTensor) {
         return new Tensor(jsonTensor.dim, jsonTensor.array);
     }
 

@@ -19,10 +19,15 @@ const props = defineProps({
 
 const fileManager = new BrowserFileManager();
 
-function save() {
+function save(): void {
+    if (props.agentObject == undefined) {
+        return;
+    }
+
     console.log('save Agent');
     console.log(props.agentObject);
-    props.agentObject?.save('model.json', fileManager);
+    fileManager.path = 'model.json';
+    props.agentObject.save(fileManager);
 }
 </script>
 

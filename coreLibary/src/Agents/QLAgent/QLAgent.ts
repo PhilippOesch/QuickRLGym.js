@@ -147,7 +147,7 @@ export default class QLAgent extends Agent implements TrainableAgent {
      */
     public async load(fileManager: FileManager): Promise<void> {
         const loadObject: object = await fileManager.load();
-        this.qTable = Utils.Tensor.fromLoadObject(
+        this.qTable = Utils.Tensor.fromJSONObject(
             loadObject as Utils.JSONTensor
         );
     }

@@ -51,7 +51,7 @@
                     :settingsObject="defaultTrainingSettings"
                     :selectionType="SelectionType.FreeStanding"
                 />
-                <FileLoader></FileLoader>
+                <FileLoader :agentObject="agent"></FileLoader>
                 <Saver :agentObject="agent"></Saver>
             </div>
         </Tab>

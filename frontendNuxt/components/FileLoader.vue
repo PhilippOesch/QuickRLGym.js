@@ -1,38 +1,43 @@
 <template>
-    <div>
-        <input type="file" @change="loadAgent()" ref="loaderInput" />
+    <div class="fileLoaderContainer">
+        <input
+            class="fileLoaderElement"
+            type="file"
+            @change="loadAgent()"
+            ref="loaderInput"
+        />
     </div>
 </template>
 
 <script setup lang="ts">
+import { TrainableAgent } from 'quickrl.core';
+import { PropType } from 'vue';
+import BrowserFileManager from '~~/utils/BrowserFileManager';
+
 const loaderInput = ref();
 
 const validFileTypes = ['application/json'];
 
-async function loadAgent() {
+const props = defineProps({
+    agentObject: Object as PropType<TrainableAgent>,
+});
+
+const fileManager: BrowserFileManager = new BrowserFileManager();
+
+async function loadAgent(): Promise<void> {
+    console.log('load');
+    if (props.agentObject == undefined) {
+        return;
+    }
+    console.log(props.agentObject);
+
     const files: File[] = loaderInput.value.files;
 
-    for (const file of files) {
-        if (isValidFileType(file)) {
-            const content = await readJSONFile(file);
-            console.log(content);
-        }
+    if (isValidFileType(files[0])) {
+        fileManager.file = files[0];
+        await props.agentObject?.load(fileManager);
     }
-}
-
-async function readJSONFile(file: File): Promise<string> {
-    var fileReader = new FileReader();
-    fileReader.readAsText(file);
-    let res: string = await new Promise<string>((resolve) => {
-        let result = '';
-        fileReader.onload = (evt: any) => {
-            result += evt.target.result;
-        };
-        fileReader.onloadend = () => {
-            resolve(result);
-        };
-    });
-    return res;
+    console.log(props.agentObject);
 }
 
 function isValidFileType(file: File) {
