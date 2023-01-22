@@ -44,7 +44,7 @@ export default abstract class Agent {
      * @param config - The config object
      * @param randomSeed - The random Seed
      */
-    abstract setOptions(config: object, randomSeed?: number): void;
+    abstract setOptions(config?: object, randomSeed?: number): void;
 
     /**
      * Method to select an action for prediction

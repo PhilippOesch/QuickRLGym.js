@@ -60,9 +60,9 @@ export default class MCAgent extends Agent implements TrainableAgent {
         }
     }
 
-    public setOptions(config: MCAgentSettings, randomSeed?: number): void {
+    public setOptions(config?: MCAgentSettings, randomSeed?: number): void {
         this.setRandomSeed(randomSeed);
-        this.config = config;
+        if (config != undefined) this.config = config;
     }
 
     step(state: object): string {

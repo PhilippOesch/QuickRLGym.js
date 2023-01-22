@@ -5,7 +5,6 @@ import SingleAgentEnvironment, {
 } from '../../RLInterface/SingleAgentEnvironment';
 import * as tf from '@tensorflow/tfjs';
 import { MathUtils } from '../../Utils';
-import { layers } from '@tensorflow/tfjs';
 
 interface Experience {
     prevState: number[];
@@ -68,7 +67,7 @@ export default class DQNAgent extends Agent {
 
     public setOptions(config: DQNAgentSettings, randomSeed?: number): void {
         this.setRandomSeed(randomSeed);
-        this.config = config;
+        if (config != undefined) this.config = config;
     }
 
     init(): void {

@@ -40,9 +40,9 @@ export default class QLAgent extends Agent implements TrainableAgent {
         this.config = config;
     }
 
-    public setOptions(config: QLAgentSettings, randomSeed?: number): void {
+    public setOptions(config?: QLAgentSettings, randomSeed?: number): void {
         this.setRandomSeed(randomSeed);
-        this.config = config;
+        if (config != undefined) this.config = config;
     }
 
     public get getQTable(): Utils.Tensor {
