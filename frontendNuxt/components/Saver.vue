@@ -9,12 +9,12 @@
 </template>
 
 <script lang="ts" setup>
-import { PropType } from 'vue';
 import BrowserFileManager from '~~/utils/BrowserFileManager';
 import { TrainableAgent } from 'quickrl.core';
+import { PropType } from 'vue';
 
 const props = defineProps({
-    agentObject: Object as PropType<TrainableAgent>,
+    agentObject: Object as PropType<any>,
 });
 
 const fileManager = new BrowserFileManager();
@@ -24,10 +24,12 @@ function save(): void {
         return;
     }
 
+    const trainableAgent = props.agentObject as TrainableAgent;
+
     console.log('save Agent');
     console.log(props.agentObject);
     fileManager.path = 'model.json';
-    props.agentObject.save(fileManager);
+    trainableAgent.save(fileManager);
 }
 </script>
 

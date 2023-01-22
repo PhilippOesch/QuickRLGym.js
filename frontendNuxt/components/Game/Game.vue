@@ -51,7 +51,11 @@
                     :settingsObject="defaultTrainingSettings"
                     :selectionType="SelectionType.FreeStanding"
                 />
-                <FileLoader :agentObject="agent"></FileLoader>
+                <FileLoader
+                    :env="env"
+                    :agentObject="agent"
+                    @loadNewAgent="onLoadNewAgent"
+                ></FileLoader>
                 <Saver :agentObject="agent"></Saver>
             </div>
         </Tab>
@@ -61,7 +65,9 @@
                 :training-iteration="25"
                 :id="gameId"
                 ref="gameViewRef"
-                @passAgent="updateAgent"
+                :agent="agent"
+                @passAgent="onPassAgent"
+                @initializeScene="updateSceneInfo"
             ></GameView>
         </div>
     </div>
@@ -73,11 +79,15 @@ import { dqnSettingsDefault } from '~~/utils/settingsInterfaces/DQNSettings';
 import defaultTrainingSettings from '~~/utils/settingsInterfaces/trainingSettings';
 import { SelectionType, ButtonSize, IconColor } from '~~/utils/enums';
 import { PropType, Ref } from 'vue';
-import { TrainableAgent } from 'quickrl.core';
+import { Agent, SingleAgentEnvironment, TrainableAgent } from 'quickrl.core';
+import { SceneInfo } from '~~/comsosable/useGameEnv';
+import useTabStore from '~~/comsosable/useTabStore';
 
 const gameViewRef: Ref<any> = ref(null);
 
-defineProps({
+let env: SingleAgentEnvironment | undefined;
+
+const props = defineProps({
     gameId: {
         type: String,
         required: true,
@@ -85,16 +95,34 @@ defineProps({
     accentColor: Object as PropType<IconColor>,
 });
 
+const { getOpenTab } = useTabStore();
+
+function updateSceneInfo(trainingEnv: SingleAgentEnvironment) {
+    env = trainingEnv;
+}
+
 function startTrainingHander() {
     gameViewRef.value.initializeTraining();
 }
 
-let agent: TrainableAgent;
+let agent: Agent | undefined;
 
-function updateAgent(passedAgent: TrainableAgent) {
+function onPassAgent(passedAgent: any) {
     agent = passedAgent;
     console.log(agent);
 }
+
+function onLoadNewAgent(loadedAgent: any) {
+    agent = loadedAgent;
+    console.log(agent);
+}
+
+watch(
+    () => getOpenTab(`${props.gameId}-AlgTab`),
+    () => {
+        agent = undefined;
+    }
+);
 </script>
 
 <style lang="postcss" scoped>

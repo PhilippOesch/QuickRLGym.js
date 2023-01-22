@@ -34,7 +34,7 @@
 
 <script lang="ts" setup>
 import { Agent, Environment, SingleAgentEnvironment } from 'quickrl.core';
-import { Ref } from 'vue';
+import { PropType, Ref } from 'vue';
 import { SceneInfo } from '~~/comsosable/useGameEnv';
 import useSettingsStore from '~~/comsosable/useSettingsStore';
 import useAgent from '~~/comsosable/useAgent';
@@ -72,12 +72,16 @@ async function initializeTraining() {
     );
     env.setOptions(gameSettings);
 
-    agent = useAgent(
-        activeAlgorithm,
-        sceneInfo?.env as Environment,
-        getAgentSettings,
-        gameSettings.randomSeed
-    );
+    if (agent == undefined) {
+        agent = useAgent(
+            activeAlgorithm,
+            sceneInfo?.env as Environment,
+            getAgentSettings,
+            gameSettings.randomSeed
+        );
+    } else {
+        agent.setOptions(getAgentSettings, gameSettings.randomSeed);
+    }
     env.setAgent = agent as Agent;
     env.initAgent();
 
@@ -103,6 +107,9 @@ const props = defineProps({
         type: Number,
         default: 100,
     },
+    agent: {
+        type: Object as PropType<Agent>,
+    },
 });
 const settingsStore = useSettingsStore();
 
@@ -116,7 +123,7 @@ let agent: undefined | Agent;
 let iteration: Ref<number> = ref(0);
 let sceneInfo: SceneInfo | undefined;
 
-const emit = defineEmits(['passAgent']);
+const emit = defineEmits(['passAgent', 'initializeScene']);
 
 async function trainingLoop(
     env: SingleAgentEnvironment,
@@ -176,6 +183,7 @@ onMounted(async () => {
     await nextTick();
     const parent = gameContainer.value as HTMLElement;
     sceneInfo = useGetGameScene(props.id, parent) as SceneInfo;
+    emit('initializeScene', sceneInfo.env);
 
     reactiveInfo.gameInfo = sceneInfo.gameScene!.gameInfo;
     reactiveInfo.stats = sceneInfo.env!.stats;

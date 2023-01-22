@@ -10,7 +10,7 @@ const agentMapping: Map<string, typeof Agent> = new Map<string, typeof Agent>([
 export default function useAgent(
     agentName: string,
     env: Environment,
-    options: object,
+    options?: object,
     randomSeed?: number
 ): Agent {
     const agentType = agentMapping.get(agentName) as any;
