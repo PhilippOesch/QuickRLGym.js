@@ -68,7 +68,7 @@ import { IconColor, InputStyleType, SelectionType } from '~~/utils/enums';
 import useSettingsStore from '~~/comsosable/useSettingsStore';
 
 const props = defineProps({
-    gameID: {
+    gameId: {
         type: String,
         required: true,
     },
@@ -94,14 +94,12 @@ const props = defineProps({
 
 const settingsStore = useSettingsStore();
 
-let isDisabled = computed(() => !settingsStore.getIsActive(props.gameID));
+let isDisabled = computed(() => !settingsStore.getIsActive(props.gameId));
 
-let settings = settingsStore.getSetting(props.gameID, props.algorithmName);
-console.log('settings', settings);
+let settings = settingsStore.getSetting(props.gameId, props.algorithmName);
 
 if (props.algorithmName !== 'gameSettings') {
-    settingsStore.setActiveAlgorithm(props.gameID, props.algorithmName);
-    console.log(props);
+    settingsStore.setActiveAlgorithm(props.gameId, props.algorithmName);
 }
 
 function getType(item: any): string {
@@ -122,7 +120,7 @@ function getType(item: any): string {
 
 function updateSettings(value: any, index: string): void {
     settings = { ...settings, [index]: value };
-    settingsStore.updateSetting(props.gameID, props.algorithmName, settings);
+    settingsStore.updateSetting(props.gameId, props.algorithmName, settings);
 }
 </script>
 

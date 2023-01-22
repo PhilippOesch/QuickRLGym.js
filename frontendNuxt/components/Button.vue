@@ -1,5 +1,8 @@
 <template>
-    <div :class="`buttonContainer ${size}`" @click="clickHandler">
+    <div
+        :class="[`buttonContainer`, size, { buttonDisabled: disabled }]"
+        @click="clickHandler"
+    >
         {{ value }}
     </div>
 </template>
@@ -15,6 +18,7 @@ const props = defineProps({
         type: Object as PropType<ButtonSize>,
         default: ButtonSize.Normal,
     },
+    disabled: Boolean,
 });
 
 function clickHandler() {
@@ -33,5 +37,9 @@ function clickHandler() {
 
 .btn-small {
     @apply py-1 px-2 text-sm;
+}
+
+.buttonDisabled {
+    @apply opacity-40 cursor-default hover:bg-darkPurple-700;
 }
 </style>

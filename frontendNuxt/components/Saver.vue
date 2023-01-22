@@ -4,6 +4,7 @@
             :size="ButtonSize.Large"
             value="Save Model"
             @click="save"
+            :disabled="agentObject == undefined || !getIsActive(gameId)"
         ></Button>
     </div>
 </template>
@@ -12,12 +13,19 @@
 import BrowserFileManager from '~~/utils/BrowserFileManager';
 import { TrainableAgent } from 'quickrl.core';
 import { PropType } from 'vue';
+import useSettingsStore from '~~/comsosable/useSettingsStore';
 
 const props = defineProps({
-    agentObject: Object as PropType<any>,
+    agentObject: Object as PropType<TrainableAgent>,
+    gameId: {
+        type: String,
+        required: true,
+    },
 });
 
 const fileManager = new BrowserFileManager();
+
+const { getIsActive } = useSettingsStore();
 
 function save(): void {
     if (props.agentObject == undefined) {
@@ -32,5 +40,3 @@ function save(): void {
     trainableAgent.save(fileManager);
 }
 </script>
-
-<style scoped></style>

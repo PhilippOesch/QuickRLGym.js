@@ -43,8 +43,6 @@ const props = defineProps({
 
 const tabStore = useTabStore();
 
-console.log(tabStore.$state);
-
 for (const tab of props.tabs) {
     tabStore.add(props.groupName, tab);
 }

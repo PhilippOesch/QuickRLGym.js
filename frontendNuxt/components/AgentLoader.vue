@@ -10,7 +10,7 @@
 </template>
 
 <script setup lang="ts">
-import { SingleAgentEnvironment, TrainableAgent } from 'quickrl.core';
+import { Agent, SingleAgentEnvironment, TrainableAgent } from 'quickrl.core';
 import { PropType } from 'vue';
 import useAgent from '~~/comsosable/useAgent';
 import useSettingsStore from '~~/comsosable/useSettingsStore';
@@ -29,7 +29,7 @@ const props = defineProps({
     env: {
         type: Object as PropType<SingleAgentEnvironment>,
     },
-    agentObject: Object as PropType<TrainableAgent>,
+    agentObject: Object as PropType<Agent>,
 });
 
 const emit = defineEmits(['loadNewAgent']);
@@ -50,7 +50,8 @@ async function loadIntoExistingAgent() {
 
     if (isValidFileType(files[0])) {
         fileManager.file = files[0];
-        await props.agentObject?.load(fileManager);
+        const loadAgent: TrainableAgent = props.agentObject as any;
+        await loadAgent.load(fileManager);
     }
     console.log(props.agentObject);
 }
@@ -59,7 +60,8 @@ function isValidFileType(file: File) {
     return validFileTypes.includes(file.type);
 }
 
-const settingsStore = useSettingsStore();
+const { getActiveAlgorithm } = useSettingsStore();
+const tabStore = useTabStore();
 
 async function loadNewAgent(): Promise<void> {
     if (props.env == undefined) {
@@ -68,9 +70,7 @@ async function loadNewAgent(): Promise<void> {
         );
         return;
     }
-    const activeAlgorithm: string = settingsStore.getActiveAlgorithm(
-        props.gameId
-    );
+    const activeAlgorithm: string = getActiveAlgorithm(props.gameId);
 
     const agent: any = useAgent(activeAlgorithm, props.env);
     const files: File[] = loaderInput.value.files;
@@ -81,6 +81,13 @@ async function loadNewAgent(): Promise<void> {
     }
     emit('loadNewAgent', agent);
 }
+
+watch(
+    () => tabStore.getOpenTab(`${props.gameId}-AlgTab`),
+    () => {
+        loaderInput.value.value = null;
+    }
+);
 </script>
 
 <style scoped></style>

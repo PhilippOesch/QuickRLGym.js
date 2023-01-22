@@ -8,7 +8,7 @@
         <Tab :tabGroup="`${gameId}-AlgTab`" name="Q Learning">
             <ParamSelector
                 title="Parameters:"
-                :gameID="gameId"
+                :gameId="gameId"
                 algorithmName="QLearning"
                 :settingsObject="qlSettingsDefault"
                 :accentColor="accentColor"
@@ -17,7 +17,7 @@
         <Tab :tabGroup="`${gameId}-AlgTab`" name="Monte Carlo">
             <ParamSelector
                 title="Parameters:"
-                :gameID="gameId"
+                :gameId="gameId"
                 algorithmName="MCLearning"
                 :settingsObject="mcSettingsDefault"
                 :accentColor="accentColor"
@@ -26,7 +26,7 @@
         <Tab :tabGroup="`${gameId}-AlgTab`" name="DQN">
             <ParamSelector
                 title="Parameters:"
-                :gameID="gameId"
+                :gameId="gameId"
                 algorithmName="DQN"
                 :settingsObject="dqnSettingsDefault"
                 :accentColor="accentColor"
@@ -46,17 +46,21 @@
                     :size="ButtonSize.Large"
                 />
                 <ParamSelector
-                    :gameID="gameId"
+                    :gameId="gameId"
                     algorithmName="gameSettings"
                     :settingsObject="defaultTrainingSettings"
                     :selectionType="SelectionType.FreeStanding"
                 />
-                <FileLoader
+                <AgentLoader
+                    :gameId="gameId"
                     :env="env"
                     :agentObject="agent"
                     @loadNewAgent="onLoadNewAgent"
-                ></FileLoader>
-                <Saver :agentObject="agent"></Saver>
+                ></AgentLoader>
+                <Saver
+                    :agentObject="((agent as any) as TrainableAgent)"
+                    :gameId="gameId"
+                ></Saver>
             </div>
         </Tab>
         <Tab tabGroup="trainingBenchmarkSwitch" name="Benchmark"></Tab>
@@ -80,7 +84,6 @@ import defaultTrainingSettings from '~~/utils/settingsInterfaces/trainingSetting
 import { SelectionType, ButtonSize, IconColor } from '~~/utils/enums';
 import { PropType, Ref } from 'vue';
 import { Agent, SingleAgentEnvironment, TrainableAgent } from 'quickrl.core';
-import { SceneInfo } from '~~/comsosable/useGameEnv';
 import useTabStore from '~~/comsosable/useTabStore';
 
 const gameViewRef: Ref<any> = ref(null);
@@ -105,22 +108,22 @@ function startTrainingHander() {
     gameViewRef.value.initializeTraining();
 }
 
-let agent: Agent | undefined;
+let agent: Ref<Agent | undefined> = ref(undefined);
 
 function onPassAgent(passedAgent: any) {
-    agent = passedAgent;
-    console.log(agent);
+    agent.value = passedAgent;
+    console.log(agent.value);
 }
 
 function onLoadNewAgent(loadedAgent: any) {
-    agent = loadedAgent;
-    console.log(agent);
+    agent.value = loadedAgent;
+    console.log(agent.value);
 }
 
 watch(
     () => getOpenTab(`${props.gameId}-AlgTab`),
     () => {
-        agent = undefined;
+        agent.value = undefined;
     }
 );
 </script>

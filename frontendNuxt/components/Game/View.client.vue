@@ -146,7 +146,6 @@ async function trainingLoop(
     } else {
         await env.train(iterationsLeft, -1, maxIterations);
         iteration.value += iterationsLeft;
-        // stats.value = env.stats;
         console.log('iteration', env.iteration);
         settingsStore.setActiveState(props.id, true);
         await renderGame();
