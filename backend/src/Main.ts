@@ -1,6 +1,5 @@
 //import { SingleAgentEnvironment, Agents, QuickRLJS } from 'quickrl.core';
 import {
-    Agent,
     SingleAgentEnvironment,
     Agents,
     QuickRLJS,
@@ -147,6 +146,9 @@ async function trainTaxiDQN() {
     await agent.save(
         'file:///Users/philippoeschger/Documents/projects/QuickRLGym.js/backend/models/DQN/Taxi'
     );
+    // await agent.save(
+    //     'file:///Users/philippoeschger/Documents/projects/QuickRLGym.js/backend/models/DQN/test'
+    // );
 }
 
 main();

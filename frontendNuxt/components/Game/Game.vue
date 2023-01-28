@@ -88,7 +88,7 @@ import useTabStore from '~~/comsosable/useTabStore';
 
 const gameViewRef: Ref<any> = ref(null);
 
-let env: SingleAgentEnvironment | undefined;
+let env: Ref<SingleAgentEnvironment | undefined> = ref(undefined);
 
 const props = defineProps({
     gameId: {
@@ -101,7 +101,9 @@ const props = defineProps({
 const { getOpenTab } = useTabStore();
 
 function updateSceneInfo(trainingEnv: SingleAgentEnvironment) {
-    env = trainingEnv;
+    console.log('test');
+    console.log(trainingEnv);
+    env.value = trainingEnv;
 }
 
 function startTrainingHander() {
