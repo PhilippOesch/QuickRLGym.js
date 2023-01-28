@@ -9,7 +9,7 @@ enum TensorFillType {
 
 export interface JSONTensor {
     dim: number[];
-    array: number[];
+    array: Array<any>;
 }
 
 /**
@@ -133,7 +133,7 @@ export class Tensor {
         this.validate(indices);
         if (
             !(indices.length === this.dim.length) &&
-            !this.isSameDimesion(this.get(...indices), value)
+            !Tensor.isSameDimension(this.get(...indices), value)
         ) {
             throw new Error(
                 `The provided value does not have the same dimension as the element to update`
@@ -164,12 +164,12 @@ export class Tensor {
      * @param {any} comp2 - object 2
      * @returns {boolean} true if both objects have the same dimension
      */
-    private isSameDimesion(comp1: any, comp2: any): boolean {
+    private static isSameDimension(comp1: any, comp2: any): boolean {
         if (!isNaN(comp1) && !isNaN(comp2)) {
             return true;
         }
-        const dimComp1 = this.getArrayDim(comp1);
-        const dimComp2 = this.getArrayDim(comp2);
+        const dimComp1 = Tensor.getArrayDim(comp1);
+        const dimComp2 = Tensor.getArrayDim(comp2);
         if (dimComp1.length !== dimComp2.length) {
             return false;
         }
@@ -186,7 +186,7 @@ export class Tensor {
      * @param {Array<any>} array - The array
      * @returns {number []} Returns the dimensions of the array
      */
-    private getArrayDim(array: Array<any>): number[] {
+    private static getArrayDim(array: Array<any>): number[] {
         let dim = [];
         let currentArray: any = array;
         do {
@@ -206,11 +206,50 @@ export class Tensor {
     }
 
     /**
+     * @returns {JSONTensor} The Tensor in JSONTensor Format
+     */
+    public toJSONTensor(): JSONTensor {
+        return {
+            dim: this.dim,
+            array: this.array,
+        };
+    }
+
+    /**
      * Get the total size of the tensor
      * @returns {number} The size
      */
     public get size(): number {
         return this.dim.reduce((a, b) => a * b);
+    }
+
+    public isEqual(comp: Tensor): boolean {
+        if (comp === undefined) return false;
+
+        return Tensor.recIsEqual(this.array, comp.array);
+    }
+
+    private static recIsEqual(comp1: Array<any>, comp2: Array<any>): boolean {
+        if (
+            (isNaN(comp1[0]) && !isNaN(comp2[0])) ||
+            (!isNaN(comp1[0]) && isNaN(comp2[0]))
+        )
+            return false;
+
+        if (comp1.length !== comp2.length) return false;
+
+        if (!isNaN(comp1[0]) && !isNaN(comp2[0])) {
+            for (let i = 0; i < comp1.length; i++) {
+                if (comp1[i] !== comp2[i]) return false;
+            }
+            return true;
+        }
+
+        for (let i = 0; i < comp1.length; i++) {
+            if (!Tensor.recIsEqual(comp1[i], comp2[i])) return false;
+        }
+
+        return true;
     }
 
     /**

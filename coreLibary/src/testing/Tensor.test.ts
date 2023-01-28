@@ -31,6 +31,22 @@ describe('Tensor', function () {
             assert.strictEqual(value, update.get(...indices));
         });
     });
+
+    describe('is equal', function () {
+        const original = Utils.Tensor.Random(...dims);
+        const copy = original.copy();
+
+        it(`The copy of an object should be of equal value to the original`, function () {
+            assert.strictEqual(true, original.isEqual(copy));
+        });
+
+        it(`When changing a value inside the copy it should be unequal`, function () {
+            const value = 12;
+            const indices: number[] = [3, 5, 2, 1, 1];
+            copy.set(indices, value);
+            assert.strictEqual(false, original.isEqual(copy));
+        });
+    });
 });
 
 describe('Tensor Zeros', function () {
