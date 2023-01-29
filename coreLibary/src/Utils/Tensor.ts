@@ -1,3 +1,5 @@
+import seedrandom from 'seedrandom';
+
 /**
  * Enum of Initialization Types for a Tensor-Object
  */
@@ -22,6 +24,12 @@ export class Tensor {
     private array: Array<any>;
 
     public constructor(dim: number[], array: Array<any>) {
+        if (!Tensor.isSameDimension(dim, Tensor.getArrayDim(array))) {
+            throw new Error(
+                'The dimension provided has to fit the size of the array'
+            );
+        }
+
         this.dim = dim;
         this.array = array;
     }
@@ -31,7 +39,7 @@ export class Tensor {
      * @param {number []} dims - The dimensions of the Tensor to initialize
      * @returns {Tensor} a filled Tensor
      */
-    public static Zeros(...dims: number[]): Tensor {
+    public static Zeros(dims: number[]): Tensor {
         const array = Tensor.init(dims, TensorFillType.Zeros);
         return new Tensor(dims, array);
     }
@@ -45,7 +53,7 @@ export class Tensor {
      * @param {number []} dims - The dimensions of the Tensor to initialize
      * @returns {Tensor} a filled Tensor
      */
-    public static Ones(...dims: number[]): Tensor {
+    public static Ones(dims: number[]): Tensor {
         const array = Tensor.init(dims, TensorFillType.Ones);
         return new Tensor(dims, array);
     }
@@ -55,8 +63,12 @@ export class Tensor {
      * @param {number []} dims - The dimensions of the Tensor to initialize
      * @returns {Tensor} a filled Tensor
      */
-    public static Random(...dims: number[]): Tensor {
-        const array = Tensor.init(dims, TensorFillType.Random);
+    public static Random(dims: number[], randomSeed?: number): Tensor {
+        let rng;
+        if (randomSeed != undefined) {
+            rng = seedrandom(randomSeed.toString());
+        }
+        const array = Tensor.init(dims, TensorFillType.Random, rng);
         return new Tensor(dims, array);
     }
 
@@ -68,16 +80,17 @@ export class Tensor {
      */
     private static init(
         dims: number[],
-        filltype: TensorFillType = TensorFillType.Zeros
+        filltype: TensorFillType = TensorFillType.Zeros,
+        rng?: seedrandom.PRNG
     ): Array<any> {
         if (dims.length === 1) {
-            return Tensor.fillArray(new Array<number>(dims[0]), filltype);
+            return Tensor.fillArray(new Array<number>(dims[0]), filltype, rng);
         }
         let array = new Array(dims[0]);
         const copyDims: number[] = [...dims];
         copyDims.shift();
         for (let i = 0; i < dims[0]; i++) {
-            array[i] = this.init(copyDims, filltype);
+            array[i] = Tensor.init(copyDims, filltype, rng);
         }
         return array;
     }
@@ -90,7 +103,8 @@ export class Tensor {
      */
     private static fillArray(
         array: number[],
-        fillType: TensorFillType
+        fillType: TensorFillType,
+        rng?: seedrandom.PRNG
     ): number[] {
         switch (fillType) {
             case TensorFillType.Zeros:
@@ -98,8 +112,13 @@ export class Tensor {
             case TensorFillType.Ones:
                 return array.fill(1);
             case TensorFillType.Random:
+                let rngGen = Math.random;
+                // use the random number generator when provided
+                if (rng != undefined) {
+                    rngGen = rng;
+                }
                 for (let i = 0; i < array.length; i++) {
-                    const rand: number = Math.random();
+                    const rand: number = rngGen();
                     array[i] = rand;
                 }
                 return array;
@@ -126,15 +145,11 @@ export class Tensor {
     /**
      * Set the value at a certain index
      * @param {number[]} indices - The indices of the position
-     * @param {number | any} value - The new value of the index
+     * @param {Array<any> | number} value - The new value of the index
      */
-    public set(indices: number[], value: number): void;
-    public set(indices: number[], value: any) {
+    public set(indices: number[], value: Array<any> | number): void {
         this.validate(indices);
-        if (
-            !(indices.length === this.dim.length) &&
-            !Tensor.isSameDimension(this.get(...indices), value)
-        ) {
+        if (!Tensor.isSameDimension(this.get(...indices), value)) {
             throw new Error(
                 `The provided value does not have the same dimension as the element to update`
             );
@@ -153,9 +168,26 @@ export class Tensor {
     private validate(indices: number[]): void {
         if (indices.length > this.dim.length) {
             throw new Error(
-                `Tensor has the dimension of ${this.dim.length} but ${indices.length} arguments where provided`
+                `Tensor has ${this.dim.length} dimensions but ${indices.length} indexes where provided`
             );
         }
+        if (this.indexOutOfRange(indices)) {
+            throw new Error(`The provided Index is out of range`);
+        }
+    }
+
+    /**
+     * Check if a provided index is out of range
+     * @param indices index array to check
+     * @returns true if the index is out of range and otherwise false
+     */
+    private indexOutOfRange(indices: number[]): boolean {
+        for (let i = 0; i < this.dim.length; i++) {
+            if (indices[i] >= this.dim[i]) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
@@ -187,12 +219,15 @@ export class Tensor {
      * @returns {number []} Returns the dimensions of the array
      */
     private static getArrayDim(array: Array<any>): number[] {
-        let dim = [];
+        let dim: number[] = [];
         let currentArray: any = array;
-        do {
-            dim.push(array.length);
-            currentArray = array[0];
-        } while (!isNaN(currentArray[0]));
+        if (array == undefined) {
+            return dim;
+        }
+        while (currentArray[0] != undefined) {
+            dim.push(currentArray.length);
+            currentArray = currentArray[0];
+        }
         return dim;
     }
 
@@ -203,6 +238,14 @@ export class Tensor {
     public copy(): Tensor {
         const copy = this.recCopy(this.array);
         return new Tensor([...this.dim], copy);
+    }
+
+    /**
+     *
+     * @returns a copy of just the inner array
+     */
+    public get seeArray(): Array<any> {
+        return this.recCopy(this.array);
     }
 
     /**

@@ -1,0 +1,1 @@
+{"learningRate":0.0001,"discountFactor":0.99,"nnLayer":[128,128,64],"epsilonStart":1,"epsilonEnd":0.01,"epsilonDecaySteps":10000,"hiddenLayerActivation":"relu","batchSize":32,"replayMemorySize":10000,"replayMemoryInitSize":1000,"activateDoubleDQN":true,"updateTargetEvery":10000,"layerNorm":false}

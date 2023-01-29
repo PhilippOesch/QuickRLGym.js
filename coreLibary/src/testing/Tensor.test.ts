@@ -5,7 +5,25 @@ import { Utils } from '..';
 const dims = [4, 6, 8, 7, 2];
 
 describe('Tensor', function () {
-    const tensor: Utils.Tensor = Utils.Tensor.Zeros(...dims);
+    const tensor: Utils.Tensor = Utils.Tensor.Zeros(dims);
+
+    describe('constructor', function () {
+        it('error should be thrown when the dimensions on initialization do not match.', function () {
+            const wrongDims = [3, 3, 3, 3];
+            assert.throws(
+                () => new Utils.Tensor(wrongDims, tensor.seeArray),
+                Error,
+                'The dimension provided has to fit the size of the array'
+            );
+        });
+
+        it('dimension and array align do no error is thrown', function () {
+            assert.doesNotThrow(
+                () => new Utils.Tensor(dims, tensor.seeArray),
+                Error
+            );
+        });
+    });
 
     describe('size', function () {
         const expected: number = dims.reduce((a, b) => a * b);
@@ -22,18 +40,17 @@ describe('Tensor', function () {
     });
 
     describe('set get', function () {
-        const update = Utils.Tensor.Zeros(...dims);
+        const update = Utils.Tensor.Zeros(dims);
         const value = 12;
         const indices: number[] = [3, 5, 2, 1, 1];
         update.set(indices, value);
-        console.log();
         it(`The after setting, the value at ${indices} should be ${value}`, function () {
             assert.strictEqual(value, update.get(...indices));
         });
     });
 
     describe('is equal', function () {
-        const original = Utils.Tensor.Random(...dims);
+        const original = Utils.Tensor.Random(dims, 12);
         const copy = original.copy();
 
         it(`The copy of an object should be of equal value to the original`, function () {
@@ -47,10 +64,109 @@ describe('Tensor', function () {
             assert.strictEqual(false, original.isEqual(copy));
         });
     });
+
+    describe('validate', function () {
+        const original = Utils.Tensor.Random(dims, 12);
+
+        describe('on get', function () {
+            it('should throw error', function () {
+                const invalidPosition = [1, 1, 1, 1, 1, 1];
+                const expectedDims = original.getDim.length;
+                const providedDims = invalidPosition.length;
+
+                assert.throws(
+                    () => original.get(...invalidPosition),
+                    Error,
+                    `Tensor has ${expectedDims} dimensions but ${providedDims} indexes where provided`
+                );
+            });
+
+            it('should throw no error', function () {
+                const validPosition = [1, 1, 1, 1];
+
+                assert.doesNotThrow(
+                    () => original.get(...validPosition),
+                    Error
+                );
+            });
+        });
+
+        describe('on set', function () {
+            it('should throw error', function () {
+                const invalidPosition = [1, 1, 1, 1, 1, 1];
+                const value = 12;
+                const expectedDims = original.getDim.length;
+                const providedDims = invalidPosition.length;
+
+                assert.throws(
+                    () => original.set(invalidPosition, value),
+                    Error,
+                    `Tensor has ${expectedDims} dimensions but ${providedDims} indexes where provided`
+                );
+            });
+
+            it('should throw no error', function () {
+                const validPosition = [1, 1, 1, 1];
+                const value: number[] = [12, 12];
+
+                assert.doesNotThrow(
+                    () => original.set(validPosition, value),
+                    Error
+                );
+            });
+        });
+    });
+
+    describe('correct set dimension', function () {
+        const original = Utils.Tensor.Random(dims, 12);
+
+        it('should throw error because the provided array is to small', function () {
+            const position = [1, 1, 1, 1];
+            const value = 12;
+            assert.throws(
+                () => original.set(position, value),
+                Error,
+                'The provided value does not have the same dimension as the element to update'
+            );
+        });
+
+        it('should throw error because the provided array is to big', function () {
+            const position = [1, 1, 1, 1, 1];
+            const value = [12, 12];
+            assert.throws(
+                () => original.set(position, value),
+                Error,
+                'The provided value does not have the same dimension as the element to update'
+            );
+        });
+
+        it('should throw no error', function () {
+            const position = [1, 1, 1, 1];
+            const value = [12, 12];
+            assert.doesNotThrow(() => original.set(position, value), Error);
+        });
+    });
+
+    describe('index out of range error', function () {
+        const original = Utils.Tensor.Zeros(dims);
+        const invalidIndex = [3, 6, 1, 1, 1];
+        const validIndex = [3, 5, 1, 1, 1];
+
+        it('should throw Error', function () {
+            assert.throws(
+                () => original.get(...invalidIndex),
+                Error,
+                'The provided Index is out of range'
+            );
+        });
+        it('should throw no Error', function () {
+            assert.doesNotThrow(() => original.get(...validIndex), Error);
+        });
+    });
 });
 
 describe('Tensor Zeros', function () {
-    const zeros: Utils.Tensor = Utils.Tensor.Zeros(...dims);
+    const zeros: Utils.Tensor = Utils.Tensor.Zeros(dims);
     describe('sum', function () {
         const expected: number = 0;
         it('The sum of Tensor.Zeros should be zero', function () {
@@ -67,7 +183,7 @@ describe('Tensor Zeros', function () {
 });
 
 describe('Tensor Ones', function () {
-    const ones: Utils.Tensor = Utils.Tensor.Ones(...dims);
+    const ones: Utils.Tensor = Utils.Tensor.Ones(dims);
     describe('sum', function () {
         const expected: number = dims.reduce((a, b) => a * b);
         it('The sum of Tensor.Zeros should be the size of the Tensor', function () {

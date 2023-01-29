@@ -56,7 +56,7 @@ export default class QLAgent extends PersistentAgent {
     init(): void {
         const qTableDims: number[] = [...this.env.stateDim];
         qTableDims.push(this.env.actionSpace.length);
-        this.qTable = Utils.Tensor.Zeros(...qTableDims);
+        this.qTable = Utils.Tensor.Zeros(qTableDims);
         if (this.config) {
             this.epsilon = this.config.epsilonStart;
         }

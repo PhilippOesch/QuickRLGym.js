@@ -53,8 +53,8 @@ export default class MCAgent extends PersistentAgent {
     init(): void {
         const valueTableDims: number[] = [...this.env.stateDim];
         valueTableDims.push(this.env.actionSpace.length);
-        this.valueTable = Utils.Tensor.Zeros(...valueTableDims);
-        this.stateReturnCountTable = Utils.Tensor.Zeros(...valueTableDims);
+        this.valueTable = Utils.Tensor.Zeros(valueTableDims);
+        this.stateReturnCountTable = Utils.Tensor.Zeros(valueTableDims);
         if (this.config) {
             this.epsilon = this.config.epsilonStart;
         }
