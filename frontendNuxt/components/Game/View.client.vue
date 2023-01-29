@@ -80,7 +80,7 @@ async function initializeTraining() {
             gameSettings.randomSeed
         );
     } else {
-        agent.setOptions(getAgentSettings, gameSettings.randomSeed);
+        agent.setConfig(getAgentSettings, gameSettings.randomSeed);
     }
     env.setAgent = agent as Agent;
     env.initAgent();

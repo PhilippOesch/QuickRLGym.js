@@ -1,5 +1,4 @@
 import seedrandom from 'seedrandom';
-import Agent from '../../RLInterface/Agent';
 import SingleAgentEnvironment, {
     GameStateContext,
 } from '../../RLInterface/SingleAgentEnvironment';
@@ -7,7 +6,6 @@ import * as tf from '@tensorflow/tfjs';
 import { MathUtils } from '../../Utils';
 import PersistentAgent from '../../RLInterface/PersistentAgent';
 import FileManager from '../../RLInterface/FileManager';
-import { TFFileManager } from '../..';
 
 interface Experience {
     prevState: number[];
@@ -73,8 +71,8 @@ export default class DQNAgent extends PersistentAgent {
         if (config != undefined) {
             this.config = config;
             this.epsilon = this.config!.epsilonStart;
-            this.epsilonStep = 0;
         }
+        this.epsilonStep = 0;
     }
 
     init(): void {
@@ -220,11 +218,11 @@ export default class DQNAgent extends PersistentAgent {
         }
     }
 
-    public async save(fileManager: TFFileManager): Promise<void> {
-        const saveResults = await fileManager.save(this.qNetworkLocal);
+    public async save(fileManager: FileManager): Promise<void> {
+        await fileManager.save(this.qNetworkLocal);
     }
 
-    async load(fileManager: TFFileManager): Promise<void> {
+    async load(fileManager: FileManager): Promise<void> {
         this.qNetworkLocal = <tf.Sequential>await fileManager.load();
 
         const adamOptimizer = tf.train.adam(this.config!.learningRate);
@@ -250,14 +248,14 @@ export default class DQNAgent extends PersistentAgent {
             this.qNetworkTarget.summary();
         }
     }
-    async loadConfig(fileManager: FileManager, path: string): Promise<void> {
+    async loadConfig(fileManager: FileManager): Promise<void> {
         const loadObject: DQNAgentSettings = <DQNAgentSettings>(
-            await fileManager.load(path)
+            await fileManager.load()
         );
         this.setConfig(loadObject);
     }
-    async saveConfig(fileManager: FileManager, path: string): Promise<void> {
-        await fileManager.save(this.config!, path);
+    async saveConfig(fileManager: FileManager): Promise<void> {
+        await fileManager.save(this.config!);
     }
 
     private async train(): Promise<void> {

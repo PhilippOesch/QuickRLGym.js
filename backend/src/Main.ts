@@ -4,12 +4,12 @@ import {
     Agents,
     QuickRLJS,
 } from '../../coreLibary/src';
-import NodeFileManager from './NodeFileManager';
+import NodeJSONFileManager from './NodeJSONFileManager';
 import NodeTFFileManager from './NodeTFFileManager';
 require('@tensorflow/tfjs-node-gpu');
 
 //parameters
-const fileManager = new NodeFileManager();
+const fileManager = new NodeJSONFileManager();
 
 async function main() {
     //trainTaxiQLAgent();
@@ -40,7 +40,8 @@ async function trainBlackJack() {
     env.setAgent = agent;
     env.initAgent();
     await env.train(numIterations, logEvery);
-    await agent.save(fileManager, './models/qTables/blackjack/qTable.json');
+    fileManager.filePath = './models/qTables/blackjack/qTable.json';
+    await agent.save(fileManager);
 }
 
 async function trainTaxiQLAgent() {
@@ -66,7 +67,8 @@ async function trainTaxiQLAgent() {
     env.setAgent = agent;
     env.initAgent();
     await env.train(numIterations, logEvery, maxIterationsPerGame);
-    await agent.save(fileManager, './models/qTables/taxi/qTable.json');
+    fileManager.filePath = './models/qTables/taxi/qTable.json';
+    await agent.save(fileManager);
 }
 
 async function trainTaxiMCAgent() {
@@ -87,7 +89,8 @@ async function trainTaxiMCAgent() {
     env.setAgent = agent;
     env.initAgent();
     await env.train(numIterations, logEvery, maxIterationsPerGame);
-    await agent.save(fileManager, './models/qTables/taxi/qTable.json');
+    fileManager.filePath = './models/qTables/taxi/qTable.json';
+    await agent.save(fileManager);
 }
 
 async function trainBlackJackMCAgent() {
@@ -108,7 +111,8 @@ async function trainBlackJackMCAgent() {
     env.setAgent = agent;
     env.initAgent();
     env.train(numIterations, logEvery);
-    await agent.save(fileManager, './models/MCAgent/blackjack/mcagent.json');
+    fileManager.filePath = './models/MCAgent/blackjack/mcagent.json';
+    await agent.save(fileManager);
 }
 
 async function trainTaxiDQN() {
@@ -141,8 +145,8 @@ async function trainTaxiDQN() {
     env.initAgent();
 
     const tFFileManager: NodeTFFileManager = new NodeTFFileManager();
-    tFFileManager.paths = ['./models/DQN/TaxiTest'];
-    await agent.saveConfig(fileManager, './models/DQN/TaxiTest/config.json');
+    tFFileManager.folderpath = './models/DQN/TaxiTest';
+    await agent.saveConfig(fileManager);
     // await agent.load(tFFileManager);
     // await env.train(numEpisodes, logEvery, maxIterationsPerGame);
     // await agent.save(tFFileManager);

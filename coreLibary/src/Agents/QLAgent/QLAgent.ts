@@ -45,8 +45,8 @@ export default class QLAgent extends PersistentAgent {
         if (config != undefined) {
             this.config = config;
             this.epsilon = this.config!.epsilonStart;
-            this.epsilonStep = 0;
         }
+        this.epsilonStep = 0;
     }
 
     public get getQTable(): Utils.Tensor {
@@ -57,10 +57,7 @@ export default class QLAgent extends PersistentAgent {
         const qTableDims: number[] = [...this.env.stateDim];
         qTableDims.push(this.env.actionSpace.length);
         this.qTable = Utils.Tensor.Zeros(qTableDims);
-        if (this.config) {
-            this.epsilon = this.config.epsilonStart;
-        }
-        this.epsilonStep = 1;
+        this.setConfig(this.config);
     }
 
     step(state: object): string {
@@ -140,8 +137,8 @@ export default class QLAgent extends PersistentAgent {
      * @param pathString - path to save the qtable to
      * @param fileManager - use of dependency infection to allow for different filemanagement implementations
      */
-    public async save(fileManager: FileManager, path?: string): Promise<void> {
-        await fileManager.save(this.qTable, path);
+    public async save(fileManager: FileManager): Promise<void> {
+        await fileManager.save(this.qTable);
     }
 
     /**
@@ -149,27 +146,21 @@ export default class QLAgent extends PersistentAgent {
      * @param pathString - path to load the qtable from
      * @param fileManager - use of dependency infection to allow for different filemanagement implementations
      */
-    public async load(fileManager: FileManager, path?: string): Promise<void> {
-        const loadObject: object = await fileManager.load(path);
+    public async load(fileManager: FileManager): Promise<void> {
+        const loadObject: object = await fileManager.load();
         this.qTable = Utils.Tensor.fromJSONObject(
             loadObject as Utils.JSONTensor
         );
     }
 
-    async loadConfig(
-        fileManager: FileManager,
-        path?: string | undefined
-    ): Promise<void> {
+    async loadConfig(fileManager: FileManager): Promise<void> {
         const loadObject: QLAgentSettings = <QLAgentSettings>(
-            await fileManager.load(path)
+            await fileManager.load()
         );
         this.setConfig(loadObject);
     }
-    async saveConfig(
-        fileManager: FileManager,
-        path?: string | undefined
-    ): Promise<void> {
-        await fileManager.save(this.config!, path);
+    async saveConfig(fileManager: FileManager): Promise<void> {
+        await fileManager.save(this.config!);
     }
 
     /**

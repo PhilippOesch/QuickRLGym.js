@@ -55,9 +55,7 @@ export default class MCAgent extends PersistentAgent {
         valueTableDims.push(this.env.actionSpace.length);
         this.valueTable = Utils.Tensor.Zeros(valueTableDims);
         this.stateReturnCountTable = Utils.Tensor.Zeros(valueTableDims);
-        if (this.config) {
-            this.epsilon = this.config.epsilonStart;
-        }
+        this.setConfig(this.config);
     }
 
     public setConfig(config?: MCAgentSettings, randomSeed?: number): void {
@@ -65,8 +63,8 @@ export default class MCAgent extends PersistentAgent {
         if (config != undefined) {
             this.config = config;
             this.epsilon = this.config!.epsilonStart;
-            this.epsilonStep = 0;
         }
+        this.epsilonStep = 0;
     }
 
     step(state: object): string {
@@ -215,29 +213,20 @@ export default class MCAgent extends PersistentAgent {
         );
     }
 
-    public async save(fileManager: FileManager, path?: string): Promise<void> {
-        await fileManager.save(
-            {
-                valueTable: this.valueTable,
-                stateReturnCountTable: this.stateReturnCountTable,
-            },
-            path
-        );
+    public async save(fileManager: FileManager): Promise<void> {
+        await fileManager.save({
+            valueTable: this.valueTable,
+            stateReturnCountTable: this.stateReturnCountTable,
+        });
     }
 
-    async loadConfig(
-        fileManager: FileManager,
-        path?: string | undefined
-    ): Promise<void> {
+    async loadConfig(fileManager: FileManager): Promise<void> {
         const loadObject: MCAgentSettings = <MCAgentSettings>(
-            await fileManager.load(path)
+            await fileManager.load()
         );
         this.setConfig(loadObject);
     }
-    async saveConfig(
-        fileManager: FileManager,
-        path?: string | undefined
-    ): Promise<void> {
-        await fileManager.save(this.config!, path);
+    async saveConfig(fileManager: FileManager): Promise<void> {
+        await fileManager.save(this.config!);
     }
 }

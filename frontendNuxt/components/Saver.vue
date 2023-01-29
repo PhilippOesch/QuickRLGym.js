@@ -3,7 +3,7 @@
         <Button
             :size="ButtonSize.Large"
             value="Save Model"
-            @click="save"
+            :handler="save"
             :disabled="agentObject == undefined || !getIsActive(gameId)"
         ></Button>
     </div>
@@ -11,12 +11,14 @@
 
 <script lang="ts" setup>
 import BrowserFileManager from '~~/utils/BrowserFileManager';
-import { TrainableAgent } from 'quickrl.core';
+import { PersistentAgent } from 'quickrl.core';
 import { PropType } from 'vue';
 import useSettingsStore from '~~/comsosable/useSettingsStore';
+import TFBrowserFileManager from '~~/utils/TFBrowserFileManager';
+import { agentMapping } from '~~/comsosable/useAgent';
 
 const props = defineProps({
-    agentObject: Object as PropType<TrainableAgent>,
+    agentObject: Object as PropType<PersistentAgent>,
     gameId: {
         type: String,
         required: true,
@@ -24,19 +26,30 @@ const props = defineProps({
 });
 
 const fileManager = new BrowserFileManager();
+const tfFileManager = new TFBrowserFileManager();
 
-const { getIsActive } = useSettingsStore();
+const { getIsActive, getActiveAlgorithm } = useSettingsStore();
 
 function save(): void {
     if (props.agentObject == undefined) {
         return;
     }
 
-    const trainableAgent = props.agentObject as TrainableAgent;
+    const activeAlgorithm = getActiveAlgorithm(props.gameId);
+    const isTFModel: boolean =
+        agentMapping.get(activeAlgorithm)!.usesTensorflow;
+
+    const trainableAgent: PersistentAgent = <PersistentAgent>props.agentObject;
 
     console.log('save Agent');
     console.log(props.agentObject);
-    fileManager.path = 'model.json';
-    trainableAgent.save(fileManager);
+    fileManager.path = 'config.json';
+    trainableAgent.saveConfig(fileManager);
+    if (isTFModel) {
+        trainableAgent.save(tfFileManager);
+    } else {
+        fileManager.path = 'model.json';
+        trainableAgent.save(fileManager);
+    }
 }
 </script>

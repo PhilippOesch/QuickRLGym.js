@@ -7,7 +7,6 @@ import Environment, { EnvOptions } from './RLInterface/Environment';
 import * as Envs from './Envs';
 import QuickRLJS from './RLInterface/QuickRLJS';
 import FileManager from './RLInterface/FileManager';
-import TFFileManager from './RLInterface/TFFileManager';
 import PersistentAgent from './RLInterface/PersistentAgent';
 import * as Agents from './Agents';
 import * as Games from './Games';
@@ -18,7 +17,6 @@ export {
     type FileManager,
     type StepResult,
     type EnvOptions,
-    type TFFileManager,
     PersistentAgent,
     Agents,
     Envs,

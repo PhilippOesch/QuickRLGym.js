@@ -1,10 +1,18 @@
 import { Agent, Agents, Environment } from 'quickrl.core';
 
-const agentMapping: Map<string, typeof Agent> = new Map<string, typeof Agent>([
-    ['random', Agents.MCAgent],
-    ['QLearning', Agents.QLAgent],
-    ['MCLearning', Agents.MCAgent],
-    ['DQN', Agents.DQNAgent],
+export interface AgentMappingEntry {
+    agentType: typeof Agent;
+    usesTensorflow: boolean;
+}
+
+export const agentMapping: Map<string, AgentMappingEntry> = new Map<
+    string,
+    AgentMappingEntry
+>([
+    ['random', { agentType: Agents.RandomAgent, usesTensorflow: false }],
+    ['QLearning', { agentType: Agents.QLAgent, usesTensorflow: false }],
+    ['MCLearning', { agentType: Agents.MCAgent, usesTensorflow: false }],
+    ['DQN', { agentType: Agents.DQNAgent, usesTensorflow: true }],
 ]);
 
 export default function useAgent(
@@ -14,7 +22,7 @@ export default function useAgent(
     randomSeed?: number
 ): Agent {
     const agentType = agentMapping.get(agentName) as any;
-    const agent: Agent = new agentType(env) as Agent;
-    agent.setOptions(options, randomSeed);
+    const agent: Agent = new agentType.agentType(env) as Agent;
+    agent.setConfig(options, randomSeed);
     return agent;
 }

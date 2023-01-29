@@ -54,11 +54,11 @@
                 <AgentLoader
                     :gameId="gameId"
                     :env="env"
-                    :agentObject="agent"
+                    :agentObject="(<PersistentAgent>agent)"
                     @loadNewAgent="onLoadNewAgent"
                 ></AgentLoader>
                 <Saver
-                    :agentObject="((agent as any) as TrainableAgent)"
+                    :agentObject="(<PersistentAgent>agent)"
                     :gameId="gameId"
                 ></Saver>
             </div>
@@ -83,7 +83,7 @@ import { dqnSettingsDefault } from '~~/utils/settingsInterfaces/DQNSettings';
 import defaultTrainingSettings from '~~/utils/settingsInterfaces/trainingSettings';
 import { SelectionType, ButtonSize, IconColor } from '~~/utils/enums';
 import { PropType, Ref } from 'vue';
-import { Agent, SingleAgentEnvironment, TrainableAgent } from 'quickrl.core';
+import { Agent, SingleAgentEnvironment, PersistentAgent } from 'quickrl.core';
 import useTabStore from '~~/comsosable/useTabStore';
 
 const gameViewRef: Ref<any> = ref(null);
@@ -101,8 +101,6 @@ const props = defineProps({
 const { getOpenTab } = useTabStore();
 
 function updateSceneInfo(trainingEnv: SingleAgentEnvironment) {
-    console.log('test');
-    console.log(trainingEnv);
     env.value = trainingEnv;
 }
 

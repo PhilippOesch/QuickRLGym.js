@@ -9,16 +9,8 @@ export default class BrowserFileManager implements FileManager {
         this._path = savePath;
     }
 
-    public get path(): string {
-        return this._path ? this._path : '';
-    }
-
     public set file(file: File | undefined) {
         this._file = file;
-    }
-
-    public get file(): File | undefined {
-        return this._file;
     }
 
     async load(): Promise<object> {
