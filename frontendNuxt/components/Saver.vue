@@ -10,13 +10,13 @@
 </template>
 
 <script lang="ts" setup>
-import BrowserFileManager, {
+import BrowserFileStrategy, {
     BrowserSaveOptions,
-} from '~~/utils/BrowserFileManager';
+} from '~~/utils/BrowserFileStrategy';
 import { PersistentAgent } from 'quickrl.core';
 import { PropType } from 'vue';
 import useSettingsStore from '~~/comsosable/useSettingsStore';
-import TFBrowserFileManager from '~~/utils/TFBrowserFileManager';
+import TFBrowserFileStrategy from '~~/utils/TFBrowserFileStrategy';
 import { agentMapping } from '~~/comsosable/useAgent';
 
 const props = defineProps({
@@ -26,9 +26,6 @@ const props = defineProps({
         required: true,
     },
 });
-
-const fileManager = new BrowserFileManager();
-const tfFileManager = new TFBrowserFileManager();
 
 const { getIsActive, getActiveAlgorithm } = useSettingsStore();
 
@@ -45,12 +42,12 @@ function save(): void {
 
     console.log('save Agent');
     console.log(props.agentObject);
-    trainableAgent.saveConfig(fileManager);
+    trainableAgent.saveConfig(new BrowserFileStrategy());
     if (isTFModel) {
-        trainableAgent.save(tfFileManager);
+        trainableAgent.save(new TFBrowserFileStrategy());
     } else {
         const options: BrowserSaveOptions = { fileName: 'model.json' };
-        trainableAgent.save(fileManager, options);
+        trainableAgent.save(new BrowserFileStrategy(), options);
     }
 }
 </script>

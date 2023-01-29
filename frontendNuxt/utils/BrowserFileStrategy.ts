@@ -1,4 +1,4 @@
-import { FileManager } from 'quickrl.core';
+import { FileStrategy } from 'quickrl.core';
 import { saveAs } from 'file-saver';
 
 export interface BrowserSaveOptions {
@@ -9,7 +9,7 @@ export interface BrowserLoadOptions {
     file: File;
 }
 
-export default class BrowserFileManager implements FileManager {
+export default class BrowserFileStrategy implements FileStrategy {
     async load(options: BrowserLoadOptions): Promise<object> {
         var fileReader = new FileReader();
         fileReader.readAsText(options.file);

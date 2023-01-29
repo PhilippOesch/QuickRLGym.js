@@ -2,7 +2,7 @@ import {
     Agent,
     Environment,
     GameStateContext,
-    FileManager,
+    FileStrategy,
     Utils,
 } from '../../index';
 import seedrandom from 'seedrandom';
@@ -205,7 +205,7 @@ export default class MCAgent extends PersistentAgent {
     }
 
     public async load(
-        fileManager: FileManager,
+        fileManager: FileStrategy,
         options?: object
     ): Promise<void> {
         const loadObject: MCSaveFormat = (await fileManager.load(
@@ -218,7 +218,7 @@ export default class MCAgent extends PersistentAgent {
     }
 
     public async save(
-        fileManager: FileManager,
+        fileManager: FileStrategy,
         options?: object
     ): Promise<void> {
         await fileManager.save(
@@ -231,7 +231,7 @@ export default class MCAgent extends PersistentAgent {
     }
 
     async loadConfig(
-        fileManager: FileManager,
+        fileManager: FileStrategy,
         options?: object
     ): Promise<void> {
         const loadObject: MCAgentSettings = <MCAgentSettings>(
@@ -240,7 +240,7 @@ export default class MCAgent extends PersistentAgent {
         this.setConfig(loadObject);
     }
     async saveConfig(
-        fileManager: FileManager,
+        fileManager: FileStrategy,
         options?: object
     ): Promise<void> {
         await fileManager.save(this.config!, options);

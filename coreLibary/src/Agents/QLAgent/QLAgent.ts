@@ -2,8 +2,7 @@ import seedrandom from 'seedrandom';
 import {
     Utils,
     SingleAgentEnvironment,
-    Agent,
-    FileManager,
+    FileStrategy,
     GameStateContext,
 } from '../../index';
 import PersistentAgent from '../../RLInterface/PersistentAgent';
@@ -138,7 +137,7 @@ export default class QLAgent extends PersistentAgent {
      * @param fileManager - use of dependency infection to allow for different filemanagement implementations
      */
     public async save(
-        fileManager: FileManager,
+        fileManager: FileStrategy,
         options?: object
     ): Promise<void> {
         await fileManager.save(this.qTable, options);
@@ -150,7 +149,7 @@ export default class QLAgent extends PersistentAgent {
      * @param fileManager - use of dependency infection to allow for different filemanagement implementations
      */
     public async load(
-        fileManager: FileManager,
+        fileManager: FileStrategy,
         options?: object
     ): Promise<void> {
         const loadObject: object = await fileManager.load(options);
@@ -160,7 +159,7 @@ export default class QLAgent extends PersistentAgent {
     }
 
     async loadConfig(
-        fileManager: FileManager,
+        fileManager: FileStrategy,
         options?: object
     ): Promise<void> {
         const loadObject: QLAgentSettings = <QLAgentSettings>(
@@ -169,7 +168,7 @@ export default class QLAgent extends PersistentAgent {
         this.setConfig(loadObject);
     }
     async saveConfig(
-        fileManager: FileManager,
+        fileManager: FileStrategy,
         options?: object
     ): Promise<void> {
         await fileManager.save(this.config!, options);

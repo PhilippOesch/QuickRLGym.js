@@ -1,12 +1,12 @@
 import path from 'path';
-import { FileManager } from '../../coreLibary/src';
+import { FileStrategy } from '../../coreLibary/src';
 import { writeFile, readFile, mkdir } from 'fs/promises';
 
 export interface NodeJSONFMOptions {
     filePath: string;
 }
 
-class NodeJSONFileManager implements FileManager {
+class NodeJSONFileStrategy implements FileStrategy {
     public async load(options: NodeJSONFMOptions): Promise<object> {
         let qtable: Buffer = await readFile(options.filePath);
         return JSON.parse(qtable.toString());
@@ -25,4 +25,4 @@ class NodeJSONFileManager implements FileManager {
     }
 }
 
-export default NodeJSONFileManager;
+export default NodeJSONFileStrategy;

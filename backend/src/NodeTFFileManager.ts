@@ -1,4 +1,4 @@
-import { FileManager } from '../../coreLibary/src';
+import { FileStrategy } from '../../coreLibary/src';
 import * as tf from '@tensorflow/tfjs';
 import path from 'path';
 import { mkdir } from 'fs/promises';
@@ -12,7 +12,7 @@ export interface NodeTFOptions {
     folderPath: string;
 }
 
-class NodeTFFileManager implements FileManager {
+class NodeTFFileStrategy implements FileStrategy {
     async load(options: NodeTFOptions): Promise<object> {
         if (options == undefined) {
             throw new Error('The options have to be defined');
@@ -37,4 +37,4 @@ class NodeTFFileManager implements FileManager {
         return true;
     }
 }
-export default NodeTFFileManager;
+export default NodeTFFileStrategy;

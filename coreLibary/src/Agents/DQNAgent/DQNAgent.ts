@@ -5,7 +5,7 @@ import SingleAgentEnvironment, {
 import * as tf from '@tensorflow/tfjs';
 import { MathUtils } from '../../Utils';
 import PersistentAgent from '../../RLInterface/PersistentAgent';
-import FileManager from '../../RLInterface/FileManager';
+import FileStrategy from '../../RLInterface/FileStrategy';
 
 interface Experience {
     prevState: number[];
@@ -219,13 +219,13 @@ export default class DQNAgent extends PersistentAgent {
     }
 
     public async save(
-        fileManager: FileManager,
+        fileManager: FileStrategy,
         options?: object
     ): Promise<void> {
         await fileManager.save(this.qNetworkLocal, options);
     }
 
-    async load(fileManager: FileManager, options?: object): Promise<void> {
+    async load(fileManager: FileStrategy, options?: object): Promise<void> {
         this.qNetworkLocal = <tf.Sequential>await fileManager.load(options);
 
         const adamOptimizer = tf.train.adam(this.config!.learningRate);
@@ -252,7 +252,7 @@ export default class DQNAgent extends PersistentAgent {
         }
     }
     async loadConfig(
-        fileManager: FileManager,
+        fileManager: FileStrategy,
         options?: object
     ): Promise<void> {
         const loadObject: DQNAgentSettings = <DQNAgentSettings>(
@@ -261,7 +261,7 @@ export default class DQNAgent extends PersistentAgent {
         this.setConfig(loadObject);
     }
     async saveConfig(
-        fileManager: FileManager,
+        fileManager: FileStrategy,
         options?: object
     ): Promise<void> {
         await fileManager.save(this.config!, options);
