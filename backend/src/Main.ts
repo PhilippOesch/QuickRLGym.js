@@ -40,8 +40,9 @@ async function trainBlackJack() {
     env.setAgent = agent;
     env.initAgent();
     await env.train(numIterations, logEvery);
-    fileManager.filePath = './models/qTables/blackjack/qTable.json';
-    await agent.save(fileManager);
+    await agent.save(fileManager, {
+        filePath: './models/qTables/blackjack/qTable.json',
+    });
 }
 
 async function trainTaxiQLAgent() {
@@ -67,8 +68,9 @@ async function trainTaxiQLAgent() {
     env.setAgent = agent;
     env.initAgent();
     await env.train(numIterations, logEvery, maxIterationsPerGame);
-    fileManager.filePath = './models/qTables/taxi/qTable.json';
-    await agent.save(fileManager);
+    await agent.save(fileManager, {
+        filePath: './models/qTables/taxi/qTable.json',
+    });
 }
 
 async function trainTaxiMCAgent() {
@@ -89,8 +91,8 @@ async function trainTaxiMCAgent() {
     env.setAgent = agent;
     env.initAgent();
     await env.train(numIterations, logEvery, maxIterationsPerGame);
-    fileManager.filePath = './models/qTables/taxi/qTable.json';
-    await agent.save(fileManager);
+    await agent.save(fileManager),
+        { filePath: './models/qTables/taxi/qTable.json' };
 }
 
 async function trainBlackJackMCAgent() {
@@ -111,8 +113,9 @@ async function trainBlackJackMCAgent() {
     env.setAgent = agent;
     env.initAgent();
     env.train(numIterations, logEvery);
-    fileManager.filePath = './models/MCAgent/blackjack/mcagent.json';
-    await agent.save(fileManager);
+    await agent.save(fileManager, {
+        filePath: './models/MCAgent/blackjack/mcagent.json',
+    });
 }
 
 async function trainTaxiDQN() {
@@ -145,8 +148,9 @@ async function trainTaxiDQN() {
     env.initAgent();
 
     const tFFileManager: NodeTFFileManager = new NodeTFFileManager();
-    tFFileManager.folderpath = './models/DQN/TaxiTest';
-    await agent.saveConfig(fileManager);
+    await agent.saveConfig(fileManager, {
+        filePath: './models/DQN/TaxiTest/config.json',
+    });
     // await agent.load(tFFileManager);
     // await env.train(numEpisodes, logEvery, maxIterationsPerGame);
     // await agent.save(tFFileManager);

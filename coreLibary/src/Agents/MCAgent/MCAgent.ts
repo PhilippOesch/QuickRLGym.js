@@ -204,29 +204,45 @@ export default class MCAgent extends PersistentAgent {
         return this.env.actionSpace[randIdx];
     }
 
-    public async load(fileManager: FileManager): Promise<void> {
-        const loadObject: MCSaveFormat =
-            (await fileManager.load()) as MCSaveFormat;
+    public async load(
+        fileManager: FileManager,
+        options?: object
+    ): Promise<void> {
+        const loadObject: MCSaveFormat = (await fileManager.load(
+            options
+        )) as MCSaveFormat;
         this.valueTable = Utils.Tensor.fromJSONObject(loadObject.valueTable);
         this.stateReturnCountTable = Utils.Tensor.fromJSONObject(
             loadObject.stateReturnCountTable
         );
     }
 
-    public async save(fileManager: FileManager): Promise<void> {
-        await fileManager.save({
-            valueTable: this.valueTable,
-            stateReturnCountTable: this.stateReturnCountTable,
-        });
+    public async save(
+        fileManager: FileManager,
+        options?: object
+    ): Promise<void> {
+        await fileManager.save(
+            {
+                valueTable: this.valueTable,
+                stateReturnCountTable: this.stateReturnCountTable,
+            },
+            options
+        );
     }
 
-    async loadConfig(fileManager: FileManager): Promise<void> {
+    async loadConfig(
+        fileManager: FileManager,
+        options?: object
+    ): Promise<void> {
         const loadObject: MCAgentSettings = <MCAgentSettings>(
-            await fileManager.load()
+            await fileManager.load(options)
         );
         this.setConfig(loadObject);
     }
-    async saveConfig(fileManager: FileManager): Promise<void> {
-        await fileManager.save(this.config!);
+    async saveConfig(
+        fileManager: FileManager,
+        options?: object
+    ): Promise<void> {
+        await fileManager.save(this.config!, options);
     }
 }

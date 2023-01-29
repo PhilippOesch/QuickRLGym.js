@@ -137,8 +137,11 @@ export default class QLAgent extends PersistentAgent {
      * @param pathString - path to save the qtable to
      * @param fileManager - use of dependency infection to allow for different filemanagement implementations
      */
-    public async save(fileManager: FileManager): Promise<void> {
-        await fileManager.save(this.qTable);
+    public async save(
+        fileManager: FileManager,
+        options?: object
+    ): Promise<void> {
+        await fileManager.save(this.qTable, options);
     }
 
     /**
@@ -146,21 +149,30 @@ export default class QLAgent extends PersistentAgent {
      * @param pathString - path to load the qtable from
      * @param fileManager - use of dependency infection to allow for different filemanagement implementations
      */
-    public async load(fileManager: FileManager): Promise<void> {
-        const loadObject: object = await fileManager.load();
+    public async load(
+        fileManager: FileManager,
+        options?: object
+    ): Promise<void> {
+        const loadObject: object = await fileManager.load(options);
         this.qTable = Utils.Tensor.fromJSONObject(
             loadObject as Utils.JSONTensor
         );
     }
 
-    async loadConfig(fileManager: FileManager): Promise<void> {
+    async loadConfig(
+        fileManager: FileManager,
+        options?: object
+    ): Promise<void> {
         const loadObject: QLAgentSettings = <QLAgentSettings>(
-            await fileManager.load()
+            await fileManager.load(options)
         );
         this.setConfig(loadObject);
     }
-    async saveConfig(fileManager: FileManager): Promise<void> {
-        await fileManager.save(this.config!);
+    async saveConfig(
+        fileManager: FileManager,
+        options?: object
+    ): Promise<void> {
+        await fileManager.save(this.config!, options);
     }
 
     /**

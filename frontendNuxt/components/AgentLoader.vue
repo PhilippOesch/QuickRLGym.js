@@ -49,8 +49,12 @@ import { PropType } from 'vue';
 import useAgent, { agentMapping } from '~~/comsosable/useAgent';
 import useSettingsStore from '~~/comsosable/useSettingsStore';
 import useTabStore from '~~/comsosable/useTabStore';
-import BrowserFileManager from '~~/utils/BrowserFileManager';
-import TFBrowserFileManager from '~~/utils/TFBrowserFileManager';
+import BrowserFileManager, {
+    BrowserLoadOptions,
+} from '~~/utils/BrowserFileManager';
+import TFBrowserFileManager, {
+    TFLoadOptions,
+} from '~~/utils/TFBrowserFileManager';
 
 const loaderInputModel = ref();
 const loaderInputConfig = ref();
@@ -183,13 +187,13 @@ async function loadAgentFiles(
     }
 
     if (isValidFileType(modelFiles[0])) {
-        fileManager.file = configFiles[0];
-        await agent.loadConfig(fileManager);
+        const options: BrowserLoadOptions = { file: configFiles[0] };
+        await agent.loadConfig(fileManager, options);
     }
 
     if (!binWeightsActive.value && isValidFileType(modelFiles[0])) {
-        fileManager.file = modelFiles[0];
-        await agent.load(fileManager);
+        const options: BrowserLoadOptions = { file: modelFiles[0] };
+        await agent.load(fileManager, options);
     }
 
     if (
@@ -197,8 +201,10 @@ async function loadAgentFiles(
         isValidFileType(modelFiles[0]) &&
         isValidFileType(weightFiles![0])
     ) {
-        tfFileManager.files = [modelFiles[0], weightFiles![0]];
-        await agent.load(tfFileManager);
+        const options: TFLoadOptions = {
+            files: [modelFiles[0], weightFiles![0]],
+        };
+        await agent.load(tfFileManager, options);
     }
     return agent;
 }

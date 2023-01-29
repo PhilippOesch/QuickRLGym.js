@@ -8,27 +8,32 @@ export interface TFFModelLoadResult {
     weights: tf.Tensor;
 }
 
+export interface NodeTFOptions {
+    folderPath: string;
+}
+
 class NodeTFFileManager implements FileManager {
-    _folderpath: string;
+    async load(options: NodeTFOptions): Promise<object> {
+        if (options == undefined) {
+            throw new Error('The options have to be defined');
+        }
 
-    set folderpath(folderpath: string) {
-        this._folderpath = folderpath;
-    }
-
-    async load(): Promise<object> {
         const model = await tf.loadLayersModel(
-            'file://' + this._folderpath + '/model.json'
+            'file://' + options.folderPath + '/model.json'
         );
         return model;
     }
-    async save(saveObject: tf.LayersModel): Promise<boolean> {
-        const folderPath = path.dirname(this._folderpath);
+    async save(
+        saveObject: tf.LayersModel,
+        options: NodeTFOptions
+    ): Promise<boolean> {
+        const folderPath = path.dirname(options.folderPath);
         await mkdir(folderPath, { recursive: true }).catch(() => {
             console.error;
             return false;
         });
 
-        await saveObject.save('file://' + this._folderpath);
+        await saveObject.save('file://' + options.folderPath);
         return true;
     }
 }

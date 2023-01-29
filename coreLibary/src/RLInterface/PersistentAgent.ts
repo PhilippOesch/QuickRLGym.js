@@ -10,23 +10,29 @@ export default abstract class PersistentAgent extends Agent {
      * @param fileManager FileManager Strategy
      * @param path Path to load the model from
      */
-    abstract load(fileManager: FileManager): Promise<void>;
+    abstract load(fileManager: FileManager, options?: object): Promise<void>;
     /**
      * load the config
      * @param fileManager FileManager Strategy
      * @param path Path to laod the config from
      */
-    abstract loadConfig(fileManager: FileManager): Promise<void>;
+    abstract loadConfig(
+        fileManager: FileManager,
+        options?: object
+    ): Promise<void>;
     /**
      * Save the model
      * @param fileManager FileManager Strategy
      * @param path Path to save the model to
      */
-    abstract save(fileManager: FileManager): Promise<void>;
+    abstract save(fileManager: FileManager, options?: object): Promise<void>;
     /**
      * Save the Config
      * @param fileManager FileManager Strategy
      * @param path Path so save the config to
      */
-    abstract saveConfig(fileManager: FileManager): Promise<void>;
+    abstract saveConfig(
+        fileManager: FileManager,
+        options?: object
+    ): Promise<void>;
 }

@@ -1,25 +1,18 @@
 import { FileManager } from 'quickrl.core';
 import { saveAs } from 'file-saver';
 
+export interface BrowserSaveOptions {
+    fileName: string;
+}
+
+export interface BrowserLoadOptions {
+    file: File;
+}
+
 export default class BrowserFileManager implements FileManager {
-    private _path?: string = '';
-    private _file?: File;
-
-    public set path(savePath: string) {
-        this._path = savePath;
-    }
-
-    public set file(file: File | undefined) {
-        this._file = file;
-    }
-
-    async load(): Promise<object> {
-        if (!this._file) {
-            return { error: 'file is undefined' };
-        }
-
+    async load(options: BrowserLoadOptions): Promise<object> {
         var fileReader = new FileReader();
-        fileReader.readAsText(this._file);
+        fileReader.readAsText(options.file);
         let res: string = await new Promise<string>((resolve) => {
             let result = '';
             fileReader.onload = (evt: any) => {
@@ -32,11 +25,14 @@ export default class BrowserFileManager implements FileManager {
         return JSON.parse(res);
     }
 
-    async save(saveObject: object): Promise<boolean> {
+    async save(
+        saveObject: object,
+        options: BrowserSaveOptions
+    ): Promise<boolean> {
         const blob = new Blob([JSON.stringify(saveObject)], {
             type: 'application/json',
         });
-        saveAs(blob, this._path);
+        saveAs(blob, options.fileName);
         return true;
     }
 }

@@ -218,12 +218,15 @@ export default class DQNAgent extends PersistentAgent {
         }
     }
 
-    public async save(fileManager: FileManager): Promise<void> {
-        await fileManager.save(this.qNetworkLocal);
+    public async save(
+        fileManager: FileManager,
+        options?: object
+    ): Promise<void> {
+        await fileManager.save(this.qNetworkLocal, options);
     }
 
-    async load(fileManager: FileManager): Promise<void> {
-        this.qNetworkLocal = <tf.Sequential>await fileManager.load();
+    async load(fileManager: FileManager, options?: object): Promise<void> {
+        this.qNetworkLocal = <tf.Sequential>await fileManager.load(options);
 
         const adamOptimizer = tf.train.adam(this.config!.learningRate);
 
@@ -248,14 +251,20 @@ export default class DQNAgent extends PersistentAgent {
             this.qNetworkTarget.summary();
         }
     }
-    async loadConfig(fileManager: FileManager): Promise<void> {
+    async loadConfig(
+        fileManager: FileManager,
+        options?: object
+    ): Promise<void> {
         const loadObject: DQNAgentSettings = <DQNAgentSettings>(
-            await fileManager.load()
+            await fileManager.load(options)
         );
         this.setConfig(loadObject);
     }
-    async saveConfig(fileManager: FileManager): Promise<void> {
-        await fileManager.save(this.config!);
+    async saveConfig(
+        fileManager: FileManager,
+        options?: object
+    ): Promise<void> {
+        await fileManager.save(this.config!, options);
     }
 
     private async train(): Promise<void> {

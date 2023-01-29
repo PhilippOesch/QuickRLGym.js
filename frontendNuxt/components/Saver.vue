@@ -10,7 +10,9 @@
 </template>
 
 <script lang="ts" setup>
-import BrowserFileManager from '~~/utils/BrowserFileManager';
+import BrowserFileManager, {
+    BrowserSaveOptions,
+} from '~~/utils/BrowserFileManager';
 import { PersistentAgent } from 'quickrl.core';
 import { PropType } from 'vue';
 import useSettingsStore from '~~/comsosable/useSettingsStore';
@@ -43,13 +45,12 @@ function save(): void {
 
     console.log('save Agent');
     console.log(props.agentObject);
-    fileManager.path = 'config.json';
     trainableAgent.saveConfig(fileManager);
     if (isTFModel) {
         trainableAgent.save(tfFileManager);
     } else {
-        fileManager.path = 'model.json';
-        trainableAgent.save(fileManager);
+        const options: BrowserSaveOptions = { fileName: 'model.json' };
+        trainableAgent.save(fileManager, options);
     }
 }
 </script>
