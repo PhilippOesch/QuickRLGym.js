@@ -19,7 +19,7 @@ export default class RandomAgent extends Agent {
         }
     }
 
-    public setOptions(options: object): void {
+    public setConfig(options: object): void {
         return;
     }
 

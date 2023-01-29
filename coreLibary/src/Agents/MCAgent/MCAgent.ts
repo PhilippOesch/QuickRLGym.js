@@ -60,9 +60,13 @@ export default class MCAgent extends Agent implements TrainableAgent {
         }
     }
 
-    public setOptions(config?: MCAgentSettings, randomSeed?: number): void {
-        this.setRandomSeed(randomSeed);
-        if (config != undefined) this.config = config;
+    public setConfig(config?: MCAgentSettings, randomSeed?: number): void {
+        if (randomSeed != undefined) this.setRandomSeed(randomSeed);
+        if (config != undefined) {
+            this.config = config;
+            this.epsilon = this.config!.epsilonStart;
+            this.epsilonStep = 0;
+        }
     }
 
     step(state: object): string {
@@ -211,10 +215,29 @@ export default class MCAgent extends Agent implements TrainableAgent {
         );
     }
 
-    public async save(fileManager: FileManager): Promise<void> {
-        await fileManager.save({
-            valueTable: this.valueTable,
-            stateReturnCountTable: this.stateReturnCountTable,
-        });
+    public async save(fileManager: FileManager, path?: string): Promise<void> {
+        await fileManager.save(
+            {
+                valueTable: this.valueTable,
+                stateReturnCountTable: this.stateReturnCountTable,
+            },
+            path
+        );
+    }
+
+    async loadConfig(
+        fileManager: FileManager,
+        path?: string | undefined
+    ): Promise<void> {
+        const loadObject: MCAgentSettings = <MCAgentSettings>(
+            await fileManager.load(path)
+        );
+        this.setConfig(loadObject);
+    }
+    async saveConfig(
+        fileManager: FileManager,
+        path?: string | undefined
+    ): Promise<void> {
+        await fileManager.save(this.config!, path);
     }
 }

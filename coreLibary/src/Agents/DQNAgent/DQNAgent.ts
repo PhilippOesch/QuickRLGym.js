@@ -5,6 +5,9 @@ import SingleAgentEnvironment, {
 } from '../../RLInterface/SingleAgentEnvironment';
 import * as tf from '@tensorflow/tfjs';
 import { MathUtils } from '../../Utils';
+import TrainableAgent from '../../RLInterface/TrainableAgent';
+import FileManager from '../../RLInterface/FileManager';
+import { TFFileManager } from '../..';
 
 interface Experience {
     prevState: number[];
@@ -30,7 +33,7 @@ export interface DQNAgentSettings {
     layerNorm?: boolean;
 }
 
-export default class DQNAgent extends Agent {
+export default class DQNAgent extends Agent implements TrainableAgent {
     private config?: DQNAgentSettings;
     private rng: seedrandom.PRNG;
     private experienceReplay: ReplayMemory;
@@ -65,9 +68,13 @@ export default class DQNAgent extends Agent {
         }
     }
 
-    public setOptions(config: DQNAgentSettings, randomSeed?: number): void {
-        this.setRandomSeed(randomSeed);
-        if (config != undefined) this.config = config;
+    public setConfig(config: DQNAgentSettings, randomSeed?: number): void {
+        if (randomSeed != undefined) this.setRandomSeed(randomSeed);
+        if (config != undefined) {
+            this.config = config;
+            this.epsilon = this.config!.epsilonStart;
+            this.epsilonStep = 0;
+        }
     }
 
     init(): void {
@@ -215,8 +222,30 @@ export default class DQNAgent extends Agent {
         }
     }
 
-    public async save(path: string): Promise<void> {
+    public async save(fileManager: FileManager, path: string): Promise<void> {
         const saveResults = await this.qNetworkLocal.save(path);
+    }
+
+    async load(
+        fileManager: TFFileManager,
+        path?: string | undefined
+    ): Promise<void> {
+        throw new Error('Method not implemented.');
+    }
+    async loadConfig(
+        fileManager: FileManager,
+        path?: string | undefined
+    ): Promise<void> {
+        const loadObject: DQNAgentSettings = <DQNAgentSettings>(
+            await fileManager.load(path)
+        );
+        this.setConfig(loadObject);
+    }
+    async saveConfig(
+        fileManager: FileManager,
+        path?: string | undefined
+    ): Promise<void> {
+        await fileManager.save(this.config!, path);
     }
 
     private async train(): Promise<void> {

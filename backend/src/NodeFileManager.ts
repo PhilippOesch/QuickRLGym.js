@@ -1,29 +1,27 @@
 import path from 'path';
 import { FileManager } from '../../coreLibary/src';
-import { writeFile, readFile, mkdir } from 'node:fs/promises';
+import { writeFile, readFile, mkdir } from 'fs/promises';
 
 class NodeFileManager implements FileManager {
-    private _path: string;
+    public async load(filePath?: string): Promise<object> {
+        if (filePath === undefined) {
+            throw new Error('No Path was defined.');
+        }
 
-    public set path(savePath: string) {
-        this._path = savePath;
-    }
-
-    public get path(): string {
-        return this._path;
-    }
-
-    public async load(): Promise<object> {
-        let qtable: Buffer = await readFile(this._path);
+        let qtable: Buffer = await readFile(filePath);
         return JSON.parse(qtable.toString());
     }
-    public async save(saveObject: object): Promise<boolean> {
-        const folderPath = path.dirname(this._path);
+    public async save(saveObject: object, filePath?: string): Promise<boolean> {
+        if (filePath === undefined) {
+            throw new Error('No Path was defined.');
+        }
+
+        const folderPath = path.dirname(filePath);
         await mkdir(folderPath, { recursive: true }).catch(() => {
             console.error;
             return false;
         });
-        await writeFile(this._path, JSON.stringify(saveObject));
+        await writeFile(filePath, JSON.stringify(saveObject));
         return true;
     }
 }

@@ -5,6 +5,7 @@ import {
     QuickRLJS,
 } from '../../coreLibary/src';
 import NodeFileManager from './NodeFileManager';
+import NodeTFFileManager from './NodeTFFileManager';
 require('@tensorflow/tfjs-node-gpu');
 
 //parameters
@@ -38,9 +39,8 @@ async function trainBlackJack() {
 
     env.setAgent = agent;
     env.initAgent();
-    fileManager.path = './models/qTables/blackjack/qTable.json';
     await env.train(numIterations, logEvery);
-    await agent.save(fileManager);
+    await agent.save(fileManager, './models/qTables/blackjack/qTable.json');
 }
 
 async function trainTaxiQLAgent() {
@@ -65,9 +65,8 @@ async function trainTaxiQLAgent() {
     );
     env.setAgent = agent;
     env.initAgent();
-    fileManager.path = './models/qTables/taxi/qTable.json';
     await env.train(numIterations, logEvery, maxIterationsPerGame);
-    await agent.save(fileManager);
+    await agent.save(fileManager, './models/qTables/taxi/qTable.json');
 }
 
 async function trainTaxiMCAgent() {
@@ -87,9 +86,8 @@ async function trainTaxiMCAgent() {
     });
     env.setAgent = agent;
     env.initAgent();
-    fileManager.path = './models/qTables/taxi/qTable.json';
     await env.train(numIterations, logEvery, maxIterationsPerGame);
-    await agent.save(fileManager);
+    await agent.save(fileManager, './models/qTables/taxi/qTable.json');
 }
 
 async function trainBlackJackMCAgent() {
@@ -110,8 +108,7 @@ async function trainBlackJackMCAgent() {
     env.setAgent = agent;
     env.initAgent();
     env.train(numIterations, logEvery);
-    fileManager.path = './models/MCAgent/blackjack/mcagent.json';
-    await agent.save(fileManager);
+    await agent.save(fileManager, './models/MCAgent/blackjack/mcagent.json');
 }
 
 async function trainTaxiDQN() {
@@ -142,9 +139,13 @@ async function trainTaxiDQN() {
 
     env.setAgent = agent;
     env.initAgent();
+
+    const tFFileManager = new NodeTFFileManager();
+
     await env.train(numEpisodes, logEvery, maxIterationsPerGame);
     await agent.save(
-        'file:///Users/philippoeschger/Documents/projects/QuickRLGym.js/backend/models/DQN/Taxi'
+        tFFileManager,
+        '/QuickRLGym.js/backend/models/DQN/TaxiTest'
     );
     // await agent.save(
     //     'file:///Users/philippoeschger/Documents/projects/QuickRLGym.js/backend/models/DQN/test'

@@ -40,9 +40,13 @@ export default class QLAgent extends Agent implements TrainableAgent {
         this.config = config;
     }
 
-    public setOptions(config?: QLAgentSettings, randomSeed?: number): void {
-        this.setRandomSeed(randomSeed);
-        if (config != undefined) this.config = config;
+    public setConfig(config?: QLAgentSettings, randomSeed?: number): void {
+        if (randomSeed != undefined) this.setRandomSeed(randomSeed);
+        if (config != undefined) {
+            this.config = config;
+            this.epsilon = this.config!.epsilonStart;
+            this.epsilonStep = 0;
+        }
     }
 
     public get getQTable(): Utils.Tensor {
@@ -136,8 +140,8 @@ export default class QLAgent extends Agent implements TrainableAgent {
      * @param pathString - path to save the qtable to
      * @param fileManager - use of dependency infection to allow for different filemanagement implementations
      */
-    public async save(fileManager: FileManager): Promise<void> {
-        await fileManager.save(this.qTable);
+    public async save(fileManager: FileManager, path?: string): Promise<void> {
+        await fileManager.save(this.qTable, path);
     }
 
     /**
@@ -145,11 +149,27 @@ export default class QLAgent extends Agent implements TrainableAgent {
      * @param pathString - path to load the qtable from
      * @param fileManager - use of dependency infection to allow for different filemanagement implementations
      */
-    public async load(fileManager: FileManager): Promise<void> {
-        const loadObject: object = await fileManager.load();
+    public async load(fileManager: FileManager, path?: string): Promise<void> {
+        const loadObject: object = await fileManager.load(path);
         this.qTable = Utils.Tensor.fromJSONObject(
             loadObject as Utils.JSONTensor
         );
+    }
+
+    async loadConfig(
+        fileManager: FileManager,
+        path?: string | undefined
+    ): Promise<void> {
+        const loadObject: QLAgentSettings = <QLAgentSettings>(
+            await fileManager.load(path)
+        );
+        this.setConfig(loadObject);
+    }
+    async saveConfig(
+        fileManager: FileManager,
+        path?: string | undefined
+    ): Promise<void> {
+        await fileManager.save(this.config!, path);
     }
 
     /**
