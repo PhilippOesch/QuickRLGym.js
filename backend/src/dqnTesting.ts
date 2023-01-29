@@ -11,16 +11,6 @@ const env: SingleAgentEnvironment = QuickRLJS.loadEnv('Taxi', {
     randomSeed: randomSeed,
 }) as SingleAgentEnvironment;
 
-// export interface DQNAgentSettings {
-//     learningRate: number;
-//     discountFactor: number;
-//     nnLayer: number[];
-//     epsilonStart: number;
-//     epsilonEnd: number;
-//     epsilonDecaySteps: number;
-//     hiddenLayerActivation?: string;
-// }
-
 const agentConfig: DQNAgentSettings = {
     learningRate: 0.001,
     discountFactor: 0.5,

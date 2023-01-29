@@ -113,7 +113,7 @@ async function trainBlackJackMCAgent() {
 
 async function trainTaxiDQN() {
     const randomSeed: number = 12;
-    const numEpisodes: number = 25000;
+    const numEpisodes: number = 10000;
     const logEvery: number = 20;
     const maxIterationsPerGame: number = 100;
 
@@ -142,9 +142,10 @@ async function trainTaxiDQN() {
 
     const tFFileManager: NodeTFFileManager = new NodeTFFileManager();
     tFFileManager.paths = ['./models/DQN/TaxiTest'];
-    await env.train(20, logEvery, maxIterationsPerGame);
-    await agent.save(tFFileManager);
-    await agent.load(tFFileManager);
+    await agent.saveConfig(fileManager, './models/DQN/TaxiTest/config.json');
+    // await agent.load(tFFileManager);
+    // await env.train(numEpisodes, logEvery, maxIterationsPerGame);
+    // await agent.save(tFFileManager);
 }
 
 main();

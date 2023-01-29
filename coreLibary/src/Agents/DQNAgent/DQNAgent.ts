@@ -5,7 +5,7 @@ import SingleAgentEnvironment, {
 } from '../../RLInterface/SingleAgentEnvironment';
 import * as tf from '@tensorflow/tfjs';
 import { MathUtils } from '../../Utils';
-import TrainableAgent from '../../RLInterface/TrainableAgent';
+import PersistentAgent from '../../RLInterface/TrainableAgent';
 import FileManager from '../../RLInterface/FileManager';
 import { TFFileManager } from '../..';
 
@@ -33,7 +33,7 @@ export interface DQNAgentSettings {
     layerNorm?: boolean;
 }
 
-export default class DQNAgent extends Agent implements TrainableAgent {
+export default class DQNAgent extends Agent implements PersistentAgent {
     private config?: DQNAgentSettings;
     private rng: seedrandom.PRNG;
     private experienceReplay: ReplayMemory;
@@ -207,11 +207,9 @@ export default class DQNAgent extends Agent implements TrainableAgent {
     }
 
     public decayEpsilon(): void {
-        //console.log('decay');
         if (!this.config!.epsilonDecaySteps || !this.config!.epsilonEnd) {
             return;
         }
-        //console.log('goOn');
         if (this.epsilonStep < this.config!.epsilonDecaySteps) {
             this.epsilonStep++;
             this.epsilon =
@@ -252,19 +250,13 @@ export default class DQNAgent extends Agent implements TrainableAgent {
             this.qNetworkTarget.summary();
         }
     }
-    async loadConfig(
-        fileManager: FileManager,
-        path?: string | undefined
-    ): Promise<void> {
+    async loadConfig(fileManager: FileManager, path: string): Promise<void> {
         const loadObject: DQNAgentSettings = <DQNAgentSettings>(
             await fileManager.load(path)
         );
         this.setConfig(loadObject);
     }
-    async saveConfig(
-        fileManager: FileManager,
-        path?: string | undefined
-    ): Promise<void> {
+    async saveConfig(fileManager: FileManager, path: string): Promise<void> {
         await fileManager.save(this.config!, path);
     }
 

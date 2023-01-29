@@ -1,6 +1,6 @@
 import FileManager from './FileManager';
 
-export default interface TrainableAgent {
+export default interface PersistentAgent {
     /**
      * load the Model
      * @param fileManager FileManager Strategy
@@ -12,7 +12,7 @@ export default interface TrainableAgent {
      * @param fileManager FileManager Strategy
      * @param path Path to laod the config from
      */
-    loadConfig(fileManager: FileManager, path?: string): Promise<void>;
+    loadConfig(fileManager: FileManager, path: string): Promise<void>;
     /**
      * Save the model
      * @param fileManager FileManager Strategy
@@ -24,5 +24,5 @@ export default interface TrainableAgent {
      * @param fileManager FileManager Strategy
      * @param path Path so save the config to
      */
-    saveConfig(fileManager: FileManager, path?: string): Promise<void>;
+    saveConfig(fileManager: FileManager, path: string): Promise<void>;
 }
