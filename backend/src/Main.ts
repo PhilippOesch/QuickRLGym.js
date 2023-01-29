@@ -140,16 +140,11 @@ async function trainTaxiDQN() {
     env.setAgent = agent;
     env.initAgent();
 
-    const tFFileManager = new NodeTFFileManager();
-
-    await env.train(numEpisodes, logEvery, maxIterationsPerGame);
-    await agent.save(
-        tFFileManager,
-        '/QuickRLGym.js/backend/models/DQN/TaxiTest'
-    );
-    // await agent.save(
-    //     'file:///Users/philippoeschger/Documents/projects/QuickRLGym.js/backend/models/DQN/test'
-    // );
+    const tFFileManager: NodeTFFileManager = new NodeTFFileManager();
+    tFFileManager.paths = ['./models/DQN/TaxiTest'];
+    await env.train(20, logEvery, maxIterationsPerGame);
+    await agent.save(tFFileManager);
+    await agent.load(tFFileManager);
 }
 
 main();

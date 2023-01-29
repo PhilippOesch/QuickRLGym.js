@@ -222,15 +222,35 @@ export default class DQNAgent extends Agent implements TrainableAgent {
         }
     }
 
-    public async save(fileManager: FileManager, path: string): Promise<void> {
-        const saveResults = await this.qNetworkLocal.save(path);
+    public async save(fileManager: TFFileManager): Promise<void> {
+        const saveResults = await fileManager.save(this.qNetworkLocal);
     }
 
-    async load(
-        fileManager: TFFileManager,
-        path?: string | undefined
-    ): Promise<void> {
-        throw new Error('Method not implemented.');
+    async load(fileManager: TFFileManager): Promise<void> {
+        this.qNetworkLocal = <tf.Sequential>await fileManager.load();
+
+        const adamOptimizer = tf.train.adam(this.config!.learningRate);
+
+        this.qNetworkLocal.compile({
+            optimizer: adamOptimizer,
+            loss: 'meanSquaredError',
+            metrics: ['accuracy'],
+        });
+        this.qNetworkLocal.summary();
+
+        //additionally load target network when needed
+        if (this.config?.activateDoubleDQN) {
+            this.qNetworkTarget = <tf.Sequential>await fileManager.load();
+
+            const adamOptimizer = tf.train.adam(this.config!.learningRate);
+
+            this.qNetworkTarget.compile({
+                optimizer: adamOptimizer,
+                loss: 'meanSquaredError',
+                metrics: ['accuracy'],
+            });
+            this.qNetworkTarget.summary();
+        }
     }
     async loadConfig(
         fileManager: FileManager,
