@@ -6,7 +6,7 @@ import {
     FileManager,
     GameStateContext,
 } from '../../index';
-import PersistentAgent from '../../RLInterface/TrainableAgent';
+import PersistentAgent from '../../RLInterface/PersistentAgent';
 
 /**
  * Settings for the QLAgent
@@ -22,7 +22,7 @@ export interface QLAgentSettings {
 /**
  * Agent that represents a Q-Learning Algorithm
  */
-export default class QLAgent extends Agent implements PersistentAgent {
+export default class QLAgent extends PersistentAgent {
     private config?: QLAgentSettings;
     private rng: seedrandom.PRNG;
     private randomSeed?: string;

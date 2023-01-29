@@ -1,28 +1,32 @@
+import Agent from './Agent';
 import FileManager from './FileManager';
 
-export default interface PersistentAgent {
+/**
+ * Interface for Agents that can be stored and loaded for later usage of interference
+ */
+export default abstract class PersistentAgent extends Agent {
     /**
      * load the Model
      * @param fileManager FileManager Strategy
      * @param path Path to load the model from
      */
-    load(fileManager: FileManager, path?: string): Promise<void>;
+    abstract load(fileManager: FileManager, path?: string): Promise<void>;
     /**
      * load the config
      * @param fileManager FileManager Strategy
      * @param path Path to laod the config from
      */
-    loadConfig(fileManager: FileManager, path: string): Promise<void>;
+    abstract loadConfig(fileManager: FileManager, path: string): Promise<void>;
     /**
      * Save the model
      * @param fileManager FileManager Strategy
      * @param path Path to save the model to
      */
-    save(fileManager: FileManager, path?: string): Promise<void>;
+    abstract save(fileManager: FileManager, path?: string): Promise<void>;
     /**
      * Save the Config
      * @param fileManager FileManager Strategy
      * @param path Path so save the config to
      */
-    saveConfig(fileManager: FileManager, path: string): Promise<void>;
+    abstract saveConfig(fileManager: FileManager, path: string): Promise<void>;
 }

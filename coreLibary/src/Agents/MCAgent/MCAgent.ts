@@ -6,7 +6,7 @@ import {
     Utils,
 } from '../../index';
 import seedrandom from 'seedrandom';
-import PersistentAgent from '../../RLInterface/TrainableAgent';
+import PersistentAgent from '../../RLInterface/PersistentAgent';
 
 export interface MCAgentSettings {
     epsilonStart: number;
@@ -29,7 +29,7 @@ interface MCSaveFormat {
 /**
  * Implementation of First visit Monte Carlo
  */
-export default class MCAgent extends Agent implements PersistentAgent {
+export default class MCAgent extends PersistentAgent {
     private config?: MCAgentSettings;
     private rng: seedrandom.PRNG;
     private randomSeed?: string;
