@@ -126,7 +126,7 @@ function updateSettings(value: any, index: string): void {
 
 <style lang="postcss" scoped>
 .paramContainer {
-    @apply drop-shadow rounded-md py-3;
+    @apply rounded-md py-3 drop-shadow;
 }
 
 .selectionGrid {
@@ -146,7 +146,7 @@ h3 {
 }
 
 .selectionGrid .settingsContainer {
-    @apply grid mt-6 lg:grid-cols-6 gap-8;
+    @apply mt-6 grid gap-8 lg:grid-cols-6;
 }
 
 .SelectionFree .settingsContainer {

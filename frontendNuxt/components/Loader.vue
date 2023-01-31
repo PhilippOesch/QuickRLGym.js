@@ -15,10 +15,10 @@ defineProps({
 
 <style lang="postcss" scoped>
 .loadingElement {
-    @apply text-lg absolute w-full h-full bg-darkPurple-900 bg-opacity-50;
+    @apply absolute h-full w-full bg-darkPurple-900 bg-opacity-50 text-lg;
 }
 
 .loadingContentWrapper {
-    @apply w-full h-full flex place-content-center place-items-center mb-2;
+    @apply mb-2 flex h-full w-full place-content-center place-items-center;
 }
 </style>

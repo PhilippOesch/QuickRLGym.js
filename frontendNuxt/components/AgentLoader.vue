@@ -242,7 +242,7 @@ input[type='file'] {
 }
 
 .fileNameLabel {
-    @apply py-2 px-4 flex;
+    @apply flex py-2 px-4;
 }
 
 .fileLoaderContainer {
@@ -250,6 +250,6 @@ input[type='file'] {
 }
 
 .fileUploadElement .inputButton {
-    @apply bg-darkPurple-700 flex py-2 px-4 text-base rounded-md drop-shadow cursor-pointer;
+    @apply flex cursor-pointer rounded-md bg-darkPurple-700 py-2 px-4 text-base drop-shadow;
 }
 </style>
