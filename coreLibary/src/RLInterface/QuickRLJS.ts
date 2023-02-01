@@ -1,5 +1,5 @@
 import Environment from './Environment';
-import { Envs } from '../index';
+import { Envs, SingleAgentEnvironment } from '../index';
 
 /**
  * Main Class for Framework
@@ -37,7 +37,40 @@ class QuickRLJS {
      * @param envtype - The referenct to the environment class
      */
     static register(name: string, envtype: typeof Environment): void {
+        if (QuickRLJS.nameAlreadyRegistered(name)) {
+            throw new Error(
+                'The specified Environment name is already registered'
+            );
+        }
+
+        if (
+            !(envtype.prototype instanceof Environment) &&
+            envtype !== SingleAgentEnvironment
+        ) {
+            throw new Error(
+                'The provided envtype must be of type "Environment"'
+            );
+        }
+
+        if (QuickRLJS.envTypeAlreadyRegistered(envtype)) {
+            throw new Error(
+                'The Environment is already registered under a different name'
+            );
+        }
+
         QuickRLJS.registery.set(name, envtype);
+    }
+
+    private static envTypeAlreadyRegistered(
+        envtype: typeof Environment
+    ): boolean {
+        const envTypes = new Set(QuickRLJS.registery.values());
+        return envTypes.has(envtype);
+    }
+
+    private static nameAlreadyRegistered(envName: string): boolean {
+        const envNames = new Set(QuickRLJS.registery.keys());
+        return envNames.has(envName);
     }
 }
 

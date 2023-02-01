@@ -7,7 +7,7 @@ export interface GameStateContext {
     maxIterationReached: boolean;
 }
 
-abstract class SingleAgentEnvironment implements Environment {
+abstract class SingleAgentEnvironment extends Environment {
     protected _lastAction?: string;
     protected agent?: Agent;
     protected initialState?: object;
