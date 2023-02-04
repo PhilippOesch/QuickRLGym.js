@@ -34,12 +34,17 @@
             /><span class="inputButton">Select Weights File</span
             ><span class="fileNameLabel">{{ weightsFileName }}</span></label
         >
-        <Button
-            :size="ButtonSize.Large"
-            value="Load Model"
-            :handler="loadAgent"
-            :disabled="loaderDisabled"
-        />
+        <div class="loaderButtonContainer">
+            <Button
+                :size="ButtonSize.Large"
+                value="Load Model"
+                :handler="loadAgent"
+                :disabled="loaderDisabled"
+            />
+            <div v-if="agentLoaded" class="agentLoadedInfo">
+                Agent has been loaded
+            </div>
+        </div>
     </div>
 </template>
 
@@ -76,6 +81,8 @@ const props = defineProps({
     },
     agentObject: Object as PropType<PersistentAgent>,
 });
+
+const agentLoaded = ref(false);
 
 onMounted(() => {
     setActiveAlgorithm();
@@ -192,6 +199,7 @@ async function loadAgentFiles(
     if (!binWeightsActive.value && isValidFileType(modelFiles[0])) {
         const options: BrowserLoadOptions = { file: modelFiles[0] };
         await agent.load(new BrowserFileStrategy(), options);
+        agentLoaded.value = true;
     }
 
     if (
@@ -203,6 +211,7 @@ async function loadAgentFiles(
             files: [modelFiles[0], weightFiles![0]],
         };
         await agent.load(new TFBrowserFileStrategy(), options);
+        agentLoaded.value = true;
     }
     return agent;
 }
@@ -218,6 +227,7 @@ watch(
         configFileName.value = fileNameDefault;
         weightsFileName.value = fileNameDefault;
         loaderDisabled.value = true;
+        agentLoaded.value = false;
     }
 );
 
@@ -253,5 +263,13 @@ input[type='file'] {
 
 .fileUploadElement .inputButton {
     @apply flex cursor-pointer rounded-md bg-darkPurple-700 py-2 px-4 text-base drop-shadow;
+}
+
+.loaderButtonContainer {
+    @apply flex flex-row;
+}
+
+.agentLoadedInfo {
+    @apply block py-2 px-4;
 }
 </style>
