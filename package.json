@@ -16,7 +16,7 @@
     "url": "git+https://github.com/PhilippOesch/QuickRLGym.js.git"
   },
   "author": "Philipp Oeschger",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/PhilippOesch/QuickRLGym.js/issues"
   },

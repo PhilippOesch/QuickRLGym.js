@@ -145,14 +145,13 @@ async function loadAgent(): Promise<void> {
 async function loadIntoExistingAgent() {
     let loadAgent: PersistentAgent = <PersistentAgent>props.agentObject;
     loadAgent = await loadAgentFiles(loadAgent);
-    console.log(props.agentObject);
 }
 
 function isValidFileType(file: File) {
     return validFileTypes.includes(file.type);
 }
 
-const { getActiveAlgorithm } = useSettingsStore();
+const { getActiveAlgorithm, updateSetting } = useSettingsStore();
 const tabStore = useTabStore();
 
 async function loadNewAgent(): Promise<void> {
@@ -182,9 +181,12 @@ async function loadAgentFiles(
         weightFiles = loaderInputWeights.value.files;
     }
 
-    if (isValidFileType(modelFiles[0])) {
+    if (isValidFileType(configFiles[0])) {
         const options: BrowserLoadOptions = { file: configFiles[0] };
         await agent.loadConfig(new BrowserFileStrategy(), options);
+
+        const activeAlgorithm: string = getActiveAlgorithm(props.gameId);
+        updateSetting(props.gameId, activeAlgorithm, agent.config);
     }
 
     if (!binWeightsActive.value && isValidFileType(modelFiles[0])) {

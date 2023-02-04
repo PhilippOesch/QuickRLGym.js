@@ -72,7 +72,7 @@ async function initializeTraining() {
     );
     env.setOptions(gameSettings);
 
-    if (agent == undefined) {
+    if (props.agent == undefined) {
         agent = useAgent(
             activeAlgorithm,
             sceneInfo?.env as Environment,
@@ -80,10 +80,11 @@ async function initializeTraining() {
             gameSettings.randomSeed
         );
     } else {
+        agent = props.agent;
         agent.setConfig(getAgentSettings, gameSettings.randomSeed);
     }
+    console.log('initial Agent', agent);
     env.setAgent = agent as Agent;
-    env.initAgent();
 
     trainingLoop(
         env,
@@ -191,11 +192,11 @@ onMounted(async () => {
 
 <style lang="postcss" scoped>
 .gameWrapper .info {
-    @apply grid lg:grid-cols-6 gap-8 mb-4;
+    @apply mb-4 grid gap-8 lg:grid-cols-6;
 }
 
 .gameWrapper .infoBox {
-    @apply bg-darkPurple-800 p-4 rounded-md;
+    @apply rounded-md bg-darkPurple-800 p-4;
 }
 
 .gameWrapperContainer {
@@ -219,7 +220,7 @@ onMounted(async () => {
 }
 
 .gameContainer {
-    @apply w-full bg-darkPurple-800 rounded-md max-h-fit relative;
+    @apply relative max-h-fit w-full rounded-md bg-darkPurple-800;
 }
 
 .gameContainer :deep(canvas) {

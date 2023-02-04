@@ -32,7 +32,7 @@ export interface DQNAgentSettings {
 }
 
 export default class DQNAgent extends PersistentAgent {
-    private config?: DQNAgentSettings;
+    private _config?: DQNAgentSettings;
     private rng: seedrandom.PRNG;
     private experienceReplay: ReplayMemory;
     private randomSeed?: string;
@@ -50,7 +50,11 @@ export default class DQNAgent extends PersistentAgent {
     ) {
         super(env);
         this.setRandomSeed(randomSeed);
-        this.config = config;
+        this._config = config;
+    }
+
+    get config(): object | undefined {
+        return this._config;
     }
 
     /**
@@ -69,25 +73,25 @@ export default class DQNAgent extends PersistentAgent {
     public setConfig(config: DQNAgentSettings, randomSeed?: number): void {
         if (randomSeed != undefined) this.setRandomSeed(randomSeed);
         if (config != undefined) {
-            this.config = config;
-            this.epsilon = this.config!.epsilonStart;
+            this._config = config;
+            this.epsilon = this._config!.epsilonStart;
         }
         this.epsilonStep = 0;
     }
 
     init(): void {
-        if (this.config) {
+        if (this._config) {
             this.experienceReplay = new ReplayMemory(
-                this.config.replayMemorySize
+                this._config.replayMemorySize
             );
         }
         // create local qNetwork
         this.qNetworkLocal = this.createNetwork();
-        if (this.config) {
-            this.epsilon = this.config.epsilonStart;
+        if (this._config) {
+            this.epsilon = this._config.epsilonStart;
 
             // when active create target network for DDQN
-            if (this.config.activateDoubleDQN)
+            if (this._config.activateDoubleDQN)
                 this.qNetworkTarget = this.createNetwork();
         }
     }
@@ -121,7 +125,7 @@ export default class DQNAgent extends PersistentAgent {
     }
     private replayMemoryLargeEnougth() {
         return (
-            this.experienceReplay.getSize >= this.config!.replayMemoryInitSize
+            this.experienceReplay.getSize >= this._config!.replayMemoryInitSize
         );
     }
 
@@ -144,8 +148,8 @@ export default class DQNAgent extends PersistentAgent {
     createNetwork(): tf.Sequential {
         const model = tf.sequential();
 
-        const hiddenLayerAct = this.config?.hiddenLayerActivation
-            ? this.config?.hiddenLayerActivation
+        const hiddenLayerAct = this._config?.hiddenLayerActivation
+            ? this._config?.hiddenLayerActivation
             : 'relu';
 
         // hidden layer
@@ -153,11 +157,11 @@ export default class DQNAgent extends PersistentAgent {
             tf.layers.dense({
                 inputShape: [this.env.stateDim.length],
                 activation: hiddenLayerAct as any,
-                units: this.config!.nnLayer[0],
+                units: this._config!.nnLayer[0],
                 kernelInitializer: 'heUniform',
             })
         );
-        if (this.config!.layerNorm) {
+        if (this._config!.layerNorm) {
             model.add(
                 tf.layers.layerNormalization({
                     center: true,
@@ -166,15 +170,15 @@ export default class DQNAgent extends PersistentAgent {
             );
         }
 
-        for (let i = 1; i < this.config!.nnLayer.length; i++) {
+        for (let i = 1; i < this._config!.nnLayer.length; i++) {
             model.add(
                 tf.layers.dense({
-                    units: this.config!.nnLayer[i],
+                    units: this._config!.nnLayer[i],
                     activation: hiddenLayerAct as any,
                     kernelInitializer: 'heUniform',
                 })
             );
-            if (this.config!.layerNorm) {
+            if (this._config!.layerNorm) {
                 model.add(
                     tf.layers.layerNormalization({
                         center: true,
@@ -192,7 +196,7 @@ export default class DQNAgent extends PersistentAgent {
             })
         );
 
-        const adamOptimizer = tf.train.adam(this.config!.learningRate);
+        const adamOptimizer = tf.train.adam(this._config!.learningRate);
 
         model.compile({
             optimizer: adamOptimizer,
@@ -205,15 +209,15 @@ export default class DQNAgent extends PersistentAgent {
     }
 
     public decayEpsilon(): void {
-        if (!this.config!.epsilonDecaySteps || !this.config!.epsilonEnd) {
+        if (!this._config!.epsilonDecaySteps || !this._config!.epsilonEnd) {
             return;
         }
-        if (this.epsilonStep < this.config!.epsilonDecaySteps) {
+        if (this.epsilonStep < this._config!.epsilonDecaySteps) {
             this.epsilonStep++;
             this.epsilon =
-                this.config!.epsilonStart -
-                ((this.config!.epsilonStart - this.config!.epsilonEnd) /
-                    this.config!.epsilonDecaySteps) *
+                this._config!.epsilonStart -
+                ((this._config!.epsilonStart - this._config!.epsilonEnd) /
+                    this._config!.epsilonDecaySteps) *
                     this.epsilonStep;
         }
     }
@@ -228,7 +232,7 @@ export default class DQNAgent extends PersistentAgent {
     async load(fileManager: FileStrategy, options?: object): Promise<void> {
         this.qNetworkLocal = <tf.Sequential>await fileManager.load(options);
 
-        const adamOptimizer = tf.train.adam(this.config!.learningRate);
+        const adamOptimizer = tf.train.adam(this._config!.learningRate);
 
         this.qNetworkLocal.compile({
             optimizer: adamOptimizer,
@@ -238,10 +242,10 @@ export default class DQNAgent extends PersistentAgent {
         this.qNetworkLocal.summary();
 
         //additionally load target network when needed
-        if (this.config?.activateDoubleDQN) {
+        if (this._config?.activateDoubleDQN) {
             this.qNetworkTarget = <tf.Sequential>await fileManager.load();
 
-            const adamOptimizer = tf.train.adam(this.config!.learningRate);
+            const adamOptimizer = tf.train.adam(this._config!.learningRate);
 
             this.qNetworkTarget.compile({
                 optimizer: adamOptimizer,
@@ -264,21 +268,21 @@ export default class DQNAgent extends PersistentAgent {
         fileManager: FileStrategy,
         options?: object
     ): Promise<void> {
-        await fileManager.save(this.config!, options);
+        await fileManager.save(this._config!, options);
     }
 
     private async train(): Promise<void> {
         this.timeStep++;
 
         const miniBatch: BatchSample = this.experienceReplay.sample(
-            this.config!.batchSize,
+            this._config!.batchSize,
             this.rng
         );
 
         let targetNetwork: tf.Sequential;
 
         // use target network when in double DQN mode
-        if (this.config!.activateDoubleDQN) {
+        if (this._config!.activateDoubleDQN) {
             targetNetwork = this.qNetworkTarget;
         } else {
             targetNetwork = this.qNetworkLocal;
@@ -299,37 +303,37 @@ export default class DQNAgent extends PersistentAgent {
         ).arraySync() as number[][];
 
         // update target according to algorithm
-        for (let i = 0; i < this.config!.batchSize; i++) {
+        for (let i = 0; i < this._config!.batchSize; i++) {
             if (miniBatch.contextInfoBatch[i].isTerminal) {
                 target[i][miniBatch.actionBatch[i]] = miniBatch.payoffBatch[i];
             } else {
                 const argMaxQ = Math.max(...targetNext[i]);
                 target[i][miniBatch.actionBatch[i]] =
                     miniBatch.payoffBatch[i] +
-                    this.config!.discountFactor * argMaxQ;
+                    this._config!.discountFactor * argMaxQ;
             }
         }
 
         let targetTensor = tf.tensor(target, [
-            this.config!.batchSize,
+            this._config!.batchSize,
             this.env.actionSpace.length,
         ]);
         //targetTensor.print();
         let stateTensor = tf.tensor(miniBatch.stateBatch, [
-            this.config!.batchSize,
+            this._config!.batchSize,
             this.env.stateDim.length,
         ]);
         //stateTensor.print();
         //targetTensor.print();
         this.loss = await this.qNetworkLocal.fit(stateTensor, targetTensor, {
-            batchSize: this.config!.batchSize,
+            batchSize: this._config!.batchSize,
             verbose: 0,
         });
 
         // update target network every "updateTargetEvery" steps
         if (
-            this.config!.activateDoubleDQN &&
-            this.timeStep >= this.config!.updateTargetEvery!
+            this._config!.activateDoubleDQN &&
+            this.timeStep >= this._config!.updateTargetEvery!
         ) {
             this.qNetworkTarget.setWeights(this.qNetworkLocal.getWeights());
             console.log('target weights updated');

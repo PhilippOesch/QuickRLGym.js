@@ -29,7 +29,7 @@ const props = defineProps({
 
 const { getIsActive, getActiveAlgorithm } = useSettingsStore();
 
-function save(): void {
+async function save(): Promise<void> {
     if (props.agentObject == undefined) {
         return;
     }
@@ -42,12 +42,14 @@ function save(): void {
 
     console.log('save Agent');
     console.log(props.agentObject);
-    trainableAgent.saveConfig(new BrowserFileStrategy());
+
+    const options: BrowserSaveOptions = { fileName: 'config.json' };
+    await trainableAgent.saveConfig(new BrowserFileStrategy(), options);
     if (isTFModel) {
-        trainableAgent.save(new TFBrowserFileStrategy());
+        await trainableAgent.save(new TFBrowserFileStrategy());
     } else {
         const options: BrowserSaveOptions = { fileName: 'model.json' };
-        trainableAgent.save(new BrowserFileStrategy(), options);
+        await trainableAgent.save(new BrowserFileStrategy(), options);
     }
 }
 </script>

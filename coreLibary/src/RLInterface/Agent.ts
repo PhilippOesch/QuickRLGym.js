@@ -47,6 +47,13 @@ export default abstract class Agent {
     abstract setConfig(config?: object, randomSeed?: number): void;
 
     /**
+     * set The configuration of the agent after initailizing
+     * @param config - The config object
+     * @param randomSeed - The random Seed
+     */
+    abstract get config(): object | undefined;
+
+    /**
      * Method to select an action for prediction
      * @param {object} state - The current game state
      * @returns {string} - The action to select next

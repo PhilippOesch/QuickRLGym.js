@@ -2,7 +2,7 @@
     <div :class="['paramContainer', selectionType]">
         <h3 v-if="title">{{ title }}</h3>
         <div class="settingsContainer">
-            <template v-for="(item, index) in settingsObject">
+            <template v-for="(item, index) in settingsObject" :key="renderKey">
                 <InputSlider
                     v-if="getType(item) == 'Slider'"
                     :name="index"
@@ -58,7 +58,7 @@
 </template>
 
 <script setup lang="ts">
-import { PropType, computed } from 'vue';
+import { PropType, computed, Ref } from 'vue';
 import {
     SettingArray,
     SettingBoolean,
@@ -96,7 +96,16 @@ const settingsStore = useSettingsStore();
 
 let isDisabled = computed(() => !settingsStore.getIsActive(props.gameId));
 
+let renderKey = ref(0);
+
 let settings = settingsStore.getSetting(props.gameId, props.algorithmName);
+
+settingsStore.$subscribe(() => {
+    settings = settingsStore.getSetting(props.gameId, props.algorithmName);
+
+    // trigger rerender
+    renderKey.value += 1;
+});
 
 if (props.algorithmName !== 'gameSettings') {
     settingsStore.setActiveAlgorithm(props.gameId, props.algorithmName);

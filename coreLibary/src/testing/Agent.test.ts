@@ -2,7 +2,10 @@ import Agent from '../RLInterface/Agent';
 import sinon from 'sinon';
 
 describe('Agent', function () {
-    class TestAgent extends Agent {
+    class MockAgent extends Agent {
+        get config(): object {
+            return {};
+        }
         init(): void {
             console.log('Agent Initialized');
         }
@@ -26,22 +29,22 @@ describe('Agent', function () {
         log(): void {}
     }
 
-    const testAgent = new TestAgent({} as any);
+    const testAgent = new MockAgent({} as any);
 
-    it('mock the init method', function () {
+    it('init method', function () {
         const agentMock = sinon.mock(testAgent).expects('init');
         agentMock.exactly(1);
         testAgent.init();
     });
 
-    it('mock the feed method', function () {
+    it('feed method', function () {
         const agentMock = sinon.mock(testAgent).expects('feed');
         agentMock.exactly(1);
         agentMock.withArgs({ test: 'test' }, 'action', {}, 2, {});
         testAgent.feed({ test: 'test' }, 'action', {}, 2, {});
     });
 
-    it('mock the step method', function () {
+    it('step method', function () {
         const agentMock = sinon.mock(testAgent).expects('step');
         agentMock.exactly(1);
         agentMock.withArgs({ test: 'test' });
@@ -49,17 +52,23 @@ describe('Agent', function () {
         testAgent.step({ test: 'test' });
     });
 
-    it('mock the stepConfig method', function () {
+    it('setConfig method', function () {
         const agentMock = sinon.mock(testAgent).expects('setConfig');
         agentMock.exactly(1);
         agentMock.withArgs({ test: 'test' }, 14);
         testAgent.setConfig({ test: 'test' }, 14);
     });
 
-    it('mock the evalStep method', function () {
+    it('evalStep method', function () {
         const agentMock = sinon.mock(testAgent).expects('evalStep');
         agentMock.exactly(1);
         agentMock.withArgs({ y: 5, x: 2 });
         testAgent.evalStep({ y: 5, x: 2 });
+    });
+
+    it('log method', function () {
+        const agentMock = sinon.mock(testAgent).expects('log');
+        agentMock.exactly(1);
+        testAgent.log();
     });
 });

@@ -3,7 +3,7 @@
         <h1 class="title">Select A Game</h1>
         <div class="gameSelectContainer">
             <template v-for="link in links" :key="link.link">
-                <NuxtLink class="linkButton" :to="link.link">
+                <NuxtLink class="linkButton bg-slate-600" :to="link.link">
                     <i :class="setClasses(link)" :alt="link.title" />
                     <div class="rightSide">
                         <h2>{{ link.title }}</h2>
@@ -53,29 +53,26 @@ function setClasses(link: any) {
 
 <style lang="postcss" scoped>
 .gameSelectContainer {
-    @apply mt-8 grid lg:grid-cols-2 grid-cols-1 gap-[2px] rounded-md drop-shadow;
+    @apply mt-8 grid grid-cols-1 gap-[2px] rounded-md drop-shadow lg:grid-cols-2;
 }
 
 .linkButton {
-    @apply first:rounded-t-md 
-        lg:first:rounded-tr-none 
-        last:rounded-b-md 
-        lg:last:rounded-bl-none 
-        px-6 py-6 text-lg
-        bg-darkPurple-800 
-        hover:bg-darkPurple-700
-        flex;
+    @apply flex bg-darkPurple-800 bg-opacity-100 px-6 py-6 text-lg first:rounded-t-md last:rounded-b-md hover:bg-darkPurple-700 lg:first:rounded-tr-none lg:last:rounded-bl-none;
+    @apply bg-darkPurple-800;
 }
+/* .linkButton {
+    @apply block bg-slate-600;
+} */
 
 .icon {
-    @apply text-5xl mr-4 grid justify-center align-middle;
+    @apply mr-4 grid justify-center align-middle text-5xl;
 }
 
 h2 {
     @apply text-xl;
 }
 p {
-    @apply text-sm mt-1;
+    @apply mt-1 text-sm;
 }
 
 .linkButton:nth-child(2) {

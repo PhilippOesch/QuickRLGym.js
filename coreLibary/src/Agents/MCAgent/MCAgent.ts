@@ -30,7 +30,7 @@ interface MCSaveFormat {
  * Implementation of First visit Monte Carlo
  */
 export default class MCAgent extends PersistentAgent {
-    private config?: MCAgentSettings;
+    private _config?: MCAgentSettings;
     private rng: seedrandom.PRNG;
     private randomSeed?: string;
     private valueTable: Utils.Tensor;
@@ -47,7 +47,11 @@ export default class MCAgent extends PersistentAgent {
     ) {
         super(env);
         this.setRandomSeed(randomSeed);
-        this.config = config;
+        this._config = config;
+    }
+
+    get config(): object | undefined {
+        return this._config;
     }
 
     init(): void {
@@ -55,14 +59,14 @@ export default class MCAgent extends PersistentAgent {
         valueTableDims.push(this.env.actionSpace.length);
         this.valueTable = Utils.Tensor.Zeros(valueTableDims);
         this.stateReturnCountTable = Utils.Tensor.Zeros(valueTableDims);
-        this.setConfig(this.config);
+        this.setConfig(this._config);
     }
 
     public setConfig(config?: MCAgentSettings, randomSeed?: number): void {
         if (randomSeed != undefined) this.setRandomSeed(randomSeed);
         if (config != undefined) {
-            this.config = config;
-            this.epsilon = this.config!.epsilonStart;
+            this._config = config;
+            this.epsilon = this._config!.epsilonStart;
         }
         this.epsilonStep = 0;
     }
@@ -98,16 +102,16 @@ export default class MCAgent extends PersistentAgent {
     }
 
     public decayEpsilon(): void {
-        if (!this.config!.epsilonDecaySteps || !this.config!.epsilonEnd) {
+        if (!this._config!.epsilonDecaySteps || !this._config!.epsilonEnd) {
             return;
         }
 
-        if (this.epsilonStep < this.config!.epsilonDecaySteps) {
+        if (this.epsilonStep < this._config!.epsilonDecaySteps) {
             this.epsilonStep++;
             this.epsilon =
-                this.config!.epsilonStart -
-                ((this.config!.epsilonStart - this.config!.epsilonEnd) /
-                    this.config!.epsilonDecaySteps) *
+                this._config!.epsilonStart -
+                ((this._config!.epsilonStart - this._config!.epsilonEnd) /
+                    this._config!.epsilonDecaySteps) *
                     this.epsilonStep;
         }
     }
@@ -143,7 +147,7 @@ export default class MCAgent extends PersistentAgent {
         this.decayEpsilon();
         for (let i = this.experience.length - 1; i >= 0; i--) {
             const idxExperience: ExperienceEntry = this.experience[i];
-            g = g * this.config!.discountFactor + idxExperience.reward;
+            g = g * this._config!.discountFactor + idxExperience.reward;
             const alreadyVisited: boolean = this.stateAlreadyVisited(
                 idxExperience.state,
                 visitedExperiences
@@ -243,6 +247,6 @@ export default class MCAgent extends PersistentAgent {
         fileManager: FileStrategy,
         options?: object
     ): Promise<void> {
-        await fileManager.save(this.config!, options);
+        await fileManager.save(this._config!, options);
     }
 }

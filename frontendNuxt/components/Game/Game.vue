@@ -117,7 +117,7 @@ function onPassAgent(passedAgent: any) {
 
 function onLoadNewAgent(loadedAgent: any) {
     agent.value = loadedAgent;
-    console.log(agent.value);
+    console.log('loadedAgent', agent.value);
 }
 
 watch(
@@ -130,11 +130,11 @@ watch(
 
 <style lang="postcss" scoped>
 .tabSelectContainer {
-    @apply bg-darkPurple-800 px-2 py-2 rounded-md flex gap-4 drop-shadow mt-6 max-w-fit;
+    @apply mt-6 flex max-w-fit gap-4 rounded-md bg-darkPurple-800 px-2 py-2 drop-shadow;
 }
 
 .tab {
-    @apply px-6 py-3 hover:bg-darkPurple-700 rounded-md duration-300 cursor-pointer;
+    @apply cursor-pointer rounded-md px-6 py-3 duration-300 hover:bg-darkPurple-700;
 }
 
 .tabContainer {
@@ -142,6 +142,6 @@ watch(
 }
 
 .freeComponents {
-    @apply flex flex-wrap mt-8 gap-8;
+    @apply mt-8 flex flex-wrap gap-8;
 }
 </style>

@@ -24,5 +24,7 @@ export default function useAgent(
     const agentType = agentMapping.get(agentName) as any;
     const agent: Agent = new agentType.agentType(env) as Agent;
     agent.setConfig(options, randomSeed);
+    agent.init();
+    console.log('new Agent loaded');
     return agent;
 }
