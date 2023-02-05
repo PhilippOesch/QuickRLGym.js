@@ -30,45 +30,52 @@ describe('Agent', function () {
     }
 
     const testAgent = new MockAgent({} as any);
+    const agentMock = sinon.mock(testAgent);
 
-    it('init method', function () {
-        const agentMock = sinon.mock(testAgent).expects('init');
-        agentMock.exactly(1);
+    it('init', function () {
+        const mockMethod = agentMock.expects('init');
+        mockMethod.exactly(1);
         testAgent.init();
+        mockMethod.verify();
     });
 
-    it('feed method', function () {
-        const agentMock = sinon.mock(testAgent).expects('feed');
-        agentMock.exactly(1);
-        agentMock.withArgs({ test: 'test' }, 'action', {}, 2, {});
+    it('feed', function () {
+        const mockMethod = agentMock.expects('feed');
+        mockMethod.exactly(1);
+        mockMethod.withArgs({ test: 'test' }, 'action', {}, 2, {});
         testAgent.feed({ test: 'test' }, 'action', {}, 2, {});
+        mockMethod.verify();
     });
 
-    it('step method', function () {
-        const agentMock = sinon.mock(testAgent).expects('step');
-        agentMock.exactly(1);
-        agentMock.withArgs({ test: 'test' });
-        agentMock.returned('action');
+    it('step', function () {
+        const mockMethod = agentMock.expects('step');
+        mockMethod.exactly(1);
+        mockMethod.withArgs({ test: 'test' });
+        mockMethod.returned('action');
         testAgent.step({ test: 'test' });
+        mockMethod.verify();
     });
 
-    it('setConfig method', function () {
-        const agentMock = sinon.mock(testAgent).expects('setConfig');
-        agentMock.exactly(1);
-        agentMock.withArgs({ test: 'test' }, 14);
+    it('setConfig', function () {
+        const mockMethod = agentMock.expects('setConfig');
+        mockMethod.exactly(1);
+        mockMethod.withArgs({ test: 'test' }, 14);
         testAgent.setConfig({ test: 'test' }, 14);
+        mockMethod.verify();
     });
 
-    it('evalStep method', function () {
-        const agentMock = sinon.mock(testAgent).expects('evalStep');
-        agentMock.exactly(1);
-        agentMock.withArgs({ y: 5, x: 2 });
+    it('evalStep', function () {
+        const mockMethod = agentMock.expects('evalStep');
+        mockMethod.exactly(1);
+        mockMethod.withArgs({ y: 5, x: 2 });
         testAgent.evalStep({ y: 5, x: 2 });
+        mockMethod.verify();
     });
 
-    it('log method', function () {
-        const agentMock = sinon.mock(testAgent).expects('log');
-        agentMock.exactly(1);
+    it('log', function () {
+        const mockMethod = agentMock.expects('log');
+        mockMethod.exactly(1);
         testAgent.log();
+        mockMethod.verify();
     });
 });

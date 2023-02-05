@@ -19,6 +19,10 @@ export default class RandomAgent extends Agent {
         }
     }
 
+    get config(): object | undefined {
+        return { randomSeed: this.randomSeed };
+    }
+
     public setConfig(options?: object, randomSeed?: number): void {
         if (randomSeed != undefined) {
             this.randomSeed = randomSeed.toString();
