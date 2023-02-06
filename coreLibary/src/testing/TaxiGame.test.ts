@@ -3,6 +3,7 @@ import { describe } from 'mocha';
 import { Utils, StepResult } from '..';
 //import { TaxiGame, TaxiGameState } from '../Games/TaxiGame';
 import { Games } from '..';
+import { TaxiGame } from '../Games/TaxiGame';
 
 describe('TaxiGame', function () {
     const game: Games.Taxi.TaxiGame = new Games.Taxi.TaxiGame();
@@ -28,7 +29,7 @@ describe('TaxiGame', function () {
         });
 
         it('check initial Game state index encoding', function () {
-            const encoding = game.encodeStateToIndices(game.gameState);
+            const encoding = TaxiGame.encodeStateToIndices(game.gameState);
             assert.strictEqual(encoding[0], initialState.playerPos.getX);
             assert.strictEqual(encoding[1], initialState.playerPos.getY);
             assert.strictEqual(encoding[2], initialState.destinationIdx);
@@ -148,14 +149,14 @@ describe('TaxiGame', function () {
             customerPosIdx: 0,
         };
         game.reset(true, initialState);
-        game.step('Up') as StepResult;
-        game.step('PickUp') as StepResult;
-        game.step('Down') as StepResult;
-        game.step('Down') as StepResult;
-        game.step('Down') as StepResult;
-        game.step('Down') as StepResult;
+        game.step('Up');
+        game.step('PickUp');
+        game.step('Down');
+        game.step('Down');
+        game.step('Down');
+        game.step('Down');
         const stepResult = game.step('DropOff') as StepResult;
-        const newState = stepResult.newState as Games.Taxi.TaxiGameState;
+        stepResult.newState as Games.Taxi.TaxiGameState;
         it('check game termination', function () {
             assert.strict(game.isTerminal);
         });

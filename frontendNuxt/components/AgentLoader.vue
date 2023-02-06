@@ -151,7 +151,7 @@ async function loadAgent(): Promise<void> {
 
 async function loadIntoExistingAgent() {
     let loadAgent: PersistentAgent = <PersistentAgent>props.agentObject;
-    loadAgent = await loadAgentFiles(loadAgent);
+    await loadAgentFiles(loadAgent);
 }
 
 function isValidFileType(file: File) {
@@ -180,35 +180,35 @@ async function loadNewAgent(): Promise<void> {
 async function loadAgentFiles(
     agent: PersistentAgent
 ): Promise<PersistentAgent> {
-    const modelFiles: File[] = loaderInputModel.value.files;
-    const configFiles: File[] = loaderInputConfig.value.files;
+    const modelFile: File = loaderInputModel.value.files[0];
+    const configFile: File = loaderInputConfig.value.file[0];
 
-    let weightFiles: File[];
+    let weightFile: File;
     if (binWeightsActive.value) {
-        weightFiles = loaderInputWeights.value.files;
+        weightFile = loaderInputWeights.value.files[0];
     }
 
-    if (isValidFileType(configFiles[0])) {
-        const options: BrowserLoadOptions = { file: configFiles[0] };
+    if (isValidFileType(configFile)) {
+        const options: BrowserLoadOptions = { file: configFile };
         await agent.loadConfig(new BrowserFileStrategy(), options);
 
         const activeAlgorithm: string = getActiveAlgorithm(props.gameId);
         updateSetting(props.gameId, activeAlgorithm, agent.config);
     }
 
-    if (!binWeightsActive.value && isValidFileType(modelFiles[0])) {
-        const options: BrowserLoadOptions = { file: modelFiles[0] };
+    if (!binWeightsActive.value && isValidFileType(modelFile)) {
+        const options: BrowserLoadOptions = { file: modelFile };
         await agent.load(new BrowserFileStrategy(), options);
         agentLoaded.value = true;
     }
 
     if (
         binWeightsActive.value &&
-        isValidFileType(modelFiles[0]) &&
-        isValidFileType(weightFiles![0])
+        isValidFileType(modelFile) &&
+        isValidFileType(weightFile!)
     ) {
         const options: TFLoadOptions = {
-            files: [modelFiles[0], weightFiles![0]],
+            files: [modelFile, weightFile!],
         };
         await agent.load(new TFBrowserFileStrategy(), options);
         agentLoaded.value = true;

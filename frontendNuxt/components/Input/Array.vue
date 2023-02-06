@@ -5,7 +5,7 @@
             type="text"
             v-model="value"
             :class="inputStyle"
-            @change="(event) => finishEdit(event.target as HTMLInputElement)"
+            @change="() => finishEdit()"
             :disabled="disabled"
         />
     </div>
@@ -44,7 +44,7 @@ if (props.defaultValue) {
 
 let numArray = [];
 
-function finishEdit(evt: HTMLInputElement): void {
+function finishEdit(): void {
     const subArray: string[] = (<string>value.value).split(props.delimiter);
     numArray = [];
     for (let entry of subArray) {
@@ -56,7 +56,7 @@ function finishEdit(evt: HTMLInputElement): void {
 
 <style lang="postcss" scoped>
 .numberInputContainer input {
-    @apply w-full py-1 px-2 rounded-md mt-2 disabled:opacity-40;
+    @apply mt-2 w-full rounded-md py-1 px-2 disabled:opacity-40;
 }
 
 .numberInputContainer h3 {

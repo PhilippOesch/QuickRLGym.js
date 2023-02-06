@@ -63,6 +63,7 @@ abstract class SingleAgentEnvironment extends Environment {
      * @param iterations - numbers of iterations to iterate.
      * @param logEvery - loging interval relative to training iterations.
      * @param maxIterationPerGame - how many iterations for a game until it automatically terminates.
+     * @param resetStatsOnLog - bool to indicate the reseting of stats after logging
      * If maxIterationPerGame = -1, the game iterates endless.
      */
     public async train(

@@ -4,11 +4,9 @@ import Vec2 from '../../Utils/Vec2';
 
 /**
  * The Player class
- * @property {Map<Action, Vec2>} moveDirMapping - Static mapping of Actions to direction vectors.
- * @property {Action} moveState - Current state of player movement (Makes it easier later to render the car sprite).
- * @property {Vec2} position - Position of the player.
- * @property {TaxiGame} game - reference to the game object
- * @property {boolean} customerPickedUp - is set when the customer was picked up (In the game logic the position of the customer is then ignored)
+ * @static {Map<Action, Vec2>} moveDirMapping - Static mapping of Actions to direction vectors.
+ * @property {Action} _moveState - Current state of player movement (Makes it easier later to render the car sprite).
+ * @property {Vec2} _position - Position of the player.qodana scan --show-report
  */
 export default class TaxiPlayer {
     private static moveDirMapping: Map<TaxiAction, Vec2> = new Map([
@@ -24,9 +22,9 @@ export default class TaxiPlayer {
     private _position: Vec2;
 
     /**
-     * @param {TaxiGame} game - The game reference.
-     * @param {Vec2} relPos - The spawn position of the player
-     * @param {TaxiAction} carMoveState - The current move state (for rendering).
+     * create a player object
+     * @param relPos - relative position
+     * @param carMoveState - the car move state
      */
     constructor(relPos: Vec2, carMoveState: TaxiAction = TaxiAction.Left) {
         this._moveState = carMoveState;

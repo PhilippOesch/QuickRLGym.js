@@ -8,13 +8,13 @@ export default abstract class PersistentAgent extends Agent {
     /**
      * load the Model
      * @param fileManager FileManager Strategy
-     * @param path Path to load the model from
+     * @param options the options zo use for loading
      */
     abstract load(fileManager: FileStrategy, options?: object): Promise<void>;
     /**
      * load the config
-     * @param fileManager FileManager Strategy
-     * @param path Path to laod the config from
+     * @param fileManager - FileManager Strategy
+     * @param options the options zo use for loading
      */
     abstract loadConfig(
         fileManager: FileStrategy,
@@ -23,13 +23,13 @@ export default abstract class PersistentAgent extends Agent {
     /**
      * Save the model
      * @param fileManager FileManager Strategy
-     * @param path Path to save the model to
+     * @param options the options to use for saving the agent
      */
     abstract save(fileManager: FileStrategy, options?: object): Promise<void>;
     /**
      * Save the Config
      * @param fileManager FileManager Strategy
-     * @param path Path so save the config to
+     * @param options the options to use for saving the agent
      */
     abstract saveConfig(
         fileManager: FileStrategy,

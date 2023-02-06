@@ -53,7 +53,7 @@ export default class TaxiGame {
         this.reset();
     }
 
-    public get gameStateDim(): number[] {
+    public static get gameStateDim(): number[] {
         return TaxiGame._gameStateDim;
     }
 
@@ -166,7 +166,7 @@ export default class TaxiGame {
     }
 
     private dropOffCustomer(): StepResult {
-        let reward: number = 0;
+        let reward: number;
         if (
             this._player.position.isEqual(
                 TaxiGlobals.destinations[this.customer.destIdx]
@@ -188,7 +188,7 @@ export default class TaxiGame {
     }
 
     private pickUpCustomer(): StepResult {
-        let reward: number = 0;
+        let reward: number;
         if (
             !this._customer.isCustomerPickedUp &&
             this._player.position.isEqual(this.customer.position)
@@ -206,7 +206,7 @@ export default class TaxiGame {
         };
     }
 
-    public encodeStateToIndices(state: TaxiGameState): number[] {
+    public static encodeStateToIndices(state: TaxiGameState): number[] {
         return [
             state.playerPos.getX,
             state.playerPos.getY,

@@ -8,8 +8,8 @@
             :min="min"
             :value="valueRef"
             :class="inputStyle"
-            @change="(event) => finishEdit(event.target as HTMLInputElement)"
-            @input="(event) => update(event.target as HTMLInputElement)"
+            @change="(event) => finishEdit(<HTMLInputElement>event.target)"
+            @input="(event) => update(<HTMLInputElement>event.target)"
             :step="stepSize"
             :disabled="disabled"
         />
@@ -52,7 +52,7 @@ function update(el: HTMLInputElement): void {
 
 <style lang="postcss" scoped>
 .numberInputContainer input {
-    @apply w-full py-1 px-2 rounded-md mt-2 disabled:opacity-40;
+    @apply mt-2 w-full rounded-md py-1 px-2 disabled:opacity-40;
 }
 
 .numberInputContainer h3 {

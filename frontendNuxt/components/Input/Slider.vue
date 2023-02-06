@@ -11,8 +11,8 @@
                 :max="max"
                 :min="min"
                 :value="valueRef"
-                @change="(event)=> finishEdit(event.target as HTMLInputElement)"
-                @input="(event) => update(event.target as HTMLInputElement)"
+                @change="(event) => finishEdit(<HTMLInputElement>event.target)"
+                @input="(event) => update(<HTMLInputElement>event.target)"
                 :step="stepSize"
                 :disabled="disabled"
             />
@@ -23,8 +23,8 @@
                 :value="valueRef"
                 :max="max"
                 :min="min"
-                @change="(event)=> finishEdit(event.target as HTMLInputElement)"
-                @input="(event) => update(event.target as HTMLInputElement)"
+                @change="(event)=> finishEdit(<HTMLInputElement>event.target)"
+                @input="(event) => update(<HTMLInputElement>event.target)"
                 :step="stepSize"
                 :disabled="disabled"
             />
@@ -66,7 +66,7 @@ function update(el: HTMLInputElement): void {
 
 <style lang="postcss" scoped>
 .sliderWrapper {
-    @apply w-full col-span-2;
+    @apply col-span-2 w-full;
 }
 
 .sliderWrapper .title {
@@ -86,7 +86,7 @@ function update(el: HTMLInputElement): void {
 .sliderInput::-webkit-slider-thumb {
     -webkit-appearance: none;
     appearance: none;
-    @apply rounded-full w-7 h-7 border disabled:opacity-40;
+    @apply h-7 w-7 rounded-full border disabled:opacity-40;
     cursor: pointer;
 }
 
@@ -123,16 +123,16 @@ function update(el: HTMLInputElement): void {
 }
 
 .sliderInput::-moz-range-thumb {
-    @apply rounded-full w-7 h-7 disabled:opacity-40;
+    @apply h-7 w-7 rounded-full disabled:opacity-40;
     cursor: pointer;
 }
 
 .sliderNumInput {
-    @apply w-28 ml-4 bg-darkPurple-900 py-1 px-2 rounded-md disabled:opacity-40;
+    @apply ml-4 w-28 rounded-md bg-darkPurple-900 py-1 px-2 disabled:opacity-40;
 }
 
 .sliderWrapper .sliderContainer {
-    @apply flex mt-2 place-content-center place-items-center disabled:opacity-40;
+    @apply mt-2 flex place-content-center place-items-center disabled:opacity-40;
 }
 
 .sliderWrapper .sliderContainer p {

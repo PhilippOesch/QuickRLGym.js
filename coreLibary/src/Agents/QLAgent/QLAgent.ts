@@ -137,26 +137,26 @@ export default class QLAgent extends PersistentAgent {
 
     /**
      * Save the q-table to file
-     * @param pathString - path to save the qtable to
-     * @param fileManager - use of dependency infection to allow for different filemanagement implementations
+     * @param fileStrategy - the file strategy for saving
+     * @param options - the options for the file strategy
      */
     public async save(
-        fileManager: FileStrategy,
+        fileStrategy: FileStrategy,
         options?: object
     ): Promise<void> {
-        await fileManager.save(this.qTable, options);
+        await fileStrategy.save(this.qTable, options);
     }
 
     /**
      * load q-table from file
-     * @param pathString - path to load the qtable from
-     * @param fileManager - use of dependency infection to allow for different filemanagement implementations
+     * @param fileStrategy - the file strategy for loading
+     * @param options - the options for the file strategy
      */
     public async load(
-        fileManager: FileStrategy,
+        fileStrategy: FileStrategy,
         options?: object
     ): Promise<void> {
-        const loadObject: object = await fileManager.load(options);
+        const loadObject: object = await fileStrategy.load(options);
         this.qTable = Utils.Tensor.fromJSONObject(
             loadObject as Utils.JSONTensor
         );

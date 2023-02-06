@@ -81,7 +81,7 @@ export default class BlackJackGameScene extends StaticRenderScene {
         });
         playerTitle.setText('Player');
 
-        const hasUsableAce: string = this.mapUsableAce(
+        const hasUsableAce: string = BlackJackGameScene.mapUsableAce(
             this.blackJackGame.getPlayer.hasUsableAce
         );
         const playerScore = this.blackJackGame.getPlayer.getScore;
@@ -113,7 +113,7 @@ export default class BlackJackGameScene extends StaticRenderScene {
         this.lastPlayerCard!.setTexture(currentCard.toString());
         const newPlayerScore = this.blackJackGame.getPlayer.getScore;
         const newDealerScore = this.blackJackGame.getDealer.getScore;
-        const hasUsableAce: string = this.mapUsableAce(
+        const hasUsableAce: string = BlackJackGameScene.mapUsableAce(
             this.blackJackGame.getPlayer.hasUsableAce
         );
 
@@ -140,7 +140,7 @@ export default class BlackJackGameScene extends StaticRenderScene {
         ]);
     }
 
-    private mapUsableAce(hasUsableAce: boolean): string {
+    private static mapUsableAce(hasUsableAce: boolean): string {
         return hasUsableAce ? 'Yes' : 'No';
     }
 }

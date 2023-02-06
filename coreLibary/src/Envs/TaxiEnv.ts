@@ -39,7 +39,7 @@ export default class TaxiEnv extends SingleAgentEnvironment {
     }
 
     public get stateDim(): number[] {
-        return this._game.gameStateDim;
+        return TaxiGame.gameStateDim;
     }
 
     /**
@@ -92,7 +92,7 @@ export default class TaxiEnv extends SingleAgentEnvironment {
     }
 
     public encodeStateToIndices(state: object): number[] {
-        return this._game.encodeStateToIndices(state as TaxiGameState);
+        return TaxiGame.encodeStateToIndices(state as TaxiGameState);
     }
 
     public override onIterationEnd(): void {

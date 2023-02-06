@@ -400,10 +400,10 @@ class ReplayMemory {
             batchSize,
             rng
         );
-        return this.toBatch(samples);
+        return ReplayMemory.toBatch(samples);
     }
 
-    private toBatch(experiences: Experience[]): BatchSample {
+    private static toBatch(experiences: Experience[]): BatchSample {
         let stateBatch = new Array<number[]>(experiences.length);
         let takenActionBatch = new Array<number>(experiences.length);
         let newStateBatch = new Array<number[]>(experiences.length);

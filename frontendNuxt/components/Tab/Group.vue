@@ -5,7 +5,7 @@
                 <div
                     class="tab"
                     :class="[
-                        getOpenTab == item
+                        getOpenTab === item
                             ? [
                                   `hover:bg-${accentColor}-700`,
                                   `bg-${accentColor}-700`,
@@ -59,10 +59,10 @@ function switchTab(idx: number) {
 
 <style lang="postcss" scoped>
 .tabSelectContainer {
-    @apply bg-darkPurple-800 px-2 py-2 rounded-md flex gap-2 drop-shadow mt-6 max-w-fit;
+    @apply mt-6 flex max-w-fit gap-2 rounded-md bg-darkPurple-800 px-2 py-2 drop-shadow;
 }
 
 .tab {
-    @apply px-6 py-3 hover:bg-darkPurple-700 rounded-md duration-300 cursor-pointer;
+    @apply cursor-pointer rounded-md px-6 py-3 duration-300 hover:bg-darkPurple-700;
 }
 </style>

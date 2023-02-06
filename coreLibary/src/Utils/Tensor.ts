@@ -20,7 +20,7 @@ export interface JSONTensor {
  * @property {Array<any>} array - The actual managed array element
  */
 export class Tensor {
-    private dim: number[];
+    private readonly dim: number[];
     private array: Array<any>;
 
     public constructor(dim: number[], array: Array<any>) {
@@ -61,6 +61,7 @@ export class Tensor {
     /**
      * Static function to initialize an Tensor filled with random number in the range of [0<=x<=1]
      * @param {number []} dims - The dimensions of the Tensor to initialize
+     * @param {number} randomSeed - random seed to used for random number generator
      * @returns {Tensor} a filled Tensor
      */
     public static Random(dims: number[], randomSeed?: number): Tensor {
@@ -76,6 +77,7 @@ export class Tensor {
      * Helper function for initializing a tensor
      * @param {number []} dims - The dimensions of the Tensor to initialize
      * @param {TensorFillType} filltype - Type of values to fill the Tensor with
+     * @param {seedrandom.PRNG} rng - The random number generator
      * @returns {Array<any>} an initialized array
      */
     private static init(
@@ -99,6 +101,7 @@ export class Tensor {
      * Helper function to fill a one dimentional array on the lowest level
      * @param {number[]} array - The array to fill
      * @param {TensorFillType} fillType - The Type of the values to fill
+     * @param {seedrandom.PRNG} rng - The random number generator
      * @returns the filled array
      */
     private static fillArray(

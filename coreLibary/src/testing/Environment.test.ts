@@ -104,7 +104,7 @@ describe('Environment', function () {
     it('encodeStateToIndices', function () {
         const mockMethod = envMock.expects('resetStats');
         mockMethod.exactly(1);
-        mockMethod.returned(true);
+        mockMethod.alwaysReturned(true);
         testEnvironment.resetStats();
         mockMethod.verify();
     });

@@ -17,7 +17,7 @@ class NodeJSONFileStrategy implements FileStrategy {
     ): Promise<boolean> {
         const folderPath = path.dirname(options.filePath);
         await mkdir(folderPath, { recursive: true }).catch(() => {
-            console.error;
+            console.error('something went wrong');
             return false;
         });
         await writeFile(options.filePath, JSON.stringify(saveObject));

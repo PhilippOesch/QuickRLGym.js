@@ -4,7 +4,7 @@
         <div class="settingsContainer">
             <template v-for="(item, index) in settingsObject" :key="renderKey">
                 <InputSlider
-                    v-if="getType(item) == 'Slider'"
+                    v-if="getType(item) === 'Slider'"
                     :name="index"
                     :title="item.displayName"
                     :max="item.setting.max"
@@ -16,7 +16,7 @@
                     :accentColor="accentColor"
                 ></InputSlider>
                 <InputNumber
-                    v-if="getType(item) == 'Number'"
+                    v-if="getType(item) === 'Number'"
                     :name="index"
                     :title="item.displayName"
                     :max="item.setting.max"
@@ -33,7 +33,7 @@
                 >
                 </InputNumber>
                 <InputToggle
-                    v-if="getType(item) == 'Toggle'"
+                    v-if="getType(item) === 'Toggle'"
                     :name="index"
                     :title="item.displayName"
                     :defaultValue="settings[index]"
@@ -43,7 +43,7 @@
                 >
                 </InputToggle>
                 <InputArray
-                    v-if="getType(item) == 'Array'"
+                    v-if="getType(item) === 'Array'"
                     :name="index"
                     :delimiter="item.setting.delimiter"
                     :title="item.displayName"

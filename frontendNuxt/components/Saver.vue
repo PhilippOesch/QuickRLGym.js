@@ -4,7 +4,7 @@
             :size="ButtonSize.Large"
             value="Save Model"
             :handler="save"
-            :disabled="agentObject == undefined || !getIsActive(gameId)"
+            :disabled="agentObject === undefined || !getIsActive(gameId)"
         ></Button>
     </div>
 </template>

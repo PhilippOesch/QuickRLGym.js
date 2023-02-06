@@ -8,7 +8,6 @@ import {
 } from '../index';
 import { describe } from 'mocha';
 import { BlackJackEnv, TaxiEnv } from '../Envs';
-import sinon from 'sinon';
 
 //Test Environment for registering;
 class TestEnv extends Environment {

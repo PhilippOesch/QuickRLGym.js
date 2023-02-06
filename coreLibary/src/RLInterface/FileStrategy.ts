@@ -4,14 +4,14 @@
 interface FileStrategy {
     /**
      * Load Function
-     * @param pathString - path to load the file from
+     * @param options - the options to use for loading
      */
     load(options?: object): Promise<object>;
 
     /**
      * Save Function
-     * @param pathString - path to save the file to
-     * @param saveObject - object to save
+     * @param saveObject - the save Object
+     * @param options - the options to use for saving
      */
     save(saveObject: object, options?: object): Promise<boolean>;
 }
