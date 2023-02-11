@@ -3,7 +3,7 @@ import SingleAgentEnvironment, {
     GameStateContext,
 } from '../../RLInterface/SingleAgentEnvironment';
 import * as tf from '@tensorflow/tfjs';
-import { MathUtils } from '../../Utils';
+import { MathUtils, General } from '../../Utils';
 import PersistentAgent from '../../RLInterface/PersistentAgent';
 import FileStrategy from '../../RLInterface/FileStrategy';
 
@@ -395,7 +395,7 @@ class ReplayMemory {
     }
 
     public sample(batchSize: number, rng?: seedrandom.PRNG): BatchSample {
-        let samples: Experience[] = MathUtils.sampleN(
+        let samples: Experience[] = General.sampleN(
             this.memory,
             batchSize,
             rng
