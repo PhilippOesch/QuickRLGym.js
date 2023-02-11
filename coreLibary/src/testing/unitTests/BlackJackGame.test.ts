@@ -1,6 +1,6 @@
 import { strict as assert } from 'node:assert';
 import { describe } from 'mocha';
-import { Games } from '..';
+import { Games } from '../../';
 
 describe('BlackJack', function () {
     const game: Games.BlackJack.BlackJackGame =

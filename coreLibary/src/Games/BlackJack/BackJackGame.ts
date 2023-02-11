@@ -36,7 +36,7 @@ export default class BlackJackGame {
         this.dealer = new BlackJackDealer(this._rng);
     }
 
-    public get getGameStateDim(): number[] {
+    public static get getGameStateDim(): number[] {
         return BlackJackGame.gameStateDim;
     }
 
@@ -129,7 +129,7 @@ export default class BlackJackGame {
         }
     }
 
-    public encodeStateToIndices(state: BlackJackGameState): number[] {
+    public static encodeStateToIndices(state: BlackJackGameState): number[] {
         return [
             state.playerScore,
             state.shownCard!.getValue,

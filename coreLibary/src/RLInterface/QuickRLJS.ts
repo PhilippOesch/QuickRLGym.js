@@ -25,7 +25,7 @@ class QuickRLJS {
         if (QuickRLJS.registery.has(name)) {
             const env = QuickRLJS.registery.get(name) as any;
             const newEnv: Environment = new env();
-            newEnv.init((options = options), (initialState = initialState));
+            newEnv.init(options, initialState);
             return newEnv;
         }
         return undefined;
@@ -74,7 +74,7 @@ class QuickRLJS {
     }
 }
 
-// registering standard enviroments
+// registering standard environments
 QuickRLJS.register('Taxi', Envs.TaxiEnv);
 QuickRLJS.register('BlackJack', Envs.BlackJackEnv);
 

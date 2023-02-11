@@ -2,29 +2,20 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="17999e1b-b9c6-41eb-b6d2-6ddad5f8a6d7" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/backend/src/NodeJSONFileManager.ts" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/NodeJSONFileManager.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/NodeTFFileManager.ts" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/NodeTFFileManager.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/coreLibary/src/Agents/DQNAgent/DQNAgent.ts" beforeDir="false" afterPath="$PROJECT_DIR$/coreLibary/src/Agents/DQNAgent/DQNAgent.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/coreLibary/src/Agents/QLAgent/QLAgent.ts" beforeDir="false" afterPath="$PROJECT_DIR$/coreLibary/src/Agents/QLAgent/QLAgent.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/coreLibary/src/Envs/TaxiEnv.ts" beforeDir="false" afterPath="$PROJECT_DIR$/coreLibary/src/Envs/TaxiEnv.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coreLibary/src/Envs/BlackJackEnv.ts" beforeDir="false" afterPath="$PROJECT_DIR$/coreLibary/src/Envs/BlackJackEnv.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coreLibary/src/Games/BlackJack/BackJackGame.ts" beforeDir="false" afterPath="$PROJECT_DIR$/coreLibary/src/Games/BlackJack/BackJackGame.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/coreLibary/src/Games/TaxiGame/Player.ts" beforeDir="false" afterPath="$PROJECT_DIR$/coreLibary/src/Games/TaxiGame/Player.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/coreLibary/src/Games/TaxiGame/TaxiGame.ts" beforeDir="false" afterPath="$PROJECT_DIR$/coreLibary/src/Games/TaxiGame/TaxiGame.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/coreLibary/src/RLInterface/FileStrategy.ts" beforeDir="false" afterPath="$PROJECT_DIR$/coreLibary/src/RLInterface/FileStrategy.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/coreLibary/src/RLInterface/PersistentAgent.ts" beforeDir="false" afterPath="$PROJECT_DIR$/coreLibary/src/RLInterface/PersistentAgent.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/coreLibary/src/RLInterface/SingleAgentEnvironment.ts" beforeDir="false" afterPath="$PROJECT_DIR$/coreLibary/src/RLInterface/SingleAgentEnvironment.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/coreLibary/src/Utils/Tensor.ts" beforeDir="false" afterPath="$PROJECT_DIR$/coreLibary/src/Utils/Tensor.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/coreLibary/src/testing/Environment.test.ts" beforeDir="false" afterPath="$PROJECT_DIR$/coreLibary/src/testing/Environment.test.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/coreLibary/src/testing/QuickRLJS.test.ts" beforeDir="false" afterPath="$PROJECT_DIR$/coreLibary/src/testing/QuickRLJS.test.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/coreLibary/src/testing/TaxiGame.test.ts" beforeDir="false" afterPath="$PROJECT_DIR$/coreLibary/src/testing/TaxiGame.test.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontendNuxt/components/AgentLoader.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontendNuxt/components/AgentLoader.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coreLibary/src/RLInterface/Agent.ts" beforeDir="false" afterPath="$PROJECT_DIR$/coreLibary/src/RLInterface/Agent.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coreLibary/src/RLInterface/QuickRLJS.ts" beforeDir="false" afterPath="$PROJECT_DIR$/coreLibary/src/RLInterface/QuickRLJS.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coreLibary/src/testing/Agent.test.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/coreLibary/src/testing/BlackJackGame.test.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/coreLibary/src/testing/Environment.test.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/coreLibary/src/testing/FileStrategy.test.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/coreLibary/src/testing/QuickRLJS.test.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/coreLibary/src/testing/TaxiGame.test.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/coreLibary/src/testing/Tensor.test.ts" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/frontendNuxt/components/Game/Game.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontendNuxt/components/Game/Game.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontendNuxt/components/Input/Array.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontendNuxt/components/Input/Array.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontendNuxt/components/Input/Number.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontendNuxt/components/Input/Number.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontendNuxt/components/Input/Slider.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontendNuxt/components/Input/Slider.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontendNuxt/components/ParamSelector.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontendNuxt/components/ParamSelector.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontendNuxt/components/Saver.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontendNuxt/components/Saver.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontendNuxt/components/Tab/Group.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontendNuxt/components/Tab/Group.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontendNuxt/utils/GameScenes/BlackJackGameScene.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontendNuxt/utils/GameScenes/BlackJackGameScene.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

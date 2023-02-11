@@ -1,4 +1,4 @@
-import Agent from '../RLInterface/Agent';
+import Agent from '../../RLInterface/Agent';
 import sinon from 'sinon';
 
 describe('Agent', function () {
@@ -10,7 +10,7 @@ describe('Agent', function () {
             console.log('Agent Initialized');
         }
         step(state: object): string {
-            return 'action';
+            return JSON.stringify(state);
         }
         async feed(
             prevState: object,
@@ -18,13 +18,21 @@ describe('Agent', function () {
             newState: object,
             payoff: number,
             contextInfo: object
-        ): Promise<void> {}
+        ): Promise<void> {
+            if (prevState && takenAction && newState && payoff && contextInfo) {
+                console.log('mock agent feed');
+            }
+        }
         setConfig(
             config?: object | undefined,
             randomSeed?: number | undefined
-        ): void {}
+        ): void {
+            if (config && randomSeed) {
+                console.log('mock agent config set');
+            }
+        }
         evalStep(state: object): string {
-            return 'evalAction';
+            return JSON.stringify(state);
         }
         log(): void {}
     }
@@ -51,7 +59,6 @@ describe('Agent', function () {
         const mockMethod = agentMock.expects('step');
         mockMethod.exactly(1);
         mockMethod.withArgs({ test: 'test' });
-        mockMethod.returned('action');
         testAgent.step({ test: 'test' });
         mockMethod.verify();
     });

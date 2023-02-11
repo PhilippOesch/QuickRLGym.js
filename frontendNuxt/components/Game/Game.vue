@@ -86,7 +86,7 @@ import { PropType, Ref } from 'vue';
 import { Agent, SingleAgentEnvironment, PersistentAgent } from 'quickrl.core';
 import useTabStore from '~~/comsosable/useTabStore';
 
-const gameViewRef: Ref<any> = ref();
+const gameViewRef: Ref = ref();
 
 let env: Ref<SingleAgentEnvironment | undefined> = ref(undefined);
 

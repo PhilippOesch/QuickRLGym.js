@@ -1,6 +1,6 @@
 import sinon from 'sinon';
-import Environment, { EnvOptions } from '../RLInterface/Environment';
-import StepResult from '../RLInterface/StepResult';
+import Environment, { EnvOptions } from '../../RLInterface/Environment';
+import StepResult from '../../RLInterface/StepResult';
 
 describe('Environment', function () {
     class MockEnvironment extends Environment {
@@ -31,10 +31,11 @@ describe('Environment', function () {
             options?: EnvOptions | undefined,
             initialState?: object | undefined
         ): void {
+            console.log('Init Env:', options, initialState);
             return;
         }
         step(action: string): StepResult {
-            this._iteration++;
+            if (action) this._iteration++;
             return {
                 newState: { x: 1, y: 2 },
                 reward: 10,
@@ -44,9 +45,11 @@ describe('Environment', function () {
             return true;
         }
         setOptions(options?: EnvOptions | undefined): void {
+            console.log('setOptions:', options);
             return;
         }
         encodeStateToIndices(state: object): number[] {
+            console.log('encodeStateToIndices:', state);
             return [1];
         }
         resetStats(): boolean {

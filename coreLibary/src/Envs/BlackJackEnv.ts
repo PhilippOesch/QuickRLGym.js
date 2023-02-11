@@ -41,7 +41,7 @@ export default class BlackJackEnv extends SingleAgentEnvironment {
     }
 
     public get stateDim(): number[] {
-        return this._game.getGameStateDim;
+        return BlackJackGame.getGameStateDim;
     }
 
     public get actionSpace(): string[] {
@@ -87,7 +87,7 @@ export default class BlackJackEnv extends SingleAgentEnvironment {
         return this._game.getIteration;
     }
     public encodeStateToIndices(state: object): number[] {
-        return this._game.encodeStateToIndices(state as BlackJackGameState);
+        return BlackJackGame.encodeStateToIndices(state as BlackJackGameState);
     }
 
     public override onIterationEnd(): void {

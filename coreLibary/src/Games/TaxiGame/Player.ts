@@ -4,8 +4,8 @@ import Vec2 from '../../Utils/Vec2';
 
 /**
  * The Player class
- * @static {Map<Action, Vec2>} moveDirMapping - Static mapping of Actions to direction vectors.
- * @property {Action} _moveState - Current state of player movement (Makes it easier later to render the car sprite).
+ * @static moveDirMapping - Static mapping of Actions to direction vectors.
+ * @property {TaxiAction} _moveState - Current state of player movement (Makes it easier later to render the car sprite).
  * @property {Vec2} _position - Position of the player.qodana scan --show-report
  */
 export default class TaxiPlayer {

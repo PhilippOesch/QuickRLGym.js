@@ -5,12 +5,12 @@ import {
     QuickRLJS,
     SingleAgentEnvironment,
     StepResult,
-} from '../index';
+} from '../../index';
 import { describe } from 'mocha';
-import { BlackJackEnv, TaxiEnv } from '../Envs';
+import { BlackJackEnv, TaxiEnv } from '../../Envs';
 
-//Test Environment for registering;
-class TestEnv extends Environment {
+//Mock Environment for registering;
+class MockEnv extends Environment {
     get stateDim(): number[] {
         throw new Error('Method not implemented.');
     }
@@ -36,18 +36,22 @@ class TestEnv extends Environment {
         options?: EnvOptions | undefined,
         initialState?: object | undefined
     ): void {
+        console.log(options, initialState);
         throw new Error('Method not implemented.');
     }
     step(action: string): StepResult {
+        console.log(action);
         throw new Error('Method not implemented.');
     }
     reset(): boolean {
         throw new Error('Method not implemented.');
     }
     setOptions(options?: EnvOptions | undefined): void {
+        console.log(options);
         throw new Error('Method not implemented.');
     }
     encodeStateToIndices(state: object): number[] {
+        console.log(state);
         throw new Error('Method not implemented.');
     }
     resetStats(): boolean {
@@ -98,7 +102,7 @@ describe('QuickRLJS', function () {
 
         it('registering an already existing environment name throws an error', function () {
             const registerNotAllowedEnv = () =>
-                QuickRLJS.register('Taxi', TestEnv);
+                QuickRLJS.register('Taxi', MockEnv);
             assert.throws(
                 registerNotAllowedEnv,
                 Error,
@@ -108,7 +112,7 @@ describe('QuickRLJS', function () {
 
         it('register new environment', function () {
             const registeringWithNoError = () => {
-                QuickRLJS.register('TestEnv', TestEnv);
+                QuickRLJS.register('TestEnv', MockEnv);
             };
 
             assert.doesNotThrow(registeringWithNoError, Error);

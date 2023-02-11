@@ -1,9 +1,9 @@
 import { strict as assert } from 'node:assert';
 import { describe } from 'mocha';
-import { Utils, StepResult } from '..';
+import { Utils, StepResult } from '../..';
 //import { TaxiGame, TaxiGameState } from '../Games/TaxiGame';
-import { Games } from '..';
-import { TaxiGame } from '../Games/TaxiGame';
+import { Games } from '../..';
+import { TaxiGame } from '../../Games/TaxiGame';
 
 describe('TaxiGame', function () {
     const game: Games.Taxi.TaxiGame = new Games.Taxi.TaxiGame();
@@ -155,8 +155,6 @@ describe('TaxiGame', function () {
         game.step('Down');
         game.step('Down');
         game.step('Down');
-        const stepResult = game.step('DropOff') as StepResult;
-        stepResult.newState as Games.Taxi.TaxiGameState;
         it('check game termination', function () {
             assert.strict(game.isTerminal);
         });

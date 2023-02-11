@@ -1,6 +1,6 @@
 import sinon from 'sinon';
 import { describe } from 'mocha';
-import FileStrategy from '../RLInterface/FileStrategy';
+import FileStrategy from '../../RLInterface/FileStrategy';
 
 describe('FileStrategy', function () {
     class TestFileStrategy implements FileStrategy {
@@ -11,6 +11,7 @@ describe('FileStrategy', function () {
             saveObject: object,
             options?: object | undefined
         ): Promise<boolean> {
+            console.log('save:', saveObject, options)
             return true;
         }
     }

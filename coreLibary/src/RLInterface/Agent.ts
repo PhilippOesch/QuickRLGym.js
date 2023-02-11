@@ -47,9 +47,8 @@ export default abstract class Agent {
     abstract setConfig(config?: object, randomSeed?: number): void;
 
     /**
-     * set The configuration of the agent after initailizing
-     * @param config - The config object
-     * @param randomSeed - The random Seed
+     * get the configuration of the agent
+     * @returns - the current set configuration object
      */
     abstract get config(): object | undefined;
 
@@ -61,7 +60,7 @@ export default abstract class Agent {
     abstract evalStep(state: object): string;
 
     /**
-     * Method for logging
+     * Interface method for loggin while training
      */
     abstract log(): void;
 }
