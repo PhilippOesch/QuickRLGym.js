@@ -74,7 +74,7 @@ export default class DQNAgent extends PersistentAgent {
         if (randomSeed != undefined) this.setRandomSeed(randomSeed);
         if (config != undefined) {
             this._config = config;
-            this.epsilon = this._config!.epsilonStart;
+            this.epsilon = this._config.epsilonStart;
         }
         this.epsilonStep = 0;
     }
@@ -245,7 +245,7 @@ export default class DQNAgent extends PersistentAgent {
         if (this._config?.activateDoubleDQN) {
             this.qNetworkTarget = <tf.Sequential>await fileManager.load();
 
-            const adamOptimizer = tf.train.adam(this._config!.learningRate);
+            const adamOptimizer = tf.train.adam(this._config.learningRate);
 
             this.qNetworkTarget.compile({
                 optimizer: adamOptimizer,
@@ -318,13 +318,10 @@ export default class DQNAgent extends PersistentAgent {
             this._config!.batchSize,
             this.env.actionSpace.length,
         ]);
-        //targetTensor.print();
         let stateTensor = tf.tensor(miniBatch.stateBatch, [
             this._config!.batchSize,
             this.env.stateDim.length,
         ]);
-        //stateTensor.print();
-        //targetTensor.print();
         this.loss = await this.qNetworkLocal.fit(stateTensor, targetTensor, {
             batchSize: this._config!.batchSize,
             verbose: 0,

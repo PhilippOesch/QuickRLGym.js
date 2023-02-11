@@ -30,7 +30,6 @@ export default class RandomAgent extends Agent {
         } else {
             this.rng = seedrandom();
         }
-        return;
     }
 
     public init(): void {

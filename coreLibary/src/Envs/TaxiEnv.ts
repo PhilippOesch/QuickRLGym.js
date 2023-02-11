@@ -61,7 +61,7 @@ export default class TaxiEnv extends SingleAgentEnvironment {
     }
 
     public get state(): TaxiGameState {
-        return this._game.gameState as TaxiGameState;
+        return this._game.gameState;
     }
 
     public get getReturn(): number {
@@ -98,9 +98,7 @@ export default class TaxiEnv extends SingleAgentEnvironment {
     public override onIterationEnd(): void {
         this.intervalCount++;
         this.averageGameIterations += this.iteration;
-        //console.log(this.iteration);
         this.averageGameScore += this._game.return;
-        //console.log(this._game.return);
     }
 
     public override log(trainIteration: number): void {

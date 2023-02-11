@@ -1,5 +1,4 @@
 import {
-    Agent,
     Environment,
     GameStateContext,
     FileStrategy,
@@ -66,7 +65,7 @@ export default class MCAgent extends PersistentAgent {
         if (randomSeed != undefined) this.setRandomSeed(randomSeed);
         if (config != undefined) {
             this._config = config;
-            this.epsilon = this._config!.epsilonStart;
+            this.epsilon = this._config.epsilonStart;
         }
         this.epsilonStep = 0;
     }
@@ -97,7 +96,6 @@ export default class MCAgent extends PersistentAgent {
         ) {
             //empty experience
             this.experience = [];
-            return;
         }
     }
 
@@ -123,7 +121,6 @@ export default class MCAgent extends PersistentAgent {
     }
 
     log(): void {
-        //console.log('experience', this.experience);
         console.log('epsilon:', this.epsilon);
         console.log('epsilonStep', this.epsilonStep);
     }

@@ -47,7 +47,7 @@ export default class QLAgent extends PersistentAgent {
         if (randomSeed != undefined) this.setRandomSeed(randomSeed);
         if (config != undefined) {
             this._config = config;
-            this.epsilon = this._config!.epsilonStart;
+            this.epsilon = this._config.epsilonStart;
         }
         this.epsilonStep = 0;
     }

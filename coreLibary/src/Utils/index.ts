@@ -1,6 +1,6 @@
-import Evaluation from './Evaluation';
-import MathUtils from './MathUtils';
-import General from './General';
+import * as Evaluation from './Evaluation';
+import * as MathUtils from './MathUtils';
+import * as General from './General';
 import { Tensor, JSONTensor } from './Tensor';
 import Vec2 from './Vec2';
 
