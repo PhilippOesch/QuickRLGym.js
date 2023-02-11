@@ -83,24 +83,7 @@ abstract class SingleAgentEnvironment extends Environment {
                 (!this.isTerminal && this.iteration < maxIterationPerGame) ||
                 (!this.isTerminal && maxIterationPerGame == -1)
             ) {
-                const prevState: object = this.state;
-                const nextAction: string = this.agent.step(this.state);
-                const { newState, reward } = this.step(nextAction);
-                const gameStateContext =
-                    this.additionalInfo(maxIterationPerGame);
-                let rewardAdjusted =
-                    this.options?.penaltyOnUnfinished &&
-                    gameStateContext.maxIterationReached &&
-                    !gameStateContext.isTerminal
-                        ? this.options?.penaltyOnUnfinished + reward
-                        : reward;
-                await this.agent.feed(
-                    prevState,
-                    nextAction,
-                    newState,
-                    rewardAdjusted,
-                    gameStateContext
-                );
+                await this.singleTrainStep(maxIterationPerGame);
             }
             this.onIterationEnd();
             if (logEvery !== -1 && i % logEvery === 0) {
@@ -116,6 +99,26 @@ abstract class SingleAgentEnvironment extends Environment {
         this.log(iterations);
         this.agent.log();
         return iterations;
+    }
+
+    private async singleTrainStep(maxIterationPerGame: number): Promise<void> {
+        const prevState: object = this.state;
+        const nextAction: string = this.agent!.step(this.state);
+        const { newState, reward } = this.step(nextAction);
+        const gameStateContext = this.additionalInfo(maxIterationPerGame);
+        let rewardAdjusted =
+            this.options?.penaltyOnUnfinished &&
+            gameStateContext.maxIterationReached &&
+            !gameStateContext.isTerminal
+                ? this.options?.penaltyOnUnfinished + reward
+                : reward;
+        await this.agent!.feed(
+            prevState,
+            nextAction,
+            newState,
+            rewardAdjusted,
+            gameStateContext
+        );
     }
 
     /**

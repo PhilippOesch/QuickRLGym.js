@@ -4,7 +4,7 @@ export function shuffleArray(array: any[], rng?: seedrandom.PRNG): any[] {
     let shufflecopy = [...array];
 
     let internalRng = undefined;
-    if (rng != undefined) {
+    if (rng !== undefined) {
         internalRng = rng;
     } else {
         internalRng = Math.random;

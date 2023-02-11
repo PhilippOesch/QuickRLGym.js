@@ -139,8 +139,8 @@ export class Tensor {
         this.validate(indices);
 
         let result = this.array;
-        for (let i = 0; i < indices.length; i++) {
-            result = result[indices[i]];
+        for (const index of indices) {
+            result = result[index];
         }
         return result;
     }

@@ -2,5 +2,5 @@ projectKey=quick-rl-js
 serverUrl=http://localhost:9000
 serverVersion=9.9.0.65466
 dashboardUrl=http://localhost:9000/dashboard?id=quick-rl-js
-ceTaskId=AYZAOXg74VHXG0YTWGHW
-ceTaskUrl=http://localhost:9000/api/ce/task?id=AYZAOXg74VHXG0YTWGHW
+ceTaskId=AYZAXph54VHXG0YTWGHY
+ceTaskUrl=http://localhost:9000/api/ce/task?id=AYZAXph54VHXG0YTWGHY

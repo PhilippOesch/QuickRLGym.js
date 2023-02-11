@@ -1,8 +1,6 @@
 import { strict as assert } from 'node:assert';
 import { describe } from 'mocha';
-import { Utils, StepResult } from '../..';
-//import { TaxiGame, TaxiGameState } from '../Games/TaxiGame';
-import { Games } from '../..';
+import { Utils, StepResult, Games } from '../..';
 import { TaxiGame } from '../../Games/TaxiGame';
 
 describe('TaxiGame', function () {
