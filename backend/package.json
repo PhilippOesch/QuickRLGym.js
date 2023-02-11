@@ -4,10 +4,9 @@
   "description": "To install dependencies:",
   "main": "Main.js",
   "scripts": {
-    "compile": "npx tsc",
+    "compile": "rm -r ./out; npx tsc",
     "run": "node ./out/backend/src/Main.js",
-    "buildrun": "npx tsc; node ./out/backend/src/Main.js",
-    "test": "npx tsc; mocha ./out/backend/testing/"
+    "buildrun": "rm -r ./out; npx tsc; node ./out/backend/src/Main.js"
   },
   "author": "Philipp Oeschger",
   "license": "ISC",

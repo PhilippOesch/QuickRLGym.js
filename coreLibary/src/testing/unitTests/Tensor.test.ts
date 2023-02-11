@@ -16,7 +16,6 @@ describe('Tensor', function () {
                 Error,
                 'The dimension provided has to fit the size of the array'
             );
-            assert.throws.apply;
         });
 
         it('dimension and array do not align, error is thrown', function () {

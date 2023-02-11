@@ -12,9 +12,9 @@
     "games"
   ],
   "scripts": {
-    "test": "npx tsc -d; mocha ./out/testing/;",
+    "test": "rm -r ./out; npx tsc -d; mocha ./out/testing/*;",
     "build": "npx tsc -d",
-    "release": "npm run build; mocha ./out/testing/; npm publish;"
+    "release": "rm -r ./out; npm run build; mocha ./out/testing/; npm publish;"
   },
   "author": "Philipp Oeschger",
   "license": "ISC",

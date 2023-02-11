@@ -91,8 +91,9 @@ async function trainTaxiMCAgent() {
     env.setAgent = agent;
     env.initAgent();
     await env.train(numIterations, logEvery, maxIterationsPerGame);
-    await agent.save(fileManager),
-        { filePath: './models/qTables/taxi/qTable.json' };
+    await agent.save(fileManager, {
+        filePath: './models/qTables/taxi/qTable.json',
+    });
 }
 
 async function trainBlackJackMCAgent() {

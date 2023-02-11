@@ -155,6 +155,7 @@ describe('TaxiGame', function () {
         game.step('Down');
         game.step('Down');
         game.step('Down');
+        game.step('DropOff');
         it('check game termination', function () {
             assert.strict(game.isTerminal);
         });

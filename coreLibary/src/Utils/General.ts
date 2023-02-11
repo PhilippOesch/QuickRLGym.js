@@ -1,11 +1,18 @@
 import seedrandom from 'seedrandom';
 
 module General {
-    export function shuffleArray(array: any[]): any[] {
+    export function shuffleArray(array: any[], rng?: seedrandom.PRNG): any[] {
         let shufflecopy = [...array];
 
+        let internalRng = undefined;
+        if (rng != undefined) {
+            internalRng = rng;
+        } else {
+            internalRng = Math.random;
+        }
+
         for (let i = shufflecopy.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
+            const j = Math.floor(internalRng() * (i + 1));
             [shufflecopy[i], shufflecopy[j]] = [shufflecopy[j], shufflecopy[i]];
         }
 
