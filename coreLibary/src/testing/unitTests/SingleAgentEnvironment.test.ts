@@ -7,6 +7,18 @@ import Agent from '../../RLInterface/Agent';
 import { EnvOptions } from '../../RLInterface/Environment';
 
 class MockSAEnv extends SingleAgentEnvironment {
+    get stateDim(): number[] {
+        throw new Error('stateDim not implemented.');
+    }
+    get stats(): object {
+        throw new Error('stats not implemented.');
+    }
+    get name(): string {
+        throw new Error('name not implemented.');
+    }
+    public resetStats(): boolean {
+        throw new Error('resetStats not implemented.');
+    }
     public get actionSpace(): string[] {
         throw new Error('Method not implemented.');
     }
@@ -84,6 +96,9 @@ describe('SingleAgentEnvironment', function () {
         return true;
     });
 
+    const resetStatsMock = mockEnv.expects('resetStats');
+    resetStatsMock.returns(true);
+
     describe('getter stubs', function () {
         it('actionSpace stub', function () {
             sinon.stub(env, 'actionSpace').get(() => ['action']);
@@ -118,6 +133,13 @@ describe('SingleAgentEnvironment', function () {
     });
 
     describe('mock methods', function () {
+        it('resetStats', function () {
+            resetStatsMock.exactly(1);
+            env.resetStats();
+            resetStatsMock.verify();
+            resetStatsMock.reset();
+        });
+
         it('reset', function () {
             const res = env.reset();
             assert.strictEqual(res, true);
@@ -185,20 +207,28 @@ describe('SingleAgentEnvironment', function () {
     });
 
     describe('training', function () {
-        const numIterations = 10;
-        const maxIterationPerGame = 10;
-        const logEvery = -1;
-
         it('agent not set', async function () {
+            const numIterations = 10;
+            const maxIterationPerGame = 10;
+            const logEvery = -1;
+
             env.agent = undefined;
+            resetStatsMock.exactly(1);
             assert.rejects(
                 env.train(numIterations, logEvery, maxIterationPerGame)
             );
 
+            resetStatsMock.verify();
             resetStub.resetHistory();
+            resetStatsMock.resetHistory();
         });
 
         it('train', async function () {
+            const numIterations = 10;
+            const maxIterationPerGame = 10;
+            const logEvery = -1;
+
+            resetStatsMock.exactly(1);
             env.agent = agent;
             const res = await env.train(
                 numIterations,
@@ -208,9 +238,30 @@ describe('SingleAgentEnvironment', function () {
             assert.strictEqual(res, numIterations);
             assert.strictEqual(stepStub.callCount, numIterations);
             assert.strictEqual(resetStub.callCount, numIterations + 1);
+            resetStatsMock.verify();
+            stepStub.resetHistory();
+            resetStub.resetHistory();
+            resetStatsMock.resetHistory();
+        });
 
-            //stepStub.resetHistory();
-            //resetStub.resetHistory();
+        it('logging', async function () {
+            resetStatsMock.reset();
+
+            const numIterations = 10;
+            const maxIterationPerGame = 10;
+            const logEvery = 4;
+
+            const logSpy = sinon.spy(env, 'log');
+            resetStatsMock.exactly(4);
+
+            env.agent = agent;
+            await env.train(numIterations, logEvery, maxIterationPerGame);
+            assert.strictEqual(logSpy.callCount, 4); // once at 0; at 4 at 8 and at the last step: 10
+
+            //resetStatsMock.verify();
+            stepStub.resetHistory();
+            resetStub.resetHistory();
+            resetStatsMock.reset();
         });
     });
 });

@@ -14,17 +14,6 @@ abstract class SingleAgentEnvironment extends Environment {
     protected _options?: EnvOptions;
     protected randomSeed?: number;
 
-    get name(): string {
-        throw new Error('Method not implemented.');
-    }
-
-    get stateDim(): number[] {
-        throw new Error('Method not implemented.');
-    }
-    get stats(): object {
-        throw new Error('Method not implemented.');
-    }
-
     get options(): EnvOptions | undefined {
         return this._options;
     }
@@ -154,9 +143,9 @@ abstract class SingleAgentEnvironment extends Environment {
         return;
     }
 
-    public resetStats(): boolean {
-        return true;
-    }
+    // public resetStats(): boolean {
+    //     return true;
+    // }
 
     /**
      * @returns - The action space of the environment an array of strings (actions possible to select)

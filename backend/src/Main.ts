@@ -12,11 +12,11 @@ require('@tensorflow/tfjs-node-gpu');
 const fileManager = new NodeJSONFileStrategy();
 
 async function main() {
-    //trainTaxiQLAgent();
+    trainTaxiQLAgent();
     //trainTaxiMCAgent();
     //trainBlackJack();
     //trainBlackJackMCAgent();
-    trainTaxiDQN();
+    //trainTaxiDQN();
 }
 
 async function trainBlackJack() {
