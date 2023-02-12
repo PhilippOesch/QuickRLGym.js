@@ -16,6 +16,7 @@ export default abstract class Environment {
     abstract get actionSpace(): string[];
     abstract get state(): object;
     abstract get isTerminal(): boolean;
+    abstract get options(): EnvOptions | undefined;
     abstract get iteration(): number;
     abstract get stats(): object;
     abstract get name(): string;

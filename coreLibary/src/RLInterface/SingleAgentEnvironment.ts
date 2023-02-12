@@ -9,9 +9,9 @@ export interface GameStateContext {
 
 abstract class SingleAgentEnvironment extends Environment {
     protected _lastAction?: string;
-    protected agent?: Agent;
+    protected _agent?: Agent;
     protected initialState?: object;
-    protected options?: EnvOptions;
+    protected _options?: EnvOptions;
     protected randomSeed?: number;
 
     get name(): string {
@@ -25,11 +25,16 @@ abstract class SingleAgentEnvironment extends Environment {
         throw new Error('Method not implemented.');
     }
 
-    /**
-     * @param agent - the Agent Object
-     */
-    public set setAgent(agent: Agent) {
-        this.agent = agent;
+    get options(): EnvOptions | undefined {
+        return this._options;
+    }
+
+    public get agent(): Agent | undefined {
+        return this._agent;
+    }
+
+    public set agent(agent: Agent | undefined) {
+        this._agent = agent;
     }
 
     public get lastAction(): string | undefined {
@@ -40,8 +45,10 @@ abstract class SingleAgentEnvironment extends Environment {
      * This method can be used to initialize the environment and for example initialize the agents
      */
     public initAgent(): void {
-        if (this.agent) {
-            this.agent.init();
+        if (this._agent !== undefined) {
+            this._agent.init();
+        } else {
+            throw new Error('initAgent can not be called without an agent set');
         }
     }
 
@@ -49,12 +56,12 @@ abstract class SingleAgentEnvironment extends Environment {
         options?: EnvOptions | undefined,
         initialState?: object | undefined
     ): void {
-        this.options = options;
+        this._options = options;
         this.initialState = initialState;
     }
 
     public setOptions(options: EnvOptions): void {
-        this.options = options;
+        this._options = options;
         this.randomSeed = options.randomSeed;
     }
 
@@ -75,7 +82,7 @@ abstract class SingleAgentEnvironment extends Environment {
         this.resetStats();
         this.reset();
 
-        if (this.agent == undefined) {
+        if (this._agent === undefined) {
             throw new Error('No Agent has been set');
         }
         for (let i = 0; i < iterations; i++) {
@@ -88,7 +95,7 @@ abstract class SingleAgentEnvironment extends Environment {
             this.onIterationEnd();
             if (logEvery !== -1 && i % logEvery === 0) {
                 this.log(i);
-                this.agent.log();
+                this._agent.log();
                 if (resetStatsOnLog) this.resetStats();
             }
             const isReset = this.reset();
@@ -97,22 +104,22 @@ abstract class SingleAgentEnvironment extends Environment {
             }
         }
         this.log(iterations);
-        this.agent.log();
+        this._agent.log();
         return iterations;
     }
 
     private async singleTrainStep(maxIterationPerGame: number): Promise<void> {
         const prevState: object = this.state;
-        const nextAction: string = this.agent!.step(this.state);
+        const nextAction: string = this._agent!.step(this.state);
         const { newState, reward } = this.step(nextAction);
         const gameStateContext = this.additionalInfo(maxIterationPerGame);
         let rewardAdjusted =
-            this.options?.penaltyOnUnfinished &&
+            this._options?.penaltyOnUnfinished &&
             gameStateContext.maxIterationReached &&
             !gameStateContext.isTerminal
-                ? this.options?.penaltyOnUnfinished + reward
+                ? this._options?.penaltyOnUnfinished + reward
                 : reward;
-        await this.agent!.feed(
+        await this._agent!.feed(
             prevState,
             nextAction,
             newState,
@@ -148,7 +155,7 @@ abstract class SingleAgentEnvironment extends Environment {
     }
 
     public resetStats(): boolean {
-        throw new Error('Method not implemented.');
+        return true;
     }
 
     /**
