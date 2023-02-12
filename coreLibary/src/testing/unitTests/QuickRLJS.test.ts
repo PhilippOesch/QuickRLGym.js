@@ -11,6 +11,9 @@ import { BlackJackEnv, TaxiEnv } from '../../Envs';
 
 //Mock Environment for registering;
 class MockEnv extends Environment {
+    get options(): EnvOptions | undefined {
+        throw new Error('Method not implemented.');
+    }
     get stateDim(): number[] {
         throw new Error('Method not implemented.');
     }
@@ -116,6 +119,12 @@ describe('QuickRLJS', function () {
             };
 
             assert.doesNotThrow(registeringWithNoError, Error);
+        });
+
+        it('environment was not found', function () {
+            const testName = 'NotExistingEnvironment';
+
+            assert.strictEqual(undefined, QuickRLJS.loadEnv(testName));
         });
     });
 });

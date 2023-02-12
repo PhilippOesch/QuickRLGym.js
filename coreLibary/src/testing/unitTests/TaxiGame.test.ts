@@ -1,7 +1,9 @@
 import { strict as assert } from 'node:assert';
 import { describe } from 'mocha';
 import { Utils, StepResult, Games } from '../..';
-import { TaxiGame } from '../../Games/TaxiGame';
+import { TaxiGame, TaxiUtils } from '../../Games/TaxiGame';
+import { Vec2 } from '../../Utils';
+import seedrandom from 'seedrandom';
 
 describe('TaxiGame', function () {
     const game: Games.Taxi.TaxiGame = new Games.Taxi.TaxiGame();
@@ -159,6 +161,101 @@ describe('TaxiGame', function () {
         });
         it('check end points', function () {
             assert.strictEqual(game.return, 14);
+        });
+    });
+
+    describe('TaxiUtils', function () {
+        describe('adjustedToAbsPos', function () {
+            it('positions are correctly asjusted', function () {
+                const test1 = new Vec2(2, 2);
+                const test2 = new Vec2(1, 2);
+                const test3 = new Vec2(3, 5);
+
+                const res1 = new Vec2(352, 224);
+                const res2 = new Vec2(224, 224);
+                const res3 = new Vec2(480, 416);
+
+                assert.strictEqual(
+                    true,
+                    res1.isEqual(TaxiUtils.adjustedToAbsPos(test1))
+                );
+                assert.strictEqual(
+                    true,
+                    res2.isEqual(TaxiUtils.adjustedToAbsPos(test2))
+                );
+                assert.strictEqual(
+                    true,
+                    res3.isEqual(TaxiUtils.adjustedToAbsPos(test3))
+                );
+            });
+        });
+
+        describe('checkIfPositionIsDestination', function () {
+            it('should be destinations', function () {
+                const test1 = new Vec2(0, 0);
+                const test2 = new Vec2(0, 4);
+                const test3 = new Vec2(4, 0);
+                const test4 = new Vec2(3, 4);
+
+                assert.strictEqual(
+                    true,
+                    TaxiUtils.checkIfPositionIsDestination(test1)
+                );
+                assert.strictEqual(
+                    true,
+                    TaxiUtils.checkIfPositionIsDestination(test2)
+                );
+                assert.strictEqual(
+                    true,
+                    TaxiUtils.checkIfPositionIsDestination(test3)
+                );
+                assert.strictEqual(
+                    true,
+                    TaxiUtils.checkIfPositionIsDestination(test4)
+                );
+            });
+
+            it('should not be destinations', function () {
+                const test1 = new Vec2(1, 2);
+                const test2 = new Vec2(2, 4);
+                const test3 = new Vec2(3, 3);
+
+                assert.strictEqual(
+                    false,
+                    TaxiUtils.checkIfPositionIsDestination(test1)
+                );
+                assert.strictEqual(
+                    false,
+                    TaxiUtils.checkIfPositionIsDestination(test2)
+                );
+                assert.strictEqual(
+                    false,
+                    TaxiUtils.checkIfPositionIsDestination(test3)
+                );
+            });
+        });
+
+        describe('getRandomPosition', function () {
+            const rngTest1 = seedrandom('30');
+            const rngTest2 = seedrandom('32');
+            const rngTest3 = seedrandom('34');
+
+            const res1 = new Vec2(1, 4);
+            const res2 = new Vec2(3, 0);
+            const res3 = new Vec2(1, 2);
+
+            assert.strictEqual(
+                true,
+                TaxiUtils.getRandomPosition(rngTest1).isEqual(res1)
+            );
+            assert.strictEqual(
+                true,
+                TaxiUtils.getRandomPosition(rngTest2).isEqual(res2)
+            );
+            assert.strictEqual(
+                true,
+                TaxiUtils.getRandomPosition(rngTest3).isEqual(res3)
+            );
         });
     });
 });

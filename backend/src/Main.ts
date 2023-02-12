@@ -37,7 +37,7 @@ async function trainBlackJack() {
         discountFactor: 0.6,
     });
 
-    env.setAgent = agent;
+    env.agent = agent;
     env.initAgent();
     await env.train(numIterations, logEvery);
     await agent.save(fileManager, {
@@ -65,7 +65,7 @@ async function trainTaxiQLAgent() {
         },
         randomSeed
     );
-    env.setAgent = agent;
+    env.agent = agent;
     env.initAgent();
     await env.train(numIterations, logEvery, maxIterationsPerGame);
     await agent.save(fileManager, {
@@ -88,7 +88,7 @@ async function trainTaxiMCAgent() {
         discountFactor: 1,
         epsilonDecaySteps: 10000,
     });
-    env.setAgent = agent;
+    env.agent = agent;
     env.initAgent();
     await env.train(numIterations, logEvery, maxIterationsPerGame);
     await agent.save(fileManager, {
@@ -111,7 +111,7 @@ async function trainBlackJackMCAgent() {
         discountFactor: 1,
     });
 
-    env.setAgent = agent;
+    env.agent = agent;
     env.initAgent();
     env.train(numIterations, logEvery);
     await agent.save(fileManager, {
@@ -145,7 +145,7 @@ async function trainTaxiDQN() {
         layerNorm: false,
     });
 
-    env.setAgent = agent;
+    env.agent = agent;
     env.initAgent();
 
     const tFFileManager: NodeTFFileStrategy = new NodeTFFileStrategy();
