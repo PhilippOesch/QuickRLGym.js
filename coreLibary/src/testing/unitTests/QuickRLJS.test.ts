@@ -39,22 +39,18 @@ class MockEnv extends Environment {
         options?: EnvOptions | undefined,
         initialState?: object | undefined
     ): void {
-        console.log(options, initialState);
         throw new Error('Method not implemented.');
     }
     step(action: string): StepResult {
-        console.log(action);
         throw new Error('Method not implemented.');
     }
     reset(): boolean {
         throw new Error('Method not implemented.');
     }
     setOptions(options?: EnvOptions | undefined): void {
-        console.log(options);
         throw new Error('Method not implemented.');
     }
     encodeStateToIndices(state: object): number[] {
-        console.log(state);
         throw new Error('Method not implemented.');
     }
     resetStats(): boolean {
@@ -62,14 +58,13 @@ class MockEnv extends Environment {
     }
 }
 
-describe('QuickRLJS', function () {
-    describe('load', function () {
-        it('load Taxi Env', function () {
-            const taxiEnv = QuickRLJS.loadEnv('Taxi');
-            assert.strictEqual(true, taxiEnv instanceof Environment);
-            assert.strictEqual(true, taxiEnv instanceof SingleAgentEnvironment);
-            assert.strictEqual(true, taxiEnv instanceof TaxiEnv);
-        });
+describe('QuickRLJS', () => {
+    describe('load', () => {
+        it('load Taxi Env', () => {});
+        const taxiEnv = QuickRLJS.loadEnv('Taxi');
+        assert.strictEqual(true, taxiEnv instanceof Environment);
+        assert.strictEqual(true, taxiEnv instanceof SingleAgentEnvironment);
+        assert.strictEqual(true, taxiEnv instanceof TaxiEnv);
 
         it('load BlackJackEnv', function () {
             const blackJackEnv = QuickRLJS.loadEnv('BlackJack');

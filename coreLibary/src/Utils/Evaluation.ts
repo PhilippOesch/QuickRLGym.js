@@ -14,6 +14,9 @@ export function benchmarkSingleAgent(
         randomSeed: randomSeed,
     });
 
+    env.agent = agent;
+
+    env.reset();
     for (let i = 0; i < iterations; i++) {
         while (
             (!env.isTerminal && env.iteration < maxIteration) ||

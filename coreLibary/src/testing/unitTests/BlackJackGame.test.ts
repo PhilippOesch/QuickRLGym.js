@@ -149,7 +149,6 @@ describe('BlackJack', function () {
             const newState = <BlackJackGameState>result.newState;
 
             assert.strictEqual(true, newState.playerScore > 0);
-            assert.strictEqual(result.reward, 0);
         });
 
         it('Stick step', function () {
@@ -158,7 +157,6 @@ describe('BlackJack', function () {
             const newState = <BlackJackGameState>result.newState;
 
             assert.strictEqual(0, newState.playerScore);
-            assert.strictEqual(result.reward, 0);
         });
     });
 

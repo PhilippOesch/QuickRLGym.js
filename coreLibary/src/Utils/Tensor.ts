@@ -20,7 +20,7 @@ export interface JSONTensor {
  * @property {Array<any>} array - The actual managed array element
  */
 export class Tensor {
-    private readonly dim: number[];
+    private readonly _dim: number[];
     private array: Array<any>;
 
     public constructor(dim: number[], array: Array<any>) {
@@ -30,7 +30,7 @@ export class Tensor {
             );
         }
 
-        this.dim = dim;
+        this._dim = dim;
         this.array = array;
     }
 
@@ -169,9 +169,9 @@ export class Tensor {
      * @param {number[]} indices
      */
     private validate(indices: number[]): void {
-        if (indices.length > this.dim.length) {
+        if (indices.length > this._dim.length) {
             throw new Error(
-                `Tensor has ${this.dim.length} dimensions but ${indices.length} indexes where provided`
+                `Tensor has ${this._dim.length} dimensions but ${indices.length} indexes where provided`
             );
         }
         if (this.indexOutOfRange(indices)) {
@@ -185,8 +185,8 @@ export class Tensor {
      * @returns true if the index is out of range and otherwise false
      */
     private indexOutOfRange(indices: number[]): boolean {
-        for (let i = 0; i < this.dim.length; i++) {
-            if (indices[i] >= this.dim[i]) {
+        for (let i = 0; i < this._dim.length; i++) {
+            if (indices[i] >= this._dim[i]) {
                 return true;
             }
         }
@@ -240,7 +240,7 @@ export class Tensor {
      */
     public copy(): Tensor {
         const copy = this.recCopy(this.array);
-        return new Tensor([...this.dim], copy);
+        return new Tensor([...this._dim], copy);
     }
 
     /**
@@ -256,7 +256,7 @@ export class Tensor {
      */
     public toJSONTensor(): JSONTensor {
         return {
-            dim: this.dim,
+            dim: this._dim,
             array: this.array,
         };
     }
@@ -266,7 +266,7 @@ export class Tensor {
      * @returns {number} The size
      */
     public get size(): number {
-        return this.dim.reduce((a, b) => a * b);
+        return this._dim.reduce((a, b) => a * b);
     }
 
     public isEqual(comp: Tensor): boolean {
@@ -303,7 +303,7 @@ export class Tensor {
      * @returns {number} The sum
      */
     public get sum(): number {
-        return this.array.flat(this.dim.length).reduce((a, b) => a + b);
+        return this.array.flat(this._dim.length).reduce((a, b) => a + b);
     }
 
     /**
@@ -342,7 +342,7 @@ export class Tensor {
      * Returns the Dimension of the Tensor
      * @returns {number[]} The mean
      */
-    public get getDim(): number[] {
-        return this.dim;
+    public get dim(): number[] {
+        return this._dim;
     }
 }

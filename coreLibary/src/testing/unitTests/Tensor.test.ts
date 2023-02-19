@@ -121,7 +121,7 @@ describe('Tensor', function () {
 
             it('should throw error', function () {
                 const invalidPosition = [1, 1, 1, 1, 1, 1];
-                const expectedDims = tensor.getDim.length;
+                const expectedDims = tensor.dim.length;
                 const providedDims = invalidPosition.length;
 
                 assert.throws(
@@ -144,7 +144,7 @@ describe('Tensor', function () {
             it('should throw error', function () {
                 const test1Index = [1, 1, 1, 1, 1, 1];
                 const test1Value = 12;
-                const expectedDims = tensor.getDim.length;
+                const expectedDims = tensor.dim.length;
                 const providedDims = test1Index.length;
 
                 assert.throws(

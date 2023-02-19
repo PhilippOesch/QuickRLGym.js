@@ -100,8 +100,12 @@ export default class BlackJackGame {
 
     public step(actionString: string): StepResult {
         this.iteration++;
-        const action: BlackJackAction =
-            BlackJackGame.actionMapping.get(actionString)!;
+        const action: BlackJackAction | undefined =
+            BlackJackGame.actionMapping.get(actionString);
+
+        if (action === undefined) {
+            throw Error('Illegal Action');
+        }
 
         switch (action) {
             case BlackJackAction.Hit:

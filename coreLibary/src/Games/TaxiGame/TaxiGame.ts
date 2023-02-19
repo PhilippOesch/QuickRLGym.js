@@ -141,7 +141,11 @@ export default class TaxiGame {
      * @param {string} actionString - The action to perform.
      */
     public step(actionString: string): StepResult {
-        const action: TaxiAction = TaxiGame.actionMapping.get(actionString)!;
+        const action: TaxiAction | undefined =
+            TaxiGame.actionMapping.get(actionString);
+        if (action === undefined) {
+            throw Error('Illegal Action');
+        }
         this.incrementIterations();
         let stepResult: StepResult;
         if (action === TaxiAction.DropOff) {

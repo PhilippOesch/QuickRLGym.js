@@ -5,7 +5,7 @@ import {
     Utils,
 } from '../../index';
 import seedrandom from 'seedrandom';
-import PersistentAgent from '../../RLInterface/PersistentAgent';
+import PersistableAgent from '../../RLInterface/PersistableAgent';
 
 export interface MCAgentSettings {
     epsilonStart: number;
@@ -28,7 +28,7 @@ interface MCSaveFormat {
 /**
  * Implementation of First visit Monte Carlo
  */
-export default class MCAgent extends PersistentAgent {
+export default class MCAgent extends PersistableAgent {
     private _config?: MCAgentSettings;
     private rng: seedrandom.PRNG;
     private randomSeed?: string;
@@ -224,8 +224,9 @@ export default class MCAgent extends PersistentAgent {
     ): Promise<void> {
         await fileManager.save(
             {
-                valueTable: this.valueTable,
-                stateReturnCountTable: this.stateReturnCountTable,
+                valueTable: this.valueTable.toJSONTensor(),
+                stateReturnCountTable:
+                    this.stateReturnCountTable.toJSONTensor(),
             },
             options
         );

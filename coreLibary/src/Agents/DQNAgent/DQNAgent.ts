@@ -4,7 +4,7 @@ import SingleAgentEnvironment, {
 } from '../../RLInterface/SingleAgentEnvironment';
 import * as tf from '@tensorflow/tfjs';
 import { MathUtils, General } from '../../Utils';
-import PersistentAgent from '../../RLInterface/PersistentAgent';
+import PersistableAgent from '../../RLInterface/PersistableAgent';
 import FileStrategy from '../../RLInterface/FileStrategy';
 
 interface Experience {
@@ -31,7 +31,7 @@ export interface DQNAgentSettings {
     layerNorm?: boolean;
 }
 
-export default class DQNAgent extends PersistentAgent {
+export default class DQNAgent extends PersistableAgent {
     private _config?: DQNAgentSettings;
     private rng: seedrandom.PRNG;
     private experienceReplay: ReplayMemory;

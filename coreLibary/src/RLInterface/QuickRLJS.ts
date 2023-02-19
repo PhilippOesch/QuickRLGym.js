@@ -17,7 +17,7 @@ class QuickRLJS {
      * @param initialState - initial state of the environment
      * @returns - an instatiated object of the environment
      */
-    static loadEnv(
+    public static loadEnv(
         name: string,
         options?: object,
         initialState?: object
@@ -36,7 +36,7 @@ class QuickRLJS {
      * @param name - name of the environment to register.
      * @param envtype - The referenct to the environment class
      */
-    static register(name: string, envtype: typeof Environment): void {
+    public static register(name: string, envtype: typeof Environment): void {
         if (QuickRLJS.nameAlreadyRegistered(name)) {
             throw new Error(
                 'The specified Environment name is already registered'
@@ -78,4 +78,4 @@ class QuickRLJS {
 QuickRLJS.register('Taxi', Envs.TaxiEnv);
 QuickRLJS.register('BlackJack', Envs.BlackJackEnv);
 
-export default QuickRLJS;
+export { QuickRLJS };

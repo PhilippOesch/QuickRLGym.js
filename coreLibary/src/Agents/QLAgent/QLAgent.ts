@@ -5,7 +5,7 @@ import {
     FileStrategy,
     GameStateContext,
 } from '../../index';
-import PersistentAgent from '../../RLInterface/PersistentAgent';
+import PersistableAgent from '../../RLInterface/PersistableAgent';
 
 /**
  * Settings for the QLAgent
@@ -21,11 +21,11 @@ export interface QLAgentSettings {
 /**
  * Agent that represents a Q-Learning Algorithm
  */
-export default class QLAgent extends PersistentAgent {
+export default class QLAgent extends PersistableAgent {
     private _config?: QLAgentSettings;
     private rng: seedrandom.PRNG;
     private randomSeed?: string;
-    private qTable: Utils.Tensor;
+    private _qTable: Utils.Tensor;
     private epsilon: number;
     private epsilonStep: number;
 
@@ -52,14 +52,14 @@ export default class QLAgent extends PersistentAgent {
         this.epsilonStep = 0;
     }
 
-    public get getQTable(): Utils.Tensor {
-        return this.qTable;
+    public get qTable(): Utils.Tensor {
+        return this._qTable;
     }
 
     init(): void {
         const qTableDims: number[] = [...this.env.stateDim];
         qTableDims.push(this.env.actionSpace.length);
-        this.qTable = Utils.Tensor.Zeros(qTableDims);
+        this._qTable = Utils.Tensor.Zeros(qTableDims);
         this.setConfig(this._config);
     }
 
@@ -105,7 +105,7 @@ export default class QLAgent extends PersistentAgent {
 
         // update qValue
 
-        this.qTable.set(
+        this._qTable.set(
             [...this.env.encodeStateToIndices(prevState), takenActionIdx],
             newQValue
         );
@@ -127,12 +127,12 @@ export default class QLAgent extends PersistentAgent {
     }
 
     public printQTable() {
-        console.log('QTable', this.qTable);
+        console.log('QTable', this._qTable);
     }
 
     private getStateActionValues(state: object): number[] {
         const indices: number[] = this.env.encodeStateToIndices(state);
-        return this.qTable.get(...indices) as number[];
+        return this._qTable.get(...indices) as number[];
     }
 
     /**
@@ -144,7 +144,7 @@ export default class QLAgent extends PersistentAgent {
         fileStrategy: FileStrategy,
         options?: object
     ): Promise<void> {
-        await fileStrategy.save(this.qTable, options);
+        await fileStrategy.save(this._qTable.toJSONTensor(), options);
     }
 
     /**
@@ -157,7 +157,7 @@ export default class QLAgent extends PersistentAgent {
         options?: object
     ): Promise<void> {
         const loadObject: object = await fileStrategy.load(options);
-        this.qTable = Utils.Tensor.fromJSONObject(
+        this._qTable = Utils.Tensor.fromJSONObject(
             loadObject as Utils.JSONTensor
         );
     }
