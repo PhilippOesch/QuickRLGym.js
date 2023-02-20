@@ -1,22 +1,9 @@
 import { strict as assert } from 'node:assert';
 import sinon from 'sinon';
 import { describe } from 'mocha';
-import { EnvOptions, QuickRLJS } from '../..';
+import { EnvOptions, FileStrategy, QuickRLJS } from '../..';
 import { TaxiEnv } from '../../Envs';
 import { QLAgent } from '../../Agents';
-
-const arrayIsEqual = (array1: number[], array2: number[]): boolean => {
-    if (array1.length !== array2.length) {
-        return false;
-    }
-
-    for (let i = 0; i < array1.length; i++) {
-        if (array1[i] !== array2[i]) {
-            return false;
-        }
-    }
-    return true;
-};
 
 describe('QLAgent', function () {
     let env: TaxiEnv;
@@ -47,10 +34,140 @@ describe('QLAgent', function () {
         const qTable = agent.qTable;
 
         const expectedDim: number[] = [5, 5, 4, 5, 6];
-        assert.strictEqual(true, arrayIsEqual(expectedDim, qTable.dim));
+        assert.deepStrictEqual(expectedDim, qTable.dim);
     });
 
     it('config', function () {
         assert.strictEqual(agentConfig, agent.config);
+    });
+
+    it('evalStep', function () {
+        // at the beginnig where all qValues are 0, argMax should return the first defined action
+        const action = agent.evalStep(env.state);
+        assert.strictEqual(action, 'Up');
+    });
+
+    it('step', function () {
+        const action = agent.step(env.state);
+        // with the defined parameters and random seed, the action is 'Right'
+        console.log(action, 'Right');
+    });
+
+    it('single feed loop', async function () {
+        const maxIterationState = 10;
+
+        const agentSpy = sinon.spy(agent);
+
+        const prevState = env.state;
+        const nextAction = agent.step(prevState);
+        const { newState, reward } = env.step(nextAction);
+        const gameStateContext = env.additionalInfo(maxIterationState);
+        await agent.feed(
+            prevState,
+            nextAction,
+            newState,
+            reward,
+            gameStateContext
+        );
+
+        // prevState = [0, 0, 2, 1]
+        // selected action idx: 3
+        // new State = [1, 0, 2, 1]
+        // reward = -1
+
+        // iteration: Q(s,a) = 0 + 0.1 * (-1 + (0.9*0)) = -0.1
+        assert.strictEqual(-0.1, agent.qTable.get(0, 0, 2, 1, 3));
+        assert.strictEqual(agentSpy.decayEpsilon.callCount, 0);
+    });
+
+    it('trainigLoop', async function () {
+        const agentSpy = sinon.spy(agent);
+
+        await env.train(10, 4, 5);
+
+        assert.strictEqual(agentSpy.decayEpsilon.callCount, 10);
+        assert.strictEqual(agentSpy.log.callCount, 4);
+        assert.strictEqual(agentSpy.step.callCount, 50);
+        assert.strictEqual(agentSpy.feed.callCount, 50);
+    });
+
+    describe('test saving interface', function () {
+        class MockFileStrategy implements FileStrategy {
+            public cache: object = {};
+
+            async load(options?: object | undefined): Promise<object> {
+                return this.cache;
+            }
+            async save(
+                saveObject: object,
+                options?: object | undefined
+            ): Promise<boolean> {
+                this.cache = saveObject;
+                return true;
+            }
+        }
+
+        it('save agent', async function () {
+            const fileStrategy = new MockFileStrategy();
+            const fileStrategySpy = sinon.spy(fileStrategy);
+
+            await agent.save(fileStrategy);
+            assert.strictEqual(true, fileStrategySpy.save.calledOnce);
+        });
+
+        describe('load agent', function () {
+            it('rejects because no qTable in cache', async function () {
+                const fileStrategy = new MockFileStrategy();
+                await assert.rejects(
+                    async () => {
+                        await agent.load(fileStrategy);
+                    },
+                    Error,
+                    'object is missing important attributes for conversion'
+                );
+            });
+
+            it('loading works correctly', async function () {
+                const fileStrategy = new MockFileStrategy();
+                const fileStrategySpy = sinon.spy(fileStrategy);
+
+                await agent.save(fileStrategy);
+
+                await assert.doesNotReject(async () => {
+                    await agent.load(fileStrategy);
+                }, Error);
+
+                assert.strictEqual(
+                    true,
+                    fileStrategySpy.load.calledAfter(fileStrategySpy.save)
+                );
+                assert.strictEqual(true, fileStrategySpy.save.calledOnce);
+                assert.strictEqual(true, fileStrategySpy.load.calledOnce);
+            });
+        });
+
+        describe('config', function () {
+            it('save config', async function () {
+                const fileStrategy = new MockFileStrategy();
+                const fileStrategySpy = sinon.spy(fileStrategy);
+
+                await agent.saveConfig(fileStrategy);
+
+                assert.deepStrictEqual(agent.config, fileStrategy.cache);
+                assert.strictEqual(true, fileStrategySpy.save.calledOnce);
+            });
+
+            it('load config', async function () {
+                const fileStrategy = new MockFileStrategy();
+                const fileStrategySpy = sinon.spy(fileStrategy);
+
+                await agent.saveConfig(fileStrategy);
+                await agent.loadConfig(fileStrategy);
+
+                assert.deepStrictEqual(agent.config, agentConfig);
+                assert.strictEqual(true, fileStrategySpy.save.calledOnce);
+                assert.strictEqual(true, fileStrategySpy.load.calledOnce);
+            });
+        });
     });
 });

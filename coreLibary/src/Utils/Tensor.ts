@@ -45,6 +45,11 @@ export class Tensor {
     }
 
     public static fromJSONObject(jsonTensor: JSONTensor) {
+        if (jsonTensor.dim === undefined || jsonTensor.array === undefined) {
+            throw new Error(
+                'object is missing important attributes for conversion'
+            );
+        }
         return new Tensor(jsonTensor.dim, jsonTensor.array);
     }
 

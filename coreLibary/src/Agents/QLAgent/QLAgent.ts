@@ -158,7 +158,7 @@ export default class QLAgent extends PersistableAgent {
     ): Promise<void> {
         const loadObject: object = await fileStrategy.load(options);
         this._qTable = Utils.Tensor.fromJSONObject(
-            loadObject as Utils.JSONTensor
+            <Utils.JSONTensor>loadObject
         );
     }
 

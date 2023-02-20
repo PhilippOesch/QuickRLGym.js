@@ -99,7 +99,7 @@ abstract class SingleAgentEnvironment extends Environment {
 
     private async singleTrainStep(maxIterationPerGame: number): Promise<void> {
         const prevState: object = this.state;
-        const nextAction: string = this._agent!.step(this.state);
+        const nextAction: string = this._agent!.step(prevState);
         const { newState, reward } = this.step(nextAction);
         const gameStateContext = this.additionalInfo(maxIterationPerGame);
         let rewardAdjusted =
@@ -125,7 +125,7 @@ abstract class SingleAgentEnvironment extends Environment {
         console.log('Iteration:', trainIteration);
     }
 
-    private additionalInfo(maxIterPerGame: number = -1): GameStateContext {
+    public additionalInfo(maxIterPerGame: number = -1): GameStateContext {
         const isTerminal = this.isTerminal;
         const maxIterationReached =
             maxIterPerGame != -1 && this.iteration >= maxIterPerGame;

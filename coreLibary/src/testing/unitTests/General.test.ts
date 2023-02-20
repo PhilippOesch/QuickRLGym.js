@@ -3,19 +3,6 @@ import { describe } from 'mocha';
 import seedrandom from 'seedrandom';
 import { General } from '../../Utils';
 
-const arrayIsEqual = (array1: number[], array2: number[]): boolean => {
-    if (array1.length !== array2.length) {
-        return false;
-    }
-
-    for (let i = 0; i < array1.length; i++) {
-        if (array1[i] !== array2[i]) {
-            return false;
-        }
-    }
-    return true;
-};
-
 describe('General', function () {
     describe('shuffleArray', function () {
         it('test shuffle with random seed 20', function () {
@@ -35,10 +22,7 @@ describe('General', function () {
             ];
 
             const shuffledArray = General.shuffleArray(array, rng);
-            assert.strictEqual(
-                true,
-                arrayIsEqual(shuffledArray, expectedShuffledArray)
-            );
+            assert.deepStrictEqual(shuffledArray, expectedShuffledArray);
         });
     });
 
@@ -56,7 +40,7 @@ describe('General', function () {
 
             const expectedSample = [56, 20, 79, 79, 54, 43, 88, 18, 43, 74];
             const sample = General.sampleN(array, n, rng);
-            assert.strictEqual(true, arrayIsEqual(sample, expectedSample));
+            assert.deepStrictEqual(sample, expectedSample);
         });
     });
 });
