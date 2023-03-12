@@ -7,7 +7,15 @@ export interface GameStateContext {
     maxIterationReached: boolean;
 }
 
-abstract class SingleAgentEnvironment extends Environment {
+export interface Experience {
+    prevState: number[];
+    takenAction: number;
+    newState: number[];
+    payoff: number;
+    contextInfo: GameStateContext;
+}
+
+export abstract class SingleAgentEnvironment extends Environment {
     protected _lastAction?: string;
     protected _agent?: Agent;
     protected initialState?: object;
@@ -143,10 +151,6 @@ abstract class SingleAgentEnvironment extends Environment {
         return;
     }
 
-    // public resetStats(): boolean {
-    //     return true;
-    // }
-
     /**
      * @returns - The action space of the environment an array of strings (actions possible to select)
      */
@@ -191,5 +195,3 @@ abstract class SingleAgentEnvironment extends Environment {
      */
     public abstract encodeStateToIndices(state: object): number[];
 }
-
-export default SingleAgentEnvironment;

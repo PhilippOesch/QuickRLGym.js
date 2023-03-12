@@ -6,6 +6,7 @@ import {
 } from '../../index';
 import seedrandom from 'seedrandom';
 import PersistableAgent from '../../RLInterface/PersistableAgent';
+import { Experience } from '../../index';
 
 export interface MCAgentSettings {
     epsilonStart: number;
@@ -14,11 +15,11 @@ export interface MCAgentSettings {
     epsilonDecaySteps?: number;
 }
 
-interface ExperienceEntry {
-    state: number[];
-    actionIdx: number;
-    reward: number;
-}
+// interface ExperienceEntry {
+//     state: number[];
+//     actionIdx: number;
+//     reward: number;
+//}
 
 interface MCSaveFormat {
     valueTable: Utils.JSONTensor;
@@ -34,7 +35,7 @@ export default class MCAgent extends PersistableAgent {
     private randomSeed?: string;
     private _valueTable: Utils.Tensor;
     private _stateReturnCountTable: Utils.Tensor;
-    private experience: ExperienceEntry[] = [];
+    private experience: Experience[] = [];
 
     private epsilon: number = 0;
     private epsilonStep: number = 0;
@@ -90,9 +91,11 @@ export default class MCAgent extends PersistableAgent {
     ): Promise<void> {
         // buffer experience
         this.experience.push({
-            state: this.env.encodeStateToIndices(prevState),
-            actionIdx: this.env.actionSpace.indexOf(takenAction),
-            reward: payoff,
+            prevState: this.env.encodeStateToIndices(prevState),
+            takenAction: this.env.actionSpace.indexOf(takenAction),
+            newState: this.env.encodeStateToIndices(newState),
+            payoff: payoff,
+            contextInfo: gameStateContext,
         });
         if (gameStateContext.isTerminal) {
             // use experience for training and then reset experience
@@ -148,47 +151,55 @@ export default class MCAgent extends PersistableAgent {
 
     private mcTrainingStep() {
         let g: number = 0;
-        let visitedExperiences: ExperienceEntry[] = [];
+        let visitedExperiences: Experience[] = [];
         this.decayEpsilon();
         for (let i = this.experience.length - 1; i >= 0; i--) {
-            const idxExperience: ExperienceEntry = this.experience[i];
-            g = g * this._config!.discountFactor + idxExperience.reward;
+            const idxExperience: Experience = this.experience[i];
+            g = g * this._config!.discountFactor + idxExperience.payoff;
             const alreadyVisited: boolean = this.stateAlreadyVisited(
-                idxExperience.state,
+                idxExperience.prevState,
                 visitedExperiences
             );
             if (!alreadyVisited) {
-                visitedExperiences.push(idxExperience);
-                let stateReturnCount: number = this._stateReturnCountTable.get(
-                    ...idxExperience.state,
-                    idxExperience.actionIdx
-                ) as number;
-                stateReturnCount++;
-                this._stateReturnCountTable.set(
-                    [...idxExperience.state, idxExperience.actionIdx],
-                    stateReturnCount
-                );
-                const oldMean: number = this._valueTable.get(
-                    ...idxExperience.state,
-                    idxExperience.actionIdx
-                ) as number;
-                const newMean =
-                    (oldMean / stateReturnCount) * (stateReturnCount - 1) +
-                    g / stateReturnCount;
-                this._valueTable.set(
-                    [...idxExperience.state, idxExperience.actionIdx],
-                    newMean
-                );
+                this.onAlreadyVisited(visitedExperiences, idxExperience, g);
             }
         }
     }
 
+    private onAlreadyVisited(
+        visitedExperiences: Experience[],
+        idxExperience: Experience,
+        g: number
+    ) {
+        visitedExperiences.push(idxExperience);
+        let stateReturnCount: number = this._stateReturnCountTable.get(
+            ...idxExperience.prevState,
+            idxExperience.takenAction
+        ) as number;
+        stateReturnCount++;
+        this._stateReturnCountTable.set(
+            [...idxExperience.prevState, idxExperience.takenAction],
+            stateReturnCount
+        );
+        const oldMean: number = this._valueTable.get(
+            ...idxExperience.prevState,
+            idxExperience.takenAction
+        ) as number;
+        const newMean =
+            (oldMean / stateReturnCount) * (stateReturnCount - 1) +
+            g / stateReturnCount;
+        this._valueTable.set(
+            [...idxExperience.prevState, idxExperience.takenAction],
+            newMean
+        );
+    }
+
     private stateAlreadyVisited(
         state: number[],
-        visitedExperiences: ExperienceEntry[]
+        visitedExperiences: Experience[]
     ): boolean {
-        const found = visitedExperiences.find((entry: ExperienceEntry) => {
-            return entry.state.every((val, idx) => val === state[idx]);
+        const found = visitedExperiences.find((entry: Experience) => {
+            return entry.prevState.every((val, idx) => val === state[idx]);
         });
         if (found !== undefined) return true;
         return false;

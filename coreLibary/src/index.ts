@@ -1,7 +1,9 @@
 import StepResult from './RLInterface/StepResult';
 import Agent from './RLInterface/Agent';
-import SingleAgentEnvironment, {
+import {
+    SingleAgentEnvironment,
     GameStateContext,
+    Experience,
 } from './RLInterface/SingleAgentEnvironment';
 import Environment, { EnvOptions } from './RLInterface/Environment';
 import * as Envs from './Envs';
@@ -17,6 +19,7 @@ export {
     type FileStrategy,
     type StepResult,
     type EnvOptions,
+    type Experience,
     PersistableAgent,
     Agents,
     Envs,

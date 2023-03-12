@@ -1,5 +1,5 @@
 import Agent from '../RLInterface/Agent';
-import SingleAgentEnvironment from '../RLInterface/SingleAgentEnvironment';
+import { SingleAgentEnvironment } from '../RLInterface/SingleAgentEnvironment';
 
 // expects an initialized Environment with agent
 export function benchmarkSingleAgent(

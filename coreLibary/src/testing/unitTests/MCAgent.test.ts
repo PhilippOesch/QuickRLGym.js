@@ -1,5 +1,4 @@
 import { strict as assert } from 'node:assert';
-import sinon from 'sinon';
 import { describe } from 'mocha';
 import { MCAgent, MCAgentSettings } from '../../Agents';
 import { EnvOptions } from '../../RLInterface/Environment';

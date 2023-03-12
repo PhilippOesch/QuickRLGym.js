@@ -1,7 +1,7 @@
 import { strict as assert } from 'node:assert';
 import sinon from 'sinon';
 import { describe } from 'mocha';
-import SingleAgentEnvironment from '../../RLInterface/SingleAgentEnvironment';
+import { SingleAgentEnvironment } from '../../RLInterface/SingleAgentEnvironment';
 import StepResult from '../../RLInterface/StepResult';
 import Agent from '../../RLInterface/Agent';
 import { EnvOptions } from '../../RLInterface/Environment';

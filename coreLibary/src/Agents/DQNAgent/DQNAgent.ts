@@ -1,19 +1,13 @@
 import seedrandom from 'seedrandom';
-import SingleAgentEnvironment, {
+import {
+    SingleAgentEnvironment,
     GameStateContext,
+    Experience,
 } from '../../RLInterface/SingleAgentEnvironment';
 import * as tf from '@tensorflow/tfjs';
 import { MathUtils, General } from '../../Utils';
 import PersistableAgent from '../../RLInterface/PersistableAgent';
 import FileStrategy from '../../RLInterface/FileStrategy';
-
-interface Experience {
-    prevState: number[];
-    takenAction: number;
-    newState: number[];
-    payoff: number;
-    contextInfo: GameStateContext;
-}
 
 export interface DQNAgentSettings {
     learningRate: number;
