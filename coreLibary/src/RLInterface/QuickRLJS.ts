@@ -31,6 +31,10 @@ class QuickRLJS {
         return undefined;
     }
 
+    public static listEnvs(): string[] {
+        return Array.from(QuickRLJS.registery.keys());
+    }
+
     /**
      * Register a new environment within the framework.
      * @param name - name of the environment to register.

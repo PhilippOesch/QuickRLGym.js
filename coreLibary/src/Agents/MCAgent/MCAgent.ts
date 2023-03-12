@@ -32,8 +32,8 @@ export default class MCAgent extends PersistableAgent {
     private _config?: MCAgentSettings;
     private rng: seedrandom.PRNG;
     private randomSeed?: string;
-    private valueTable: Utils.Tensor;
-    private stateReturnCountTable: Utils.Tensor;
+    private _valueTable: Utils.Tensor;
+    private _stateReturnCountTable: Utils.Tensor;
     private experience: ExperienceEntry[] = [];
 
     private epsilon: number = 0;
@@ -53,11 +53,19 @@ export default class MCAgent extends PersistableAgent {
         return this._config;
     }
 
+    get valueTable(): Utils.Tensor {
+        return this._valueTable;
+    }
+
+    get stateReturnCountTable(): Utils.Tensor {
+        return this._stateReturnCountTable;
+    }
+
     init(): void {
         const valueTableDims: number[] = [...this.env.stateDim];
         valueTableDims.push(this.env.actionSpace.length);
-        this.valueTable = Utils.Tensor.Zeros(valueTableDims);
-        this.stateReturnCountTable = Utils.Tensor.Zeros(valueTableDims);
+        this._valueTable = Utils.Tensor.Zeros(valueTableDims);
+        this._stateReturnCountTable = Utils.Tensor.Zeros(valueTableDims);
         this.setConfig(this._config);
     }
 
@@ -151,23 +159,23 @@ export default class MCAgent extends PersistableAgent {
             );
             if (!alreadyVisited) {
                 visitedExperiences.push(idxExperience);
-                let stateReturnCount: number = this.stateReturnCountTable.get(
+                let stateReturnCount: number = this._stateReturnCountTable.get(
                     ...idxExperience.state,
                     idxExperience.actionIdx
                 ) as number;
                 stateReturnCount++;
-                this.stateReturnCountTable.set(
+                this._stateReturnCountTable.set(
                     [...idxExperience.state, idxExperience.actionIdx],
                     stateReturnCount
                 );
-                const oldMean: number = this.valueTable.get(
+                const oldMean: number = this._valueTable.get(
                     ...idxExperience.state,
                     idxExperience.actionIdx
                 ) as number;
                 const newMean =
                     (oldMean / stateReturnCount) * (stateReturnCount - 1) +
                     g / stateReturnCount;
-                this.valueTable.set(
+                this._valueTable.set(
                     [...idxExperience.state, idxExperience.actionIdx],
                     newMean
                 );
@@ -188,7 +196,7 @@ export default class MCAgent extends PersistableAgent {
 
     private getStateActionValues(state: object): number[] {
         const indices: number[] = this.env.encodeStateToIndices(state);
-        return this.valueTable.get(...indices) as number[];
+        return this._valueTable.get(...indices) as number[];
     }
 
     private followEpsGreedyPolicy(state: object): string {
@@ -212,8 +220,8 @@ export default class MCAgent extends PersistableAgent {
         const loadObject: MCSaveFormat = (await fileManager.load(
             options
         )) as MCSaveFormat;
-        this.valueTable = Utils.Tensor.fromJSONObject(loadObject.valueTable);
-        this.stateReturnCountTable = Utils.Tensor.fromJSONObject(
+        this._valueTable = Utils.Tensor.fromJSONObject(loadObject.valueTable);
+        this._stateReturnCountTable = Utils.Tensor.fromJSONObject(
             loadObject.stateReturnCountTable
         );
     }
@@ -224,9 +232,9 @@ export default class MCAgent extends PersistableAgent {
     ): Promise<void> {
         await fileManager.save(
             {
-                valueTable: this.valueTable.toJSONTensor(),
+                valueTable: this._valueTable.toJSONTensor(),
                 stateReturnCountTable:
-                    this.stateReturnCountTable.toJSONTensor(),
+                    this._stateReturnCountTable.toJSONTensor(),
             },
             options
         );

@@ -11,7 +11,7 @@ export interface BrowserLoadOptions {
 
 export default class BrowserFileStrategy implements FileStrategy {
     async load(options: BrowserLoadOptions): Promise<object> {
-        var fileReader = new FileReader();
+        const fileReader = new FileReader();
         fileReader.readAsText(options.file);
         let res: string = await new Promise<string>((resolve) => {
             let result = '';

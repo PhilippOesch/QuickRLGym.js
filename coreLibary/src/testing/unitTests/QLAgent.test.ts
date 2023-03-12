@@ -38,7 +38,7 @@ describe('QLAgent', function () {
     });
 
     it('config', function () {
-        assert.strictEqual(agentConfig, agent.config);
+        assert.deepStrictEqual(agentConfig, agent.config);
     });
 
     it('evalStep', function () {

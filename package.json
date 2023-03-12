@@ -1,29 +1,29 @@
 {
-  "name": "tstaxirl",
-  "version": "1.0.0",
-  "description": "repository wide enforcement of a style guide",
-  "main": "index.js",
-  "scripts": {
-    "test": "npm run test --prefix ./backend",
-    "dependencies": "npm i; npm i --prefix ./shared; npm i --prefix ./backend; npm i --prefix ./frontend;",
-    "frontend": "npm run dev --prefix ./frontendNuxt",
-    "backend": "npm run buildrun --prefix ./backend",
-    "deployFrontend": "npm run deploy --prefix ./frontend",
-    "buildCore": "npm run build --prefix ./coreLibary"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/PhilippOesch/QuickRLGym.js.git"
-  },
-  "author": "Philipp Oeschger",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/PhilippOesch/QuickRLGym.js/issues"
-  },
-  "homepage": "https://github.com/PhilippOesch/QuickRLGym.js#readme",
-  "devDependencies": {
-    "prettier": "^2.8.3",
-    "prettier-plugin-tailwindcss": "^0.2.2",
-    "typescript": "^4.8.4"
-  }
+    "name": "tstaxirl",
+    "version": "1.0.0",
+    "description": "repository wide enforcement of a style guide",
+    "main": "index.js",
+    "scripts": {
+        "test": "npm run test --prefix ./backend",
+        "dependencies": "npm i; npm i --prefix ./shared; npm i --prefix ./backend; npm i --prefix ./frontend;",
+        "frontend": "npm run dev --prefix ./frontendNuxt",
+        "backend": "npm run buildrun --prefix ./backend",
+        "deployFrontend": "npm run deploy --prefix ./frontend",
+        "buildCore": "npm run build --prefix ./coreLibary"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/PhilippOesch/QuickRLGym.js.git"
+    },
+    "author": "Philipp Oeschger",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/PhilippOesch/QuickRLGym.js/issues"
+    },
+    "homepage": "https://github.com/PhilippOesch/QuickRLGym.js#readme",
+    "devDependencies": {
+        "prettier": "^2.8.3",
+        "prettier-plugin-tailwindcss": "^0.2.2",
+        "typescript": "^4.8.4"
+    }
 }

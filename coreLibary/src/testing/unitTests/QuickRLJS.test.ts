@@ -60,11 +60,12 @@ class MockEnv extends Environment {
 
 describe('QuickRLJS', () => {
     describe('load', () => {
-        it('load Taxi Env', () => {});
-        const taxiEnv = QuickRLJS.loadEnv('Taxi');
-        assert.strictEqual(true, taxiEnv instanceof Environment);
-        assert.strictEqual(true, taxiEnv instanceof SingleAgentEnvironment);
-        assert.strictEqual(true, taxiEnv instanceof TaxiEnv);
+        it('load Taxi Env', () => {
+            const taxiEnv = QuickRLJS.loadEnv('Taxi');
+            assert.strictEqual(true, taxiEnv instanceof Environment);
+            assert.strictEqual(true, taxiEnv instanceof SingleAgentEnvironment);
+            assert.strictEqual(true, taxiEnv instanceof TaxiEnv);
+        });
 
         it('load BlackJackEnv', function () {
             const blackJackEnv = QuickRLJS.loadEnv('BlackJack');
@@ -74,6 +75,16 @@ describe('QuickRLJS', () => {
                 blackJackEnv instanceof SingleAgentEnvironment
             );
             assert.strictEqual(true, blackJackEnv instanceof BlackJackEnv);
+        });
+    });
+
+    describe('info', function () {
+        const numEnvs = 2;
+        const listOfEnvs = ['Taxi', 'BlackJack'];
+
+        it('registeredEnvs', function () {
+            assert.strictEqual(QuickRLJS.listEnvs().length, numEnvs);
+            assert.deepStrictEqual(QuickRLJS.listEnvs(), listOfEnvs);
         });
     });
 

@@ -15,7 +15,8 @@
         "test": "npm run buildDev; nyc mocha ./out/testing/*;",
         "buildProd": "rm -r ./out; npx tsc -d -p tsconfig.json",
         "buildDev": "rm -r ./out; npx tsc -d -p tsconfig.dev.json",
-        "release": "npm run test; npm run buildProd; npm publish;"
+        "release": "npm run test; npm run buildProd; npm publish;",
+        "coverage": "nyc report --reporter=lcov;"
     },
     "author": "Philipp Oeschger",
     "license": "ISC",
@@ -29,6 +30,7 @@
         "@types/seedrandom": "^3.0.2",
         "@types/sinon": "^10.0.13",
         "mocha": "^10.2.0",
+        "mocha-suppress-logs": "^0.3.1",
         "npx": "^10.2.2",
         "nyc": "^15.1.0",
         "sinon": "^15.0.1",
