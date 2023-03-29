@@ -9,13 +9,16 @@ Have fun with this project.
 
 ## Environments
 
-- BlackJack
-- Taxi
+- [x] BlackJack
+- [x] Taxi Problem
+- [ ] Grid World
 
 ## Algorithms
 
 - [x] Monte Carlo
 - [x] Q-Learning
-- [x] DQN
-- [ ] A2C
-- [ ] PPO
+- [x] Deep Q Learning
+- [ ] Advantage Actor Critic
+- [ ] Procimal Policy Optimization
+
+
