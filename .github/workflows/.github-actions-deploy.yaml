@@ -1,28 +1,28 @@
-name: GitHub Deploy Frontend
-run-name: ${{ github.actor }} Deploys Frontend
-on:
-    push:
-        branches:
-            - main
-            - 'releases/**'
-jobs:
-    GitHub-Deploy-Frontend:
-        runs-on: ubuntu-latest
-        steps:
-            - uses: actions/checkout@v3
-            - uses: actions/setup-node@v3
-              with:
-                  node-version: '18.x'
-            - run: npm install
-            - name: Install Dependencies
-              run: npm run dependencies
-            - name: Tests
-              run: npm run test
-            - name: Build Frontend
-              run: |
-                  cd ./frontend
-                  npm run build
-            - name: Deploy
-              uses: JamesIves/github-pages-deploy-action@v4
-              with:
-                  folder: frontend/dist
+# name: GitHub Deploy Frontend
+# run-name: ${{ github.actor }} Deploys Frontend
+# on:
+#     push:
+#         branches:
+#             - main
+#             - 'releases/**'
+# jobs:
+#     GitHub-Deploy-Frontend:
+#         runs-on: ubuntu-latest
+#         steps:
+#             - uses: actions/checkout@v3
+#             - uses: actions/setup-node@v3
+#               with:
+#                   node-version: '18.x'
+#             - run: npm install
+#             - name: Install Dependencies
+#               run: npm run dependencies
+#             - name: Tests
+#               run: npm run test
+#             - name: Build Frontend
+#               run: |
+#                   cd ./frontend
+#                   npm run build
+#             - name: Deploy
+#               uses: JamesIves/github-pages-deploy-action@v4
+#               with:
+#                   folder: frontend/dist

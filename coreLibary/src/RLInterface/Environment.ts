@@ -12,6 +12,9 @@ export interface EnvOptions {
  * The Environment Interface
  */
 export default abstract class Environment {
+    /**
+     * The state dimension
+     */
     abstract get stateDim(): number[];
     abstract get actionSpace(): string[];
     abstract get state(): object;

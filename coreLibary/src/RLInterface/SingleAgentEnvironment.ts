@@ -151,9 +151,6 @@ export abstract class SingleAgentEnvironment extends Environment {
         return;
     }
 
-    /**
-     * @returns - The action space of the environment an array of strings (actions possible to select)
-     */
     public abstract get actionSpace(): string[];
 
     /**
