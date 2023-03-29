@@ -5,7 +5,7 @@
     "main": "index.js",
     "scripts": {
         "test": "npm run test --prefix ./coreLibary",
-        "dependencies": "npm i; npm i --prefix ./shared; npm i --prefix ./backend; npm i --prefix ./frontend;",
+        "dependencies": "npm i; npm i --prefix ./coreLibary; npm i --prefix ./backend; npm i --prefix ./frontendNuxt;",
         "frontend": "npm run dev --prefix ./frontendNuxt",
         "backend": "npm run buildrun --prefix ./backend",
         "deployFrontend": "npm run deploy --prefix ./frontend",
