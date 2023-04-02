@@ -8,6 +8,7 @@ import * as tf from '@tensorflow/tfjs';
 import { MathUtils, General } from '../../Utils';
 import PersistableAgent from '../../RLInterface/PersistableAgent';
 import FileStrategy from '../../RLInterface/FileStrategy';
+import { initializers } from '@tensorflow/tfjs';
 
 export interface DQNAgentSettings {
     learningRate: number;
@@ -23,6 +24,7 @@ export interface DQNAgentSettings {
     updateTargetEvery?: number;
     hiddenLayerActivation?: string;
     layerNorm?: boolean;
+    kernelInitializerSeed?: number;
 }
 
 export default class DQNAgent extends PersistableAgent {
@@ -119,11 +121,11 @@ export default class DQNAgent extends PersistableAgent {
     }
     private replayMemoryLargeEnougth() {
         return (
-            this.experienceReplay.getSize >= this._config!.replayMemoryInitSize
+            this.experienceReplay.length >= this._config!.replayMemoryInitSize
         );
     }
 
-    evalStep(state: object): string {
+    public evalStep(state: object): string {
         const encodedState: tf.Tensor<tf.Rank> = tf.tensor(
             this.env.encodeStateToIndices(state),
             [1, this.env.stateDim.length]
@@ -135,16 +137,25 @@ export default class DQNAgent extends PersistableAgent {
         const actionIdx = MathUtils.argMax(qValues[0]);
         return this.env.actionSpace[actionIdx];
     }
-    log(): void {
+    public log(): void {
         console.log('epsilon', this.epsilon);
     }
 
-    createNetwork(): tf.Sequential {
+    public createNetwork(): tf.Sequential {
         const model = tf.sequential();
 
         const hiddenLayerAct = this._config?.hiddenLayerActivation
             ? this._config?.hiddenLayerActivation
             : 'relu';
+
+        let kernelInitializer: any;
+        if (this._config?.kernelInitializerSeed) {
+            kernelInitializer = tf.initializers.heNormal({
+                seed: this._config?.kernelInitializerSeed,
+            });
+        } else {
+            kernelInitializer = tf.initializers.heNormal({});
+        }
 
         // hidden layer
         model.add(
@@ -152,7 +163,7 @@ export default class DQNAgent extends PersistableAgent {
                 inputShape: [this.env.stateDim.length],
                 activation: hiddenLayerAct as any,
                 units: this._config!.nnLayer[0],
-                kernelInitializer: 'heUniform',
+                kernelInitializer: kernelInitializer,
             })
         );
         if (this._config!.layerNorm) {
@@ -169,7 +180,7 @@ export default class DQNAgent extends PersistableAgent {
                 tf.layers.dense({
                     units: this._config!.nnLayer[i],
                     activation: hiddenLayerAct as any,
-                    kernelInitializer: 'heUniform',
+                    kernelInitializer: kernelInitializer,
                 })
             );
             if (this._config!.layerNorm) {
@@ -364,7 +375,7 @@ export default class DQNAgent extends PersistableAgent {
     }
 }
 
-interface BatchSample {
+export interface BatchSample {
     stateBatch: number[][];
     actionBatch: number[];
     newStateBatch: number[][];
@@ -372,16 +383,20 @@ interface BatchSample {
     contextInfoBatch: GameStateContext[];
 }
 
-class ReplayMemory {
+export class ReplayMemory {
     private memory: Experience[];
-    private size: number;
+    private _maxSize: number;
 
-    constructor(size: number) {
+    constructor(maxSize: number) {
         this.memory = [];
-        this.size = size;
+        this._maxSize = maxSize;
     }
 
-    public get getSize(): number {
+    public get maxSize(): number {
+        return this._maxSize;
+    }
+
+    public get length(): number {
         return this.memory.length;
     }
 
@@ -419,7 +434,7 @@ class ReplayMemory {
 
     public save(experience: Experience) {
         const newLength: number = this.memory.push(experience);
-        if (newLength > this.size) {
+        if (newLength > this._maxSize) {
             this.memory.shift();
         }
     }
