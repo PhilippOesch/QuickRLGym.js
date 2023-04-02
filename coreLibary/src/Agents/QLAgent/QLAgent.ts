@@ -117,7 +117,7 @@ export default class QLAgent extends PersistableAgent {
             return;
         }
 
-        const { epsilon, stepCount } = General.decayEpsilon(
+        const { epsilon, stepCount } = General.linearDecayEpsilon(
             this.epsilonStep,
             this._config!.epsilonDecaySteps,
             this._config!.epsilonStart,

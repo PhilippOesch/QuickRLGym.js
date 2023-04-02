@@ -46,7 +46,7 @@ export function sampleN(array: any[], n: number, rng?: seedrandom.PRNG): any[] {
     return result.slice(0, n);
 }
 
-export function decayEpsilon(
+export function linearDecayEpsilon(
     stepCount: number,
     decaySteps: number,
     epsilonStart: number,

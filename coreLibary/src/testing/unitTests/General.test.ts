@@ -51,7 +51,7 @@ describe('General', function () {
             const epsilonStart = 1;
             const decaySteps = 9;
 
-            const { epsilon, stepCount } = General.decayEpsilon(
+            const { epsilon, stepCount } = General.linearDecayEpsilon(
                 step,
                 decaySteps,
                 epsilonStart,
@@ -68,7 +68,7 @@ describe('General', function () {
             const epsilonStart = 1;
             const decaySteps = 9;
 
-            const { epsilon, stepCount } = General.decayEpsilon(
+            const { epsilon, stepCount } = General.linearDecayEpsilon(
                 step,
                 decaySteps,
                 epsilonStart,

@@ -5,6 +5,8 @@ import { EnvOptions } from '../../RLInterface/Environment';
 import { BlackJackEnv } from '../../Envs';
 import { QuickRLJS } from '../../RLInterface/QuickRLJS';
 import sinon from 'sinon';
+import FileStrategy from '../../RLInterface/FileStrategy';
+import { MCSaveFormat } from '../../Agents/MCAgent/MCAgent';
 
 describe('MCAgent', function () {
     let env: BlackJackEnv;
@@ -86,5 +88,101 @@ describe('MCAgent', function () {
         assert.strictEqual(1, spy.step.callCount);
         assert.strictEqual(1, spy.feed.callCount);
         assert.strictEqual(1, agent.experience.length);
+    });
+
+    it('testDecayStepCalled', async function () {
+        const spy = sinon.spy(agent);
+
+        const prevState = env.state;
+        const action = agent.step(env.state);
+        const stepResult = env.step(action);
+        const gameStateContext = env.additionalInfo();
+
+        await agent.feed(
+            prevState,
+            action,
+            stepResult.newState,
+            stepResult.reward,
+            gameStateContext
+        );
+
+        console.log('gameStateContext', gameStateContext);
+
+        assert.strictEqual(spy.decayEpsilon.callCount, 1);
+    });
+
+    describe('test loading and saving interface', function () {
+        let fileStrategy: MockFileStrategy;
+        let spy: sinon.SinonSpiedInstance<MockFileStrategy>;
+
+        this.beforeEach(function () {
+            fileStrategy = new MockFileStrategy();
+            spy = sinon.spy(fileStrategy);
+        });
+
+        class MockFileStrategy implements FileStrategy {
+            public cache: object = {};
+
+            async load(options?: object | undefined): Promise<object> {
+                return this.cache;
+            }
+            async save(
+                saveObject: object,
+                options?: object | undefined
+            ): Promise<boolean> {
+                this.cache = saveObject;
+                return true;
+            }
+        }
+
+        describe('agent', function () {
+            it('save', function () {
+                agent.save(fileStrategy);
+
+                const cache: MCSaveFormat = <MCSaveFormat>fileStrategy.cache;
+                assert.strictEqual(spy.save.callCount, 1);
+                assert.notStrictEqual(cache.valueTable, undefined);
+                assert.notStrictEqual(cache.stateReturnCountTable, undefined);
+            });
+
+            it('load', async function () {
+                agent.save(fileStrategy);
+
+                await assert.doesNotReject(async () => {
+                    await agent.load(fileStrategy);
+                }, Error);
+                assert.strictEqual(true, spy.load.calledAfter(spy.save));
+                assert.strictEqual(true, spy.save.calledOnce);
+                assert.strictEqual(true, spy.load.calledOnce);
+            });
+
+            it('rejects because empty cache', async function () {
+                await assert.rejects(
+                    async () => {
+                        await agent.load(fileStrategy);
+                    },
+                    Error,
+                    'object is missing important attributes for conversion'
+                );
+            });
+        });
+
+        describe('config', function () {
+            it('save', async function () {
+                await agent.saveConfig(fileStrategy);
+
+                assert.deepStrictEqual(agent.config, fileStrategy.cache);
+                assert.strictEqual(true, spy.save.calledOnce);
+            });
+
+            it('save', async function () {
+                await agent.saveConfig(fileStrategy);
+                await agent.loadConfig(fileStrategy);
+
+                assert.deepStrictEqual(agent.config, agentConfig);
+                assert.strictEqual(true, spy.save.calledOnce);
+                assert.strictEqual(true, spy.load.calledOnce);
+            });
+        });
     });
 });

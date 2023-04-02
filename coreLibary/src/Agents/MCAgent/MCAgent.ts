@@ -16,7 +16,7 @@ export interface MCAgentSettings {
     epsilonDecaySteps?: number;
 }
 
-interface MCSaveFormat {
+export interface MCSaveFormat {
     valueTable: Utils.JSONTensor;
     stateReturnCountTable: Utils.JSONTensor;
 }
@@ -118,7 +118,7 @@ export default class MCAgent extends PersistableAgent {
             return;
         }
 
-        const { epsilon, stepCount } = General.decayEpsilon(
+        const { epsilon, stepCount } = General.linearDecayEpsilon(
             this.epsilonStep,
             this._config!.epsilonDecaySteps,
             this._config!.epsilonStart,
@@ -232,9 +232,9 @@ export default class MCAgent extends PersistableAgent {
         fileManager: FileStrategy,
         options?: object
     ): Promise<void> {
-        const loadObject: MCSaveFormat = (await fileManager.load(
-            options
-        )) as MCSaveFormat;
+        const loadObject: MCSaveFormat = <MCSaveFormat>(
+            await fileManager.load(options)
+        );
         this._valueTable = Utils.Tensor.fromJSONObject(loadObject.valueTable);
         this._stateReturnCountTable = Utils.Tensor.fromJSONObject(
             loadObject.stateReturnCountTable
