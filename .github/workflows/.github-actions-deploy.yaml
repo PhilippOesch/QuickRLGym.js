@@ -13,10 +13,7 @@ jobs:
             - uses: actions/setup-node@v3
               with:
                   node-version: '18.x'
-            - run: npm install
             - name: Run coreLibrary Tests
-              with:
-              path: ./coreLibrary
               run: |
-                  npm install
-                  npm run test
+                  npm install --prefix ./coreLibrary
+                  npm run test --prefix ./coreLibrary
