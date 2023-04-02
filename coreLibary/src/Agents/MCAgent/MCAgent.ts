@@ -7,6 +7,7 @@ import {
 import seedrandom from 'seedrandom';
 import PersistableAgent from '../../RLInterface/PersistableAgent';
 import { Experience } from '../../index';
+import { General } from '../../Utils';
 
 export interface MCAgentSettings {
     epsilonStart: number;
@@ -117,14 +118,15 @@ export default class MCAgent extends PersistableAgent {
             return;
         }
 
-        if (this.epsilonStep < this._config!.epsilonDecaySteps) {
-            this.epsilonStep++;
-            this.epsilon =
-                this._config!.epsilonStart -
-                ((this._config!.epsilonStart - this._config!.epsilonEnd) /
-                    this._config!.epsilonDecaySteps) *
-                    this.epsilonStep;
-        }
+        const { epsilon, stepCount } = General.decayEpsilon(
+            this.epsilonStep,
+            this._config!.epsilonDecaySteps,
+            this._config!.epsilonStart,
+            this._config!.epsilonEnd
+        );
+
+        this.epsilon = epsilon;
+        this.epsilonStep = stepCount;
     }
 
     public evalStep(state: object): string {

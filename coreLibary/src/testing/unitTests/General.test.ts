@@ -43,4 +43,40 @@ describe('General', function () {
             assert.deepStrictEqual(sample, expectedSample);
         });
     });
+
+    describe('decayEpsilon', function () {
+        it('test core decayEpsilon Functionality', function () {
+            const step = 6;
+            const epsilonEnd = 0.1;
+            const epsilonStart = 1;
+            const decaySteps = 9;
+
+            const { epsilon, stepCount } = General.decayEpsilon(
+                step,
+                decaySteps,
+                epsilonStart,
+                epsilonEnd
+            );
+
+            assert.strictEqual(stepCount, 7);
+            assert.strictEqual(true, Math.abs(0.3 - epsilon) < 0.000000001);
+        });
+
+        it('reached epsilon end', function () {
+            const step = 9;
+            const epsilonEnd = 0.1;
+            const epsilonStart = 1;
+            const decaySteps = 9;
+
+            const { epsilon, stepCount } = General.decayEpsilon(
+                step,
+                decaySteps,
+                epsilonStart,
+                epsilonEnd
+            );
+
+            assert.strictEqual(stepCount, 10);
+            assert.strictEqual(epsilon, 0.1);
+        });
+    });
 });

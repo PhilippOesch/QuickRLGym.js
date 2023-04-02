@@ -6,6 +6,7 @@ import {
     GameStateContext,
 } from '../../index';
 import PersistableAgent from '../../RLInterface/PersistableAgent';
+import { General } from '../../Utils';
 
 /**
  * Settings for the QLAgent
@@ -116,14 +117,15 @@ export default class QLAgent extends PersistableAgent {
             return;
         }
 
-        if (this.epsilonStep < this._config!.epsilonDecaySteps) {
-            this.epsilonStep++;
-            this.epsilon =
-                this._config!.epsilonStart -
-                ((this._config!.epsilonStart - this._config!.epsilonEnd) /
-                    this._config!.epsilonDecaySteps) *
-                    this.epsilonStep;
-        }
+        const { epsilon, stepCount } = General.decayEpsilon(
+            this.epsilonStep,
+            this._config!.epsilonDecaySteps,
+            this._config!.epsilonStart,
+            this._config!.epsilonEnd
+        );
+
+        this.epsilon = epsilon;
+        this.epsilonStep = stepCount;
     }
 
     public printQTable() {

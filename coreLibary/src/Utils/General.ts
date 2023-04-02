@@ -45,3 +45,19 @@ export function sampleN(array: any[], n: number, rng?: seedrandom.PRNG): any[] {
     }
     return result.slice(0, n);
 }
+
+export function decayEpsilon(
+    stepCount: number,
+    decaySteps: number,
+    epsilonStart: number,
+    epsilonEnd: number
+): { epsilon: number; stepCount: number } {
+    if (stepCount < decaySteps) {
+        const epsilon =
+            epsilonStart -
+            ((epsilonStart - epsilonEnd) / decaySteps) * (stepCount + 1);
+        return { epsilon: epsilon, stepCount: stepCount + 1 };
+    } else {
+        return { epsilon: epsilonEnd, stepCount: stepCount + 1 };
+    }
+}
