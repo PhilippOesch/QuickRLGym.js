@@ -15,7 +15,8 @@ jobs:
                   node-version: '18.x'
             - run: npm install
             - name: Run coreLibrary Tests
+              with:
+              path: ./coreLibrary
               run: |
-                  cd ./coreLibrary
                   npm install
                   npm run test
