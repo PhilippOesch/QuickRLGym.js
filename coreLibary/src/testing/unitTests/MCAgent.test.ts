@@ -4,6 +4,7 @@ import { MCAgent, MCAgentSettings } from '../../Agents';
 import { EnvOptions } from '../../RLInterface/Environment';
 import { BlackJackEnv } from '../../Envs';
 import { QuickRLJS } from '../../RLInterface/QuickRLJS';
+import sinon from 'sinon';
 
 describe('MCAgent', function () {
     let env: BlackJackEnv;
@@ -60,5 +61,30 @@ describe('MCAgent', function () {
         const expectedAction = 'Stick';
 
         assert.strictEqual(agent.step(env.state), expectedAction);
+    });
+
+    it('feed', async function () {
+        const spy = sinon.spy(agent);
+
+        const prevState = env.state;
+        const action = agent.step(env.state);
+        const stepResult = env.step(action);
+
+        // manipulate the game state context for testing.
+        const gameStateContext = {
+            isTerminal: false,
+            maxIterationReached: false,
+        };
+        await agent.feed(
+            prevState,
+            action,
+            stepResult.newState,
+            stepResult.reward,
+            gameStateContext
+        );
+
+        assert.strictEqual(1, spy.step.callCount);
+        assert.strictEqual(1, spy.feed.callCount);
+        assert.strictEqual(1, agent.experience.length);
     });
 });

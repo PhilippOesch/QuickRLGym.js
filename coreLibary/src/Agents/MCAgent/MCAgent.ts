@@ -29,7 +29,7 @@ export default class MCAgent extends PersistableAgent {
     private randomSeed?: string;
     private _valueTable: Utils.Tensor;
     private _stateReturnCountTable: Utils.Tensor;
-    private experience: Experience[] = [];
+    private _experience: Experience[] = [];
 
     private epsilon: number = 0;
     private epsilonStep: number = 0;
@@ -44,19 +44,26 @@ export default class MCAgent extends PersistableAgent {
         this._config = config;
     }
 
-    get config(): object | undefined {
+    public get config(): object | undefined {
         return this._config;
     }
 
-    get valueTable(): Utils.Tensor {
+    public get valueTable(): Utils.Tensor {
         return this._valueTable;
     }
 
-    get stateReturnCountTable(): Utils.Tensor {
+    public get stateReturnCountTable(): Utils.Tensor {
         return this._stateReturnCountTable;
     }
 
-    init(): void {
+    /**
+     * Get a full copy of experiences
+     */
+    public get experience(): Experience[] {
+        return this._experience.map((entry) => Object.assign({}, entry));
+    }
+
+    public init(): void {
         const valueTableDims: number[] = [...this.env.stateDim];
         valueTableDims.push(this.env.actionSpace.length);
         this._valueTable = Utils.Tensor.Zeros(valueTableDims);
@@ -73,10 +80,11 @@ export default class MCAgent extends PersistableAgent {
         this.epsilonStep = 0;
     }
 
-    step(state: object): string {
+    public step(state: object): string {
         return this.followEpsGreedyPolicy(state);
     }
-    async feed(
+
+    public async feed(
         prevState: object,
         takenAction: string,
         newState: object,
@@ -84,7 +92,7 @@ export default class MCAgent extends PersistableAgent {
         gameStateContext: GameStateContext
     ): Promise<void> {
         // buffer experience
-        this.experience.push({
+        this._experience.push({
             prevState: this.env.encodeStateToIndices(prevState),
             takenAction: this.env.actionSpace.indexOf(takenAction),
             newState: this.env.encodeStateToIndices(newState),
@@ -100,7 +108,7 @@ export default class MCAgent extends PersistableAgent {
             gameStateContext.isTerminal
         ) {
             //empty experience
-            this.experience = [];
+            this._experience = [];
         }
     }
 
@@ -119,13 +127,13 @@ export default class MCAgent extends PersistableAgent {
         }
     }
 
-    evalStep(state: object): string {
+    public evalStep(state: object): string {
         const actions: number[] = this.getStateActionValues(state);
         const actionIdx: number = Utils.MathUtils.argMax(actions);
         return this.env.actionSpace[actionIdx];
     }
 
-    log(): void {
+    public log(): void {
         console.log('epsilon:', this.epsilon);
         console.log('epsilonStep', this.epsilonStep);
     }
@@ -147,8 +155,8 @@ export default class MCAgent extends PersistableAgent {
         let g: number = 0;
         let visitedExperiences: Experience[] = [];
         this.decayEpsilon();
-        for (let i = this.experience.length - 1; i >= 0; i--) {
-            const idxExperience: Experience = this.experience[i];
+        for (let i = this._experience.length - 1; i >= 0; i--) {
+            const idxExperience: Experience = this._experience[i];
             g = g * this._config!.discountFactor + idxExperience.payoff;
             const alreadyVisited: boolean = this.stateAlreadyVisited(
                 idxExperience.prevState,
@@ -245,7 +253,7 @@ export default class MCAgent extends PersistableAgent {
         );
     }
 
-    async loadConfig(
+    public async loadConfig(
         fileManager: FileStrategy,
         options?: object
     ): Promise<void> {
@@ -254,7 +262,7 @@ export default class MCAgent extends PersistableAgent {
         );
         this.setConfig(loadObject);
     }
-    async saveConfig(
+    public async saveConfig(
         fileManager: FileStrategy,
         options?: object
     ): Promise<void> {
