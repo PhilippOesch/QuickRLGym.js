@@ -92,6 +92,14 @@ describe('QLAgent', function () {
     });
 
     describe('test saving interface', function () {
+        let fileStrategy: MockFileStrategy;
+        let spy: sinon.SinonSpiedInstance<MockFileStrategy>;
+
+        this.beforeEach(function () {
+            fileStrategy = new MockFileStrategy();
+            spy = sinon.spy(fileStrategy);
+        });
+
         class MockFileStrategy implements FileStrategy {
             public cache: object = {};
 
@@ -107,66 +115,52 @@ describe('QLAgent', function () {
             }
         }
 
-        it('save agent', async function () {
-            const fileStrategy = new MockFileStrategy();
-            const fileStrategySpy = sinon.spy(fileStrategy);
-
-            await agent.save(fileStrategy);
-            assert.strictEqual(true, fileStrategySpy.save.calledOnce);
-        });
-
-        describe('load agent', function () {
-            it('rejects because no qTable in cache', async function () {
-                const fileStrategy = new MockFileStrategy();
-                await assert.rejects(
-                    async () => {
-                        await agent.load(fileStrategy);
-                    },
-                    Error,
-                    'object is missing important attributes for conversion'
-                );
+        describe('agent', function () {
+            it('save', async function () {
+                await agent.save(fileStrategy);
+                assert.strictEqual(true, spy.save.calledOnce);
             });
 
-            it('loading works correctly', async function () {
-                const fileStrategy = new MockFileStrategy();
-                const fileStrategySpy = sinon.spy(fileStrategy);
+            describe('load', function () {
+                it('rejects because no qTable in cache', async function () {
+                    await assert.rejects(
+                        async () => {
+                            await agent.load(fileStrategy);
+                        },
+                        Error,
+                        'object is missing important attributes for conversion'
+                    );
+                });
 
-                await agent.save(fileStrategy);
+                it('loading works correctly', async function () {
+                    await agent.save(fileStrategy);
 
-                await assert.doesNotReject(async () => {
-                    await agent.load(fileStrategy);
-                }, Error);
+                    await assert.doesNotReject(async () => {
+                        await agent.load(fileStrategy);
+                    }, Error);
 
-                assert.strictEqual(
-                    true,
-                    fileStrategySpy.load.calledAfter(fileStrategySpy.save)
-                );
-                assert.strictEqual(true, fileStrategySpy.save.calledOnce);
-                assert.strictEqual(true, fileStrategySpy.load.calledOnce);
+                    assert.strictEqual(true, spy.load.calledAfter(spy.save));
+                    assert.strictEqual(true, spy.save.calledOnce);
+                    assert.strictEqual(true, spy.load.calledOnce);
+                });
             });
         });
 
         describe('config', function () {
             it('save config', async function () {
-                const fileStrategy = new MockFileStrategy();
-                const fileStrategySpy = sinon.spy(fileStrategy);
-
                 await agent.saveConfig(fileStrategy);
 
                 assert.deepStrictEqual(agent.config, fileStrategy.cache);
-                assert.strictEqual(true, fileStrategySpy.save.calledOnce);
+                assert.strictEqual(true, spy.save.calledOnce);
             });
 
             it('load config', async function () {
-                const fileStrategy = new MockFileStrategy();
-                const fileStrategySpy = sinon.spy(fileStrategy);
-
                 await agent.saveConfig(fileStrategy);
                 await agent.loadConfig(fileStrategy);
 
                 assert.deepStrictEqual(agent.config, agentConfig);
-                assert.strictEqual(true, fileStrategySpy.save.calledOnce);
-                assert.strictEqual(true, fileStrategySpy.load.calledOnce);
+                assert.strictEqual(true, spy.save.calledOnce);
+                assert.strictEqual(true, spy.load.calledOnce);
             });
         });
     });
