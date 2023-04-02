@@ -15,12 +15,6 @@ export interface MCAgentSettings {
     epsilonDecaySteps?: number;
 }
 
-// interface ExperienceEntry {
-//     state: number[];
-//     actionIdx: number;
-//     reward: number;
-//}
-
 interface MCSaveFormat {
     valueTable: Utils.JSONTensor;
     stateReturnCountTable: Utils.JSONTensor;
