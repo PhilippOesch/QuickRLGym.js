@@ -292,3 +292,16 @@ describe('Tensor Ones', function () {
         });
     });
 });
+
+describe('Tensor Sum', function () {
+    const randomSeed = 15;
+
+    it('random Tensor', function () {
+        const tensor = Utils.Tensor.Random([7, 6, 5, 3], randomSeed);
+
+        assert.strictEqual(
+            true,
+            Math.abs(tensor.sum - 310.9336659451267) < 0.000000001
+        );
+    });
+});

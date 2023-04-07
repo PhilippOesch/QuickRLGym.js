@@ -271,7 +271,16 @@ export class Tensor {
      * @returns {number} The size
      */
     public get size(): number {
-        return this._dim.reduce((a, b) => a * b);
+        if (this._dim === undefined || this._dim.length === 0) {
+            return 0;
+        }
+
+        let size = 1;
+        for (let i = 0; i < this._dim.length; i++) {
+            size *= this._dim[i];
+        }
+
+        return size;
     }
 
     public isEqual(comp: Tensor): boolean {
@@ -308,7 +317,26 @@ export class Tensor {
      * @returns {number} The sum
      */
     public get sum(): number {
-        return this.array.flat(this._dim.length).reduce((a, b) => a + b);
+        return this.recSum(this.array);
+    }
+
+    private recSum(array: any[]): number {
+        if (array === undefined || array.length === 0) {
+            return 0;
+        }
+
+        let sum = 0;
+        if (!isNaN(array[0])) {
+            for (let i = 0; i < array.length; i++) {
+                sum += array[i];
+            }
+            return sum;
+        }
+
+        for (let i = 0; i < array.length; i++) {
+            sum += this.recSum(array[i]);
+        }
+        return sum;
     }
 
     /**
