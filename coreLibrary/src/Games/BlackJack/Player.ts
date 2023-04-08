@@ -17,9 +17,13 @@ export default class BlackJackPlayer {
     }
 
     public get getCardSum(): number {
-        return this.cardHistory.reduce((a, b) => {
-            return a + b.getValue;
-        }, 0);
+        let sum = 0;
+
+        for (let i = 0; i < this.cardHistory.length; i++) {
+            sum += this.cardHistory[i].getValue;
+        }
+
+        return sum;
     }
 
     public get getCurrentCard(): BlackJackCard | undefined {

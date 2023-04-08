@@ -8,7 +8,6 @@ import * as tf from '@tensorflow/tfjs';
 import { MathUtils, General } from '../../Utils';
 import PersistableAgent from '../../RLInterface/PersistableAgent';
 import FileStrategy from '../../RLInterface/FileStrategy';
-import { initializers } from '@tensorflow/tfjs';
 
 export interface DQNAgentSettings {
     learningRate: number;
@@ -25,6 +24,11 @@ export interface DQNAgentSettings {
     hiddenLayerActivation?: string;
     layerNorm?: boolean;
     kernelInitializerSeed?: number;
+}
+
+export interface DQNNetwork {
+    local: tf.Sequential;
+    target?: tf.Sequential;
 }
 
 export default class DQNAgent extends PersistableAgent {
@@ -49,7 +53,7 @@ export default class DQNAgent extends PersistableAgent {
         this._config = config;
     }
 
-    get config(): object | undefined {
+    public get config(): object | undefined {
         return this._config;
     }
 
@@ -58,7 +62,7 @@ export default class DQNAgent extends PersistableAgent {
      * @param randomSeed - the random seed
      */
     private setRandomSeed(randomSeed?: number) {
-        if (randomSeed != undefined) {
+        if (randomSeed !== undefined) {
             this.randomSeed = randomSeed.toString();
             this.rng = seedrandom(this.randomSeed);
         } else {
@@ -66,16 +70,27 @@ export default class DQNAgent extends PersistableAgent {
         }
     }
 
+    public get network(): DQNNetwork {
+        return <DQNNetwork>{
+            local: this.qNetworkLocal,
+            target: this.qNetworkTarget,
+        };
+    }
+
+    public get replayMemory(): ReplayMemory {
+        return this.experienceReplay;
+    }
+
     public setConfig(config: DQNAgentSettings, randomSeed?: number): void {
-        if (randomSeed != undefined) this.setRandomSeed(randomSeed);
-        if (config != undefined) {
+        if (randomSeed !== undefined) this.setRandomSeed(randomSeed);
+        if (config !== undefined) {
             this._config = config;
             this.epsilon = this._config.epsilonStart;
         }
         this.epsilonStep = 0;
     }
 
-    init(): void {
+    public init(): void {
         if (this._config) {
             this.experienceReplay = new ReplayMemory(
                 this._config.replayMemorySize
@@ -91,10 +106,10 @@ export default class DQNAgent extends PersistableAgent {
                 this.qNetworkTarget = this.createNetwork();
         }
     }
-    step(state: object): string {
+    public step(state: object): string {
         return this.followEpsGreedyPolicy(state);
     }
-    async feed(
+    public async feed(
         prevState: object,
         takenAction: string,
         newState: object,
@@ -235,7 +250,10 @@ export default class DQNAgent extends PersistableAgent {
         await fileManager.save(this.qNetworkLocal, options);
     }
 
-    async load(fileManager: FileStrategy, options?: object): Promise<void> {
+    public async load(
+        fileManager: FileStrategy,
+        options?: object
+    ): Promise<void> {
         this.qNetworkLocal = <tf.Sequential>await fileManager.load(options);
 
         const adamOptimizer = tf.train.adam(this._config!.learningRate);
@@ -249,7 +267,9 @@ export default class DQNAgent extends PersistableAgent {
 
         //additionally load target network when needed
         if (this._config?.activateDoubleDQN) {
-            this.qNetworkTarget = <tf.Sequential>await fileManager.load();
+            this.qNetworkTarget = <tf.Sequential>(
+                await fileManager.load(options)
+            );
 
             const adamOptimizer = tf.train.adam(this._config.learningRate);
 
@@ -261,7 +281,7 @@ export default class DQNAgent extends PersistableAgent {
             this.qNetworkTarget.summary();
         }
     }
-    async loadConfig(
+    public async loadConfig(
         fileManager: FileStrategy,
         options?: object
     ): Promise<void> {
@@ -270,7 +290,7 @@ export default class DQNAgent extends PersistableAgent {
         );
         this.setConfig(loadObject);
     }
-    async saveConfig(
+    public async saveConfig(
         fileManager: FileStrategy,
         options?: object
     ): Promise<void> {

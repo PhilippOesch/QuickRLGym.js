@@ -58,7 +58,7 @@ export default class MCAgent extends PersistableAgent {
     }
 
     /**
-     * Get a full copy of experiences
+     * Get a shallow copy of experiences
      */
     public get experience(): Experience[] {
         return this._experience.map((entry) => Object.assign({}, entry));
