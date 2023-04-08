@@ -1,9 +1,8 @@
-import { DQNAgentSettings } from '../../coreLibary/src/Agents';
 import {
     Agents,
     SingleAgentEnvironment,
     QuickRLJS,
-} from '../../coreLibary/src/index';
+} from '../../coreLibrary/src';
 
 const randomSeed = 1234;
 
@@ -11,7 +10,7 @@ const env: SingleAgentEnvironment = QuickRLJS.loadEnv('Taxi', {
     randomSeed: randomSeed,
 }) as SingleAgentEnvironment;
 
-const agentConfig: DQNAgentSettings = {
+const agentConfig: Agents.DQNAgentSettings = {
     learningRate: 0.001,
     discountFactor: 0.5,
     nnLayer: [64, 64],

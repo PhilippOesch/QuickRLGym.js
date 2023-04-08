@@ -11,6 +11,7 @@
   "author": "Philipp Oeschger",
   "license": "ISC",
   "devDependencies": {
+    "@types/benchmark": "^2.1.2",
     "@types/mocha": "^10.0.0",
     "@types/node": "^18.11.9",
     "@types/seedrandom": "^3.0.2",
@@ -20,6 +21,7 @@
   "dependencies": {
     "@tensorflow/tfjs-node": "^4.2.0",
     "@tensorflow/tfjs-node-gpu": "^4.2.0",
+    "benchmark": "^2.1.4",
     "quickrl.core": "^0.5.10",
     "seedrandom": "^3.0.5"
   }

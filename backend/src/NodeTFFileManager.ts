@@ -1,4 +1,4 @@
-import { FileStrategy } from '../../coreLibary/src';
+import { FileStrategy } from '../../coreLibrary/src';
 import * as tf from '@tensorflow/tfjs';
 import path from 'path';
 import { mkdir } from 'fs/promises';

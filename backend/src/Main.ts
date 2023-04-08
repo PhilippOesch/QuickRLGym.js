@@ -3,7 +3,7 @@ import {
     SingleAgentEnvironment,
     Agents,
     QuickRLJS,
-} from '../../coreLibary/src';
+} from '../../coreLibrary/src';
 import NodeJSONFileStrategy from './NodeJSONFileManager';
 import NodeTFFileStrategy from './NodeTFFileManager';
 require('@tensorflow/tfjs-node-gpu');

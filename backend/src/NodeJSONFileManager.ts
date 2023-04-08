@@ -1,5 +1,5 @@
 import path from 'path';
-import { FileStrategy } from '../../coreLibary/src';
+import { FileStrategy } from '../../coreLibrary/src';
 import { writeFile, readFile, mkdir } from 'fs/promises';
 
 export interface NodeJSONFMOptions {

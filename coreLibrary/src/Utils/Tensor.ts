@@ -1,4 +1,6 @@
 import seedrandom from 'seedrandom';
+import { MathUtils } from '.';
+import { Utils } from '..';
 
 /**
  * Enum of Initialization Types for a Tensor-Object
@@ -33,6 +35,8 @@ export class Tensor {
         this._dim = dim;
         this.array = array;
     }
+
+    private memoizedSum: any;
 
     /**
      * Static function to initialize an Tensor filled with Zeros
@@ -139,6 +143,7 @@ export class Tensor {
      * Get a certain index of the array.
      * @param {number[]} indices - The Tensor index to return
      * @returns {Array<any> | number} The digit or sub array
+     * note this returns a deep copy not the actual array
      */
     public get(...indices: number[]): Array<any> | number {
         this.validate(indices);
@@ -147,7 +152,8 @@ export class Tensor {
         for (const index of indices) {
             result = result[index];
         }
-        return result;
+        console.log(result);
+        return this.recCopy(result);
     }
 
     /**
@@ -244,7 +250,7 @@ export class Tensor {
      * @returns {Tensor} The copy
      */
     public copy(): Tensor {
-        const copy = this.recCopy(this.array);
+        const copy = <Array<any>>this.recCopy(this.array);
         return new Tensor([...this._dim], copy);
     }
 
@@ -253,7 +259,7 @@ export class Tensor {
      * @returns a copy of just the inner array
      */
     public get seeArray(): Array<any> {
-        return this.recCopy(this.array);
+        return <Array<any>>this.recCopy(this.array);
     }
 
     /**
@@ -327,9 +333,7 @@ export class Tensor {
 
         let sum = 0;
         if (!isNaN(array[0])) {
-            for (let i = 0; i < array.length; i++) {
-                sum += array[i];
-            }
+            sum += MathUtils.sum(array);
             return sum;
         }
 
@@ -339,12 +343,20 @@ export class Tensor {
         return sum;
     }
 
+    public originalSum(): number {
+        return this.recSum(this.array);
+    }
+
     /**
      * Helper function for recursively copying an array
      * @param {Array<any>} array - The sub array
      * @returns {Array<any> } The copy
      */
-    private recCopy(array: Array<any>): Array<any> {
+    private recCopy(array: Array<any> | number): Array<any> | number {
+        if (typeof array == 'number') {
+            return array;
+        }
+
         if (!isNaN(array[0])) {
             return [...array];
         }
