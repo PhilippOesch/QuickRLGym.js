@@ -5,10 +5,10 @@
     "main": "index.js",
     "scripts": {
         "test": "cd ./coreLibrary; yarn run test",
-        "dependencies": "yarn install; cd ./coreLibrary; yarn install; cd ../backend; yarn install; cd ../frontend; yarn install",
-        "frontend": "cd ./frontend; yarn run dev",
-        "backend": "cd ./backend; yarb run buildrun",
-        "buildCore": "cd ./coreLibrary; yarn run buildDev"
+        "dependencies": "pnpm install; cd ./coreLibrary; pnpm install; cd ../backend; pnpm install; cd ../frontend; pnpm install",
+        "frontend": "cd ./frontend; pnpm dev",
+        "backend": "cd ./backend; pnpm buildrun",
+        "buildCore": "cd ./coreLibrary; pnpm run buildDev"
     },
     "repository": {
         "type": "git",

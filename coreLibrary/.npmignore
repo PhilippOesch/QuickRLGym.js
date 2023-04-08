@@ -8,3 +8,4 @@ package-lock.json
 tsconfig.dev.json
 Development.md
 .mocharc.json
+pnpm-lock.yaml

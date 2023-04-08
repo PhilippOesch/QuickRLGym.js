@@ -13,14 +13,14 @@
 import BrowserFileStrategy, {
     BrowserSaveOptions,
 } from '~~/utils/BrowserFileStrategy';
-import { PersistentAgent } from 'quickrl.core';
+import { PersistableAgent } from 'quickrl.core';
 import { PropType } from 'vue';
 import useSettingsStore from '~~/comsosable/useSettingsStore';
 import TFBrowserFileStrategy from '~~/utils/TFBrowserFileStrategy';
 import { agentMapping } from '~~/comsosable/useAgent';
 
 const props = defineProps({
-    agentObject: Object as PropType<PersistentAgent>,
+    agentObject: Object as PropType<PersistableAgent>,
     gameId: {
         type: String,
         required: true,
@@ -38,7 +38,9 @@ async function save(): Promise<void> {
     const isTFModel: boolean =
         agentMapping.get(activeAlgorithm)!.usesTensorflow;
 
-    const trainableAgent: PersistentAgent = <PersistentAgent>props.agentObject;
+    const trainableAgent: PersistableAgent = <PersistableAgent>(
+        props.agentObject
+    );
 
     console.log('save Agent');
     console.log(props.agentObject);

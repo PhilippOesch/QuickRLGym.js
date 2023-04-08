@@ -49,7 +49,7 @@
 </template>
 
 <script setup lang="ts">
-import { SingleAgentEnvironment, PersistentAgent } from 'quickrl.core';
+import { SingleAgentEnvironment, PersistableAgent } from 'quickrl.core';
 import { PropType } from 'vue';
 import useAgent, { agentMapping } from '~~/comsosable/useAgent';
 import useSettingsStore from '~~/comsosable/useSettingsStore';
@@ -79,7 +79,7 @@ const props = defineProps({
     env: {
         type: Object as PropType<SingleAgentEnvironment>,
     },
-    agentObject: Object as PropType<PersistentAgent>,
+    agentObject: Object as PropType<PersistableAgent>,
 });
 
 const agentLoaded = ref(false);
@@ -150,7 +150,7 @@ async function loadAgent(): Promise<void> {
 }
 
 async function loadIntoExistingAgent() {
-    let loadAgent: PersistentAgent = <PersistentAgent>props.agentObject;
+    let loadAgent: PersistableAgent = <PersistableAgent>props.agentObject;
     await loadAgentFiles(loadAgent);
 }
 
@@ -170,7 +170,7 @@ async function loadNewAgent(): Promise<void> {
     }
     const activeAlgorithm: string = getActiveAlgorithm(props.gameId);
 
-    let agent: PersistentAgent = <PersistentAgent>(
+    let agent: PersistableAgent = <PersistableAgent>(
         useAgent(activeAlgorithm, props.env)
     );
     agent = await loadAgentFiles(agent);
@@ -178,8 +178,8 @@ async function loadNewAgent(): Promise<void> {
 }
 
 async function loadAgentFiles(
-    agent: PersistentAgent
-): Promise<PersistentAgent> {
+    agent: PersistableAgent
+): Promise<PersistableAgent> {
     const modelFile: File = loaderInputModel.value.files[0];
     const configFile: File = loaderInputConfig.value.file[0];
 
