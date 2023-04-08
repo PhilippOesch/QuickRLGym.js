@@ -2,3 +2,9 @@ node_modules
 src
 out/testing
 tsconfig.json
+.nyc_output
+coverage
+package-lock.json
+tsconfig.dev.json
+Development.md
+.mocharc.json

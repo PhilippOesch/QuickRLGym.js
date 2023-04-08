@@ -4,12 +4,11 @@
     "description": "repository wide enforcement of a style guide",
     "main": "index.js",
     "scripts": {
-        "test": "npm run test --prefix ./coreLibary",
-        "dependencies": "npm i; npm i --prefix ./coreLibary; npm i --prefix ./backend; npm i --prefix ./frontendNuxt;",
-        "frontend": "npm run dev --prefix ./frontendNuxt",
-        "backend": "npm run buildrun --prefix ./backend",
-        "deployFrontend": "npm run deploy --prefix ./frontend",
-        "buildCore": "npm run build --prefix ./coreLibary"
+        "test": "cd ./coreLibrary; yarn run test",
+        "dependencies": "yarn install; cd ./coreLibrary; yarn install; cd ../backend; yarn install; cd ../frontend; yarn install",
+        "frontend": "cd ./frontend; yarn run dev",
+        "backend": "cd ./backend; yarb run buildrun",
+        "buildCore": "cd ./coreLibrary; yarn run buildDev"
     },
     "repository": {
         "type": "git",

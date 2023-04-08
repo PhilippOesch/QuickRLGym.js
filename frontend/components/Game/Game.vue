@@ -54,17 +54,17 @@
                 <AgentLoader
                     :gameId="gameId"
                     :env="env"
-                    :agentObject="(<PersistentAgent>agent)"
+                    :agentObject="(<PersistableAgent>agent)"
                     @loadNewAgent="onLoadNewAgent"
                 ></AgentLoader>
                 <Saver
-                    :agentObject="(<PersistentAgent>agent)"
+                    :agentObject="(<PersistableAgent>agent)"
                     :gameId="gameId"
                 ></Saver>
             </div>
         </Tab>
         <Tab tabGroup="trainingBenchmarkSwitch" name="Benchmark"></Tab>
-        <div class="pt-8 pb-2">
+        <div class="pb-2 pt-8">
             <GameView
                 :training-iteration="25"
                 :id="gameId"
@@ -83,7 +83,7 @@ import { dqnSettingsDefault } from '~~/utils/settingsInterfaces/DQNSettings';
 import defaultTrainingSettings from '~~/utils/settingsInterfaces/trainingSettings';
 import { SelectionType, ButtonSize, IconColor } from '~~/utils/enums';
 import { PropType, Ref } from 'vue';
-import { Agent, SingleAgentEnvironment, PersistentAgent } from 'quickrl.core';
+import { Agent, SingleAgentEnvironment, PersistableAgent } from 'quickrl.core';
 import useTabStore from '~~/comsosable/useTabStore';
 
 const gameViewRef: Ref = ref();

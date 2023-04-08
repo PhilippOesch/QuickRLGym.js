@@ -20,7 +20,7 @@ function loadEnv(name: string) {
         name
     ) as SingleAgentEnvironment;
     const randAgent = new Agents.RandomAgent(env);
-    env.setAgent = randAgent;
+    env.agent = randAgent;
     env.initAgent();
     return env;
 }

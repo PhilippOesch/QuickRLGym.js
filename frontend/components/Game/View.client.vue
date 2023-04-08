@@ -84,7 +84,7 @@ async function initializeTraining() {
         agent.setConfig(getAgentSettings, gameSettings.randomSeed);
     }
     console.log('initial Agent', agent);
-    env.setAgent = agent as Agent;
+    env.agent = agent as Agent;
 
     trainingLoop(
         env,
