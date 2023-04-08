@@ -1,6 +1,6 @@
 {
     "name": "quickrl.core",
-    "version": "0.6.7",
+    "version": "0.6.8",
     "description": "This is a simple framework for implementing and testing reinforcement learning environments and algorithms",
     "main": "./out/index.js",
     "types": "./out/index.d.ts",
@@ -19,9 +19,10 @@
         "coverage": "nyc report --reporter=lcov;"
     },
     "author": "Philipp Oeschger",
-    "license": "ISC",
+    "license": "MIT",
     "dependencies": {
         "@tensorflow/tfjs": "^4.2.0",
+        "license": "file:../LICENSE",
         "seedrandom": "^3.0.5"
     },
     "devDependencies": {
