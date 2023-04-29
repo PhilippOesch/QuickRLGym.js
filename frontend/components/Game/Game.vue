@@ -1,43 +1,51 @@
 <template>
     <div>
         <TabGroup
-            :tabs="['Q Learning', 'Monte Carlo', 'DQN']"
-            :groupName="`${gameId}-AlgTab`"
-            :accentColor="accentColor"
-        />
-        <Tab :tabGroup="`${gameId}-AlgTab`" name="Q Learning">
-            <ParamSelector
-                title="Parameters:"
-                :gameId="gameId"
-                algorithmName="QLearning"
-                :settingsObject="qlSettingsDefault"
-                :accentColor="accentColor"
-            />
-        </Tab>
-        <Tab :tabGroup="`${gameId}-AlgTab`" name="Monte Carlo">
-            <ParamSelector
-                title="Parameters:"
-                :gameId="gameId"
-                algorithmName="MCLearning"
-                :settingsObject="mcSettingsDefault"
-                :accentColor="accentColor"
-            />
-        </Tab>
-        <Tab :tabGroup="`${gameId}-AlgTab`" name="DQN">
-            <ParamSelector
-                title="Parameters:"
-                :gameId="gameId"
-                algorithmName="DQN"
-                :settingsObject="dqnSettingsDefault"
-                :accentColor="accentColor"
-            />
-        </Tab>
-        <TabGroup
             class="mt-12"
-            :tabs="['Training', 'Benchmark']"
             groupName="trainingBenchmarkSwitch"
             :accentColor="accentColor"
         />
+        <Tab tabGroup="trainingBenchmarkSwitch" name="Training">
+            <TabGroup
+                :groupName="`${gameId}-AlgTab`"
+                :accentColor="accentColor"
+            />
+            <Tab
+                :tabGroup="`${gameId}-AlgTab`"
+                name="Q Learning"
+                :onEnterHandler="() => onEnterHandler('Q Learning')"
+            >
+                <ParamSelector
+                    title="Parameters:"
+                    :gameId="gameId"
+                    settingsName="QLearning"
+                    :settingsObject="qlSettingsDefault"
+                    :accentColor="accentColor"
+                />
+            </Tab>
+            <Tab
+                :tabGroup="`${gameId}-AlgTab`"
+                name="Monte Carlo"
+                :onEnterHandler="() => onEnterHandler('Monte Carlo')"
+            >
+                <ParamSelector
+                    title="Parameters:"
+                    :gameId="gameId"
+                    settingsName="MCLearning"
+                    :settingsObject="mcSettingsDefault"
+                    :accentColor="accentColor"
+                />
+            </Tab>
+            <Tab :tabGroup="`${gameId}-AlgTab`" name="DQN">
+                <ParamSelector
+                    title="Parameters:"
+                    :gameId="gameId"
+                    settingsName="DQN"
+                    :settingsObject="dqnSettingsDefault"
+                    :accentColor="accentColor"
+                />
+            </Tab>
+        </Tab>
         <Tab tabGroup="trainingBenchmarkSwitch" name="Training">
             <div class="freeComponents">
                 <Button
@@ -47,23 +55,35 @@
                 />
                 <ParamSelector
                     :gameId="gameId"
-                    algorithmName="gameSettings"
+                    settingsName="gameSettings"
                     :settingsObject="defaultTrainingSettings"
                     :selectionType="SelectionType.FreeStanding"
                 />
-                <AgentLoader
-                    :gameId="gameId"
-                    :env="env"
-                    :agentObject="(<PersistableAgent>agent)"
-                    @loadNewAgent="onLoadNewAgent"
-                ></AgentLoader>
-                <Saver
-                    :agentObject="(<PersistableAgent>agent)"
-                    :gameId="gameId"
-                ></Saver>
             </div>
         </Tab>
-        <Tab tabGroup="trainingBenchmarkSwitch" name="Benchmark"></Tab>
+        <Tab tabGroup="trainingBenchmarkSwitch" name="Benchmark">
+            <div class="freeComponents">
+                <Button value="Start Benchmark" :size="ButtonSize.Large" />
+                <ParamSelector
+                    :gameId="gameId"
+                    settingsName="benchmarkSettings"
+                    :settingsObject="defaultBenchmarkSettings"
+                    :selectionType="SelectionType.FreeStanding"
+                />
+            </div>
+        </Tab>
+        <div class="freeComponents">
+            <AgentLoader
+                :gameId="gameId"
+                :env="env"
+                :agentObject="(<PersistableAgent>agent)"
+                @loadNewAgent="onLoadNewAgent"
+            ></AgentLoader>
+            <Saver
+                :agentObject="(<PersistableAgent>agent)"
+                :gameId="gameId"
+            ></Saver>
+        </div>
         <div class="pb-2 pt-8">
             <GameView
                 :training-iteration="25"
@@ -85,6 +105,7 @@ import { SelectionType, ButtonSize, IconColor } from '~~/utils/enums';
 import { PropType, Ref } from 'vue';
 import { Agent, SingleAgentEnvironment, PersistableAgent } from 'quickrl.core';
 import useTabStore from '~~/comsosable/useTabStore';
+import defaultBenchmarkSettings from '~~/utils/settingsInterfaces/benchmarkSettings';
 
 const gameViewRef: Ref = ref();
 
@@ -99,6 +120,10 @@ const props = defineProps({
 });
 
 const { getOpenTab } = useTabStore();
+
+function onEnterHandler(alg: string) {
+    console.log(`${alg} is opened`);
+}
 
 function updateSceneInfo(trainingEnv: SingleAgentEnvironment) {
     env.value = trainingEnv;

@@ -1,8 +1,6 @@
 <template>
     <div class="mainContainer">
-        <!-- <Menu></Menu> -->
         <h1>Taxi Game</h1>
-        <!-- <GameTaxi></GameTaxi> -->
         <Game gameId="Taxi" :accentColor="IconColor.Amber"></Game>
     </div>
 </template>

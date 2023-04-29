@@ -8,7 +8,8 @@
         "dependencies": "pnpm install; cd ./coreLibrary; pnpm install; cd ../backend; pnpm install; cd ../frontend; pnpm install",
         "frontend": "cd ./frontend; pnpm dev",
         "backend": "cd ./backend; pnpm buildrun",
-        "buildCore": "cd ./coreLibrary; pnpm run buildDev"
+        "buildCore": "cd ./coreLibrary; pnpm run buildDev",
+        "deployDevDocker": "cd ./frontend; bash dev_deploy_docker.bash"
     },
     "repository": {
         "type": "git",

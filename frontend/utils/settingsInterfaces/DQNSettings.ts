@@ -17,6 +17,7 @@ interface IDQNSettings {
     epsilonDecaySteps: Setting<SettingNumber>;
     activateDoubleDQN: Setting<SettingBoolean>;
     updateTargetEvery: Setting<SettingNumber>;
+    kernelInitializerSeed: Setting<SettingNumber>;
 }
 
 export const dqnSettingsDefault: IDQNSettings = {
@@ -63,6 +64,10 @@ export const dqnSettingsDefault: IDQNSettings = {
     updateTargetEvery: {
         displayName: 'Update Target Network every',
         setting: new SettingNumber(10, 10),
+    },
+    kernelInitializerSeed: {
+        displayName: 'Kernal Initalization Seed',
+        setting: new SettingNumber(1, 0),
     },
 };
 

@@ -242,6 +242,7 @@ watch(
 
 function setActiveAlgorithm() {
     const activeAlgorithm = getActiveAlgorithm(props.gameId);
+    console.log('active alg:', activeAlgorithm);
     const isTFModel: boolean =
         agentMapping.get(activeAlgorithm)!.usesTensorflow;
     binWeightsActive.value = isTFModel;

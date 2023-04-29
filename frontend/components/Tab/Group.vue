@@ -1,11 +1,12 @@
 <template>
     <div>
-        <div class="tabSelectContainer">
+        <div class="tabSelectContainer" v-if="tabs">
             <template v-for="(item, index) in tabs">
                 <div
                     class="tab"
                     :class="[
-                        getOpenTab === item
+                        getOpenTab === item ||
+                        (getOpenTab === undefined && index === 0)
                             ? [
                                   `hover:bg-${accentColor}-700`,
                                   `bg-${accentColor}-700`,
@@ -25,15 +26,12 @@
 </template>
 
 <script setup lang="ts">
-import { PropType, computed } from 'vue';
+import { ComputedRef } from 'vue';
+import { PropType } from 'vue';
 import useTabStore from '~~/comsosable/useTabStore';
 import { IconColor } from '~~/utils/enums';
 
 const props = defineProps({
-    tabs: {
-        type: Object as PropType<string[]>,
-        required: true,
-    },
     groupName: {
         type: String,
         required: true,
@@ -43,17 +41,19 @@ const props = defineProps({
 
 const tabStore = useTabStore();
 
-for (const tab of props.tabs) {
-    tabStore.add(props.groupName, tab);
-}
-tabStore.initialize(props.groupName, props.tabs[0]);
+const getOpenTab = computed(() => tabStore.getOpenTab(props.groupName));
+let tabs: ComputedRef = computed(() => tabStore.getGroupTabs(props.groupName));
 
-const getOpenTab = computed(() => {
-    return tabStore.getOpenTab(props.groupName)?.name;
+tabStore.getOpenTab(props.groupName);
+console.log('openTabRef', getOpenTab);
+
+tabStore.$onAction((info) => {
+    if (info.name === 'switchTab') {
+    }
 });
 
 function switchTab(idx: number) {
-    tabStore.switchTab(props.groupName, props.tabs[idx]);
+    tabStore.switchTab(props.groupName, tabs.value[idx]);
 }
 </script>
 

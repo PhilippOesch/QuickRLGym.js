@@ -18,6 +18,13 @@ export interface GameTrainingSettings {
     [x: string]: any;
 }
 
+export interface GameBenchmarkSettings {
+    benchmarkGames: number;
+    simulateGameEvery: number;
+    randomSeed: number;
+    [x: string]: any;
+}
+
 const qLDefaultSettings: Agents.QLAgentSettings = {
     learningRate: 0.001,
     discountFactor: 0.5,
@@ -45,12 +52,19 @@ const dqnDefaultSettings: Agents.DQNAgentSettings = {
     epsilonDecaySteps: 1000,
     activateDoubleDQN: true,
     updateTargetEvery: 2000,
+    kernelInitializerSeed: 12,
 };
 
 const defaultGameSettings: GameTrainingSettings = {
     episodes: 10000,
     showProgressEvery: 1000,
     randomSeed: 1234,
+};
+
+const defaultBenchmarkSettings: GameBenchmarkSettings = {
+    benchmarkGames: 1000,
+    simulateGameEvery: 100,
+    randomSeed: 4321,
 };
 
 export const defaultSettings: ISettingsStore = {
@@ -61,6 +75,7 @@ export const defaultSettings: ISettingsStore = {
         MCLearning: mCDefaultSettings,
         DQN: dqnDefaultSettings,
         gameSettings: defaultGameSettings,
+        benchmarkSettings: defaultBenchmarkSettings,
     },
     BlackJack: {
         algorithmActive: 'random',
@@ -69,5 +84,6 @@ export const defaultSettings: ISettingsStore = {
         MCLearning: mCDefaultSettings,
         DQN: dqnDefaultSettings,
         gameSettings: defaultGameSettings,
+        benchmarkSettings: defaultBenchmarkSettings,
     },
 };

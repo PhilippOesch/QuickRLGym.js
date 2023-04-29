@@ -2,7 +2,7 @@
     <div :class="['paramContainer', selectionType]">
         <h3 v-if="title">{{ title }}</h3>
         <div class="settingsContainer">
-            <template v-for="(item, index) in settingsObject" :key="renderKey">
+            <template v-for="(item, index) in settingsObject" v-if="settings">
                 <InputSlider
                     v-if="getType(item) === 'Slider'"
                     :name="index"
@@ -58,7 +58,7 @@
 </template>
 
 <script setup lang="ts">
-import { PropType, computed, Ref } from 'vue';
+import { PropType, computed, onMounted } from 'vue';
 import {
     SettingArray,
     SettingBoolean,
@@ -72,7 +72,7 @@ const props = defineProps({
         type: String,
         required: true,
     },
-    algorithmName: {
+    settingsName: {
         type: String,
         required: true,
     },
@@ -96,19 +96,22 @@ const settingsStore = useSettingsStore();
 
 let isDisabled = computed(() => !settingsStore.getIsActive(props.gameId));
 
-let renderKey = ref(0);
+let settings: any = ref(undefined);
 
-let settings = settingsStore.getSetting(props.gameId, props.algorithmName);
-
-settingsStore.$subscribe(() => {
-    settings = settingsStore.getSetting(props.gameId, props.algorithmName);
-
-    // trigger rerender
-    renderKey.value += 1;
+onMounted(() => {
+    settings.value = settingsStore.getSetting(props.gameId, props.settingsName);
 });
 
-if (props.algorithmName !== 'gameSettings') {
-    settingsStore.setActiveAlgorithm(props.gameId, props.algorithmName);
+settingsStore.$subscribe(() => {
+    settings.value = settingsStore.getSetting(props.gameId, props.settingsName);
+    // trigger rerender
+});
+
+if (
+    props.settingsName !== 'gameSettings' &&
+    props.settingsName !== 'benchmarkSettings'
+) {
+    settingsStore.setActiveAlgorithm(props.gameId, props.settingsName);
 }
 
 function getType(item: any): string {
@@ -128,8 +131,12 @@ function getType(item: any): string {
 }
 
 function updateSettings(value: any, index: string): void {
-    settings = { ...settings, [index]: value };
-    settingsStore.updateSetting(props.gameId, props.algorithmName, settings);
+    settings.value = { ...settings.value, [index]: value };
+    settingsStore.updateSetting(
+        props.gameId,
+        props.settingsName,
+        settings.value
+    );
 }
 </script>
 

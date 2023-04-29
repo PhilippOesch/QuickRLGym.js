@@ -2,28 +2,16 @@
     <div class="gameWrapper">
         <Tab tabGroup="trainingBenchmarkSwitch" name="Training">
             <div class="info" :key="counter">
-                <div class="infoBox gameInfo">
-                    <h2>Current Game Info:</h2>
-                    <ul class="list" v-if="reactiveInfo.gameInfo">
-                        <li
-                            class="flex gap-2"
-                            v-for="(item, index) in reactiveInfo.gameInfo"
-                        >
-                            <span>{{ index }}:</span><span>{{ item }}</span>
-                        </li>
-                    </ul>
-                </div>
-                <div class="infoBox trainingInfo">
-                    <h2>Training Progress - Iteration {{ iteration }}</h2>
-                    <ul class="list" v-if="reactiveInfo.stats">
-                        <li
-                            class="flex gap-2"
-                            v-for="(item, index) in reactiveInfo.stats"
-                        >
-                            <span>{{ index }}:</span><span>{{ item }}</span>
-                        </li>
-                    </ul>
-                </div>
+                <InfoBox
+                    title="Current Game Info:"
+                    :content="<object>reactiveInfo.gameInfo"
+                    styleClasses="gameInfo"
+                />
+                <InfoBox
+                    :title="`Training Progress - Iteration ${iteration}`"
+                    :content="<object>reactiveInfo.stats"
+                    styleClasses="trainingInfo"
+                />
             </div>
         </Tab>
         <div ref="gameContainer" class="gameContainer">
@@ -195,10 +183,6 @@ onMounted(async () => {
     @apply mb-4 grid gap-8 lg:grid-cols-6;
 }
 
-.gameWrapper .infoBox {
-    @apply rounded-md bg-darkPurple-800 p-4;
-}
-
 .gameWrapperContainer {
     @apply grid lg:grid-cols-6;
 }
@@ -209,14 +193,6 @@ onMounted(async () => {
 
 .trainingInfo {
     @apply lg:col-span-4;
-}
-
-.infoBox h2 {
-    @apply text-lg font-semibold;
-}
-
-.infoBox .list {
-    @apply mt-2;
 }
 
 .gameContainer {

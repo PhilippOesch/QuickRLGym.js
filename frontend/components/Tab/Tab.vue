@@ -10,15 +10,27 @@ import useTabStore from '~~/comsosable/useTabStore';
 const props = defineProps({
     tabGroup: { type: String, required: true },
     name: { type: String, required: true },
+    onEnterHandler: Function,
 });
 
 const tabStore = useTabStore();
 
+tabStore.add(props.tabGroup, props.name);
+
 const isVisible = computed(() => {
-    const tab = tabStore.getTab(props.tabGroup, props.name);
-    if (!tab) return false;
-    return tab.selected;
+    const selectedTab = tabStore.getOpenTab(props.tabGroup);
+    if (selectedTab !== undefined && selectedTab === props.name) {
+        callEnteredHandler();
+        return true;
+    }
+    return false;
 });
+
+function callEnteredHandler() {
+    if (props.onEnterHandler) {
+        props.onEnterHandler();
+    }
+}
 </script>
 
 <style lang="postcss" scoped></style>
