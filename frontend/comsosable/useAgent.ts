@@ -22,6 +22,7 @@ export default function useAgent(
     randomSeed?: number
 ): Agent {
     const agentType = agentMapping.get(agentName) as any;
+    console.log('agentType', agentName);
     const agent: Agent = new agentType.agentType(env) as Agent;
     agent.setConfig(options, randomSeed);
     agent.init();

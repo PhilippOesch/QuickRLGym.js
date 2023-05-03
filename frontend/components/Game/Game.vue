@@ -12,8 +12,8 @@
             />
             <Tab
                 :tabGroup="`${gameId}-AlgTab`"
-                name="Q Learning"
-                :onEnterHandler="() => onEnterHandler('Q Learning')"
+                name="QLearning"
+                :onEnterHandler="() => onOpenTab('QLearning')"
             >
                 <ParamSelector
                     title="Parameters:"
@@ -21,12 +21,13 @@
                     settingsName="QLearning"
                     :settingsObject="qlSettingsDefault"
                     :accentColor="accentColor"
+                    :selectionType="SelectionType.Grid"
                 />
             </Tab>
             <Tab
                 :tabGroup="`${gameId}-AlgTab`"
-                name="Monte Carlo"
-                :onEnterHandler="() => onEnterHandler('Monte Carlo')"
+                name="MCLearning"
+                :onEnterHandler="() => onOpenTab('MCLearning')"
             >
                 <ParamSelector
                     title="Parameters:"
@@ -34,15 +35,21 @@
                     settingsName="MCLearning"
                     :settingsObject="mcSettingsDefault"
                     :accentColor="accentColor"
+                    :selectionType="SelectionType.Grid"
                 />
             </Tab>
-            <Tab :tabGroup="`${gameId}-AlgTab`" name="DQN">
+            <Tab
+                :tabGroup="`${gameId}-AlgTab`"
+                name="DQN"
+                :onEnterHandler="() => onOpenTab('DQN')"
+            >
                 <ParamSelector
                     title="Parameters:"
                     :gameId="gameId"
                     settingsName="DQN"
                     :settingsObject="dqnSettingsDefault"
                     :accentColor="accentColor"
+                    :selectionType="SelectionType.Grid"
                 />
             </Tab>
         </Tab>
@@ -62,6 +69,28 @@
             </div>
         </Tab>
         <Tab tabGroup="trainingBenchmarkSwitch" name="Benchmark">
+            <TabGroup
+                :groupName="`${gameId}-AlgTab`"
+                :accentColor="accentColor"
+            />
+            <Tab
+                :tabGroup="`${gameId}-AlgTab`"
+                name="QLearning"
+                :onEnterHandler="() => onOpenTab('QLearning')"
+            >
+            </Tab>
+            <Tab
+                :tabGroup="`${gameId}-AlgTab`"
+                name="MCLearning"
+                :onEnterHandler="() => onOpenTab('MCLearning')"
+            >
+            </Tab>
+            <Tab
+                :tabGroup="`${gameId}-AlgTab`"
+                name="DQN"
+                :onEnterHandler="() => onOpenTab('DQN')"
+            >
+            </Tab>
             <div class="freeComponents">
                 <Button value="Start Benchmark" :size="ButtonSize.Large" />
                 <ParamSelector
@@ -106,6 +135,7 @@ import { PropType, Ref } from 'vue';
 import { Agent, SingleAgentEnvironment, PersistableAgent } from 'quickrl.core';
 import useTabStore from '~~/comsosable/useTabStore';
 import defaultBenchmarkSettings from '~~/utils/settingsInterfaces/benchmarkSettings';
+import useSettingsStore from '~~/comsosable/useSettingsStore';
 
 const gameViewRef: Ref = ref();
 
@@ -120,10 +150,6 @@ const props = defineProps({
 });
 
 const { getOpenTab } = useTabStore();
-
-function onEnterHandler(alg: string) {
-    console.log(`${alg} is opened`);
-}
 
 function updateSceneInfo(trainingEnv: SingleAgentEnvironment) {
     env.value = trainingEnv;
@@ -140,9 +166,15 @@ function onPassAgent(passedAgent: any) {
     console.log(agent.value);
 }
 
-function onLoadNewAgent(loadedAgent: any) {
+function onLoadNewAgent(loadedAgent: Agent | undefined) {
     agent.value = loadedAgent;
     console.log('loadedAgent', agent.value);
+}
+
+const settingsStore = useSettingsStore();
+
+function onOpenTab(algorithm: string) {
+    settingsStore.setActiveAlgorithm(props.gameId, algorithm);
 }
 
 watch(

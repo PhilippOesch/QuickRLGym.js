@@ -164,8 +164,6 @@ async function renderGame() {
     await new Promise((f) => setTimeout(f, 200));
 }
 
-//const getGameInfo = ref();
-
 onMounted(async () => {
     if (!isTraining.value) settingsStore.setActiveState(props.id, true);
     await nextTick();

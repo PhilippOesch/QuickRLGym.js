@@ -1,5 +1,5 @@
 <template>
-    <div :class="['paramContainer', selectionType]">
+    <div :class="[selectionType, 'paramContainer']">
         <h3 v-if="title">{{ title }}</h3>
         <div class="settingsContainer">
             <template v-for="(item, index) in settingsObject" v-if="settings">
@@ -104,15 +104,7 @@ onMounted(() => {
 
 settingsStore.$subscribe(() => {
     settings.value = settingsStore.getSetting(props.gameId, props.settingsName);
-    // trigger rerender
 });
-
-if (
-    props.settingsName !== 'gameSettings' &&
-    props.settingsName !== 'benchmarkSettings'
-) {
-    settingsStore.setActiveAlgorithm(props.gameId, props.settingsName);
-}
 
 function getType(item: any): string {
     if ((item.setting as any) instanceof SettingNumber) {

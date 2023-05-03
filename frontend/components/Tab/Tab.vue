@@ -26,7 +26,7 @@ const isVisible = computed(() => {
     return false;
 });
 
-function callEnteredHandler() {
+async function callEnteredHandler() {
     if (props.onEnterHandler) {
         props.onEnterHandler();
     }

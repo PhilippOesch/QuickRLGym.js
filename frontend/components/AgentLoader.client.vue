@@ -45,6 +45,12 @@
                 Agent has been loaded
             </div>
         </div>
+        <Alert
+            v-if="alertOpen"
+            content="This is an alert."
+            :onAbort="onAbort"
+            :onSuccess="onSuccess"
+        ></Alert>
     </div>
 </template>
 
@@ -70,6 +76,15 @@ const fileNameDefault = 'No File Selected';
 const modelFileName = ref(fileNameDefault);
 const loaderDisabled = ref(true);
 const binWeightsActive = ref(false);
+const alertOpen = ref(false);
+
+function onSuccess() {
+    console.log('OK');
+}
+
+function onAbort() {
+    console.log('Abort');
+}
 
 const props = defineProps({
     gameId: {
@@ -83,9 +98,11 @@ const props = defineProps({
 });
 
 const agentLoaded = ref(false);
+let activeAlgorithm: undefined | string;
 
 onMounted(() => {
-    setActiveAlgorithm();
+    activeAlgorithm = getActiveAlgorithm(props.gameId);
+    setActiveAlgorithm(activeAlgorithm);
 });
 
 function modelFileChanged() {
@@ -216,35 +233,29 @@ async function loadAgentFiles(
     return agent;
 }
 
-watch(
-    () => tabStore.getOpenTab(`${props.gameId}-AlgTab`),
-    () => {
-        loaderInputModel.value.value = null;
-        loaderInputConfig.value.value = null;
-        if (binWeightsActive.value && loaderInputWeights.value != undefined)
-            loaderInputWeights.value.value = null;
-        modelFileName.value = fileNameDefault;
-        configFileName.value = fileNameDefault;
-        weightsFileName.value = fileNameDefault;
-        loaderDisabled.value = true;
-        agentLoaded.value = false;
+const settingStore = useSettingsStore();
+
+function isAgentActive() {
+    return props.agentObject !== undefined;
+}
+
+tabStore.$onAction((info) => {
+    if (info.name === 'switchTab' && info.args[0] == `${props.gameId}-AlgTab`) {
+        const oldAlg = activeAlgorithm;
+        updateAlert(isAgentActive());
+        const newAlg = info.args[1];
+        setActiveAlgorithm(newAlg);
     }
-);
+});
 
-const { getOpenTab } = useTabStore();
+function updateAlert(isOpen: boolean) {
+    alertOpen.value = isOpen;
+}
 
-watch(
-    () => getOpenTab(`${props.gameId}-AlgTab`),
-    () => {
-        setActiveAlgorithm();
-    }
-);
-
-function setActiveAlgorithm() {
-    const activeAlgorithm = getActiveAlgorithm(props.gameId);
-    console.log('active alg:', activeAlgorithm);
-    const isTFModel: boolean =
-        agentMapping.get(activeAlgorithm)!.usesTensorflow;
+function setActiveAlgorithm(activeAlgorithm: string) {
+    const isTFModel: boolean = agentMapping.get(activeAlgorithm)?.usesTensorflow
+        ? agentMapping.get(activeAlgorithm)!.usesTensorflow
+        : false;
     binWeightsActive.value = isTFModel;
 }
 </script>

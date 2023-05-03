@@ -1,5 +1,4 @@
 import { defineStore } from 'pinia';
-import { Ref } from 'vue';
 
 export interface TabItem {
     name: string;
@@ -56,11 +55,7 @@ const useTabStore = defineStore('tabs', {
         },
     },
     actions: {
-        add(
-            groupName: string,
-            tabName: string,
-            onEnterHandler: Function = () => {}
-        ) {
+        add(groupName: string, tabName: string) {
             if (!this.tabGroups.has(groupName)) {
                 initializeTabGroup(this, groupName, tabName);
             }
@@ -72,14 +67,16 @@ const useTabStore = defineStore('tabs', {
                 return;
             }
 
+            const anonym = () => {};
+
             tabGroup.tabs.set(tabName, {
                 name: tabName,
             });
         },
         switchTab(groupName: string, tabName: string) {
-            console.log('switch');
             if (this.tabGroups.has(groupName)) {
                 const tabGroup: TabGroup = this.tabGroups.get(groupName)!;
+                const oldTab = tabGroup.openTab;
 
                 if (tabGroup.tabs.has(tabName)) {
                     tabGroup.openTab = tabName;

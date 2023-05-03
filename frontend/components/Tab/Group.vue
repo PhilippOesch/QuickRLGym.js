@@ -47,11 +47,6 @@ let tabs: ComputedRef = computed(() => tabStore.getGroupTabs(props.groupName));
 tabStore.getOpenTab(props.groupName);
 console.log('openTabRef', getOpenTab);
 
-tabStore.$onAction((info) => {
-    if (info.name === 'switchTab') {
-    }
-});
-
 function switchTab(idx: number) {
     tabStore.switchTab(props.groupName, tabs.value[idx]);
 }
