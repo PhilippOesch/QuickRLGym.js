@@ -152,7 +152,6 @@ export class Tensor {
         for (const index of indices) {
             result = result[index];
         }
-        console.log(result);
         return this.recCopy(result);
     }
 
