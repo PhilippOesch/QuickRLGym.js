@@ -45,12 +45,6 @@
                 Agent has been loaded
             </div>
         </div>
-        <!-- <Alert
-            v-if="alertOpen"
-            content="This is an alert."
-            :onAbort="onAbort"
-            :onSuccess="onSuccess"
-        ></Alert> -->
     </div>
 </template>
 
@@ -59,7 +53,6 @@ import { SingleAgentEnvironment, PersistableAgent } from 'quickrl.core';
 import { PropType } from 'vue';
 import useAgent, { agentMapping } from '~~/comsosable/useAgent';
 import useSettingsStore from '~~/comsosable/useSettingsStore';
-import useTabStore from '~~/comsosable/useTabStore';
 import BrowserFileStrategy, {
     BrowserLoadOptions,
 } from '~~/utils/BrowserFileStrategy';
@@ -75,27 +68,22 @@ const fileNameDefault = 'No File Selected';
 
 const modelFileName = ref(fileNameDefault);
 const loaderDisabled = ref(true);
-const binWeightsActive = ref(false);
-const alertOpen = ref(false);
+// const binWeightsActive = ref(false);
+const binWeightsActive = computed(() => {
+    console.log('active Algo', props.activeAlgorithm);
+    return agentMapping.get(props.activeAlgorithm)?.usesTensorflow
+        ? agentMapping.get(props.activeAlgorithm)!.usesTensorflow
+        : false;
+});
 
 const settingStore = useSettingsStore();
-const tabStore = useTabStore();
-
-// function onSuccess() {
-//     console.log('old', oldAlg, 'newAlg', newAlg);
-//     updateAlert(false);
-//     setActiveAlgorithm(newAlg);
-// }
-
-// async function onAbort() {
-//     console.log('Abort');
-//     updateAlert(false);
-//     tabStore.switchTab(`${props.gameId}-AlgTab`, oldAlg);
-//     console.log(props.agentObject);
-// }
 
 const props = defineProps({
     gameId: {
+        type: String,
+        required: true,
+    },
+    activeAlgorithm: {
         type: String,
         required: true,
     },
@@ -106,12 +94,6 @@ const props = defineProps({
 });
 
 const agentLoaded = ref(false);
-let activeAlgorithm: undefined | string;
-
-onMounted(() => {
-    activeAlgorithm = settingStore.getActiveAlgorithm(props.gameId);
-    setActiveAlgorithm(activeAlgorithm);
-});
 
 function modelFileChanged() {
     if (loaderInputModel.value.files.length < 1) {
@@ -216,10 +198,11 @@ async function loadAgentFiles(
         const options: BrowserLoadOptions = { file: configFile };
         await agent.loadConfig(new BrowserFileStrategy(), options);
 
-        const activeAlgorithm: string = settingStore.getActiveAlgorithm(
-            props.gameId
+        settingStore.updateSetting(
+            props.gameId,
+            props.activeAlgorithm,
+            agent.config
         );
-        settingStore.updateSetting(props.gameId, activeAlgorithm, agent.config);
     }
 
     if (!binWeightsActive.value && isValidFileType(modelFile)) {
@@ -240,33 +223,6 @@ async function loadAgentFiles(
         agentLoaded.value = true;
     }
     return agent;
-}
-
-function isAgentActive() {
-    return props.agentObject !== undefined;
-}
-
-let oldAlg: any;
-let newAlg: any;
-
-tabStore.$onAction(async (info) => {
-    if (info.name === 'switchTab' && info.args[0] == `${props.gameId}-AlgTab`) {
-        oldAlg = activeAlgorithm;
-        updateAlert(isAgentActive());
-        newAlg = info.args[1];
-        console.log(oldAlg, newAlg);
-    }
-});
-
-function updateAlert(isOpen: boolean) {
-    alertOpen.value = isOpen;
-}
-
-function setActiveAlgorithm(activeAlgorithm: string) {
-    const isTFModel: boolean = agentMapping.get(activeAlgorithm)?.usesTensorflow
-        ? agentMapping.get(activeAlgorithm)!.usesTensorflow
-        : false;
-    binWeightsActive.value = isTFModel;
 }
 </script>
 

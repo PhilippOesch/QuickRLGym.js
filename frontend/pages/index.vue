@@ -13,13 +13,8 @@
             </template>
         </div>
     </div>
-    <SimpleTabSwitch group-name="Test"></SimpleTabSwitch>
-    <SimpleTab tab-group="Test" tab-name="Test1">Test</SimpleTab>
-    <SimpleTab tab-group="Test" tab-name="Test2">Test2</SimpleTab>
 </template>
 <script setup lang="ts">
-import { SimpleTab, SimpleTabSwitch } from 'simple-tabs-vue';
-
 const links = [
     {
         title: 'Taxi Game',

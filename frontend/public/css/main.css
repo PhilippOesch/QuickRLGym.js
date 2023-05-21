@@ -20,3 +20,15 @@ h1 {
 a {
     @apply duration-300;
 }
+
+/* tab styling */
+.simpleT-tabSwitcher {
+    @apply flex max-w-fit gap-2 rounded-md bg-darkPurple-800 px-2 py-2 drop-shadow my-6;
+}
+.simpleT-tabSwitchBtn {
+    @apply cursor-pointer rounded-md px-6 py-3 duration-300 hover:bg-darkPurple-700;
+}
+
+/* .simpleT-tabOpened {
+    @apply bg-amber-700 hover:bg-amber-700;
+} */
