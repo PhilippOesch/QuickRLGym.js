@@ -47,11 +47,11 @@ export default class RandomAgent extends Agent {
         return this.step();
     }
 
-    log(): void {
+    public log(): void {
         return;
     }
 
-    async feed(): Promise<void> {
+    public async feed(): Promise<void> {
         return;
     }
 }

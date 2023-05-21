@@ -16,7 +16,8 @@
         "buildProd": "rm -r ./out; npx tsc -d -p tsconfig.json",
         "buildDev": "rm -r ./out; npx tsc -d -p tsconfig.dev.json",
         "release": "pnpm test; pnpm buildProd; pnpm publish --no-git-checks;",
-        "coverage": "nyc report --reporter=lcov;"
+        "coverage": "nyc report --reporter=lcov;",
+        "genDocs": "jsdoc -c jsdoc.conf.json"
     },
     "author": "Philipp Oeschger",
     "license": "MIT",
@@ -29,6 +30,8 @@
         "@types/node": "^18.11.9",
         "@types/seedrandom": "^3.0.2",
         "@types/sinon": "^10.0.13",
+        "better-docs": "^2.7.2",
+        "jsdoc": "^4.0.2",
         "mocha": "^10.2.0",
         "mocha-suppress-logs": "^0.3.1",
         "npx": "^10.2.2",

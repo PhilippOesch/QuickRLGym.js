@@ -1,7 +1,7 @@
 import seedrandom from 'seedrandom';
 import {
     SingleAgentEnvironment,
-    GameStateContext,
+    EnvStateContext,
     Experience,
 } from '../../RLInterface/SingleAgentEnvironment';
 import * as tf from '@tensorflow/tfjs';
@@ -114,7 +114,7 @@ export default class DQNAgent extends PersistableAgent {
         takenAction: string,
         newState: object,
         payoff: number,
-        contextInfo: GameStateContext
+        contextInfo: EnvStateContext
     ): Promise<void> {
         this.experienceReplay.save(
             this.toExperience(
@@ -370,7 +370,7 @@ export default class DQNAgent extends PersistableAgent {
         takenAction: string,
         newState: object,
         payoff: number,
-        contextInfo: GameStateContext
+        contextInfo: EnvStateContext
     ): Experience {
         return {
             prevState: this.env.encodeStateToIndices(prevState),
@@ -401,7 +401,7 @@ export interface BatchSample {
     actionBatch: number[];
     newStateBatch: number[][];
     payoffBatch: number[];
-    contextInfoBatch: GameStateContext[];
+    contextInfoBatch: EnvStateContext[];
 }
 
 export class ReplayMemory {
@@ -435,7 +435,7 @@ export class ReplayMemory {
         let takenActionBatch = new Array<number>(experiences.length);
         let newStateBatch = new Array<number[]>(experiences.length);
         let payoffBatch = new Array<number>(experiences.length);
-        let contextInfoBatch = new Array<GameStateContext>(experiences.length);
+        let contextInfoBatch = new Array<EnvStateContext>(experiences.length);
 
         for (let i = 0; i < experiences.length; i++) {
             stateBatch[i] = experiences[i].prevState;

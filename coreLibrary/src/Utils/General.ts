@@ -1,5 +1,16 @@
 import seedrandom from 'seedrandom';
 
+/**
+ * static class for general utility
+ * @module Utils/Generals
+ */
+
+/**
+ * Shuffle the array
+ * @param {any[]} array the array to shuffle
+ * @param {seedrandom.PRNG} rng the random number generator
+ * @returns {any[]} the shuffled array
+ */
 export function shuffleArray(array: any[], rng?: seedrandom.PRNG): any[] {
     let shufflecopy = [...array];
 
@@ -18,6 +29,13 @@ export function shuffleArray(array: any[], rng?: seedrandom.PRNG): any[] {
     return shufflecopy;
 }
 
+/**
+ * samples n values from the provided array
+ * @param {any[]} array the array to sample from
+ * @param {number} n the number of values to sample
+ * @param {seedrandom.PRNG} rng the random number generator
+ * @returns the samples
+ */
 export function sampleN(array: any[], n: number, rng?: seedrandom.PRNG): any[] {
     let randomGen: any;
     if (rng) {
@@ -46,6 +64,14 @@ export function sampleN(array: any[], n: number, rng?: seedrandom.PRNG): any[] {
     return result.slice(0, n);
 }
 
+/**
+ * linearly decay the epsilon value
+ * @param {number} stepCount the current step
+ * @param {number} decaySteps number of total decay steps
+ * @param {number} epsilonStart epsilon start value
+ * @param {number} epsilonEnd epsilon end value
+ * @returns {number} the epsilon value and the new step count
+ */
 export function linearDecayEpsilon(
     stepCount: number,
     decaySteps: number,

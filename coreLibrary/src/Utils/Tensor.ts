@@ -1,9 +1,9 @@
 import seedrandom from 'seedrandom';
 import { MathUtils } from '.';
-import { Utils } from '..';
 
 /**
  * Enum of Initialization Types for a Tensor-Object
+ * @enum
  */
 enum TensorFillType {
     Zeros,
@@ -11,15 +11,24 @@ enum TensorFillType {
     Random,
 }
 
+/**
+ * Tensor converted to JSON
+ */
 export interface JSONTensor {
+    /**
+     * the dimensions
+     */
     dim: number[];
-    array: Array<any>;
+    /**
+     * the actual tensor array
+     */
+    array: any[];
 }
 
 /**
  * Represents a multi dimensional number object
- * @property {number} dim - The dimension of the Tensor
- * @property {Array<any>} array - The actual managed array element
+ * @param {number[]} dim - The dimension of the Tensor
+ * @param {any[]} array - The actual managed array element
  */
 export class Tensor {
     private readonly _dim: number[];
@@ -36,11 +45,9 @@ export class Tensor {
         this.array = array;
     }
 
-    private memoizedSum: any;
-
     /**
      * Static function to initialize an Tensor filled with Zeros
-     * @param {number []} dims - The dimensions of the Tensor to initialize
+     * @param {number[]} dims - The dimensions of the Tensor to initialize
      * @returns {Tensor} a filled Tensor
      */
     public static Zeros(dims: number[]): Tensor {
@@ -48,7 +55,12 @@ export class Tensor {
         return new Tensor(dims, array);
     }
 
-    public static fromJSONObject(jsonTensor: JSONTensor) {
+    /**
+     * Convert JSONTensor to actual Tensor
+     * @param {JSONTensor} jsonTensor json tensor to convert
+     * @returns {Tensor} the converted Tensor
+     */
+    public static fromJSONObject(jsonTensor: JSONTensor): Tensor {
         if (jsonTensor.dim === undefined || jsonTensor.array === undefined) {
             throw new Error(
                 'object is missing important attributes for conversion'
@@ -59,7 +71,7 @@ export class Tensor {
 
     /**
      * Static function to initialize an Tensor filled with Ones
-     * @param {number []} dims - The dimensions of the Tensor to initialize
+     * @param {number[]} dims - The dimensions of the Tensor to initialize
      * @returns {Tensor} a filled Tensor
      */
     public static Ones(dims: number[]): Tensor {
@@ -69,7 +81,7 @@ export class Tensor {
 
     /**
      * Static function to initialize an Tensor filled with random number in the range of [0<=x<=1]
-     * @param {number []} dims - The dimensions of the Tensor to initialize
+     * @param {number[]} dims - The dimensions of the Tensor to initialize
      * @param {number} randomSeed - random seed to used for random number generator
      * @returns {Tensor} a filled Tensor
      */
@@ -84,10 +96,10 @@ export class Tensor {
 
     /**
      * Helper function for initializing a tensor
-     * @param {number []} dims - The dimensions of the Tensor to initialize
+     * @param {number[]} dims - The dimensions of the Tensor to initialize
      * @param {TensorFillType} filltype - Type of values to fill the Tensor with
      * @param {seedrandom.PRNG} rng - The random number generator
-     * @returns {Array<any>} an initialized array
+     * @returns {any[]} an initialized array
      */
     private static init(
         dims: number[],
@@ -111,7 +123,7 @@ export class Tensor {
      * @param {number[]} array - The array to fill
      * @param {TensorFillType} fillType - The Type of the values to fill
      * @param {seedrandom.PRNG} rng - The random number generator
-     * @returns the filled array
+     * @returns {number[]} the filled array
      */
     private static fillArray(
         array: number[],
@@ -142,7 +154,7 @@ export class Tensor {
     /**
      * Get a certain index of the array.
      * @param {number[]} indices - The Tensor index to return
-     * @returns {Array<any> | number} The digit or sub array
+     * @returns {any[] | number} The digit or sub array
      * note this returns a deep copy not the actual array
      */
     public get(...indices: number[]): Array<any> | number {
@@ -157,8 +169,8 @@ export class Tensor {
 
     /**
      * Set the value at a certain index
-     * @param {number[]} indices - The indices of the position
-     * @param {Array<any> | number} value - The new value of the index
+     * @param indices - The indices of the position
+     * @param value - The new value of the index
      */
     public set(indices: number[], value: Array<any> | number): void {
         this.validate(indices);
@@ -191,8 +203,8 @@ export class Tensor {
 
     /**
      * Check if a provided index is out of range
-     * @param indices index array to check
-     * @returns true if the index is out of range and otherwise false
+     * @param {number[]} indices index array to check
+     * @returns {boolean} true if the index is out of range and otherwise false
      */
     private indexOutOfRange(indices: number[]): boolean {
         for (let i = 0; i < this._dim.length; i++) {
@@ -228,8 +240,8 @@ export class Tensor {
 
     /**
      * Returns the dimension of the array
-     * @param {Array<any>} array - The array
-     * @returns {number []} Returns the dimensions of the array
+     * @param {any[]} array - The array
+     * @returns {number[]} Returns the dimensions of the array
      */
     private static getArrayDim(array: Array<any>): number[] {
         let dim: number[] = [];
@@ -254,14 +266,15 @@ export class Tensor {
     }
 
     /**
-     *
-     * @returns a copy of just the inner array
+     * See the contained array
+     * @returns {any[]} a copy of just the inner array
      */
     public get seeArray(): Array<any> {
         return <Array<any>>this.recCopy(this.array);
     }
 
     /**
+     * Convert to JSONTensor
      * @returns {JSONTensor} The Tensor in JSONTensor Format
      */
     public toJSONTensor(): JSONTensor {
@@ -288,6 +301,11 @@ export class Tensor {
         return size;
     }
 
+    /**
+     * is Tensor equal
+     * @param {Tensor} comp
+     * @returns {boolean} Whether it is equal
+     */
     public isEqual(comp: Tensor): boolean {
         if (comp === undefined) return false;
 
@@ -319,7 +337,7 @@ export class Tensor {
 
     /**
      * Get the total sum of the tensor
-     * @returns {number} The sum
+     * @returns The sum
      */
     public get sum(): number {
         return this.recSum(this.array);
@@ -368,7 +386,7 @@ export class Tensor {
 
     /**
      * Returns the Tensor as a string object
-     * @returns {string} The stringified Tensor
+     * @returns The stringified Tensor
      */
     public toString(): string {
         return `Tensor(${this.array.toString()})`;
@@ -376,7 +394,7 @@ export class Tensor {
 
     /**
      * Returns the Mean of the Tensor
-     * @returns {number} The mean
+     * @returns The mean
      */
     public get mean(): number {
         return this.sum / this.size;
@@ -384,7 +402,7 @@ export class Tensor {
 
     /**
      * Returns the Dimension of the Tensor
-     * @returns {number[]} The mean
+     * @returns The mean
      */
     public get dim(): number[] {
         return this._dim;

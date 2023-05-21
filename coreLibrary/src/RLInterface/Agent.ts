@@ -2,9 +2,9 @@ import Environment from './Environment';
 
 /**
  * The Agent Interface
- * @property env - The Agent has a reference to the environment
+ * @param {Environment} env The referenct to the environment
  */
-export default abstract class Agent {
+abstract class Agent {
     protected env: Environment;
 
     constructor(env: Environment) {
@@ -41,8 +41,8 @@ export default abstract class Agent {
 
     /**
      * set The configuration of the agent after initailizing
-     * @param config - The config object
-     * @param randomSeed - The random Seed
+     * @param {string} config - The config object
+     * @param {number} randomSeed - The random Seed
      */
     abstract setConfig(config?: object, randomSeed?: number): void;
 
@@ -64,3 +64,5 @@ export default abstract class Agent {
      */
     abstract log(): void;
 }
+
+export default Agent;

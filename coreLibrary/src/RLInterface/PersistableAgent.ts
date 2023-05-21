@@ -4,7 +4,7 @@ import FileStrategy from './FileStrategy';
 /**
  * Interface for Agents that can be stored and loaded for later usage of interference
  */
-export default abstract class PersistableAgent extends Agent {
+abstract class PersistableAgent extends Agent {
     /**
      * load the Model
      * @param fileManager FileManager Strategy
@@ -36,3 +36,5 @@ export default abstract class PersistableAgent extends Agent {
         options?: object
     ): Promise<void>;
 }
+
+export default PersistableAgent;

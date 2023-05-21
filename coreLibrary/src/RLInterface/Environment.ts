@@ -4,7 +4,13 @@ import StepResult from './StepResult';
  * Basic Environment Options
  */
 export interface EnvOptions {
+    /**
+     * The random seed
+     */
     randomSeed?: number;
+    /**
+     * the penalty reward to return when no end state was reached
+     */
     penaltyOnUnfinished?: number;
 }
 

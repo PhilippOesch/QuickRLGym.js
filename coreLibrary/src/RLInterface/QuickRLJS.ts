@@ -1,85 +1,80 @@
 import Environment from './Environment';
 import { Envs, SingleAgentEnvironment } from '../index';
 
+type EnvType = typeof Environment;
+
 /**
  * Main Class for Framework
+ * @module QuickRLJS
  */
-class QuickRLJS {
-    /**
-     * @property registery - registery for enviroment classes
-     */
-    private static registery: Map<string, typeof Environment> = new Map();
 
-    /**
-     * load a registered environment class
-     * @param name - Name of the environment
-     * @param options - options to use for instantiating environment
-     * @param initialState - initial state of the environment
-     * @returns - an instatiated object of the environment
-     */
-    public static loadEnv(
-        name: string,
-        options?: object,
-        initialState?: object
-    ): Environment | undefined {
-        if (QuickRLJS.registery.has(name)) {
-            const env = QuickRLJS.registery.get(name) as any;
-            const newEnv: Environment = new env();
-            newEnv.init(options, initialState);
-            return newEnv;
-        }
-        return undefined;
+const registery: Map<string, EnvType> = new Map();
+
+/**
+ * load a registered environment class
+ * @param {string} name - Name of the environment
+ * @param {object} options - options to use for instantiating environment
+ * @param {initialState} initialState - initial state of the environment
+ * @returns - an instatiated object of the environment
+ */
+export function loadEnv(
+    name: string,
+    options?: object,
+    initialState?: object
+): Environment | undefined {
+    if (registery.has(name)) {
+        const env = registery.get(name) as any;
+        const newEnv: Environment = new env();
+        newEnv.init(options, initialState);
+        return newEnv;
+    }
+    return undefined;
+}
+
+/**
+ * Returns all registered environment names
+ * @returns {string[]} a list of environment names
+ */
+export function listEnvs(): string[] {
+    return Array.from(registery.keys());
+}
+
+/**
+ * Register a new environment within the framework.
+ * @param name - name of the environment to register.
+ * @param envtype - The referenct to the environment class
+ */
+export function register(name: string, envtype: typeof Environment): void {
+    if (nameAlreadyRegistered(name)) {
+        throw new Error('The specified Environment name is already registered');
     }
 
-    public static listEnvs(): string[] {
-        return Array.from(QuickRLJS.registery.keys());
+    if (
+        !(envtype.prototype instanceof Environment) &&
+        envtype !== SingleAgentEnvironment
+    ) {
+        throw new Error('The provided envtype must be of type "Environment"');
     }
 
-    /**
-     * Register a new environment within the framework.
-     * @param name - name of the environment to register.
-     * @param envtype - The referenct to the environment class
-     */
-    public static register(name: string, envtype: typeof Environment): void {
-        if (QuickRLJS.nameAlreadyRegistered(name)) {
-            throw new Error(
-                'The specified Environment name is already registered'
-            );
-        }
-
-        if (
-            !(envtype.prototype instanceof Environment) &&
-            envtype !== SingleAgentEnvironment
-        ) {
-            throw new Error(
-                'The provided envtype must be of type "Environment"'
-            );
-        }
-
-        if (QuickRLJS.envTypeAlreadyRegistered(envtype)) {
-            throw new Error(
-                'The Environment is already registered under a different name'
-            );
-        }
-
-        QuickRLJS.registery.set(name, envtype);
+    if (envTypeAlreadyRegistered(envtype)) {
+        throw new Error(
+            'The Environment is already registered under a different name'
+        );
     }
 
-    private static envTypeAlreadyRegistered(
-        envtype: typeof Environment
-    ): boolean {
-        const envTypes = new Set(QuickRLJS.registery.values());
-        return envTypes.has(envtype);
-    }
+    registery.set(name, envtype);
+}
 
-    private static nameAlreadyRegistered(envName: string): boolean {
-        const envNames = new Set(QuickRLJS.registery.keys());
-        return envNames.has(envName);
-    }
+function envTypeAlreadyRegistered(envtype: typeof Environment): boolean {
+    const envTypes = new Set(registery.values());
+    return envTypes.has(envtype);
+}
+
+function nameAlreadyRegistered(envName: string): boolean {
+    const envNames = new Set(registery.keys());
+    return envNames.has(envName);
 }
 
 // registering standard environments
-QuickRLJS.register('Taxi', Envs.TaxiEnv);
-QuickRLJS.register('BlackJack', Envs.BlackJackEnv);
-
-export { QuickRLJS };
+register('Taxi', Envs.TaxiEnv);
+register('BlackJack', Envs.BlackJackEnv);

@@ -1,9 +1,4 @@
-import {
-    Environment,
-    GameStateContext,
-    FileStrategy,
-    Utils,
-} from '../../index';
+import { Environment, EnvStateContext, FileStrategy, Utils } from '../../index';
 import seedrandom from 'seedrandom';
 import PersistableAgent from '../../RLInterface/PersistableAgent';
 import { Experience } from '../../index';
@@ -21,9 +16,6 @@ export interface MCSaveFormat {
     stateReturnCountTable: Utils.JSONTensor;
 }
 
-/**
- * Implementation of First visit Monte Carlo
- */
 export default class MCAgent extends PersistableAgent {
     private _config?: MCAgentSettings;
     private rng: seedrandom.PRNG;
@@ -35,6 +27,9 @@ export default class MCAgent extends PersistableAgent {
     private epsilon: number = 0;
     private epsilonStep: number = 0;
 
+    /**
+     * Implementation of First visit Monte Carlo
+     */
     constructor(
         env: Environment,
         config?: MCAgentSettings,
@@ -90,7 +85,7 @@ export default class MCAgent extends PersistableAgent {
         takenAction: string,
         newState: object,
         payoff: number,
-        gameStateContext: GameStateContext
+        envStateContext: EnvStateContext
     ): Promise<void> {
         // buffer experience
         this._experience.push({
@@ -98,16 +93,13 @@ export default class MCAgent extends PersistableAgent {
             takenAction: this.env.actionSpace.indexOf(takenAction),
             newState: this.env.encodeStateToIndices(newState),
             payoff: payoff,
-            contextInfo: gameStateContext,
+            contextInfo: envStateContext,
         });
-        if (gameStateContext.isTerminal) {
+        if (envStateContext.isTerminal) {
             // use experience for training and then reset experience
             this.mcTrainingStep();
         }
-        if (
-            gameStateContext.maxIterationReached ||
-            gameStateContext.isTerminal
-        ) {
+        if (envStateContext.maxIterationReached || envStateContext.isTerminal) {
             //empty experience
             this._experience = [];
         }

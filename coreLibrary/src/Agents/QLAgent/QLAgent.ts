@@ -3,7 +3,7 @@ import {
     Utils,
     SingleAgentEnvironment,
     FileStrategy,
-    GameStateContext,
+    EnvStateContext,
 } from '../../index';
 import PersistableAgent from '../../RLInterface/PersistableAgent';
 import { General } from '../../Utils';
@@ -57,32 +57,32 @@ export default class QLAgent extends PersistableAgent {
         return this._qTable;
     }
 
-    init(): void {
+    public init(): void {
         const qTableDims: number[] = [...this.env.stateDim];
         qTableDims.push(this.env.actionSpace.length);
         this._qTable = Utils.Tensor.Zeros(qTableDims);
         this.setConfig(this._config);
     }
 
-    step(state: object): string {
+    public step(state: object): string {
         return this.followEpsGreedyPolicy(state);
     }
 
-    log(): void {
+    public log(): void {
         return;
     }
 
-    evalStep(state: object): string {
+    public evalStep(state: object): string {
         const actions: number[] = this.getStateActionValues(state);
         const actionIdx: number = Utils.MathUtils.argMax(actions);
         return this.env.actionSpace[actionIdx];
     }
-    async feed(
+    public async feed(
         prevState: object,
         takenAction: string,
         newState: object,
         payoff: number,
-        gameStateContext: GameStateContext
+        envStateContext: EnvStateContext
     ): Promise<void> {
         //lookups
         const takenActionIdx = this.env.actionSpace.indexOf(takenAction);
@@ -92,7 +92,7 @@ export default class QLAgent extends PersistableAgent {
             newPossibleActionValues
         );
 
-        if (gameStateContext.isTerminal || gameStateContext.maxIterationReached)
+        if (envStateContext.isTerminal || envStateContext.maxIterationReached)
             this.decayEpsilon();
 
         // bellmann equation
@@ -164,7 +164,7 @@ export default class QLAgent extends PersistableAgent {
         );
     }
 
-    async loadConfig(
+    public async loadConfig(
         fileManager: FileStrategy,
         options?: object
     ): Promise<void> {
@@ -173,7 +173,7 @@ export default class QLAgent extends PersistableAgent {
         );
         this.setConfig(loadObject);
     }
-    async saveConfig(
+    public async saveConfig(
         fileManager: FileStrategy,
         options?: object
     ): Promise<void> {

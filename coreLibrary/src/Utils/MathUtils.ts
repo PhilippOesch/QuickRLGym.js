@@ -1,3 +1,13 @@
+/**
+ * static class for general utility
+ * @module Utils/MathUtils
+ */
+
+/**
+ * Returns the index of the maximum Value
+ * @param {number[]} array A numbers array
+ * @returns {number} the index of the maximum value
+ */
 export function argMax(array: number[]): number {
     if (!array || array.length < 1) {
         return -1;
@@ -14,6 +24,11 @@ export function argMax(array: number[]): number {
     return maxIdx;
 }
 
+/**
+ * Calculate the Sum of a numbers array
+ * @param {number[]} array the numbers array
+ * @returns {number} The sum
+ */
 export function sum(array: number[]): number {
     if (array === undefined || array.length == 0) {
         return 0;

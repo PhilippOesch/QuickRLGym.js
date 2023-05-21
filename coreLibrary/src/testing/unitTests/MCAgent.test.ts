@@ -73,7 +73,7 @@ describe('MCAgent', function () {
         const stepResult = env.step(action);
 
         // manipulate the game state context for testing.
-        const gameStateContext = {
+        const envStateContext = {
             isTerminal: false,
             maxIterationReached: false,
         };
@@ -82,7 +82,7 @@ describe('MCAgent', function () {
             action,
             stepResult.newState,
             stepResult.reward,
-            gameStateContext
+            envStateContext
         );
 
         assert.strictEqual(1, spy.step.callCount);
@@ -96,17 +96,17 @@ describe('MCAgent', function () {
         const prevState = env.state;
         const action = agent.step(env.state);
         const stepResult = env.step(action);
-        const gameStateContext = env.additionalInfo();
+        const envStateContext = env.additionalInfo();
 
         await agent.feed(
             prevState,
             action,
             stepResult.newState,
             stepResult.reward,
-            gameStateContext
+            envStateContext
         );
 
-        console.log('gameStateContext', gameStateContext);
+        console.log('envStateContext', envStateContext);
 
         assert.strictEqual(spy.decayEpsilon.callCount, 1);
     });

@@ -1,0 +1,28 @@
+{
+    "recurseDepth": 10,
+    "tags": {
+        "allowUnknownTags": true,
+        "dictionaries": ["jsdoc", "closure"]
+    },
+    "source": {
+        "include": ["./src"],
+        "includePattern": "\\.(jsx|js|ts|tsx)$",
+        "excludePattern": "(^|\\/|\\\\)_"
+    },
+    "plugins": [
+        "plugins/markdown",
+        "better-docs/typescript",
+        "better-docs/category",
+        "better-docs/component"
+    ],
+    "templates": {
+        "better-docs": {
+            "name": "QuickRLJS"
+        }
+    },
+    "opts": {
+        "destination": "docs",
+        "recurse": true,
+        "readme": "../README.md"
+    }
+}

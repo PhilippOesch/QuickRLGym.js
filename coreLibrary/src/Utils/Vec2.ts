@@ -1,26 +1,26 @@
 /**
- * A class that represents a 2d vector
- * @property {number} x - The x coordinate.
- * @property {number} y - The y coordinate.
+ * Represent a 2d Vector
  */
-export default class Vec2 {
+class Vec2 {
     private x: number;
     private y: number;
 
-    /**
-     * @param {number} x - The x coordinate
-     * @param {number} y - The y coordinate
-     */
     constructor(x: number, y: number) {
         this.x = x;
         this.y = y;
     }
 
-    get getX(): number {
+    /**
+     * Get the x value
+     */
+    public get getX(): number {
         return this.x;
     }
 
-    get getY(): number {
+    /**
+     * Get the y value
+     */
+    public get getY(): number {
         return this.y;
     }
 
@@ -35,7 +35,7 @@ export default class Vec2 {
 
     /**
      * Create a copy of this vector
-     * @returns A copy of this vector
+     * @returns {Vec2} A copy of this vector
      */
     copy(): Vec2 {
         return new Vec2(this.x, this.y);
@@ -50,3 +50,5 @@ export default class Vec2 {
         return this.x === other.x && this.y === other.y;
     }
 }
+
+export default Vec2;

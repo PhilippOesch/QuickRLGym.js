@@ -2,19 +2,34 @@ import Agent from './Agent';
 import StepResult from './StepResult';
 import Environment, { EnvOptions } from './Environment';
 
-export interface GameStateContext {
+/**
+ * The EnvStateContext
+ */
+export interface EnvStateContext {
+    /**
+     * Whether the environment has terminated
+     */
     isTerminal: boolean;
+    /**
+     * Wheather the max iteration was reached
+     */
     maxIterationReached: boolean;
 }
 
+/**
+ * Describes a single expericence of an enviroment step
+ */
 export interface Experience {
     prevState: number[];
     takenAction: number;
     newState: number[];
     payoff: number;
-    contextInfo: GameStateContext;
+    contextInfo: EnvStateContext;
 }
 
+/**
+ * An environment with a single agent
+ */
 export abstract class SingleAgentEnvironment extends Environment {
     protected _lastAction?: string;
     protected _agent?: Agent;
@@ -22,18 +37,31 @@ export abstract class SingleAgentEnvironment extends Environment {
     protected _options?: EnvOptions;
     protected randomSeed?: number;
 
+    /**
+     * Get the current environment Options
+     */
     get options(): EnvOptions | undefined {
         return this._options;
     }
 
+    /**
+     * Get the agent
+     */
     public get agent(): Agent | undefined {
         return this._agent;
     }
 
+    /**
+     * Set the agent for the environment
+     */
     public set agent(agent: Agent | undefined) {
         this._agent = agent;
     }
 
+    /**
+     * The last action taken
+     * @returns {string | undefined } the last action
+     */
     public get lastAction(): string | undefined {
         return this._lastAction;
     }
@@ -109,11 +137,11 @@ export abstract class SingleAgentEnvironment extends Environment {
         const prevState: object = this.state;
         const nextAction: string = this._agent!.step(prevState);
         const { newState, reward } = this.step(nextAction);
-        const gameStateContext = this.additionalInfo(maxIterationPerGame);
+        const envStateContext = this.additionalInfo(maxIterationPerGame);
         let rewardAdjusted =
             this._options?.penaltyOnUnfinished &&
-            gameStateContext.maxIterationReached &&
-            !gameStateContext.isTerminal
+            envStateContext.maxIterationReached &&
+            !envStateContext.isTerminal
                 ? this._options?.penaltyOnUnfinished + reward
                 : reward;
         await this._agent!.feed(
@@ -121,7 +149,7 @@ export abstract class SingleAgentEnvironment extends Environment {
             nextAction,
             newState,
             rewardAdjusted,
-            gameStateContext
+            envStateContext
         );
     }
 
@@ -133,7 +161,7 @@ export abstract class SingleAgentEnvironment extends Environment {
         console.log('Iteration:', trainIteration);
     }
 
-    public additionalInfo(maxIterPerGame: number = -1): GameStateContext {
+    public additionalInfo(maxIterPerGame: number = -1): EnvStateContext {
         const isTerminal = this.isTerminal;
         const maxIterationReached =
             maxIterPerGame != -1 && this.iteration >= maxIterPerGame;
