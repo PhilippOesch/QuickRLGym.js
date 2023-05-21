@@ -29,7 +29,7 @@ const props = defineProps({
     disabled: Boolean,
     stepSize: Number,
     inputStyle: {
-        type: Object as PropType<InputStyleType>,
+        type: String as PropType<InputStyleType>,
         default: InputStyleType.Dark,
     },
 });

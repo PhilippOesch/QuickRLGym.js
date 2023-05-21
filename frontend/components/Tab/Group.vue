@@ -36,7 +36,7 @@ const props = defineProps({
         type: String,
         required: true,
     },
-    accentColor: Object as PropType<IconColor>,
+    accentColor: String as PropType<IconColor>,
 });
 
 const tabStore = useTabStore();

@@ -15,7 +15,7 @@ const props = defineProps({
     handler: Function,
     value: String,
     size: {
-        type: Object as PropType<ButtonSize>,
+        type: String as PropType<ButtonSize>,
         default: ButtonSize.Normal,
     },
     disabled: Boolean,

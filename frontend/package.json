@@ -20,6 +20,7 @@
         "@pinia/nuxt": "^0.4.6",
         "file-saver": "^2.0.5",
         "phaser": "^3.55.2",
-        "quickrl.core": "^0.6.10"
+        "quickrl.core": "^0.6.11",
+        "simple-tabs-vue": "^0.0.8"
     }
 }

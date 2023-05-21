@@ -13,8 +13,13 @@
             </template>
         </div>
     </div>
+    <SimpleTabSwitch group-name="Test"></SimpleTabSwitch>
+    <SimpleTab tab-group="Test" tab-name="Test1">Test</SimpleTab>
+    <SimpleTab tab-group="Test" tab-name="Test2">Test2</SimpleTab>
 </template>
 <script setup lang="ts">
+import { SimpleTab, SimpleTabSwitch } from 'simple-tabs-vue';
+
 const links = [
     {
         title: 'Taxi Game',
@@ -30,20 +35,6 @@ const links = [
         icon: 'card',
         color: IconColor.Green,
     },
-    // {
-    //     title: 'Grid World',
-    //     link: '/Games/Taxi',
-    //     description: 'A Grid World Implementation',
-    //     icon: 'grid',
-    //     color: IconColor.Sky,
-    // },
-    // {
-    //     title: 'Tic-Tac-Toe',
-    //     link: '/Games/BlackJack',
-    //     description: 'Standard Tic-Tac-Toe Implementation',
-    //     icon: 'tic-tac-toe',
-    //     color: IconColor.Pink,
-    // },
 ];
 
 function setClasses(link: any) {

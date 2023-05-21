@@ -45,12 +45,12 @@
                 Agent has been loaded
             </div>
         </div>
-        <Alert
+        <!-- <Alert
             v-if="alertOpen"
             content="This is an alert."
             :onAbort="onAbort"
             :onSuccess="onSuccess"
-        ></Alert>
+        ></Alert> -->
     </div>
 </template>
 
@@ -78,13 +78,21 @@ const loaderDisabled = ref(true);
 const binWeightsActive = ref(false);
 const alertOpen = ref(false);
 
-function onSuccess() {
-    console.log('OK');
-}
+const settingStore = useSettingsStore();
+const tabStore = useTabStore();
 
-function onAbort() {
-    console.log('Abort');
-}
+// function onSuccess() {
+//     console.log('old', oldAlg, 'newAlg', newAlg);
+//     updateAlert(false);
+//     setActiveAlgorithm(newAlg);
+// }
+
+// async function onAbort() {
+//     console.log('Abort');
+//     updateAlert(false);
+//     tabStore.switchTab(`${props.gameId}-AlgTab`, oldAlg);
+//     console.log(props.agentObject);
+// }
 
 const props = defineProps({
     gameId: {
@@ -101,7 +109,7 @@ const agentLoaded = ref(false);
 let activeAlgorithm: undefined | string;
 
 onMounted(() => {
-    activeAlgorithm = getActiveAlgorithm(props.gameId);
+    activeAlgorithm = settingStore.getActiveAlgorithm(props.gameId);
     setActiveAlgorithm(activeAlgorithm);
 });
 
@@ -175,9 +183,6 @@ function isValidFileType(file: File) {
     return validFileTypes.includes(file.type);
 }
 
-const { getActiveAlgorithm, updateSetting } = useSettingsStore();
-const tabStore = useTabStore();
-
 async function loadNewAgent(): Promise<void> {
     if (props.env == undefined) {
         console.warn(
@@ -185,7 +190,9 @@ async function loadNewAgent(): Promise<void> {
         );
         return;
     }
-    const activeAlgorithm: string = getActiveAlgorithm(props.gameId);
+    const activeAlgorithm: string = settingStore.getActiveAlgorithm(
+        props.gameId
+    );
 
     let agent: PersistableAgent = <PersistableAgent>(
         useAgent(activeAlgorithm, props.env)
@@ -209,8 +216,10 @@ async function loadAgentFiles(
         const options: BrowserLoadOptions = { file: configFile };
         await agent.loadConfig(new BrowserFileStrategy(), options);
 
-        const activeAlgorithm: string = getActiveAlgorithm(props.gameId);
-        updateSetting(props.gameId, activeAlgorithm, agent.config);
+        const activeAlgorithm: string = settingStore.getActiveAlgorithm(
+            props.gameId
+        );
+        settingStore.updateSetting(props.gameId, activeAlgorithm, agent.config);
     }
 
     if (!binWeightsActive.value && isValidFileType(modelFile)) {
@@ -233,18 +242,19 @@ async function loadAgentFiles(
     return agent;
 }
 
-const settingStore = useSettingsStore();
-
 function isAgentActive() {
     return props.agentObject !== undefined;
 }
 
-tabStore.$onAction((info) => {
+let oldAlg: any;
+let newAlg: any;
+
+tabStore.$onAction(async (info) => {
     if (info.name === 'switchTab' && info.args[0] == `${props.gameId}-AlgTab`) {
-        const oldAlg = activeAlgorithm;
+        oldAlg = activeAlgorithm;
         updateAlert(isAgentActive());
-        const newAlg = info.args[1];
-        setActiveAlgorithm(newAlg);
+        newAlg = info.args[1];
+        console.log(oldAlg, newAlg);
     }
 });
 

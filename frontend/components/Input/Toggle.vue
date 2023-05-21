@@ -23,7 +23,7 @@ const props = defineProps({
     name: String,
     defaultValue: Boolean,
     disabled: Boolean,
-    accentColor: Object as PropType<IconColor>,
+    accentColor: String as PropType<IconColor>,
 });
 
 let value = props.defaultValue ? props.defaultValue : false;

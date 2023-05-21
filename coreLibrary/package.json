@@ -1,6 +1,6 @@
 {
     "name": "quickrl.core",
-    "version": "0.6.10",
+    "version": "0.6.11",
     "description": "This is a simple framework for implementing and testing reinforcement learning environments and algorithms",
     "main": "./out/index.js",
     "types": "./out/index.d.ts",
@@ -15,7 +15,7 @@
         "test": "pnpm buildDev; nyc mocha ./out/testing/*;",
         "buildProd": "rm -r ./out; npx tsc -d -p tsconfig.json",
         "buildDev": "rm -r ./out; npx tsc -d -p tsconfig.dev.json",
-        "release": "pnpm test; pnpm buildProd; pnpm publish;",
+        "release": "pnpm test; pnpm buildProd; pnpm publish --no-git-checks;",
         "coverage": "nyc report --reporter=lcov;"
     },
     "author": "Philipp Oeschger",

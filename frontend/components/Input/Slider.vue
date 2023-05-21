@@ -44,7 +44,7 @@ const props = defineProps({
     defaultValue: Number,
     stepSize: Number,
     disabled: Boolean,
-    accentColor: Object as PropType<IconColor>,
+    accentColor: String as PropType<IconColor>,
 });
 
 const valueRef: Ref<number> = ref(props.defaultValue ? props.defaultValue : 0);

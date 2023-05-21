@@ -13,7 +13,8 @@
             <Tab
                 :tabGroup="`${gameId}-AlgTab`"
                 name="QLearning"
-                :onEnterHandler="() => onOpenTab('QLearning')"
+                :onLeaveHandler="() => beforeSwitchTab()"
+                @tabSwitching="(newTab: string, prevTab: string) => onSwitchTab(newTab, prevTab)"
             >
                 <ParamSelector
                     title="Parameters:"
@@ -27,7 +28,8 @@
             <Tab
                 :tabGroup="`${gameId}-AlgTab`"
                 name="MCLearning"
-                :onEnterHandler="() => onOpenTab('MCLearning')"
+                :onLeaveHandler="() => beforeSwitchTab()"
+                @tabSwitching="(prevTab: string, newTab: string) => onSwitchTab(prevTab, newTab)"
             >
                 <ParamSelector
                     title="Parameters:"
@@ -41,7 +43,8 @@
             <Tab
                 :tabGroup="`${gameId}-AlgTab`"
                 name="DQN"
-                :onEnterHandler="() => onOpenTab('DQN')"
+                :onLeaveHandler="() => beforeSwitchTab()"
+                @tabSwitching="(prevTab: string, newTab: string) => onSwitchTab(prevTab, newTab)"
             >
                 <ParamSelector
                     title="Parameters:"
@@ -76,19 +79,22 @@
             <Tab
                 :tabGroup="`${gameId}-AlgTab`"
                 name="QLearning"
-                :onEnterHandler="() => onOpenTab('QLearning')"
+                :onLeaveHandler="() => beforeSwitchTab()"
+                @tabSwitching="(prevTab: string, newTab: string) => onSwitchTab(prevTab, newTab)"
             >
             </Tab>
             <Tab
                 :tabGroup="`${gameId}-AlgTab`"
                 name="MCLearning"
-                :onEnterHandler="() => onOpenTab('MCLearning')"
+                :onLeaveHandler="() => beforeSwitchTab()"
+                @tabSwitching="(prevTab: string, newTab: string) => onSwitchTab(prevTab, newTab)"
             >
             </Tab>
             <Tab
                 :tabGroup="`${gameId}-AlgTab`"
                 name="DQN"
-                :onEnterHandler="() => onOpenTab('DQN')"
+                :onLeaveHandler="() => beforeSwitchTab()"
+                @tabSwitching="(prevTab: string, newTab: string) => onSwitchTab(prevTab, newTab)"
             >
             </Tab>
             <div class="freeComponents">
@@ -123,6 +129,12 @@
                 @initializeScene="updateSceneInfo"
             ></GameView>
         </div>
+        <Alert
+            v-if="isAlertOpen"
+            content="The currently loaded models will be deleted. Do you still want to continue"
+            :onSuccess="() => onSuccess()"
+            :onAbort="() => onAbort()"
+        ></Alert>
     </div>
 </template>
 <script lang="ts" setup>
@@ -133,23 +145,49 @@ import defaultTrainingSettings from '~~/utils/settingsInterfaces/trainingSetting
 import { SelectionType, ButtonSize, IconColor } from '~~/utils/enums';
 import { PropType, Ref } from 'vue';
 import { Agent, SingleAgentEnvironment, PersistableAgent } from 'quickrl.core';
-import useTabStore from '~~/comsosable/useTabStore';
+//import useTabStore from '~~/comsosable/useTabStore';
 import defaultBenchmarkSettings from '~~/utils/settingsInterfaces/benchmarkSettings';
 import useSettingsStore from '~~/comsosable/useSettingsStore';
+import useTabStore from '~~/comsosable/useTabStore';
 
 const gameViewRef: Ref = ref();
 
+const settingsStore = useSettingsStore();
+
 let env: Ref<SingleAgentEnvironment | undefined> = ref(undefined);
+let refNewAlg: string;
+
+const tabStore = useTabStore();
 
 const props = defineProps({
     gameId: {
         type: String,
         required: true,
     },
-    accentColor: Object as PropType<IconColor>,
+    accentColor: String as PropType<IconColor>,
 });
 
-const { getOpenTab } = useTabStore();
+function onSwitchTab(newTab: string, prevTab: string) {
+    refNewAlg = newTab;
+    switchTab();
+}
+
+function beforeSwitchTab() {
+    console.log('beforeTabSwitch', agent.value);
+    if (agent.value !== undefined) {
+        isAlertOpen.value = true;
+        console.log('hallo, is noch was?');
+        return false;
+    }
+    return true;
+}
+
+let agent: Ref<Agent | undefined> = ref(undefined);
+
+settingsStore.setActiveAlgorithm(props.gameId, 'QLearning');
+agent.value = undefined;
+
+let isAlertOpen = ref(false);
 
 function updateSceneInfo(trainingEnv: SingleAgentEnvironment) {
     env.value = trainingEnv;
@@ -158,8 +196,6 @@ function updateSceneInfo(trainingEnv: SingleAgentEnvironment) {
 function startTrainingHander() {
     gameViewRef.value.initializeTraining();
 }
-
-let agent: Ref<Agent | undefined> = ref(undefined);
 
 function onPassAgent(passedAgent: any) {
     agent.value = passedAgent;
@@ -171,18 +207,24 @@ function onLoadNewAgent(loadedAgent: Agent | undefined) {
     console.log('loadedAgent', agent.value);
 }
 
-const settingsStore = useSettingsStore();
-
-function onOpenTab(algorithm: string) {
-    settingsStore.setActiveAlgorithm(props.gameId, algorithm);
+function onAbort() {
+    isAlertOpen.value = false;
+    console.log('on abort', agent.value);
 }
 
-watch(
-    () => getOpenTab(`${props.gameId}-AlgTab`),
-    () => {
-        agent.value = undefined;
-    }
-);
+function onSuccess() {
+    switchTab();
+    isAlertOpen.value = false;
+}
+
+function switchTab() {
+    agent.value = undefined;
+    console.log('actualSwitch', agent.value);
+    console.log('newAlg', refNewAlg);
+    settingsStore.setActiveAlgorithm(props.gameId, refNewAlg);
+    tabStore.switchTab(props.gameId, refNewAlg);
+    console.log('the new alg', refNewAlg);
+}
 </script>
 
 <style lang="postcss" scoped>
