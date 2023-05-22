@@ -21,8 +21,12 @@ export interface QLAgentSettings {
 
 /**
  * Agent that represents a Q-Learning Algorithm
+ * @extends PersistableAgent
+ * @param {SingleAgentEnvironment} - the environment
+ * @param {QLAgentSettings} - the configuration
+ * @param {number} - The randomSeed
  */
-export default class QLAgent extends PersistableAgent {
+class QLAgent extends PersistableAgent {
     private _config?: QLAgentSettings;
     private rng: seedrandom.PRNG;
     private randomSeed?: string;
@@ -207,3 +211,5 @@ export default class QLAgent extends PersistableAgent {
         return this.env.actionSpace[randIdx];
     }
 }
+
+export default QLAgent;

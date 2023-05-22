@@ -3,11 +3,12 @@ import { TaxiGlobals } from './index';
 
 /**
  * The class of the Customer who has to be droped of
- * @property {Vec2} position - The current position of the customer
- * @property {number} destinationIdx - The index of the destination the customer has to be droped of to
- * @property {number} spawnDestIdx - The index of the destination, the customer started on
+ * @param {number} spawnIdx - The spawn index
+ * @param {number} destIdx - The index of the destination the customer has to be droped of to
+ * @category Games
+ * @subcategory Taxi
  */
-export default class TaxiCustomer {
+class TaxiCustomer {
     private _destinationIdx: number;
     private _spawnDestIdx: number;
     private _isCustomerPickedUp: boolean = false;
@@ -61,3 +62,5 @@ export default class TaxiCustomer {
         }
     }
 }
+
+export default TaxiCustomer;

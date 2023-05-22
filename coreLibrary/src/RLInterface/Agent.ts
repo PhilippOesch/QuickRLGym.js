@@ -3,6 +3,7 @@ import Environment from './Environment';
 /**
  * The Agent Interface
  * @param {Environment} env The referenct to the environment
+ * @category QuickRLInterface
  */
 abstract class Agent {
     protected env: Environment;

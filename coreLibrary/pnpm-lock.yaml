@@ -42,6 +42,9 @@ devDependencies:
   sinon:
     specifier: ^15.0.1
     version: 15.0.3
+  taffydb:
+    specifier: ^2.7.3
+    version: 2.7.3
   typescript:
     specifier: ^4.8.4
     version: 4.9.5
@@ -2319,6 +2322,10 @@ packages:
   /supports-preserve-symlinks-flag@1.0.0:
     resolution: {integrity: sha512-ot0WnXS9fgdkgIcePe6RHNk1WA8+muPa6cSjeR3V8K27q9BB1rTE3R1p7Hv0z1ZyAc8s6Vvv8DIyWf681MAt0w==}
     engines: {node: '>= 0.4'}
+    dev: true
+
+  /taffydb@2.7.3:
+    resolution: {integrity: sha512-GQ3gtYFSOAxSMN/apGtDKKkbJf+8izz5YfbGqIsUc7AMiQOapARZ76dhilRY2h39cynYxBFdafQo5HUL5vgkrg==}
     dev: true
 
   /test-exclude@6.0.0:

@@ -3,6 +3,7 @@ import seedrandom from 'seedrandom';
 /**
  * static class for general utility
  * @module Utils/Generals
+ * @category Utils
  */
 
 /**

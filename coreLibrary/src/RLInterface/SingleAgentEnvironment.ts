@@ -1,34 +1,60 @@
 import Agent from './Agent';
-import StepResult from './StepResult';
 import Environment, { EnvOptions } from './Environment';
 
 /**
  * The EnvStateContext
+ * @category QuickRLInterface
  */
 export interface EnvStateContext {
     /**
      * Whether the environment has terminated
+     * @type {boolean}
      */
     isTerminal: boolean;
     /**
      * Wheather the max iteration was reached
+     * @type {boolean}
      */
     maxIterationReached: boolean;
 }
 
 /**
  * Describes a single expericence of an enviroment step
+ * @category QuickRLInterface
  */
 export interface Experience {
+    /**
+     * The encoded previous state
+     * @type {number[]}
+     */
     prevState: number[];
+    /**
+     * The taken action index
+     * @type {number}
+     */
     takenAction: number;
+    /**
+     * The encoded new state
+     * @type {number[]}
+     */
     newState: number[];
+    /**
+     * the payoff
+     * @type {number}
+     */
     payoff: number;
+    /**
+     * The environment context
+     * @type {EnvStateContext}
+     */
     contextInfo: EnvStateContext;
 }
 
 /**
  * An environment with a single agent
+ * @abstract
+ * @extends Environment
+ * @category QuickRLInterface
  */
 export abstract class SingleAgentEnvironment extends Environment {
     protected _lastAction?: string;
@@ -37,30 +63,29 @@ export abstract class SingleAgentEnvironment extends Environment {
     protected _options?: EnvOptions;
     protected randomSeed?: number;
 
-    /**
-     * Get the current environment Options
-     */
     get options(): EnvOptions | undefined {
         return this._options;
     }
 
     /**
-     * Get the agent
+     * get the agent
+     * @type {Agent | undefined}
      */
     public get agent(): Agent | undefined {
         return this._agent;
     }
 
     /**
-     * Set the agent for the environment
+     * set the agent
+     * @type {Agent | undefined}
      */
     public set agent(agent: Agent | undefined) {
         this._agent = agent;
     }
 
     /**
-     * The last action taken
-     * @returns {string | undefined } the last action
+     * get the last action
+     * @type {string | undefined}
      */
     public get lastAction(): string | undefined {
         return this._lastAction;
@@ -68,6 +93,7 @@ export abstract class SingleAgentEnvironment extends Environment {
 
     /**
      * This method can be used to initialize the environment and for example initialize the agents
+     * @returns {void} test
      */
     public initAgent(): void {
         if (this._agent !== undefined) {
@@ -77,7 +103,7 @@ export abstract class SingleAgentEnvironment extends Environment {
         }
     }
 
-    init(
+    public init(
         options?: EnvOptions | undefined,
         initialState?: object | undefined
     ): void {
@@ -92,15 +118,15 @@ export abstract class SingleAgentEnvironment extends Environment {
 
     /**
      * The training loop method as Async Version.
-     * @param iterations - numbers of iterations to iterate.
-     * @param logEvery - loging interval relative to training iterations.
-     * @param maxIterationPerGame - how many iterations for a game until it automatically terminates.
-     * @param resetStatsOnLog - bool to indicate the reseting of stats after logging
-     * If maxIterationPerGame = -1, the game iterates endless.
+     * @param {number} iterations - numbers of iterations to iterate.
+     * @param {number} logEvery - loging interval relative to training iterations.
+     * @param {number} maxIterationPerGame - how many iterations for a game until it automatically terminates.
+     * @param {boolean} resetStatsOnLog - bool to indicate the reseting of stats after logging
+     * @returns {Promise<number>}
      */
     public async train(
         iterations: number = 100,
-        logEvery = -1,
+        logEvery: number = -1,
         maxIterationPerGame: number = -1,
         resetStatsOnLog: boolean = true
     ): Promise<number> {
@@ -133,6 +159,50 @@ export abstract class SingleAgentEnvironment extends Environment {
         return iterations;
     }
 
+    /**
+     * Is called each iteration defined by the logEvery parameter in the training method
+     * @param trainIteration - The current training iteration
+     * @returns {void}
+     */
+    public log(trainIteration: number): void {
+        console.log('Iteration:', trainIteration);
+    }
+
+    /**
+     * Get additional info about the environment state
+     * @param {number} EnvStateContext EnvStateContext maxIterPerGame
+     * @returns {EnvStateContext}
+     */
+    public additionalInfo(maxIterPerGame: number = -1): EnvStateContext {
+        const isTerminal = this.isTerminal;
+        const maxIterationReached =
+            maxIterPerGame != -1 && this.iteration >= maxIterPerGame;
+        return {
+            isTerminal: isTerminal,
+            maxIterationReached: maxIterationReached,
+        };
+    }
+
+    /**
+     * Function called after the training Iteration and before the logging.
+     * This function can be used for example for logging specifig cleanups/ calculations
+     * @returns {void}
+     */
+    public onIterationEnd(): void {
+        return;
+    }
+
+    /**
+     * The total Return of the agent.
+     * @type {number}
+     */
+    public abstract get getReturn(): number;
+
+    /**
+     * A single trainign step
+     * @param {number} maxIterationPerGame - The max iterations per game
+     * @returns {Promise<void>}
+     */
     private async singleTrainStep(maxIterationPerGame: number): Promise<void> {
         const prevState: object = this.state;
         const nextAction: string = this._agent!.step(prevState);
@@ -152,71 +222,4 @@ export abstract class SingleAgentEnvironment extends Environment {
             envStateContext
         );
     }
-
-    /**
-     * Is called each iteration defined by the logEvery parameter in the training method
-     * @param trainIteration - The current training iteration
-     */
-    public log(trainIteration: number): void {
-        console.log('Iteration:', trainIteration);
-    }
-
-    public additionalInfo(maxIterPerGame: number = -1): EnvStateContext {
-        const isTerminal = this.isTerminal;
-        const maxIterationReached =
-            maxIterPerGame != -1 && this.iteration >= maxIterPerGame;
-        return {
-            isTerminal: isTerminal,
-            maxIterationReached: maxIterationReached,
-        };
-    }
-
-    /**
-     * Function called after the training Iteration and before the logging.
-     * This function can be used for example for logging specifig cleanups/ calculations
-     */
-    public onIterationEnd(): void {
-        return;
-    }
-
-    public abstract get actionSpace(): string[];
-
-    /**
-     * Perform an action within the environment
-     * @param action - the action to perform.
-     * @returns - the new state of the environment.
-     */
-    public abstract step(action: string): StepResult;
-
-    /**
-     * @returns The total Return of the agent.
-     */
-    public abstract get getReturn(): number;
-
-    /**
-     * @returns The state of the environment.
-     */
-    public abstract get state(): object;
-
-    /**
-     * @returns reset the environment.
-     */
-    public abstract reset(): boolean;
-
-    /**
-     * @returns Return True if the environment has reached a final state.
-     */
-    public abstract get isTerminal(): boolean;
-
-    /**
-     * @returns Get The current iteration count of the environment
-     */
-    public abstract get iteration(): number;
-
-    /**
-     * Returns the game state as a number encoded array.
-     * @param state - The state object.
-     * @returns The game state as number array.
-     */
-    public abstract encodeStateToIndices(state: object): number[];
 }

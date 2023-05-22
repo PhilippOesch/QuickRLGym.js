@@ -13,8 +13,10 @@ import seedrandom from 'seedrandom';
  * @property {Map<string, TaxiAction>} actionMapping - Static mapping of certain strings to actions.
  * @property {TaxiPlayer} player - The player object.
  * @property {TaxiCustomer} customer - The customer object.
+ * @category Games
+ * @subcategory Taxi
  */
-export default class TaxiGame {
+class TaxiGame {
     private static readonly _gameStateDim: number[] = [5, 5, 4, 5];
 
     public static readonly actionMapping: Map<string, TaxiAction> = new Map([
@@ -240,3 +242,5 @@ export default class TaxiGame {
         return this._rng;
     }
 }
+
+export default TaxiGame;

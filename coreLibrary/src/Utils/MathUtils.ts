@@ -1,6 +1,7 @@
 /**
  * static class for general utility
  * @module Utils/MathUtils
+ * @category Utils
  */
 
 /**

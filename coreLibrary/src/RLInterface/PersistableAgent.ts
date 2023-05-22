@@ -3,6 +3,9 @@ import FileStrategy from './FileStrategy';
 
 /**
  * Interface for Agents that can be stored and loaded for later usage of interference
+ * @abstract
+ * @extends Agent
+ * @category QuickRLInterface
  */
 abstract class PersistableAgent extends Agent {
     /**

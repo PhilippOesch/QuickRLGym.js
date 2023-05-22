@@ -12,7 +12,7 @@ import {
  * The Black Jack implementation is oriented on the logic described in Richard
  * S. Sutton and Andrew G. Barto 'Reinforcement Learning: An Introduction' Example 5.1..
  */
-export default class BlackJackGame {
+class BlackJackGame {
     public static readonly gameStateDim: number[] = [32, 11, 2];
 
     public static readonly actionMapping: Map<string, BlackJackAction> =
@@ -156,3 +156,5 @@ export default class BlackJackGame {
         return true;
     }
 }
+
+export default BlackJackGame;

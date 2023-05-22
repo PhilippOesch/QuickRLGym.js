@@ -6,6 +6,7 @@ type EnvType = typeof Environment;
 /**
  * Main Class for Framework
  * @module QuickRLJS
+ * @category QuickRLInterface
  */
 
 const registery: Map<string, EnvType> = new Map();

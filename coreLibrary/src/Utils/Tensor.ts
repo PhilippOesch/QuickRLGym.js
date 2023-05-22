@@ -3,7 +3,9 @@ import { MathUtils } from '.';
 
 /**
  * Enum of Initialization Types for a Tensor-Object
+ * @readonly
  * @enum
+ * @category Utils
  */
 enum TensorFillType {
     Zeros,
@@ -13,14 +15,17 @@ enum TensorFillType {
 
 /**
  * Tensor converted to JSON
+ * @category Utils
  */
-export interface JSONTensor {
+interface JSONTensor {
     /**
      * the dimensions
+     * @type {number[]}
      */
     dim: number[];
     /**
      * the actual tensor array
+     * @type {any[]}
      */
     array: any[];
 }
@@ -29,21 +34,11 @@ export interface JSONTensor {
  * Represents a multi dimensional number object
  * @param {number[]} dim - The dimension of the Tensor
  * @param {any[]} array - The actual managed array element
+ * @category Utils
  */
-export class Tensor {
+class Tensor {
     private readonly _dim: number[];
     private array: Array<any>;
-
-    public constructor(dim: number[], array: Array<any>) {
-        if (!Tensor.isSameDimension(dim, Tensor.getArrayDim(array))) {
-            throw new Error(
-                'The dimension provided has to fit the size of the array'
-            );
-        }
-
-        this._dim = dim;
-        this.array = array;
-    }
 
     /**
      * Static function to initialize an Tensor filled with Zeros
@@ -53,20 +48,6 @@ export class Tensor {
     public static Zeros(dims: number[]): Tensor {
         const array = Tensor.init(dims, TensorFillType.Zeros);
         return new Tensor(dims, array);
-    }
-
-    /**
-     * Convert JSONTensor to actual Tensor
-     * @param {JSONTensor} jsonTensor json tensor to convert
-     * @returns {Tensor} the converted Tensor
-     */
-    public static fromJSONObject(jsonTensor: JSONTensor): Tensor {
-        if (jsonTensor.dim === undefined || jsonTensor.array === undefined) {
-            throw new Error(
-                'object is missing important attributes for conversion'
-            );
-        }
-        return new Tensor(jsonTensor.dim, jsonTensor.array);
     }
 
     /**
@@ -82,7 +63,7 @@ export class Tensor {
     /**
      * Static function to initialize an Tensor filled with random number in the range of [0<=x<=1]
      * @param {number[]} dims - The dimensions of the Tensor to initialize
-     * @param {number} randomSeed - random seed to used for random number generator
+     * @param {?number} randomSeed - random seed to used for random number generator
      * @returns {Tensor} a filled Tensor
      */
     public static Random(dims: number[], randomSeed?: number): Tensor {
@@ -95,12 +76,206 @@ export class Tensor {
     }
 
     /**
-     * Helper function for initializing a tensor
-     * @param {number[]} dims - The dimensions of the Tensor to initialize
-     * @param {TensorFillType} filltype - Type of values to fill the Tensor with
-     * @param {seedrandom.PRNG} rng - The random number generator
-     * @returns {any[]} an initialized array
+     * Convert JSONTensor to actual Tensor
+     * @param {JSONTensor} jsonTensor - json tensor to convert
+     * @returns {Tensor} - the converted Tensor
      */
+    public static fromJSONObject(jsonTensor: JSONTensor): Tensor {
+        if (jsonTensor.dim === undefined || jsonTensor.array === undefined) {
+            throw new Error(
+                'object is missing important attributes for conversion'
+            );
+        }
+        return new Tensor(jsonTensor.dim, jsonTensor.array);
+    }
+
+    /**
+     * Returns the Mean of the Tensor
+     * @type {number}
+     */
+    public get mean(): number {
+        return this.sum / this.size;
+    }
+
+    /**
+     * Get the total sum of the tensor
+     * @type {number}
+     */
+    public get sum(): number {
+        return this.recSum(this.array);
+    }
+
+    /**
+     * Returns the Dimension of the Tensor
+     * @type {number[]}
+     */
+    public get dim(): number[] {
+        return this._dim;
+    }
+
+    /**
+     * See the contained array
+     * @type {any[]}
+     */
+    public get seeArray(): Array<any> {
+        return <Array<any>>this.recCopy(this.array);
+    }
+
+    /**
+     * Get the total size of the tensor
+     * @type {number}
+     */
+    public get size(): number {
+        if (this._dim === undefined || this._dim.length === 0) {
+            return 0;
+        }
+
+        let size = 1;
+        for (let i = 0; i < this._dim.length; i++) {
+            size *= this._dim[i];
+        }
+
+        return size;
+    }
+
+    public constructor(dim: number[], array: Array<any>) {
+        if (!Tensor.isSameDimension(dim, Tensor.getArrayDim(array))) {
+            throw new Error(
+                'The dimension provided has to fit the size of the array'
+            );
+        }
+
+        this._dim = dim;
+        this.array = array;
+    }
+
+    /**
+     * Get a certain index of the array.
+     * @param {number[]} indices - The Tensor index to return
+     * @returns {any[] | number} The digit or sub array
+     */
+    public get(...indices: number[]): Array<any> | number {
+        this.validate(indices);
+
+        let result = this.array;
+        for (const index of indices) {
+            result = result[index];
+        }
+        return this.recCopy(result);
+    }
+
+    /**
+     * Set the value at a certain index
+     * @param {number[]} indices - The indices of the position
+     * @param {Array<any> | number} value - The new value of the index
+     * @returns {void}
+     */
+    public set(indices: number[], value: Array<any> | number): void {
+        this.validate(indices);
+        if (!Tensor.isSameDimension(this.get(...indices), value)) {
+            throw new Error(
+                `The provided value does not have the same dimension as the element to update`
+            );
+        }
+        let updateElement = this.array;
+        for (let i = 0; i < indices.length - 1; i++) {
+            updateElement = updateElement[indices[i]];
+        }
+        updateElement[indices[indices.length - 1]] = value;
+    }
+
+    /**
+     * Create a copy of the Tensor
+     * @returns {Tensor} The copy
+     */
+    public copy(): Tensor {
+        const copy = <Array<any>>this.recCopy(this.array);
+        return new Tensor([...this._dim], copy);
+    }
+
+    /**
+     * Convert to JSONTensor
+     * @returns {JSONTensor} The Tensor in JSONTensor Format
+     */
+    public toJSONTensor(): JSONTensor {
+        return {
+            dim: this._dim,
+            array: this.array,
+        };
+    }
+
+    /**
+     * is Tensor equal
+     * @param {Tensor} comp
+     * @returns {boolean} Whether it is equal
+     */
+    public isEqual(comp: Tensor): boolean {
+        if (comp === undefined) return false;
+
+        return Tensor.recIsEqual(this.array, comp.array);
+    }
+
+    /**
+     * Returns the Tensor as a string object
+     * @returns {string} The stringified Tensor
+     */
+    public toString(): string {
+        return `Tensor(${this.array.toString()})`;
+    }
+
+    private static getArrayDim(array: Array<any>): number[] {
+        let dim: number[] = [];
+        let currentArray: any = array;
+        if (array == undefined) {
+            return dim;
+        }
+        while (currentArray[0] != undefined) {
+            dim.push(currentArray.length);
+            currentArray = currentArray[0];
+        }
+        return dim;
+    }
+
+    private static recIsEqual(comp1: Array<any>, comp2: Array<any>): boolean {
+        if (
+            (isNaN(comp1[0]) && !isNaN(comp2[0])) ||
+            (!isNaN(comp1[0]) && isNaN(comp2[0]))
+        )
+            return false;
+
+        if (comp1.length !== comp2.length) return false;
+
+        if (!isNaN(comp1[0]) && !isNaN(comp2[0])) {
+            for (let i = 0; i < comp1.length; i++) {
+                if (comp1[i] !== comp2[i]) return false;
+            }
+            return true;
+        }
+
+        for (let i = 0; i < comp1.length; i++) {
+            if (!Tensor.recIsEqual(comp1[i], comp2[i])) return false;
+        }
+
+        return true;
+    }
+
+    private static isSameDimension(comp1: any, comp2: any): boolean {
+        if (!isNaN(comp1) && !isNaN(comp2)) {
+            return true;
+        }
+        const dimComp1 = Tensor.getArrayDim(comp1);
+        const dimComp2 = Tensor.getArrayDim(comp2);
+        if (dimComp1.length !== dimComp2.length) {
+            return false;
+        }
+        for (let i = 0; i < dimComp1.length; i++) {
+            if (dimComp1[i] !== dimComp2[i]) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     private static init(
         dims: number[],
         filltype: TensorFillType = TensorFillType.Zeros,
@@ -118,13 +293,6 @@ export class Tensor {
         return array;
     }
 
-    /**
-     * Helper function to fill a one dimentional array on the lowest level
-     * @param {number[]} array - The array to fill
-     * @param {TensorFillType} fillType - The Type of the values to fill
-     * @param {seedrandom.PRNG} rng - The random number generator
-     * @returns {number[]} the filled array
-     */
     private static fillArray(
         array: number[],
         fillType: TensorFillType,
@@ -151,45 +319,6 @@ export class Tensor {
         }
     }
 
-    /**
-     * Get a certain index of the array.
-     * @param {number[]} indices - The Tensor index to return
-     * @returns {any[] | number} The digit or sub array
-     * note this returns a deep copy not the actual array
-     */
-    public get(...indices: number[]): Array<any> | number {
-        this.validate(indices);
-
-        let result = this.array;
-        for (const index of indices) {
-            result = result[index];
-        }
-        return this.recCopy(result);
-    }
-
-    /**
-     * Set the value at a certain index
-     * @param indices - The indices of the position
-     * @param value - The new value of the index
-     */
-    public set(indices: number[], value: Array<any> | number): void {
-        this.validate(indices);
-        if (!Tensor.isSameDimension(this.get(...indices), value)) {
-            throw new Error(
-                `The provided value does not have the same dimension as the element to update`
-            );
-        }
-        let updateElement = this.array;
-        for (let i = 0; i < indices.length - 1; i++) {
-            updateElement = updateElement[indices[i]];
-        }
-        updateElement[indices[indices.length - 1]] = value;
-    }
-
-    /**
-     * Validade the indices
-     * @param {number[]} indices
-     */
     private validate(indices: number[]): void {
         if (indices.length > this._dim.length) {
             throw new Error(
@@ -201,11 +330,6 @@ export class Tensor {
         }
     }
 
-    /**
-     * Check if a provided index is out of range
-     * @param {number[]} indices index array to check
-     * @returns {boolean} true if the index is out of range and otherwise false
-     */
     private indexOutOfRange(indices: number[]): boolean {
         for (let i = 0; i < this._dim.length; i++) {
             if (indices[i] >= this._dim[i]) {
@@ -215,132 +339,19 @@ export class Tensor {
         return false;
     }
 
-    /**
-     * Compare whether to objects have the same dimension
-     * @param {any} comp1 - object 1
-     * @param {any} comp2 - object 2
-     * @returns {boolean} true if both objects have the same dimension
-     */
-    private static isSameDimension(comp1: any, comp2: any): boolean {
-        if (!isNaN(comp1) && !isNaN(comp2)) {
-            return true;
-        }
-        const dimComp1 = Tensor.getArrayDim(comp1);
-        const dimComp2 = Tensor.getArrayDim(comp2);
-        if (dimComp1.length !== dimComp2.length) {
-            return false;
-        }
-        for (let i = 0; i < dimComp1.length; i++) {
-            if (dimComp1[i] !== dimComp2[i]) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    /**
-     * Returns the dimension of the array
-     * @param {any[]} array - The array
-     * @returns {number[]} Returns the dimensions of the array
-     */
-    private static getArrayDim(array: Array<any>): number[] {
-        let dim: number[] = [];
-        let currentArray: any = array;
-        if (array == undefined) {
-            return dim;
-        }
-        while (currentArray[0] != undefined) {
-            dim.push(currentArray.length);
-            currentArray = currentArray[0];
-        }
-        return dim;
-    }
-
-    /**
-     * Create a copy of the Tensor
-     * @returns {Tensor} The copy
-     */
-    public copy(): Tensor {
-        const copy = <Array<any>>this.recCopy(this.array);
-        return new Tensor([...this._dim], copy);
-    }
-
-    /**
-     * See the contained array
-     * @returns {any[]} a copy of just the inner array
-     */
-    public get seeArray(): Array<any> {
-        return <Array<any>>this.recCopy(this.array);
-    }
-
-    /**
-     * Convert to JSONTensor
-     * @returns {JSONTensor} The Tensor in JSONTensor Format
-     */
-    public toJSONTensor(): JSONTensor {
-        return {
-            dim: this._dim,
-            array: this.array,
-        };
-    }
-
-    /**
-     * Get the total size of the tensor
-     * @returns {number} The size
-     */
-    public get size(): number {
-        if (this._dim === undefined || this._dim.length === 0) {
-            return 0;
+    private recCopy(array: Array<any> | number): Array<any> | number {
+        if (typeof array == 'number') {
+            return array;
         }
 
-        let size = 1;
-        for (let i = 0; i < this._dim.length; i++) {
-            size *= this._dim[i];
+        if (!isNaN(array[0])) {
+            return [...array];
         }
-
-        return size;
-    }
-
-    /**
-     * is Tensor equal
-     * @param {Tensor} comp
-     * @returns {boolean} Whether it is equal
-     */
-    public isEqual(comp: Tensor): boolean {
-        if (comp === undefined) return false;
-
-        return Tensor.recIsEqual(this.array, comp.array);
-    }
-
-    private static recIsEqual(comp1: Array<any>, comp2: Array<any>): boolean {
-        if (
-            (isNaN(comp1[0]) && !isNaN(comp2[0])) ||
-            (!isNaN(comp1[0]) && isNaN(comp2[0]))
-        )
-            return false;
-
-        if (comp1.length !== comp2.length) return false;
-
-        if (!isNaN(comp1[0]) && !isNaN(comp2[0])) {
-            for (let i = 0; i < comp1.length; i++) {
-                if (comp1[i] !== comp2[i]) return false;
-            }
-            return true;
+        let copy = new Array(array.length);
+        for (let i = 0; i < array.length; i++) {
+            copy[i] = this.recCopy(array[i]);
         }
-
-        for (let i = 0; i < comp1.length; i++) {
-            if (!Tensor.recIsEqual(comp1[i], comp2[i])) return false;
-        }
-
-        return true;
-    }
-
-    /**
-     * Get the total sum of the tensor
-     * @returns The sum
-     */
-    public get sum(): number {
-        return this.recSum(this.array);
+        return copy;
     }
 
     private recSum(array: any[]): number {
@@ -359,52 +370,6 @@ export class Tensor {
         }
         return sum;
     }
-
-    public originalSum(): number {
-        return this.recSum(this.array);
-    }
-
-    /**
-     * Helper function for recursively copying an array
-     * @param {Array<any>} array - The sub array
-     * @returns {Array<any> } The copy
-     */
-    private recCopy(array: Array<any> | number): Array<any> | number {
-        if (typeof array == 'number') {
-            return array;
-        }
-
-        if (!isNaN(array[0])) {
-            return [...array];
-        }
-        let copy = new Array(array.length);
-        for (let i = 0; i < array.length; i++) {
-            copy[i] = this.recCopy(array[i]);
-        }
-        return copy;
-    }
-
-    /**
-     * Returns the Tensor as a string object
-     * @returns The stringified Tensor
-     */
-    public toString(): string {
-        return `Tensor(${this.array.toString()})`;
-    }
-
-    /**
-     * Returns the Mean of the Tensor
-     * @returns The mean
-     */
-    public get mean(): number {
-        return this.sum / this.size;
-    }
-
-    /**
-     * Returns the Dimension of the Tensor
-     * @returns The mean
-     */
-    public get dim(): number[] {
-        return this._dim;
-    }
 }
+
+export { TensorFillType, Tensor, JSONTensor };

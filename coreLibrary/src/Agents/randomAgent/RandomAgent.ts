@@ -4,8 +4,11 @@ import Environment from '../../RLInterface/Environment';
 
 /**
  * Agent For selecting Random Actions
+ * @param {Environment} env - The environment
+ * @param {number} randomSeed - The random seed
+ * @extends Agent
  */
-export default class RandomAgent extends Agent {
+class RandomAgent extends Agent {
     private rng: seedrandom.PRNG;
     private randomSeed?: string;
 
@@ -55,3 +58,5 @@ export default class RandomAgent extends Agent {
         return;
     }
 }
+
+export default RandomAgent;

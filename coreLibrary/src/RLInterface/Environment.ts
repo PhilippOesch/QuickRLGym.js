@@ -2,50 +2,86 @@ import StepResult from './StepResult';
 
 /**
  * Basic Environment Options
+ * @category QuickRLInterface
  */
 export interface EnvOptions {
     /**
      * The random seed
+     * @type {?randomSeed}
      */
     randomSeed?: number;
     /**
      * the penalty reward to return when no end state was reached
+     * @type {?number}
      */
     penaltyOnUnfinished?: number;
 }
 
 /**
  * The Environment Interface
+ * @abstract
+ * @category QuickRLInterface
  */
-export default abstract class Environment {
+abstract class Environment {
     /**
      * The state dimension
+     * @type {number[]}
      */
     abstract get stateDim(): number[];
+    /**
+     * The action space
+     * @type {string[]}
+     */
     abstract get actionSpace(): string[];
+    /**
+     * The state
+     * @type {object}
+     */
     abstract get state(): object;
+    /**
+     * Whether the enviroment state is terminal
+     * @type {boolean}
+     */
     abstract get isTerminal(): boolean;
+    /**
+     * The current options
+     * @type {EnvOptions | undefined}
+     */
     abstract get options(): EnvOptions | undefined;
+    /**
+     * The current iteration
+     * @type {number}
+     */
     abstract get iteration(): number;
+
+    /**
+     * The current environment stats
+     * @type {object}
+     */
     abstract get stats(): object;
+    /**
+     * The enviromnet name
+     * @type {string}
+     */
     abstract get name(): string;
 
     /**
      * initialize the environment
-     * @param options - the environment options
-     * @param initialState - the optional initial state of the environment
+     * @param {?EnvOptions} options - the environment options
+     * @param {?object} initialState - the optional initial state of the environment
      */
     abstract init(options?: EnvOptions, initialState?: object): void;
 
     /**
      * take an action in the environment
-     * @param action - the action to take
-     * @returns the result of the taken action
+     * @param {string} action - the action to take
+     * @returns {StepResult} the result of the taken action
      */
     abstract step(action: string): StepResult;
 
     /**
      * The reset the environment
+     * @returns {boolean}
      */
     abstract reset(): boolean;
 
@@ -57,14 +93,16 @@ export default abstract class Environment {
 
     /**
      * encode the state into an number array
-     * @param state the state to encode
-     * @returns an numbers array
+     * @param {object} state the state to encode
+     * @returns {number[]} an numbers array
      */
     abstract encodeStateToIndices(state: object): number[];
 
     /**
      * reset the stats accumulated over the life time of the environment
-     * @returns True if the reset was sucessfull
+     * @returns {boolean} True if the reset was sucessfull
      */
     abstract resetStats(): boolean;
 }
+
+export default Environment;
