@@ -1,18 +1,35 @@
 import { TaxiGame, TaxiGameState } from '../Games/TaxiGame/index';
 import { StepResult, SingleAgentEnvironment, EnvOptions } from '../index';
 
+/**
+ * The Taxi Environment stats
+ * @category Environments
+ * @property {number} averageGameIterations - The average amount of game iterations
+ * @property {number} averageGameScore The average game score achieved
+ */
 export interface TaxiStats {
     averageGameIterations: number;
     averageGameScore: number;
 }
 
-export default class TaxiEnv extends SingleAgentEnvironment {
+/**
+ * The Taxi Problem Environment
+ * @category Environments
+ * @extends SingleAgentEnvironment
+ */
+class TaxiEnv extends SingleAgentEnvironment {
     private _game: TaxiGame;
     private intervalCount: number = 0;
     private averageGameIterations: number = 0;
     private averageGameScore: number = 0;
     private static _name = 'Taxi';
 
+    /**
+     * Initialize the environment
+     * @param {?EnvOptions} options The enviroment options
+     * @param {?TaxiGameState} initialState The initial taxi game state
+     * @returns {void}
+     */
     public init(options?: EnvOptions, initialState?: TaxiGameState): void {
         super.init(options, initialState);
         if (options) {
@@ -27,6 +44,10 @@ export default class TaxiEnv extends SingleAgentEnvironment {
         return TaxiEnv._name;
     }
 
+    /**
+     * Return the environment stats
+     * @type {TaxiStats}
+     */
     public get stats(): TaxiStats {
         return {
             averageGameIterations: this.intervalCount
@@ -43,7 +64,8 @@ export default class TaxiEnv extends SingleAgentEnvironment {
     }
 
     /**
-     * @returns The game object
+     * Return the taxi problem game
+     * @returns {TaxiGame} The game object
      */
     public get game(): TaxiGame {
         return this._game;
@@ -60,6 +82,10 @@ export default class TaxiEnv extends SingleAgentEnvironment {
         return this._game.iteration;
     }
 
+    /**
+     * Get the game state
+     * @type {TaxiGameState}
+     */
     public get state(): TaxiGameState {
         return this._game.gameState;
     }
@@ -113,3 +139,5 @@ export default class TaxiEnv extends SingleAgentEnvironment {
         );
     }
 }
+
+export default TaxiEnv;

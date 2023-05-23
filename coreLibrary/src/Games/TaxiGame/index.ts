@@ -1,6 +1,6 @@
 import TaxiAction from './Action';
 import TaxiCustomer from './Customer';
-import TaxiGameMap from './GameMap';
+import * as TaxiGameMap from './GameMap';
 import TaxiGameState from './GameState';
 import * as TaxiGlobals from './Globals';
 import TaxiPlayer from './Player';

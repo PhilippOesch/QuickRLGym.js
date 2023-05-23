@@ -1,13 +1,25 @@
 import { EnvOptions, SingleAgentEnvironment, StepResult } from '../index';
 import { BlackJackGame, BlackJackGameState } from '../Games/BlackJack/index';
 
+/**
+ * The BlackJack stats
+ * @category Environments
+ * @property {number} averageReturn - the average return
+ * @property {number} averageDealerScore The average dealers score
+ * @property {number} averagePlayerScore The average players score
+ */
 export interface BlackJackStats {
     averageReturn: number;
     averageDealerScore: number;
     averagePlayerScore: number;
 }
 
-export default class BlackJackEnv extends SingleAgentEnvironment {
+/**
+ * The BlackJack Environment
+ * @category Environments
+ * @extends SingleAgentEnvironment
+ */
+class BlackJackEnv extends SingleAgentEnvironment {
     private _game: BlackJackGame;
     private intervalCount: number = 0;
     private averagePlayerScore: number = 0;
@@ -15,6 +27,10 @@ export default class BlackJackEnv extends SingleAgentEnvironment {
     private averageDealerScore: number = 0;
     private static _name: string = 'BlackJack';
 
+    /**
+     * Get the games stats
+     * @type {BlackJackStats}
+     */
     public get stats(): BlackJackStats {
         return {
             averageReturn: this.intervalCount
@@ -34,27 +50,34 @@ export default class BlackJackEnv extends SingleAgentEnvironment {
     }
 
     /**
-     * @returns The game object
+     * Get the game object
+     * @returns {BlackJackGame} The game object
      */
     public get game(): BlackJackGame {
         return this._game;
     }
 
     public get stateDim(): number[] {
-        return BlackJackGame.getGameStateDim;
+        return BlackJackGame.gameStateDim;
     }
 
     public get actionSpace(): string[] {
-        return BlackJackGame.getActionSpace;
+        return BlackJackGame.actionSpace;
     }
 
     public setOptions(options: EnvOptions): void {
         super.setOptions(options);
         if (this.randomSeed) {
-            this.game.setRng = this.randomSeed;
+            this.game.randomSeed = this.randomSeed;
         }
     }
 
+    /**
+     * Initialize the environment
+     * @param {?EnvOptions} options The environment options
+     * @param {?BlackJackGameState} initialGameState The initial game state
+     * @returns {void}
+     */
     public init(
         options?: EnvOptions,
         initialGameState?: BlackJackGameState
@@ -72,19 +95,19 @@ export default class BlackJackEnv extends SingleAgentEnvironment {
         return this._game.step(action);
     }
     public get getReturn(): number {
-        return this._game.getReturn;
+        return this._game.return;
     }
     public get state(): object {
-        return this._game.getGameState;
+        return this._game.gameState;
     }
     public reset(): boolean {
         return this._game.reset();
     }
     public get isTerminal(): boolean {
-        return this._game.getIsTerminal;
+        return this._game.isTerminal;
     }
     public get iteration(): number {
-        return this._game.getIteration;
+        return this._game.iteration;
     }
     public encodeStateToIndices(state: object): number[] {
         return BlackJackGame.encodeStateToIndices(state as BlackJackGameState);
@@ -95,7 +118,7 @@ export default class BlackJackEnv extends SingleAgentEnvironment {
         const currentStats = this.state as BlackJackGameState;
         this.averagePlayerScore += currentStats.playerScore;
         this.averageReturn += this.getReturn;
-        this.averageDealerScore += this._game.getDealer.getScore;
+        this.averageDealerScore += this._game.dealer.score;
     }
 
     public override log(trainIteration: number): void {
@@ -120,3 +143,5 @@ export default class BlackJackEnv extends SingleAgentEnvironment {
         return true;
     }
 }
+
+export default BlackJackEnv;

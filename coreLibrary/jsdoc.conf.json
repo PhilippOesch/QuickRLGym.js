@@ -18,8 +18,22 @@
         "better-docs/component"
     ],
     "templates": {
+        "cleverLinks": true,
+        "monospaceLinks": false,
+        "search": true,
         "better-docs": {
-            "name": "QuickRLJS"
+            "name": "QuickRLJS",
+            "hideGenerator": false,
+            "navLinks": [
+                {
+                    "label": "Github",
+                    "href": "https://github.com/PhilippOesch/QuickRLGym.js"
+                },
+                {
+                    "label": "NPM Package",
+                    "href": "https://www.npmjs.com/package/quickrl.core"
+                }
+            ]
         }
     },
     "opts": {

@@ -14,6 +14,7 @@ abstract class Agent {
 
     /**
      * initialize the agent
+     * @returns {void}
      */
     abstract init(): void;
 
@@ -31,6 +32,7 @@ abstract class Agent {
      * @param {object} newState - The new game state
      * @param {number} payoff - The gained payoff for the agent
      * @param {object} contextInfo - Through this object, additional information can be provided.
+     * @returns {Promise<void>}
      */
     abstract feed(
         prevState: object,
@@ -42,14 +44,15 @@ abstract class Agent {
 
     /**
      * set The configuration of the agent after initailizing
-     * @param {string} config - The config object
-     * @param {number} randomSeed - The random Seed
+     * @param {?object} config - The config object
+     * @param {?number} randomSeed - The random Seed
+     * @returns {void}
      */
     abstract setConfig(config?: object, randomSeed?: number): void;
 
     /**
      * get the configuration of the agent
-     * @returns - the current set configuration object
+     * @type {object | undefined}
      */
     abstract get config(): object | undefined;
 
@@ -62,6 +65,7 @@ abstract class Agent {
 
     /**
      * Interface method for loggin while training
+     * @returns {void}
      */
     abstract log(): void;
 }

@@ -1,24 +1,44 @@
 import { BlackJackPlayer, BlackJackCard } from './index';
 
-export default class BlackJackDealer extends BlackJackPlayer {
-    private shownCard: BlackJackCard;
+/**
+ * The card object
+ * @category Games
+ * @subcategory BlackJack
+ * @extends BlackJackPlayer
+ */
+class BlackJackDealer extends BlackJackPlayer {
+    private _shownCard: BlackJackCard;
 
-    public get getShownCard(): BlackJackCard {
-        return this.shownCard;
+    /**
+     * The dealers shown card
+     * @type {BlackJackCard}
+     */
+    public get shownCard(): BlackJackCard {
+        return this._shownCard;
     }
 
-    public init() {
-        this.shownCard = BlackJackCard.returnRandomCard(this.rng);
+    /**
+     * Initialize the dealer
+     * @returns {void}
+     */
+    public init(): void {
+        this._shownCard = BlackJackCard.returnRandomCard(this.rng);
         // add two cards to the actors deck
-        this.addCard(this.shownCard);
+        this.addCard(this._shownCard);
         this.addCard(BlackJackCard.returnRandomCard(this.rng));
     }
 
+    /**
+     * Let the dealer act
+     * @returns {void}
+     */
     public act(): void {
-        if (this.getScore < 17) {
+        if (this.score < 17) {
             this.addCard(BlackJackCard.returnRandomCard(this.rng));
         } else {
             this.callStick();
         }
     }
 }
+
+export default BlackJackDealer;

@@ -7,18 +7,22 @@ import Vec2 from '../../Utils/Vec2';
 import { TaxiGlobals } from './index';
 import StepResult from '../../RLInterface/StepResult';
 import seedrandom from 'seedrandom';
+import { CustomerStartState } from './TaxiUtils';
 
 /**
  * The Taxi Game class
- * @property {Map<string, TaxiAction>} actionMapping - Static mapping of certain strings to actions.
- * @property {TaxiPlayer} player - The player object.
- * @property {TaxiCustomer} customer - The customer object.
+ * @param {?number} randomSeed the random seed
  * @category Games
  * @subcategory Taxi
  */
 class TaxiGame {
     private static readonly _gameStateDim: number[] = [5, 5, 4, 5];
 
+    /**
+     * Mapping of actions
+     * @type {Map<string, TaxiAction>}
+     * @readonly
+     */
     public static readonly actionMapping: Map<string, TaxiAction> = new Map([
         ['Up', TaxiAction.Up],
         ['Down', TaxiAction.Down],
@@ -35,13 +39,14 @@ class TaxiGame {
     private _points: number = 0;
     private _iteration: number = 0;
 
+    /**
+     * Get The action space
+     * @type {string[]}
+     */
     public static get getActionSpace(): string[] {
         return Array.from(TaxiGame.actionMapping.keys());
     }
 
-    /**
-     * @param {number} randomSeed - Set a random seed for the game for reproducability.
-     */
     constructor(randomSeed?: number) {
         if (randomSeed) {
             this._rng = seedrandom(randomSeed.toString());
@@ -50,23 +55,43 @@ class TaxiGame {
         }
     }
 
+    /**
+     * Set the games random seed
+     * @type {number}
+     */
     public set setRng(randomSeed: number) {
         this._rng = seedrandom(randomSeed.toString());
         this.reset();
     }
 
+    /**
+     * Set the games state dimension
+     * @type {number[]}
+     */
     public static get gameStateDim(): number[] {
         return TaxiGame._gameStateDim;
     }
 
+    /**
+     * Get the customer
+     * @type {TaxiCustomer}
+     */
     public get customer(): TaxiCustomer {
         return this._customer;
     }
 
+    /**
+     * get the player
+     * @type {TaxiPlayer}
+     */
     public get player(): TaxiPlayer {
         return this._player;
     }
 
+    /**
+     * Get the games current state
+     * @type {TaxiGameState}
+     */
     public get gameState(): TaxiGameState {
         return {
             playerPos: this._player.position.copy(),
@@ -75,47 +100,79 @@ class TaxiGame {
         };
     }
 
+    /**
+     * Get the games current return
+     * @type {number}
+     */
     public get return(): number {
         return Number(this._points);
     }
 
+    /**
+     * Get whether the game has reached a terminal state
+     * @type {boolean}
+     */
     public get isTerminal(): boolean {
         return this._isTerminal;
     }
 
+    /**
+     * Continue the current game
+     * @return {void}
+     */
     public continue(): void {
         this._isTerminal = false;
     }
 
     /**
      * Initialize the game objects
+     * @returns {void}
      */
     public initGame(): void {
         this.spawnGameElements();
     }
 
+    /**
+     * Update the number of points
+     * @param {number} points The points to add / subtract
+     * @returns {void}
+     */
     public updatePoints(points: number): void {
         this._points += points;
     }
 
+    /**
+     * Terminate the game
+     * @returns {void}
+     */
     public terminateGame(): void {
         this._isTerminal = true;
     }
 
     /**
      * Spawn the player and customer object
+     * @returns {void}
      */
     public spawnGameElements(): void {
         const playerPos: Vec2 = TaxiUtils.getRandomPosition(this._rng);
         this._player = new TaxiPlayer(playerPos, TaxiAction.Down);
 
-        const customerInfo: number[] = TaxiUtils.resetCustomer(
+        const customerInfo: CustomerStartState = TaxiUtils.resetCustomer(
             this._rng,
             playerPos
         );
-        this._customer = new TaxiCustomer(customerInfo[0], customerInfo[1]);
+        this._customer = new TaxiCustomer(
+            customerInfo.spawnIdx,
+            customerInfo.destIdx
+        );
     }
 
+    /**
+     * Reset the game
+     * @param {boolean} [resetGameState=true] Whether to reset the games state
+     * @param {?TaxiGameState} initialGameState The initial game state
+     * @returns {boolean} Whether the reset was successful
+     */
     public reset(
         resetGameState: boolean = true,
         initialGameState?: TaxiGameState
@@ -141,6 +198,7 @@ class TaxiGame {
     /**
      * Perform a single game step
      * @param {string} actionString - The action to perform.
+     * @returns {StepResult} The result of the step
      */
     public step(actionString: string): StepResult {
         const action: TaxiAction | undefined =
@@ -160,10 +218,6 @@ class TaxiGame {
         return stepResult;
     }
 
-    /**
-     * Encodes the customer Position for the GameState (see GameState-Interface)
-     * @returns {number} - [0<=x<=3] if customer hasn't been picked up or 4 if the customer has been picked up.
-     */
     private getEncodedCustomerPos(): number {
         if (this.customer.isCustomerPickedUp) {
             return 4;
@@ -212,6 +266,11 @@ class TaxiGame {
         };
     }
 
+    /**
+     * encode the game state to an encoded numbers array
+     * @param {TaxiGameState} state the state to encode
+     * @returns {number[]} The encoded array
+     */
     public static encodeStateToIndices(state: TaxiGameState): number[] {
         return [
             state.playerPos.getX,
@@ -221,6 +280,11 @@ class TaxiGame {
         ];
     }
 
+    /**
+     * Update the player position with the taken action
+     * @param {TaxiAction} action the taken action
+     * @returns {StepResult} The result of the steps
+     */
     public updatePlayerPosition(action: TaxiAction): StepResult {
         this.updatePoints(TaxiGlobals.stepPenaltyPoints);
         this._player.updatePosition(action);
@@ -230,14 +294,26 @@ class TaxiGame {
         };
     }
 
+    /**
+     * Increment the game iteration
+     * @returns {void}
+     */
     public incrementIterations(): void {
         this._iteration++;
     }
 
+    /**
+     * Get the iteration
+     * @type {number}
+     */
     public get iteration(): number {
         return this._iteration;
     }
 
+    /**
+     * Get the random number generator
+     * @type {seedrandom.PRNG}
+     */
     public get rng(): seedrandom.PRNG {
         return this._rng;
     }

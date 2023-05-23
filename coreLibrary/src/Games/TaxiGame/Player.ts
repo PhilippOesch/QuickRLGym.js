@@ -1,14 +1,15 @@
 import TaxiAction from './Action';
-import TaxiGameMap from './GameMap';
+import { TaxiGameMap } from './index';
 import Vec2 from '../../Utils/Vec2';
 
 /**
  * The Player class
- * @static moveDirMapping - Static mapping of Actions to direction vectors.
- * @property {TaxiAction} _moveState - Current state of player movement (Makes it easier later to render the car sprite).
- * @property {Vec2} _position - Position of the player.qodana scan --show-report
+ * @category Games
+ * @subcategory Taxi
+ * @param {Vec2} relPos - The relative start position of the player.
+ * @param {TaxiAction} carMoveState - The car move state at the start.
  */
-export default class TaxiPlayer {
+class TaxiPlayer {
     private static moveDirMapping: Map<TaxiAction, Vec2> = new Map([
         [TaxiAction.Left, new Vec2(-1, 0)],
         [TaxiAction.Right, new Vec2(1, 0)],
@@ -21,24 +22,31 @@ export default class TaxiPlayer {
     private _moveState: TaxiAction;
     private _position: Vec2;
 
-    /**
-     * create a player object
-     * @param relPos - relative position
-     * @param carMoveState - the car move state
-     */
     constructor(relPos: Vec2, carMoveState: TaxiAction = TaxiAction.Left) {
         this._moveState = carMoveState;
         this._position = relPos;
     }
 
+    /**
+     * The player position
+     * @type {Vec2}
+     */
     public get position(): Vec2 {
         return this._position;
     }
 
+    /**
+     * The car move state for the visualization
+     * @type {Vec2}
+     */
     public get carMoveState(): TaxiAction {
         return this._moveState;
     }
 
+    /**
+     * Set the position
+     * @type {Vec2}
+     */
     public set position(pos: Vec2) {
         this._position = pos;
     }
@@ -60,6 +68,12 @@ export default class TaxiPlayer {
             TaxiGameMap.tileMap[adjustedPos.getY][adjustedPos.getX]
         );
     }
+
+    /**
+     * Update the player position according to the taken action
+     * @param {TaxiAction} action the action taken
+     * @returns {void}
+     */
     public updatePosition(action: TaxiAction): void {
         if (!this.detectCollision(action)) {
             this._moveState = action;
@@ -70,3 +84,5 @@ export default class TaxiPlayer {
         }
     }
 }
+
+export default TaxiPlayer;

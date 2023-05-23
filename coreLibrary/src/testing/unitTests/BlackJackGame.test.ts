@@ -23,17 +23,17 @@ describe('BlackJack', function () {
 
     describe('Cards', function () {
         it('get correct suit', function () {
-            assert.strictEqual(cardJack.getSuit, 'clubs');
-            assert.strictEqual(card5.getSuit, 'hearts');
-            assert.strictEqual(cardAce.getSuit, 'spades');
-            assert.strictEqual(card10.getSuit, 'diamonds');
+            assert.strictEqual(cardJack.suit, 'clubs');
+            assert.strictEqual(card5.suit, 'hearts');
+            assert.strictEqual(cardAce.suit, 'spades');
+            assert.strictEqual(card10.suit, 'diamonds');
         });
 
         it('get correct rank', function () {
-            assert.strictEqual(cardJack.getRank, 13);
-            assert.strictEqual(card5.getRank, 5);
-            assert.strictEqual(cardAce.getRank, 1);
-            assert.strictEqual(card10.getRank, 10);
+            assert.strictEqual(cardJack.rank, 13);
+            assert.strictEqual(card5.rank, 5);
+            assert.strictEqual(cardAce.rank, 1);
+            assert.strictEqual(card10.rank, 10);
         });
 
         it('test toString Method', function () {
@@ -44,70 +44,70 @@ describe('BlackJack', function () {
         });
 
         it('cards return the correct value', function () {
-            assert.strictEqual(10, cardJack.getValue);
-            assert.strictEqual(5, card5.getValue);
-            assert.strictEqual(1, cardAce.getValue);
-            assert.strictEqual(10, card10.getValue);
+            assert.strictEqual(10, cardJack.value);
+            assert.strictEqual(5, card5.value);
+            assert.strictEqual(1, cardAce.value);
+            assert.strictEqual(10, card10.value);
         });
 
         it('has usable ace', function () {
             game.reset(false);
-            game.getPlayer.addCard(cardAce);
-            game.getPlayer.addCard(card10);
-            assert.strictEqual(true, game.getPlayer.hasUsableAce);
+            game.player.addCard(cardAce);
+            game.player.addCard(card10);
+            assert.strictEqual(true, game.player.hasUsableAce);
         });
 
         it('has no usable ace', function () {
             game.reset(false);
-            game.getPlayer.addCard(cardAce);
-            game.getPlayer.addCard(card10);
-            game.getPlayer.addCard(card5);
-            assert.strictEqual(false, game.getPlayer.hasUsableAce);
+            game.player.addCard(cardAce);
+            game.player.addCard(card10);
+            game.player.addCard(card5);
+            assert.strictEqual(false, game.player.hasUsableAce);
         });
     });
 
     describe('Natural BlackJack', function () {
         it('player has natural blackjack and dealer does not', function () {
             game.reset(false);
-            game.getPlayer.addCard(cardAce);
-            game.getPlayer.addCard(card10);
-            game.getPlayer.callStick();
-            game.getDealer.addCard(cardAce);
-            game.getDealer.addCard(card5);
-            game.getDealer.callStick();
+            game.player.addCard(cardAce);
+            game.player.addCard(card10);
+            game.player.callStick();
+            game.dealer.addCard(cardAce);
+            game.dealer.addCard(card5);
+            game.dealer.callStick();
 
-            assert.strictEqual(game.getReturn, 1);
+            assert.strictEqual(game.return, 1);
         });
 
         it('player has natural blackjack and dealer does so as well', function () {
             game.reset(false);
-            game.getPlayer.addCard(cardAce);
-            game.getPlayer.addCard(card10);
-            game.getPlayer.callStick();
-            game.getDealer.addCard(cardAce);
-            game.getDealer.addCard(card10);
-            game.getDealer.callStick();
+            game.player.addCard(cardAce);
+            game.player.addCard(card10);
+            game.player.callStick();
+            game.dealer.addCard(cardAce);
+            game.dealer.addCard(card10);
+            game.dealer.callStick();
 
-            assert.strictEqual(game.getReturn, 0);
+            assert.strictEqual(game.return, 0);
         });
     });
 
     describe('game ending', function () {
         it('game is over', function () {
             game.reset(false);
-            game.getPlayer.callStick();
-            game.getDealer.callStick();
-            assert.strictEqual(true, game.getIsTerminal);
+            game.player.callStick();
+            game.dealer.callStick();
+            assert.strictEqual(true, game.isTerminal);
         });
 
         it('game is not over', function () {
             game.reset(false);
-            game.getPlayer.callStick();
-            assert.strictEqual(false, game.getIsTerminal);
+            game.player.callStick();
+            assert.strictEqual(false, game.isTerminal);
 
             game.reset(false);
-            game.getDealer.callStick();
-            assert.strictEqual(false, game.getIsTerminal);
+            game.dealer.callStick();
+            assert.strictEqual(false, game.isTerminal);
         });
     });
 
@@ -119,10 +119,10 @@ describe('BlackJack', function () {
 
         it('returns correct game state', function () {
             game.reset(false);
-            game.getPlayer.addCard(cardAce);
-            game.getPlayer.addCard(card5);
+            game.player.addCard(cardAce);
+            game.player.addCard(card5);
             const realState: Games.BlackJack.BlackJackGameState =
-                game.getGameState;
+                game.gameState;
 
             const expectedState: Games.BlackJack.BlackJackGameState = {
                 playerScore: 16,
@@ -163,88 +163,88 @@ describe('BlackJack', function () {
     describe('game winner', function () {
         it('player has more points, no one over 21', function () {
             game.reset(false);
-            game.getDealer.addCard(card5);
-            game.getDealer.addCard(cardAce);
-            game.getPlayer.addCard(card10);
-            game.getPlayer.addCard(card10);
+            game.dealer.addCard(card5);
+            game.dealer.addCard(cardAce);
+            game.player.addCard(card10);
+            game.player.addCard(card10);
             game.endGame();
-            assert.strictEqual(1, game.getReturn);
+            assert.strictEqual(1, game.return);
         });
 
         it('player has less points, no one over 21', function () {
             game.reset(false);
-            game.getDealer.addCard(card10);
-            game.getDealer.addCard(card10);
-            game.getPlayer.addCard(card5);
-            game.getPlayer.addCard(card10);
+            game.dealer.addCard(card10);
+            game.dealer.addCard(card10);
+            game.player.addCard(card5);
+            game.player.addCard(card10);
             game.endGame();
-            assert.strictEqual(-1, game.getReturn);
+            assert.strictEqual(-1, game.return);
         });
 
         it('player has 15 points, dealer over 21', function () {
             game.reset(false);
-            game.getDealer.addCard(card10);
-            game.getDealer.addCard(card10);
-            game.getDealer.addCard(card2);
-            game.getPlayer.addCard(card10);
-            game.getPlayer.addCard(card5);
+            game.dealer.addCard(card10);
+            game.dealer.addCard(card10);
+            game.dealer.addCard(card2);
+            game.player.addCard(card10);
+            game.player.addCard(card5);
             game.endGame();
-            assert.strictEqual(1, game.getReturn);
+            assert.strictEqual(1, game.return);
         });
 
         it('player has 22 points, and dealer 15', function () {
             game.reset(false);
-            game.getPlayer.addCard(card10);
-            game.getPlayer.addCard(card10);
-            game.getPlayer.addCard(card2);
-            game.getDealer.addCard(card10);
-            game.getDealer.addCard(card5);
+            game.player.addCard(card10);
+            game.player.addCard(card10);
+            game.player.addCard(card2);
+            game.dealer.addCard(card10);
+            game.dealer.addCard(card5);
             game.endGame();
-            assert.strictEqual(-1, game.getReturn);
+            assert.strictEqual(-1, game.return);
         });
 
         it('both over 21', function () {
             game.reset(false);
-            game.getDealer.addCard(card10);
-            game.getDealer.addCard(card10);
-            game.getDealer.addCard(card2);
-            game.getPlayer.addCard(card10);
-            game.getPlayer.addCard(card10);
-            game.getPlayer.addCard(card2);
+            game.dealer.addCard(card10);
+            game.dealer.addCard(card10);
+            game.dealer.addCard(card2);
+            game.player.addCard(card10);
+            game.player.addCard(card10);
+            game.player.addCard(card2);
             game.endGame();
-            assert.strictEqual(-1, game.getReturn);
+            assert.strictEqual(-1, game.return);
         });
 
         it('both same points', function () {
             game.reset(false);
-            game.getDealer.addCard(card10);
-            game.getDealer.addCard(card5);
-            game.getDealer.addCard(card2);
-            game.getPlayer.addCard(card10);
-            game.getPlayer.addCard(card5);
-            game.getPlayer.addCard(card2);
+            game.dealer.addCard(card10);
+            game.dealer.addCard(card5);
+            game.dealer.addCard(card2);
+            game.player.addCard(card10);
+            game.player.addCard(card5);
+            game.player.addCard(card2);
             game.endGame();
-            assert.strictEqual(0, game.getReturn);
+            assert.strictEqual(0, game.return);
         });
     });
 
     describe('Dealer', function () {
         it('dealer Hits', function () {
             game.reset(false);
-            game.getDealer.addCard(card10);
-            game.getDealer.addCard(card6);
-            game.getDealer.act();
+            game.dealer.addCard(card10);
+            game.dealer.addCard(card6);
+            game.dealer.act();
 
-            assert.strictEqual(true, game.getDealer.getScore > 16);
+            assert.strictEqual(true, game.dealer.score > 16);
         });
 
         it('dealer stick', function () {
             game.reset(false);
-            game.getDealer.addCard(card10);
-            game.getDealer.addCard(card7);
-            game.getDealer.act();
+            game.dealer.addCard(card10);
+            game.dealer.addCard(card7);
+            game.dealer.act();
 
-            assert.strictEqual(17, game.getDealer.getScore);
+            assert.strictEqual(17, game.dealer.score);
         });
     });
 });

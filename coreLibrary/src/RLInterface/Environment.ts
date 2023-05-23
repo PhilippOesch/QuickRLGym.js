@@ -3,17 +3,11 @@ import StepResult from './StepResult';
 /**
  * Basic Environment Options
  * @category QuickRLInterface
+ * @property {?number} randomSeed The random seed
+ * @property {?number} penaltyOnUnfinished The penalty reward to return when no end state was reached
  */
 export interface EnvOptions {
-    /**
-     * The random seed
-     * @type {?randomSeed}
-     */
     randomSeed?: number;
-    /**
-     * the penalty reward to return when no end state was reached
-     * @type {?number}
-     */
     penaltyOnUnfinished?: number;
 }
 
@@ -69,6 +63,7 @@ abstract class Environment {
      * initialize the environment
      * @param {?EnvOptions} options - the environment options
      * @param {?object} initialState - the optional initial state of the environment
+     * @returns {void}
      */
     abstract init(options?: EnvOptions, initialState?: object): void;
 
@@ -87,7 +82,7 @@ abstract class Environment {
 
     /**
      * Set the environment options
-     * @param options
+     * @param {?EnvOptions} options
      */
     abstract setOptions(options?: EnvOptions): void;
 

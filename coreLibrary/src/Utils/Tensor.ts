@@ -16,17 +16,11 @@ enum TensorFillType {
 /**
  * Tensor converted to JSON
  * @category Utils
+ * @property {number[]} dim The dimensions
+ * @property {any[]} array array
  */
 interface JSONTensor {
-    /**
-     * the dimensions
-     * @type {number[]}
-     */
     dim: number[];
-    /**
-     * the actual tensor array
-     * @type {any[]}
-     */
     array: any[];
 }
 

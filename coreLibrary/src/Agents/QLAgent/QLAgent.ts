@@ -10,6 +10,12 @@ import { General } from '../../Utils';
 
 /**
  * Settings for the QLAgent
+ * @category Agents
+ * @property {number} learningRate The learning rate
+ * @property {number} discountFactor The discount factor
+ * @property {number} epsilonStart Epsilon at the start of training
+ * @property {number} epsilonEnd The epsilon at the end of training
+ * @property {number} epsilonDecaySteps For how many steps to decay epsilon
  */
 export interface QLAgentSettings {
     learningRate: number;
@@ -21,10 +27,11 @@ export interface QLAgentSettings {
 
 /**
  * Agent that represents a Q-Learning Algorithm
+ * @category Agents
  * @extends PersistableAgent
- * @param {SingleAgentEnvironment} - the environment
- * @param {QLAgentSettings} - the configuration
- * @param {number} - The randomSeed
+ * @param {SingleAgentEnvironment} env - the environment
+ * @param {?QLAgentSettings} config - the configuration
+ * @param {?number} randomSeed - The randomSeed
  */
 class QLAgent extends PersistableAgent {
     private _config?: QLAgentSettings;
@@ -44,10 +51,20 @@ class QLAgent extends PersistableAgent {
         this._config = config;
     }
 
-    get config(): object | undefined {
+    /**
+     * Get the configuration
+     * @type {QLAgentSettings}
+     */
+    get config(): QLAgentSettings | undefined {
         return this._config;
     }
 
+    /**
+     * Set the configuration
+     * @param {?QLAgentSettings} config set the configuration
+     * @param {?number} randomSeed Set the random seed
+     * @returns {void}
+     */
     public setConfig(config?: QLAgentSettings, randomSeed?: number): void {
         if (randomSeed != undefined) this.setRandomSeed(randomSeed);
         if (config != undefined) {
@@ -57,6 +74,10 @@ class QLAgent extends PersistableAgent {
         this.epsilonStep = 0;
     }
 
+    /**
+     * Get the q-table
+     * @type {Tensor}
+     */
     public get qTable(): Utils.Tensor {
         return this._qTable;
     }
@@ -116,6 +137,10 @@ class QLAgent extends PersistableAgent {
         );
     }
 
+    /**
+     * Decay the epsilon value
+     * @returns {void}
+     */
     public decayEpsilon(): void {
         if (!this._config!.epsilonDecaySteps || !this._config!.epsilonEnd) {
             return;
@@ -132,7 +157,11 @@ class QLAgent extends PersistableAgent {
         this.epsilonStep = stepCount;
     }
 
-    public printQTable() {
+    /**
+     * Print the q table
+     * @type {void}
+     */
+    public printQTable(): void {
         console.log('QTable', this._qTable);
     }
 

@@ -10,14 +10,16 @@ import FileStrategy from './FileStrategy';
 abstract class PersistableAgent extends Agent {
     /**
      * load the Model
-     * @param fileManager FileManager Strategy
-     * @param options the options zo use for loading
+     * @param {FileStrategy} fileManager FileManager Strategy
+     * @param {?object} options the options zo use for loading
+     * @returns {Promise<void>}
      */
     abstract load(fileManager: FileStrategy, options?: object): Promise<void>;
     /**
      * load the config
-     * @param fileManager - FileManager Strategy
-     * @param options the options zo use for loading
+     * @param {FileStrategy} fileManager - FileManager Strategy
+     * @param {?object} options the options zo use for loading
+     * @returns {Promise<void>}
      */
     abstract loadConfig(
         fileManager: FileStrategy,
@@ -25,14 +27,16 @@ abstract class PersistableAgent extends Agent {
     ): Promise<void>;
     /**
      * Save the model
-     * @param fileManager FileManager Strategy
-     * @param options the options to use for saving the agent
+     * @param {FileStrategy} fileManager FileManager Strategy
+     * @param {?object} options the options to use for saving the agent
+     * @returns {Promise<void>}
      */
     abstract save(fileManager: FileStrategy, options?: object): Promise<void>;
     /**
      * Save the Config
-     * @param fileManager FileManager Strategy
-     * @param options the options to use for saving the agent
+     * @param {FileStrategy} fileManager FileManager Strategy
+     * @param {?object} options the options to use for saving the agent
+     * @returns {Promise<void>}
      */
     abstract saveConfig(
         fileManager: FileStrategy,

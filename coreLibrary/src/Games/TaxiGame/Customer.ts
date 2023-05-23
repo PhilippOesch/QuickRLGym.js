@@ -13,36 +13,55 @@ class TaxiCustomer {
     private _spawnDestIdx: number;
     private _isCustomerPickedUp: boolean = false;
 
-    /**
-     * @constructor
-     * @param {number} spawnIdx - The index of the spawn destination
-     * @param {number} destIdx - The indes of the drop off destination
-     */
     constructor(spawnIdx: number, destIdx: number) {
         this._spawnDestIdx = spawnIdx;
         this._destinationIdx = destIdx;
     }
 
+    /**
+     * The position
+     * @type {Vec2}
+     */
     public get position(): Vec2 {
         return TaxiGlobals.destinations[this._spawnDestIdx];
     }
 
+    /**
+     * The destination
+     * @type {number}
+     */
     public get destIdx(): number {
         return this._destinationIdx;
     }
 
+    /**
+     * The Spawn destination
+     * @type {number}
+     */
     public get spawnDestIdx(): number {
         return this._spawnDestIdx;
     }
 
+    /**
+     * Whether the customer ist picked up
+     * @type {boolean}
+     */
     public get isCustomerPickedUp(): boolean {
         return this._isCustomerPickedUp;
     }
 
+    /**
+     * Pick up The customer
+     * @returns {void}
+     */
     public pickUpCustomer(): void {
         this._isCustomerPickedUp = true;
     }
 
+    /**
+     * Drop Of the customer
+     * @returns {void}
+     */
     public dropOffCustomer(): void {
         this._isCustomerPickedUp = false;
     }

@@ -4,49 +4,28 @@ import Environment, { EnvOptions } from './Environment';
 /**
  * The EnvStateContext
  * @category QuickRLInterface
+ * @property {boolean} isTerminal Whether the environment has terminated
+ * @property {boolean} maxIterationReached Wheather the max iteration was reached
  */
 export interface EnvStateContext {
-    /**
-     * Whether the environment has terminated
-     * @type {boolean}
-     */
     isTerminal: boolean;
-    /**
-     * Wheather the max iteration was reached
-     * @type {boolean}
-     */
     maxIterationReached: boolean;
 }
 
 /**
  * Describes a single expericence of an enviroment step
  * @category QuickRLInterface
+ * @property {number[]} prevState The encoded previous state
+ * @property {number} takenAction The taken action index
+ * @property {number[]} newState The encoded new state
+ * @property {number} payoff the payoff
+ * @property {EnvStateContext} contextInfo The environment context
  */
 export interface Experience {
-    /**
-     * The encoded previous state
-     * @type {number[]}
-     */
     prevState: number[];
-    /**
-     * The taken action index
-     * @type {number}
-     */
     takenAction: number;
-    /**
-     * The encoded new state
-     * @type {number[]}
-     */
     newState: number[];
-    /**
-     * the payoff
-     * @type {number}
-     */
     payoff: number;
-    /**
-     * The environment context
-     * @type {EnvStateContext}
-     */
     contextInfo: EnvStateContext;
 }
 
@@ -118,10 +97,10 @@ export abstract class SingleAgentEnvironment extends Environment {
 
     /**
      * The training loop method as Async Version.
-     * @param {number} iterations - numbers of iterations to iterate.
-     * @param {number} logEvery - loging interval relative to training iterations.
-     * @param {number} maxIterationPerGame - how many iterations for a game until it automatically terminates.
-     * @param {boolean} resetStatsOnLog - bool to indicate the reseting of stats after logging
+     * @param {number} [iterations=100] - numbers of iterations to iterate.
+     * @param {number} [logEvery=-1] - loging interval relative to training iterations.
+     * @param {number} [maxIterationPerGame=-1] - how many iterations for a game until it automatically terminates.
+     * @param {boolean} [resetStatsOnLog=true] - bool to indicate the reseting of stats after logging
      * @returns {Promise<number>}
      */
     public async train(

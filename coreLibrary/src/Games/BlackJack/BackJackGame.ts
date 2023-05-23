@@ -11,20 +11,29 @@ import {
 /**
  * The Black Jack implementation is oriented on the logic described in Richard
  * S. Sutton and Andrew G. Barto 'Reinforcement Learning: An Introduction' Example 5.1..
+ * @param {?number} randomSeed the random seed
+ * @category Games
+ * @subcategory BlackJack
  */
 class BlackJackGame {
-    public static readonly gameStateDim: number[] = [32, 11, 2];
-
+    /**
+     * The action mapping
+     * @static
+     * @type {Map<string, BlackJackAction>}
+     * @readonly
+     */
     public static readonly actionMapping: Map<string, BlackJackAction> =
         new Map([
             ['Stick', BlackJackAction.Stick],
             ['Hit', BlackJackAction.Hit],
         ]);
 
+    public static readonly _gameStateDim: number[] = [32, 11, 2];
+
     private _rng: seedrandom.PRNG;
-    private player: BlackJackPlayer;
-    private dealer: BlackJackDealer;
-    private iteration: number = 0;
+    private _player: BlackJackPlayer;
+    private _dealer: BlackJackDealer;
+    private _iteration: number = 0;
 
     constructor(randomSeed?: number) {
         if (randomSeed) {
@@ -32,74 +41,123 @@ class BlackJackGame {
         } else {
             this._rng = seedrandom();
         }
-        this.player = new BlackJackPlayer(this._rng);
-        this.dealer = new BlackJackDealer(this._rng);
+        this._player = new BlackJackPlayer(this._rng);
+        this._dealer = new BlackJackDealer(this._rng);
     }
 
-    public static get getGameStateDim(): number[] {
-        return BlackJackGame.gameStateDim;
+    /**
+     * Get the game state dimension
+     * @type {number[]}
+     */
+    public static get gameStateDim(): number[] {
+        return BlackJackGame._gameStateDim;
     }
 
-    public get getPlayer(): BlackJackPlayer {
-        return this.player;
+    /**
+     * Get the player
+     * @type {BlackJackPlayer}
+     */
+    public get player(): BlackJackPlayer {
+        return this._player;
     }
 
-    public get getDealer(): BlackJackDealer {
-        return this.dealer;
+    /**
+     * Get the dealer
+     * @type {BlackJackDealer}
+     */
+    public get dealer(): BlackJackDealer {
+        return this._dealer;
     }
 
-    public static get getActionSpace(): string[] {
+    /**
+     * Get the action space
+     * @type {string[]}
+     */
+    public static get actionSpace(): string[] {
         return Array.from(BlackJackGame.actionMapping.keys());
     }
 
-    public get getReturn(): number {
-        if (!this.getIsTerminal) return 0;
-        if (this.player.getScore > 21) return -1;
-        if (this.dealer.getScore > 21) return 1;
-        const playerScore = Math.abs(this.player.getScore - 21);
-        const dealerScore = Math.abs(this.dealer.getScore - 21);
+    /**
+     * Get The return
+     * @type {number}
+     */
+    public get return(): number {
+        if (!this.isTerminal) return 0;
+        if (this._player.score > 21) return -1;
+        if (this._dealer.score > 21) return 1;
+        const playerScore = Math.abs(this._player.score - 21);
+        const dealerScore = Math.abs(this._dealer.score - 21);
         if (playerScore < dealerScore) return 1;
         if (playerScore > dealerScore) return -1;
         return 0;
     }
 
-    public get getIsTerminal(): boolean {
-        return this.dealer.getStick && this.player.getStick;
+    /**
+     * Return whether the game has terminated
+     * @type {boolean}
+     */
+    public get isTerminal(): boolean {
+        return this._dealer.sticks && this._player.sticks;
     }
 
-    public get getGameState(): BlackJackGameState {
+    /**
+     * Get the games state
+     * @type {BlackJackGameState}
+     */
+    public get gameState(): BlackJackGameState {
         return {
-            playerScore: this.player.getScore,
-            shownCard: this.dealer.getShownCard,
-            playerHoldsUsableAce: this.player.hasUsableAce,
+            playerScore: this._player.score,
+            shownCard: this._dealer.shownCard,
+            playerHoldsUsableAce: this._player.hasUsableAce,
         };
     }
 
-    public get getIteration(): number {
-        return this.iteration;
+    /**
+     * Get the iteration
+     * @type {number}
+     */
+    public get iteration(): number {
+        return this._iteration;
     }
 
+    /**
+     * initialize the game
+     * @returns {void}
+     */
     public initGame(): void {
-        this.player.init();
-        this.dealer.init();
+        this._player.init();
+        this._dealer.init();
         const playerHasNat = this.playerHasNatural();
         if (playerHasNat) {
             this.endGame();
         }
     }
 
-    public set setRng(randomSeed: number) {
+    /**
+     * Set the random seed
+     * @type {number}
+     */
+    public set randomSeed(randomSeed: number) {
         this._rng = seedrandom(randomSeed.toString());
         this.reset(true);
     }
 
+    /**
+     * Return whether the player has a natural blackjack
+     * @returns {boolean} whether the player has a natural blackjack
+     */
     public playerHasNatural(): boolean {
-        if (this.player.getScore === 21) return true;
+        if (this._player.score === 21) return true;
         return false;
     }
 
+    /**
+     * Make an environment step
+     * @param {string} actionString The action
+     * @returns {StepResult} The result
+     */
     public step(actionString: string): StepResult {
-        this.iteration++;
+        this._iteration++;
         const action: BlackJackAction | undefined =
             BlackJackGame.actionMapping.get(actionString);
 
@@ -110,46 +168,64 @@ class BlackJackGame {
         switch (action) {
             case BlackJackAction.Hit:
                 const newCard = BlackJackCard.returnRandomCard(this._rng);
-                this.player.addCard(newCard);
-                if (this.player.getScore > 21) {
+                this._player.addCard(newCard);
+                if (this._player.score > 21) {
                     this.endGame();
                 }
                 break;
             case BlackJackAction.Stick:
-                this.player.callStick();
+                this._player.callStick();
                 this.simulateDealer();
                 break;
         }
 
         return {
-            newState: this.getGameState,
-            reward: this.getReturn,
+            newState: this.gameState,
+            reward: this.return,
         };
     }
 
-    public simulateDealer() {
-        while (!this.dealer.getStick) {
-            this.dealer.act();
+    /**
+     * Simulate the dealer
+     * @returns {void}
+     */
+    public simulateDealer(): void {
+        while (!this._dealer.sticks) {
+            this._dealer.act();
         }
     }
 
+    /**
+     * Encode the state to a number encoded array
+     * @param {BlackJackGameState} state the state
+     * @returns the encoded array
+     */
     public static encodeStateToIndices(state: BlackJackGameState): number[] {
         return [
             state.playerScore,
-            state.shownCard!.getValue,
+            state.shownCard!.value,
             Number(state.playerHoldsUsableAce),
         ];
     }
 
+    /**
+     * End the game
+     * @returns {void}
+     */
     public endGame(): void {
-        this.player.callStick();
-        this.dealer.callStick();
+        this._player.callStick();
+        this._dealer.callStick();
     }
 
+    /**
+     * Reset the game
+     * @param {boolean} [reinit=true] Whether to reinitialize the game
+     * @returns {boolean}
+     */
     public reset(reinit = true): boolean {
-        this.iteration = 0;
-        this.player.reset();
-        this.dealer.reset();
+        this._iteration = 0;
+        this._player.reset();
+        this._dealer.reset();
         if (reinit) {
             this.initGame();
         }
