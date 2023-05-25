@@ -6,7 +6,7 @@ import Environment from '../../RLInterface/Environment';
  * Agent For selecting Random Actions
  * @category Agents
  * @param {Environment} env - The environment
- * @param {number} randomSeed - The random seed
+ * @param {?number} randomSeed - The random seed
  * @extends Agent
  */
 class RandomAgent extends Agent {

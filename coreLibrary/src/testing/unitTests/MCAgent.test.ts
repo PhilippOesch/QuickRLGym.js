@@ -3,7 +3,7 @@ import { describe } from 'mocha';
 import { MCAgent, MCAgentSettings } from '../../Agents';
 import { EnvOptions } from '../../RLInterface/Environment';
 import { BlackJackEnv } from '../../Envs';
-import { QuickRLJS } from '../../RLInterface/QuickRLJS';
+import { QuickRLJS } from '../../index';
 import sinon from 'sinon';
 import FileStrategy from '../../RLInterface/FileStrategy';
 import { MCSaveFormat } from '../../Agents/MCAgent/MCAgent';

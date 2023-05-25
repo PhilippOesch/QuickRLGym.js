@@ -43,7 +43,7 @@ abstract class Agent {
     ): Promise<void>;
 
     /**
-     * set The configuration of the agent after initailizing
+     * Set The configuration of the agent after initailizing.
      * @param {?object} config - The config object
      * @param {?number} randomSeed - The random Seed
      * @returns {void}

@@ -4,6 +4,15 @@ import PersistableAgent from '../../RLInterface/PersistableAgent';
 import { Experience } from '../../index';
 import { General } from '../../Utils';
 
+/**
+ * Settings for the MCAgent
+ * @category Agents
+ * @subcategory MCAgent
+ * @property {number} epsilonStart the epsilon start
+ * @property {number} discountFactor the discount factor
+ * @property {?number} epsilonEnd the epsilon end
+ * @property {?number} epsilonDecaySteps the epsilon decay steps
+ */
 export interface MCAgentSettings {
     epsilonStart: number;
     discountFactor: number;
@@ -11,12 +20,27 @@ export interface MCAgentSettings {
     epsilonDecaySteps?: number;
 }
 
+/**
+ * The Monte Carlo Save format
+ * @category Agents
+ * @subcategory MCAgent
+ * @property {JSONTensor} valueTable the value table
+ * @property {JSONTensor} stateReturnCountTable the state return count table
+ */
 export interface MCSaveFormat {
     valueTable: Utils.JSONTensor;
     stateReturnCountTable: Utils.JSONTensor;
 }
 
-export default class MCAgent extends PersistableAgent {
+/**
+ * Implementation of First visit Monte Carlo
+ * @category Agents
+ * @extends PersistableAgent
+ * @param {Environment} env The environment
+ * @param {?MCAgentSettings} config The configuration
+ * @param {?number} randomSeed the random seed
+ */
+class MCAgent extends PersistableAgent {
     private _config?: MCAgentSettings;
     private rng: seedrandom.PRNG;
     private randomSeed?: string;
@@ -27,9 +51,6 @@ export default class MCAgent extends PersistableAgent {
     private epsilon: number = 0;
     private epsilonStep: number = 0;
 
-    /**
-     * Implementation of First visit Monte Carlo
-     */
     constructor(
         env: Environment,
         config?: MCAgentSettings,
@@ -44,16 +65,25 @@ export default class MCAgent extends PersistableAgent {
         return this._config;
     }
 
+    /**
+     * Get the value table
+     * @type {Tensor}
+     */
     public get valueTable(): Utils.Tensor {
         return this._valueTable;
     }
 
+    /**
+     * Get the state retunn count table
+     * @type {Tensor}
+     */
     public get stateReturnCountTable(): Utils.Tensor {
         return this._stateReturnCountTable;
     }
 
     /**
      * Get a shallow copy of experiences
+     * @type {Experience[]}
      */
     public get experience(): Experience[] {
         return this._experience.map((entry) => Object.assign({}, entry));
@@ -67,6 +97,11 @@ export default class MCAgent extends PersistableAgent {
         this.setConfig(this._config);
     }
 
+    /**
+     * Set The configuration of the agent after initailizing.
+     * @param {?MCAgentSettings} config The configuration
+     * @param {?randomSeed} randomSeed The random seed
+     */
     public setConfig(config?: MCAgentSettings, randomSeed?: number): void {
         if (randomSeed != undefined) this.setRandomSeed(randomSeed);
         if (config != undefined) {
@@ -105,6 +140,10 @@ export default class MCAgent extends PersistableAgent {
         }
     }
 
+    /**
+     * Decay the epsilon value
+     * @returns {void}
+     */
     public decayEpsilon(): void {
         if (!this._config!.epsilonDecaySteps || !this._config!.epsilonEnd) {
             return;
@@ -134,7 +173,7 @@ export default class MCAgent extends PersistableAgent {
 
     /**
      * Set the random Seed for the agent
-     * @param randomSeed - the random seed
+     * @param {?number} randomSeed - the random seed
      */
     private setRandomSeed(randomSeed?: number) {
         if (randomSeed != undefined) {
@@ -263,3 +302,5 @@ export default class MCAgent extends PersistableAgent {
         await fileManager.save(this._config!, options);
     }
 }
+
+export default MCAgent;

@@ -1,16 +1,12 @@
 import seedrandom from 'seedrandom';
-import {
-    Utils,
-    SingleAgentEnvironment,
-    FileStrategy,
-    EnvStateContext,
-} from '../../index';
+import { Utils, Environment, FileStrategy, EnvStateContext } from '../../index';
 import PersistableAgent from '../../RLInterface/PersistableAgent';
 import { General } from '../../Utils';
 
 /**
  * Settings for the QLAgent
  * @category Agents
+ * @subcategory QLAgent
  * @property {number} learningRate The learning rate
  * @property {number} discountFactor The discount factor
  * @property {number} epsilonStart Epsilon at the start of training
@@ -26,10 +22,10 @@ export interface QLAgentSettings {
 }
 
 /**
- * Agent that represents a Q-Learning Algorithm
+ * Agent that represents the Q-Learning Algorithm
  * @category Agents
  * @extends PersistableAgent
- * @param {SingleAgentEnvironment} env - the environment
+ * @param {Environment} env - the environment
  * @param {?QLAgentSettings} config - the configuration
  * @param {?number} randomSeed - The randomSeed
  */
@@ -42,7 +38,7 @@ class QLAgent extends PersistableAgent {
     private epsilonStep: number;
 
     constructor(
-        env: SingleAgentEnvironment,
+        env: Environment,
         config?: QLAgentSettings,
         randomSeed?: number
     ) {
@@ -53,7 +49,7 @@ class QLAgent extends PersistableAgent {
 
     /**
      * Get the configuration
-     * @type {QLAgentSettings}
+     * @type {QLAgentSettings | undefined }
      */
     get config(): QLAgentSettings | undefined {
         return this._config;

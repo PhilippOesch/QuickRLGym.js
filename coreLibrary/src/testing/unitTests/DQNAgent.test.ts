@@ -1,20 +1,29 @@
 import { describe } from 'mocha';
 import sinon from 'sinon';
-import { TaxiEnv } from '../../Envs';
-import { QuickRLJS } from '../../RLInterface/QuickRLJS';
-import { EnvOptions } from '../../RLInterface/Environment';
-import { DQNAgent, DQNAgentSettings, ReplayMemory } from '../../Agents';
+// import { TaxiEnv } from '../../Envs';
+// import { QuickRLJS } from '../../RLInterface/QuickRLJS';
+// import { EnvOptions } from '../../RLInterface/Environment';
+// import { DQNAgent, DQNAgentSettings, ReplayMemory } from '../../Agents';
 import assert from 'node:assert';
-import { TaxiGameState } from '../../Games/TaxiGame';
-import { Vec2 } from '../../Utils';
+// import { TaxiGameState } from '../../Games/TaxiGame';
+// import { Vec2 } from '../../Utils';
 import seedrandom from 'seedrandom';
-import { DQNNetwork } from '../../Agents/DQNAgent/DQNAgent';
-import FileStrategy from '../../RLInterface/FileStrategy';
+// import { DQNNetwork } from '../../Agents/DQNAgent/DQNAgent';
+// import FileStrategy from '../../RLInterface/FileStrategy';
+import {
+    Envs,
+    QuickRLJS,
+    EnvOptions,
+    Agents,
+    Games,
+    Utils,
+    FileStrategy,
+} from '../../';
 
 describe('DQNAgent', function () {
-    let env: TaxiEnv;
-    let agent: DQNAgent;
-    let spy: sinon.SinonSpiedInstance<DQNAgent>;
+    let env: Envs.TaxiEnv;
+    let agent: Agents.DQNAgent;
+    let spy: sinon.SinonSpiedInstance<Agents.DQNAgent>;
 
     const envOptions: EnvOptions = {
         randomSeed: 134,
@@ -22,7 +31,7 @@ describe('DQNAgent', function () {
 
     const agentRandomSeed = 135;
 
-    const agentConfig: DQNAgentSettings = {
+    const agentConfig: Agents.DQNAgentSettings = {
         learningRate: 0.001,
         discountFactor: 0.5,
         nnLayer: [16, 16],
@@ -37,8 +46,8 @@ describe('DQNAgent', function () {
     };
 
     this.beforeEach(function () {
-        env = <TaxiEnv>QuickRLJS.loadEnv('Taxi', envOptions);
-        agent = new DQNAgent(env, agentConfig, agentRandomSeed);
+        env = <Envs.TaxiEnv>QuickRLJS.loadEnv('Taxi', envOptions);
+        agent = new Agents.DQNAgent(env, agentConfig, agentRandomSeed);
         spy = sinon.spy(agent);
     });
 
@@ -50,22 +59,22 @@ describe('DQNAgent', function () {
     });
 
     describe('ReplayMemory', function () {
-        let replayMemory: ReplayMemory;
-        let rMSpy: sinon.SinonSpiedInstance<ReplayMemory>;
+        let replayMemory: Agents.ReplayMemory;
+        let rMSpy: sinon.SinonSpiedInstance<Agents.ReplayMemory>;
         let sampleRandomSeed: number = 15;
-        let prevState: TaxiGameState = {
-            playerPos: new Vec2(0, 0),
+        let prevState: Games.Taxi.TaxiGameState = {
+            playerPos: new Utils.Vec2(0, 0),
             destinationIdx: 0,
             customerPosIdx: 0,
         };
 
         this.beforeEach(function () {
-            replayMemory = new ReplayMemory(10);
+            replayMemory = new Agents.ReplayMemory(10);
             rMSpy = sinon.spy(replayMemory);
         });
 
         it('after Initialization', function () {
-            assert.strictEqual(0, replayMemory.length);
+            assert.strictEqual(0, replayMemory.size);
             assert.strictEqual(10, replayMemory.maxSize);
         });
 
@@ -73,7 +82,7 @@ describe('DQNAgent', function () {
             this.beforeEach(function () {
                 for (let i = 1; i <= 10; i++) {
                     let newState = {
-                        playerPos: new Vec2(i, i),
+                        playerPos: new Utils.Vec2(i, i),
                         destinationIdx: i,
                         customerPosIdx: i,
                     };
@@ -94,7 +103,7 @@ describe('DQNAgent', function () {
             });
 
             it('correct replay memory size', function () {
-                assert.strictEqual(replayMemory.length, 10);
+                assert.strictEqual(replayMemory.size, 10);
             });
 
             it('correct number of saves called', function () {
@@ -131,7 +140,7 @@ describe('DQNAgent', function () {
                     },
                 });
 
-                assert.strictEqual(10, replayMemory.length);
+                assert.strictEqual(10, replayMemory.size);
 
                 const samples = replayMemory.sample(
                     10,
@@ -148,7 +157,7 @@ describe('DQNAgent', function () {
     });
 
     describe('config', function () {
-        const agentConfig: DQNAgentSettings = {
+        const agentConfig: Agents.DQNAgentSettings = {
             learningRate: 0.001,
             discountFactor: 0.5,
             nnLayer: [16, 16],
@@ -190,7 +199,7 @@ describe('DQNAgent', function () {
 
     describe('initialization', function () {
         it('Normal DQN', function () {
-            const agentConfig: DQNAgentSettings = {
+            const agentConfig: Agents.DQNAgentSettings = {
                 learningRate: 0.001,
                 discountFactor: 0.5,
                 nnLayer: [16, 16],
@@ -212,7 +221,7 @@ describe('DQNAgent', function () {
         });
 
         it('Double DQN', function () {
-            const agentConfig: DQNAgentSettings = {
+            const agentConfig: Agents.DQNAgentSettings = {
                 learningRate: 0.001,
                 discountFactor: 0.5,
                 nnLayer: [16, 16],

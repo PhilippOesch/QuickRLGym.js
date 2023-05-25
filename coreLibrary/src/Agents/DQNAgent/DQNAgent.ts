@@ -1,14 +1,34 @@
 import seedrandom from 'seedrandom';
-import {
-    SingleAgentEnvironment,
-    EnvStateContext,
-    Experience,
-} from '../../RLInterface/SingleAgentEnvironment';
+import { Environment, EnvStateContext, Experience } from '../../index';
 import * as tf from '@tensorflow/tfjs';
 import { MathUtils, General } from '../../Utils';
 import PersistableAgent from '../../RLInterface/PersistableAgent';
 import FileStrategy from '../../RLInterface/FileStrategy';
 
+/**
+ * The settings of the DQN-Agent
+ * @category Agents
+ * @subcategory DQN
+ * @property {number} learningRate The learning rate
+ * @property {number} discountFactor The discount factor
+ * @property {number[]} nnLayer The size of the neurlal network layer
+ * @property {number} replayMemorySize The replay memory size
+ * @property {number} batchSize The batch size
+ * @property {number} replayMemoryInitSize The initial needed size of the replay memory
+ * @property {number} epsilonStart The epsilon start value
+ * @property {number} epsilonEnd The epsilon end value
+ * @property {number} epsilonDecaySteps The number of epsilon decay steps
+ * @property {?boolean} activateDoubleDQN Use a double DQN setup for learning (recommended)
+ * @property {?number} updateTargetEvery After how many steps to synchronize the target network
+ * with the local network when the double DQN is active
+ * @property {?string} hiddenLayerActivation The hidden layer activation function to use. (recommended: 'relu').
+ * See the  {@link https://js.tensorflow.org/api/latest/#layers.dense|tensorflow.js } documentation
+ * for available activation functions.
+ * @property {?boolean} layerNorm Whether to use layer normalization.
+ * This slows down training but may improve training results.
+ * @property {?number} kernelInitializerSeed The seed to use for kernel initialization.
+ * This improved the reproducability of training results.
+ */
 export interface DQNAgentSettings {
     learningRate: number;
     discountFactor: number;
@@ -26,12 +46,27 @@ export interface DQNAgentSettings {
     kernelInitializerSeed?: number;
 }
 
+/**
+ * Interface for the DQN-Network
+ * @category Agents
+ * @subcategory DQN
+ * @property {tf.Sequential} local The local network (see: {@link https://js.tensorflow.org/api/latest/#class:Sequential|tf.Sequential})
+ * @property {?tf.Sequential} target The target network (see: {@link https://js.tensorflow.org/api/latest/#class:Sequential|tf.Sequential})
+ */
 export interface DQNNetwork {
     local: tf.Sequential;
     target?: tf.Sequential;
 }
 
-export default class DQNAgent extends PersistableAgent {
+/**
+ * Implementation of {@link https://arxiv.org/abs/1312.5602|DQN}
+ * @category Agents
+ * @extends PersistableAgent
+ * @param {Environment} env The enviroment
+ * @param {?DQNAgentSettings} config The configuration
+ * @param {?number} randomSeed The configuration
+ */
+class DQNAgent extends PersistableAgent {
     private _config?: DQNAgentSettings;
     private rng: seedrandom.PRNG;
     private experienceReplay: ReplayMemory;
@@ -44,7 +79,7 @@ export default class DQNAgent extends PersistableAgent {
     private loss: any;
 
     constructor(
-        env: SingleAgentEnvironment,
+        env: Environment,
         config?: DQNAgentSettings,
         randomSeed?: number
     ) {
@@ -57,10 +92,6 @@ export default class DQNAgent extends PersistableAgent {
         return this._config;
     }
 
-    /**
-     * Set the random Seed for the agent
-     * @param randomSeed - the random seed
-     */
     private setRandomSeed(randomSeed?: number) {
         if (randomSeed !== undefined) {
             this.randomSeed = randomSeed.toString();
@@ -70,6 +101,10 @@ export default class DQNAgent extends PersistableAgent {
         }
     }
 
+    /**
+     * Get the network
+     * @type {DQNNetwork}
+     */
     public get network(): DQNNetwork {
         return <DQNNetwork>{
             local: this.qNetworkLocal,
@@ -77,11 +112,20 @@ export default class DQNAgent extends PersistableAgent {
         };
     }
 
+    /**
+     * Get the ReplayMemory
+     * @type {ReplayMemory}
+     */
     public get replayMemory(): ReplayMemory {
         return this.experienceReplay;
     }
 
-    public setConfig(config: DQNAgentSettings, randomSeed?: number): void {
+    /**
+     * Set The configuration of the agent after initailizing.
+     * @param {?DQNAgentSettings} config The configuration.
+     * @param {?number} randomSeed The random seed.
+     */
+    public setConfig(config?: DQNAgentSettings, randomSeed?: number): void {
         if (randomSeed !== undefined) this.setRandomSeed(randomSeed);
         if (config !== undefined) {
             this._config = config;
@@ -135,9 +179,7 @@ export default class DQNAgent extends PersistableAgent {
         }
     }
     private replayMemoryLargeEnougth() {
-        return (
-            this.experienceReplay.length >= this._config!.replayMemoryInitSize
-        );
+        return this.experienceReplay.size >= this._config!.replayMemoryInitSize;
     }
 
     public evalStep(state: object): string {
@@ -156,6 +198,10 @@ export default class DQNAgent extends PersistableAgent {
         console.log('epsilon', this.epsilon);
     }
 
+    /**
+     * Create a network
+     * @returns {tf.Sequential}
+     */
     public createNetwork(): tf.Sequential {
         const model = tf.sequential();
 
@@ -228,6 +274,10 @@ export default class DQNAgent extends PersistableAgent {
         return model;
     }
 
+    /**
+     * Decay the epsilon value
+     * @returns {void}
+     */
     public decayEpsilon(): void {
         if (!this._config!.epsilonDecaySteps || !this._config!.epsilonEnd) {
             return;
@@ -396,6 +446,16 @@ export default class DQNAgent extends PersistableAgent {
     }
 }
 
+/**
+ * A Batch sample
+ * @category Agents
+ * @subcategory DQN
+ * @property {number[][]} stateBatch The states batch
+ * @property {number[]} actionBatch The actions batch
+ * @property {number[][]} newStateBatch The new states batch
+ * @property {number[]} payoffBatch The payoffs batch
+ * @property {EnvStateContext[]} contextInfoBatch The environment context info batch
+ * */
 export interface BatchSample {
     stateBatch: number[][];
     actionBatch: number[];
@@ -404,6 +464,12 @@ export interface BatchSample {
     contextInfoBatch: EnvStateContext[];
 }
 
+/**
+ * The Replay Memory
+ * @category Agents
+ * @subcategory DQN
+ * @param {number} maxSize The maximal size of the replay memory
+ */
 export class ReplayMemory {
     private memory: Experience[];
     private _maxSize: number;
@@ -413,14 +479,28 @@ export class ReplayMemory {
         this._maxSize = maxSize;
     }
 
+    /**
+     * Get the max size
+     * @type {number}
+     */
     public get maxSize(): number {
         return this._maxSize;
     }
 
-    public get length(): number {
+    /**
+     * Get the current size
+     * @type {number}
+     */
+    public get size(): number {
         return this.memory.length;
     }
 
+    /**
+     * Sample from memory
+     * @param {number} batchSize The size of the batch to sample
+     * @param {?seedrandom.PRNG} rng The random number generator to use for sampling
+     * @return {BatchSample} The batch sample
+     */
     public sample(batchSize: number, rng?: seedrandom.PRNG): BatchSample {
         let samples: Experience[] = General.sampleN(
             this.memory,
@@ -453,10 +533,17 @@ export class ReplayMemory {
         };
     }
 
-    public save(experience: Experience) {
+    /**
+     * Save an experience in the replay memory
+     * @param {Experience} experience The experience to save
+     * @returns {void}
+     */
+    public save(experience: Experience): void {
         const newLength: number = this.memory.push(experience);
         if (newLength > this._maxSize) {
             this.memory.shift();
         }
     }
 }
+
+export default DQNAgent;
