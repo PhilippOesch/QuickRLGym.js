@@ -39,7 +39,7 @@
     "opts": {
         "destination": "../../pages/docs",
         "recurse": true,
-        "readme": "../README.md",
+        "readme": "../../README.md",
         "template": "./node_modules/better-docs"
     }
 }
