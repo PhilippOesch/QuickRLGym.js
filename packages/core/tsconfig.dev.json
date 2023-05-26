@@ -1,5 +1,5 @@
 {
-    "extends": "../tsconfig.json",
+    "extends": "../../tsconfig.json",
     "compilerOptions": {
         "moduleResolution": "node",
         "module": "CommonJS" /* Specify what module code is generated. */ /* Specify multiple folders that act like './node_modules/@types'. */,
