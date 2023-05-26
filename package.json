@@ -4,13 +4,13 @@
     "description": "repository wide enforcement of a style guide",
     "main": "index.js",
     "scripts": {
-        "test": "cd ./coreLibrary; pnpm test",
-        "dependencies": "pnpm install; cd ./coreLibrary; pnpm install; cd ../backend; pnpm install; cd ../frontend; pnpm install",
+        "test": "cd ./packages/core; pnpm test",
+        "dependencies": "pnpm install; cd ./packages/core; pnpm install; cd ../../backend; pnpm install; cd ../frontend; pnpm install",
         "frontend": "cd ./frontend; pnpm dev",
         "backend": "cd ./backend; pnpm buildrun",
-        "buildCore": "cd ./coreLibrary; pnpm buildDev",
+        "buildCore": "cd ./packages/core; pnpm buildDev",
         "deployDevDocker": "cd ./frontend; bash dev_deploy_docker.bash",
-        "buildDocs": "cd ./coreLibrary; pnpm genDocs"
+        "buildDocs": "cd ./packages/core; pnpm genDocs"
     },
     "repository": {
         "type": "git",

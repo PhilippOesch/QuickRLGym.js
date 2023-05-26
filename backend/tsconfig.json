@@ -1,8 +1,9 @@
 {
     "extends": "../tsconfig.json",
     "compilerOptions": {
+        "target": "ESNext",
         "moduleResolution": "node",
-        "module": "CommonJS" /* Specify what module code is generated. */ /* Specify multiple folders that act like './node_modules/@types'. */,
+        "module": "ESNext" /* Specify what module code is generated. */ /* Specify multiple folders that act like './node_modules/@types'. */,
         "types": [
             "node"
         ] /* Specify type package names to be included without being referenced in a source file. */ /* Specify a file that bundles all outputs into one JavaScript file. If 'declaration' is true, also designates a file that bundles all .d.ts output. */,

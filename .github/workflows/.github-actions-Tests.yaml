@@ -21,6 +21,6 @@ jobs:
 
             - name: Run coreLibrary Tests
               run: |
-                  cd ./coreLibrary
+                  cd ./packages/core
                   pnpm install
                   pnpm run test
