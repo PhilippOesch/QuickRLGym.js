@@ -24,6 +24,7 @@
         "better-docs": {
             "name": "QuickRLJS",
             "hideGenerator": false,
+            "logo": "logo/logo.png",
             "navLinks": [
                 {
                     "label": "Github",

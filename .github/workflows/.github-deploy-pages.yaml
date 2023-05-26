@@ -25,6 +25,12 @@ jobs:
                   pnpm install
                   pnpm genDocs
 
+            - name: Copy logos into documentation
+              run: |
+                  mkdir pages/docs/logo
+                  cp logo/logo.png pages/docs/logo/logo.png
+                  cp logo/Version_1_dark.svg cp pages/docs/logo/Version_1_dark.svg
+
             - name: Deploy 🚀
               uses: JamesIves/github-pages-deploy-action@v4
               with:
