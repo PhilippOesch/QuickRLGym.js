@@ -170,5 +170,6 @@ dist
 .DS_Store
 
 coreLibrary/docs
+docs
 
 .scannerwork

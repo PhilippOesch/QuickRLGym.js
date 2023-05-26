@@ -11,9 +11,13 @@ jobs:
         steps:
             - uses: actions/checkout@v3
             - uses: actions/setup-node@v3
+
+            - name: Setup PNPM
+              uses: pnpm/action-setup@v2.2.4
+
               with:
                   node-version: '18.x'
             - name: Run coreLibrary Tests
               run: |
-                  npm install --prefix ./coreLibrary
-                  npm run test --prefix ./coreLibrary
+                  pnpm buildCore
+                  pnpm test
