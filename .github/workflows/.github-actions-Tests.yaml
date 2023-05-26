@@ -23,5 +23,4 @@ jobs:
               run: |
                   cd ./frontend
                   pnpm install
-                  pnpm buildDev
-                  pnpm test
+                  pnpm run test
