@@ -173,3 +173,4 @@ coreLibrary/docs
 docs
 
 .scannerwork
+sonar-project.properties
