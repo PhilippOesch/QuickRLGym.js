@@ -1,0 +1,692 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title> Agents/DQNAgent/DQNAgent.ts</title>
+
+  <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script src="./build/entry.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+  <link href="https://fonts.googleapis.com/css?family=Roboto:100,400,700|Inconsolata,700" rel="stylesheet">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+  <link type="text/css" rel="stylesheet" href="https://jmblog.github.io/color-themes-for-google-code-prettify/themes/tomorrow-night.min.css">
+  <link type="text/css" rel="stylesheet" href="styles/app.min.css">
+  <link type="text/css" rel="stylesheet" href="styles/iframe.css">
+  <link type="text/css" rel="stylesheet" href="">
+  <script async defer src="https://buttons.github.io/buttons.js"></script>
+
+  
+</head>
+
+
+
+<body class="layout small-header">
+    <div id="stickyNavbarOverlay"></div>
+    
+
+<div class="top-nav">
+    <div class="inner">
+        <a id="hamburger" role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+        </a>
+        <div class="logo">
+            
+             
+                <a href="index.html">
+                    <h1 class="navbar-item">QuickRLJS</h1>
+                </a>
+            
+        </div>
+        <div class="menu">
+            
+            <div class="navigation">
+                <a
+                    href="index.html"
+                    class="link"
+                >
+                    Documentation
+                </a>
+                
+                 
+                    
+                        <a
+                            class="link user-link "
+                            href="https://github.com/PhilippOesch/QuickRLGym.js"
+                        >
+                            Github
+                        </a>
+                    
+                        <a
+                            class="link user-link "
+                            href="https://www.npmjs.com/package/quickrl.core"
+                        >
+                            NPM Package
+                        </a>
+                    
+                
+                
+            </div>
+        </div>
+    </div>
+</div>
+    <div id="main">
+        <div
+            class="sidebar "
+            id="sidebarNav"
+        >
+            
+                <div class="search-wrapper">
+                    <input id="search" type="text" placeholder="Search docs..." class="input">
+                </div>
+            
+            <nav>
+                
+                    <h2><a href="index.html">Documentation</a></h2><div class="category"></div><div class="category"><h2>Agents</h2><h3>Classes</h3><ul><li><a href="DQNAgent.html">DQNAgent</a></li><li><a href="MCAgent.html">MCAgent</a></li><li><a href="QLAgent.html">QLAgent</a></li><li><a href="RandomAgent.html">RandomAgent</a></li></ul><h3>Classes / DQN</h3><ul><li><a href="ReplayMemory.html">ReplayMemory</a></li></ul><h3>Interfaces / DQN</h3><ul><li><a href="BatchSample.html">BatchSample</a></li><li><a href="DQNAgentSettings.html">DQNAgentSettings</a></li><li><a href="DQNNetwork.html">DQNNetwork</a></li></ul><h3>Interfaces / MCAgent</h3><ul><li><a href="MCAgentSettings.html">MCAgentSettings</a></li><li><a href="MCSaveFormat.html">MCSaveFormat</a></li></ul><h3>Interfaces / QLAgent</h3><ul><li><a href="QLAgentSettings.html">QLAgentSettings</a></li></ul></div><div class="category"><h2>Environments</h2><h3>Classes</h3><ul><li><a href="BlackJackEnv.html">BlackJackEnv</a></li><li><a href="TaxiEnv.html">TaxiEnv</a></li></ul><h3>Interfaces</h3><ul><li><a href="BlackJackStats.html">BlackJackStats</a></li><li><a href="TaxiStats.html">TaxiStats</a></li></ul></div><div class="category"><h2>Games</h2><h3>Modules / Taxi</h3><ul><li><a href="module-TaxiGameMap.html">TaxiGameMap</a></li><li><a href="module-TaxiGlobals.html">TaxiGlobals</a></li><li><a href="module-TaxiUtils.html">TaxiUtils</a></li></ul><h3>Classes / BlackJack</h3><ul><li><a href="BlackJackCard.html">BlackJackCard</a></li><li><a href="BlackJackDealer.html">BlackJackDealer</a></li><li><a href="BlackJackGame.html">BlackJackGame</a></li><li><a href="BlackJackPlayer.html">BlackJackPlayer</a></li></ul><h3>Classes / Taxi</h3><ul><li><a href="TaxiCustomer.html">TaxiCustomer</a></li><li><a href="TaxiGame.html">TaxiGame</a></li><li><a href="TaxiPlayer.html">TaxiPlayer</a></li></ul><h3>Interfaces / BlackJack</h3><ul><li><a href="BlackJackGameState.html">BlackJackGameState</a></li></ul><h3>Interfaces / Taxi</h3><ul><li><a href="CustomerStartState.html">CustomerStartState</a></li><li><a href="TaxiGameState.html">TaxiGameState</a></li></ul><h3>Global</h3><ul><li><a href="global.html#BlackJackAction">BlackJackAction</a></li><li><a href="global.html#TaxiAction">TaxiAction</a></li><li><a href="global.html#TaxiUtils">TaxiUtils</a></li></ul></div><div class="category"><h2>QuickRLInterface</h2><h3>Modules</h3><ul><li><a href="module-QuickRLJS.html">QuickRLJS</a></li></ul><h3>Classes</h3><ul><li><a href="Agent.html">Agent</a></li><li><a href="Environment.html">Environment</a></li><li><a href="PersistableAgent.html">PersistableAgent</a></li><li><a href="SingleAgentEnvironment.html">SingleAgentEnvironment</a></li></ul><h3>Interfaces</h3><ul><li><a href="EnvOptions.html">EnvOptions</a></li><li><a href="EnvStateContext.html">EnvStateContext</a></li><li><a href="Experience.html">Experience</a></li><li><a href="FileStrategy.html">FileStrategy</a></li><li><a href="StepResult.html">StepResult</a></li></ul></div><div class="category"><h2>Utils</h2><h3>Modules</h3><ul><li><a href="module-Utils_Generals.html">Utils/Generals</a></li><li><a href="module-Utils_MathUtils.html">Utils/MathUtils</a></li></ul><h3>Classes</h3><ul><li><a href="Tensor.html">Tensor</a></li><li><a href="Vec2.html">Vec2</a></li></ul><h3>Interfaces</h3><ul><li><a href="JSONTensor.html">JSONTensor</a></li></ul><h3>Global</h3><ul><li><a href="global.html#TensorFillType">TensorFillType</a></li><li><a href="global.html#Utils/Generals">Utils/Generals</a></li><li><a href="global.html#Utils/MathUtils">Utils/MathUtils</a></li></ul></div>
+                
+            </nav>
+        </div>
+        <div class="core" id="main-content-wrapper">
+            <div class="content">
+                <header class="page-title">
+                    <p>Source</p>
+                    <h1>Agents/DQNAgent/DQNAgent.ts</h1>
+                </header>
+                
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import seedrandom from 'seedrandom';
+import { Environment, EnvStateContext, Experience } from '../../index';
+import * as tf from '@tensorflow/tfjs';
+import { MathUtils, General } from '../../Utils';
+import PersistableAgent from '../../RLInterface/PersistableAgent';
+import FileStrategy from '../../RLInterface/FileStrategy';
+
+/**
+ * The settings of the DQN-Agent
+ * @category Agents
+ * @subcategory DQN
+ * @property {number} learningRate The learning rate
+ * @property {number} discountFactor The discount factor
+ * @property {number[]} nnLayer The size of the neurlal network layer
+ * @property {number} replayMemorySize The replay memory size
+ * @property {number} batchSize The batch size
+ * @property {number} replayMemoryInitSize The initial needed size of the replay memory
+ * @property {number} epsilonStart The epsilon start value
+ * @property {number} epsilonEnd The epsilon end value
+ * @property {number} epsilonDecaySteps The number of epsilon decay steps
+ * @property {?boolean} activateDoubleDQN Use a double DQN setup for learning (recommended)
+ * @property {?number} updateTargetEvery After how many steps to synchronize the target network
+ * with the local network when the double DQN is active
+ * @property {?string} hiddenLayerActivation The hidden layer activation function to use. (recommended: 'relu').
+ * See the  {@link https://js.tensorflow.org/api/latest/#layers.dense|tensorflow.js } documentation
+ * for available activation functions.
+ * @property {?boolean} layerNorm Whether to use layer normalization.
+ * This slows down training but may improve training results.
+ * @property {?number} kernelInitializerSeed The seed to use for kernel initialization.
+ * This improved the reproducability of training results.
+ */
+export interface DQNAgentSettings {
+    learningRate: number;
+    discountFactor: number;
+    nnLayer: number[];
+    replayMemorySize: number;
+    batchSize: number;
+    replayMemoryInitSize: number;
+    epsilonStart: number;
+    epsilonEnd: number;
+    epsilonDecaySteps: number;
+    activateDoubleDQN?: boolean;
+    updateTargetEvery?: number;
+    hiddenLayerActivation?: string;
+    layerNorm?: boolean;
+    kernelInitializerSeed?: number;
+}
+
+/**
+ * Interface for the DQN-Network
+ * @category Agents
+ * @subcategory DQN
+ * @property {tf.Sequential} local The local network (see: {@link https://js.tensorflow.org/api/latest/#class:Sequential|tf.Sequential})
+ * @property {?tf.Sequential} target The target network (see: {@link https://js.tensorflow.org/api/latest/#class:Sequential|tf.Sequential})
+ */
+export interface DQNNetwork {
+    local: tf.Sequential;
+    target?: tf.Sequential;
+}
+
+/**
+ * Implementation of {@link https://arxiv.org/abs/1312.5602|DQN}
+ * @category Agents
+ * @extends PersistableAgent
+ * @param {Environment} env The enviroment
+ * @param {?DQNAgentSettings} config The configuration
+ * @param {?number} randomSeed The configuration
+ */
+class DQNAgent extends PersistableAgent {
+    private _config?: DQNAgentSettings;
+    private rng: seedrandom.PRNG;
+    private experienceReplay: ReplayMemory;
+    private randomSeed?: string;
+    private qNetworkLocal: tf.Sequential;
+    private qNetworkTarget: tf.Sequential;
+    private epsilon: number;
+    private epsilonStep: number = 0;
+    private timeStep: number = 0;
+    private loss: any;
+
+    constructor(
+        env: Environment,
+        config?: DQNAgentSettings,
+        randomSeed?: number
+    ) {
+        super(env);
+        this.setRandomSeed(randomSeed);
+        this._config = config;
+    }
+
+    public get config(): object | undefined {
+        return this._config;
+    }
+
+    private setRandomSeed(randomSeed?: number) {
+        if (randomSeed !== undefined) {
+            this.randomSeed = randomSeed.toString();
+            this.rng = seedrandom(this.randomSeed);
+        } else {
+            this.rng = seedrandom();
+        }
+    }
+
+    /**
+     * Get the network
+     * @type {DQNNetwork}
+     */
+    public get network(): DQNNetwork {
+        return &lt;DQNNetwork>{
+            local: this.qNetworkLocal,
+            target: this.qNetworkTarget,
+        };
+    }
+
+    /**
+     * Get the ReplayMemory
+     * @type {ReplayMemory}
+     */
+    public get replayMemory(): ReplayMemory {
+        return this.experienceReplay;
+    }
+
+    /**
+     * Set The configuration of the agent after initailizing.
+     * @param {?DQNAgentSettings} config The configuration.
+     * @param {?number} randomSeed The random seed.
+     */
+    public setConfig(config?: DQNAgentSettings, randomSeed?: number): void {
+        if (randomSeed !== undefined) this.setRandomSeed(randomSeed);
+        if (config !== undefined) {
+            this._config = config;
+            this.epsilon = this._config.epsilonStart;
+        }
+        this.epsilonStep = 0;
+    }
+
+    public init(): void {
+        if (this._config) {
+            this.experienceReplay = new ReplayMemory(
+                this._config.replayMemorySize
+            );
+        }
+        // create local qNetwork
+        this.qNetworkLocal = this.createNetwork();
+        if (this._config) {
+            this.epsilon = this._config.epsilonStart;
+
+            // when active create target network for DDQN
+            if (this._config.activateDoubleDQN)
+                this.qNetworkTarget = this.createNetwork();
+        }
+    }
+    public step(state: object): string {
+        return this.followEpsGreedyPolicy(state);
+    }
+    public async feed(
+        prevState: object,
+        takenAction: string,
+        newState: object,
+        payoff: number,
+        contextInfo: EnvStateContext
+    ): Promise&lt;void> {
+        this.experienceReplay.save(
+            this.toExperience(
+                prevState,
+                takenAction,
+                newState,
+                payoff,
+                contextInfo
+            )
+        );
+        // wait untily replay memory is large enougth
+        if (this.replayMemoryLargeEnougth()) {
+            await this.train();
+        }
+
+        if (contextInfo.isTerminal || contextInfo.maxIterationReached) {
+            this.decayEpsilon();
+        }
+    }
+    private replayMemoryLargeEnougth() {
+        return this.experienceReplay.size >= this._config!.replayMemoryInitSize;
+    }
+
+    public evalStep(state: object): string {
+        const encodedState: tf.Tensor&lt;tf.Rank> = tf.tensor(
+            this.env.encodeStateToIndices(state),
+            [1, this.env.stateDim.length]
+        );
+        const result: tf.Tensor&lt;tf.Rank> = this.qNetworkLocal.predict(
+            encodedState
+        ) as tf.Tensor&lt;tf.Rank>;
+        const qValues = result.arraySync() as number[][];
+        const actionIdx = MathUtils.argMax(qValues[0]);
+        return this.env.actionSpace[actionIdx];
+    }
+    public log(): void {
+        console.log('epsilon', this.epsilon);
+    }
+
+    /**
+     * Create a network
+     * @returns {tf.Sequential}
+     */
+    public createNetwork(): tf.Sequential {
+        const model = tf.sequential();
+
+        const hiddenLayerAct = this._config?.hiddenLayerActivation
+            ? this._config?.hiddenLayerActivation
+            : 'relu';
+
+        let kernelInitializer: any;
+        if (this._config?.kernelInitializerSeed) {
+            kernelInitializer = tf.initializers.heNormal({
+                seed: this._config?.kernelInitializerSeed,
+            });
+        } else {
+            kernelInitializer = tf.initializers.heNormal({});
+        }
+
+        // hidden layer
+        model.add(
+            tf.layers.dense({
+                inputShape: [this.env.stateDim.length],
+                activation: hiddenLayerAct as any,
+                units: this._config!.nnLayer[0],
+                kernelInitializer: kernelInitializer,
+            })
+        );
+        if (this._config!.layerNorm) {
+            model.add(
+                tf.layers.layerNormalization({
+                    center: true,
+                    scale: true,
+                })
+            );
+        }
+
+        for (let i = 1; i &lt; this._config!.nnLayer.length; i++) {
+            model.add(
+                tf.layers.dense({
+                    units: this._config!.nnLayer[i],
+                    activation: hiddenLayerAct as any,
+                    kernelInitializer: kernelInitializer,
+                })
+            );
+            if (this._config!.layerNorm) {
+                model.add(
+                    tf.layers.layerNormalization({
+                        center: true,
+                        scale: true,
+                    })
+                );
+            }
+        }
+
+        // output layer
+        model.add(
+            tf.layers.dense({
+                units: this.env.actionSpace.length,
+                activation: 'linear',
+            })
+        );
+
+        const adamOptimizer = tf.train.adam(this._config!.learningRate);
+
+        model.compile({
+            optimizer: adamOptimizer,
+            loss: 'meanSquaredError',
+            metrics: ['accuracy'],
+        });
+        model.summary();
+
+        return model;
+    }
+
+    /**
+     * Decay the epsilon value
+     * @returns {void}
+     */
+    public decayEpsilon(): void {
+        if (!this._config!.epsilonDecaySteps || !this._config!.epsilonEnd) {
+            return;
+        }
+        const { epsilon, stepCount } = General.linearDecayEpsilon(
+            this.epsilonStep,
+            this._config!.epsilonDecaySteps,
+            this._config!.epsilonStart,
+            this._config!.epsilonEnd
+        );
+
+        this.epsilon = epsilon;
+        this.epsilonStep = stepCount;
+    }
+
+    public async save(
+        fileManager: FileStrategy,
+        options?: object
+    ): Promise&lt;void> {
+        await fileManager.save(this.qNetworkLocal, options);
+    }
+
+    public async load(
+        fileManager: FileStrategy,
+        options?: object
+    ): Promise&lt;void> {
+        this.qNetworkLocal = &lt;tf.Sequential>await fileManager.load(options);
+
+        const adamOptimizer = tf.train.adam(this._config!.learningRate);
+
+        this.qNetworkLocal.compile({
+            optimizer: adamOptimizer,
+            loss: 'meanSquaredError',
+            metrics: ['accuracy'],
+        });
+        this.qNetworkLocal.summary();
+
+        //additionally load target network when needed
+        if (this._config?.activateDoubleDQN) {
+            this.qNetworkTarget = &lt;tf.Sequential>(
+                await fileManager.load(options)
+            );
+
+            const adamOptimizer = tf.train.adam(this._config.learningRate);
+
+            this.qNetworkTarget.compile({
+                optimizer: adamOptimizer,
+                loss: 'meanSquaredError',
+                metrics: ['accuracy'],
+            });
+            this.qNetworkTarget.summary();
+        }
+    }
+    public async loadConfig(
+        fileManager: FileStrategy,
+        options?: object
+    ): Promise&lt;void> {
+        const loadObject: DQNAgentSettings = &lt;DQNAgentSettings>(
+            await fileManager.load(options)
+        );
+        this.setConfig(loadObject);
+    }
+    public async saveConfig(
+        fileManager: FileStrategy,
+        options?: object
+    ): Promise&lt;void> {
+        await fileManager.save(this._config!, options);
+    }
+
+    private async train(): Promise&lt;void> {
+        this.timeStep++;
+
+        const miniBatch: BatchSample = this.experienceReplay.sample(
+            this._config!.batchSize,
+            this.rng
+        );
+
+        let targetNetwork: tf.Sequential;
+
+        // use target network when in double DQN mode
+        if (this._config!.activateDoubleDQN) {
+            targetNetwork = this.qNetworkTarget;
+        } else {
+            targetNetwork = this.qNetworkLocal;
+        }
+
+        //get target prediction
+        let target: number[][] = (
+            targetNetwork.predict(
+                tf.tensor(miniBatch.stateBatch)
+            ) as tf.Tensor&lt;tf.Rank>
+        ).arraySync() as number[][];
+
+        // get nextStateTarget prediction
+        let targetNext: number[][] = (
+            targetNetwork.predict(
+                tf.tensor(miniBatch.newStateBatch)
+            ) as tf.Tensor&lt;tf.Rank>
+        ).arraySync() as number[][];
+
+        // update target according to algorithm
+        for (let i = 0; i &lt; this._config!.batchSize; i++) {
+            if (miniBatch.contextInfoBatch[i].isTerminal) {
+                target[i][miniBatch.actionBatch[i]] = miniBatch.payoffBatch[i];
+            } else {
+                const argMaxQ = Math.max(...targetNext[i]);
+                target[i][miniBatch.actionBatch[i]] =
+                    miniBatch.payoffBatch[i] +
+                    this._config!.discountFactor * argMaxQ;
+            }
+        }
+
+        let targetTensor = tf.tensor(target, [
+            this._config!.batchSize,
+            this.env.actionSpace.length,
+        ]);
+        let stateTensor = tf.tensor(miniBatch.stateBatch, [
+            this._config!.batchSize,
+            this.env.stateDim.length,
+        ]);
+        this.loss = await this.qNetworkLocal.fit(stateTensor, targetTensor, {
+            batchSize: this._config!.batchSize,
+            verbose: 0,
+        });
+
+        // update target network every "updateTargetEvery" steps
+        if (
+            this._config!.activateDoubleDQN &amp;&amp;
+            this.timeStep >= this._config!.updateTargetEvery!
+        ) {
+            this.qNetworkTarget.setWeights(this.qNetworkLocal.getWeights());
+            console.log('target weights updated');
+            console.log('loss', this.loss);
+            this.timeStep = 0;
+        }
+    }
+
+    private toExperience(
+        prevState: object,
+        takenAction: string,
+        newState: object,
+        payoff: number,
+        contextInfo: EnvStateContext
+    ): Experience {
+        return {
+            prevState: this.env.encodeStateToIndices(prevState),
+            takenAction: this.env.actionSpace.indexOf(takenAction),
+            newState: this.env.encodeStateToIndices(newState),
+            payoff: payoff,
+            contextInfo: contextInfo,
+        };
+    }
+
+    private sampleRandomAction(): string {
+        const randIdx = Math.floor(this.rng() * this.env.actionSpace.length);
+        return this.env.actionSpace[randIdx];
+    }
+
+    private followEpsGreedyPolicy(state: object): string {
+        const randNum: number = this.rng();
+        if (randNum &lt; this.epsilon) {
+            return this.sampleRandomAction();
+        } else {
+            return this.evalStep(state);
+        }
+    }
+}
+
+/**
+ * A Batch sample
+ * @category Agents
+ * @subcategory DQN
+ * @property {number[][]} stateBatch The states batch
+ * @property {number[]} actionBatch The actions batch
+ * @property {number[][]} newStateBatch The new states batch
+ * @property {number[]} payoffBatch The payoffs batch
+ * @property {EnvStateContext[]} contextInfoBatch The environment context info batch
+ * */
+export interface BatchSample {
+    stateBatch: number[][];
+    actionBatch: number[];
+    newStateBatch: number[][];
+    payoffBatch: number[];
+    contextInfoBatch: EnvStateContext[];
+}
+
+/**
+ * The Replay Memory
+ * @category Agents
+ * @subcategory DQN
+ * @param {number} maxSize The maximal size of the replay memory
+ */
+export class ReplayMemory {
+    private memory: Experience[];
+    private _maxSize: number;
+
+    constructor(maxSize: number) {
+        this.memory = [];
+        this._maxSize = maxSize;
+    }
+
+    /**
+     * Get the max size
+     * @type {number}
+     */
+    public get maxSize(): number {
+        return this._maxSize;
+    }
+
+    /**
+     * Get the current size
+     * @type {number}
+     */
+    public get size(): number {
+        return this.memory.length;
+    }
+
+    /**
+     * Sample from memory
+     * @param {number} batchSize The size of the batch to sample
+     * @param {?seedrandom.PRNG} rng The random number generator to use for sampling
+     * @return {BatchSample} The batch sample
+     */
+    public sample(batchSize: number, rng?: seedrandom.PRNG): BatchSample {
+        let samples: Experience[] = General.sampleN(
+            this.memory,
+            batchSize,
+            rng
+        );
+        return ReplayMemory.toBatch(samples);
+    }
+
+    private static toBatch(experiences: Experience[]): BatchSample {
+        let stateBatch = new Array&lt;number[]>(experiences.length);
+        let takenActionBatch = new Array&lt;number>(experiences.length);
+        let newStateBatch = new Array&lt;number[]>(experiences.length);
+        let payoffBatch = new Array&lt;number>(experiences.length);
+        let contextInfoBatch = new Array&lt;EnvStateContext>(experiences.length);
+
+        for (let i = 0; i &lt; experiences.length; i++) {
+            stateBatch[i] = experiences[i].prevState;
+            takenActionBatch[i] = experiences[i].takenAction;
+            newStateBatch[i] = experiences[i].newState;
+            payoffBatch[i] = experiences[i].payoff;
+            contextInfoBatch[i] = experiences[i].contextInfo;
+        }
+        return {
+            stateBatch: stateBatch,
+            actionBatch: takenActionBatch,
+            newStateBatch: newStateBatch,
+            payoffBatch: payoffBatch,
+            contextInfoBatch: contextInfoBatch,
+        };
+    }
+
+    /**
+     * Save an experience in the replay memory
+     * @param {Experience} experience The experience to save
+     * @returns {void}
+     */
+    public save(experience: Experience): void {
+        const newLength: number = this.memory.push(experience);
+        if (newLength > this._maxSize) {
+            this.memory.shift();
+        }
+    }
+}
+
+export default DQNAgent;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+            </div>
+            
+            <footer class="footer">
+                <div class="content has-text-centered">
+                    <p>Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 4.0.2</a></p>
+                    <p class="sidebar-created-by">
+                        <a href="https://github.com/SoftwareBrothers/better-docs" target="_blank">BetterDocs theme</a> provided with <i class="fas fa-heart"></i> by
+                        <a href="http://softwarebrothers.co" target="_blank">SoftwareBrothers - JavaScript Development Agency</a>
+                    </p>
+                </div>
+            </footer>
+            
+        </div>
+        <div id="side-nav" class="side-nav">
+        </div>
+    </div>
+<script src="scripts/app.min.js"></script>
+<script>PR.prettyPrint();</script>
+<script src="scripts/linenumber.js"> </script>
+
+<script src="scripts/search.js"> </script>
+
+
+</body>
+</html>
