@@ -22,9 +22,8 @@
         "monospaceLinks": false,
         "search": true,
         "better-docs": {
-            "name": "QuickRLJS",
+            "name": "QuickRLJS-API",
             "hideGenerator": false,
-            "logo": "logo/logo.png",
             "navLinks": [
                 {
                     "label": "Github",

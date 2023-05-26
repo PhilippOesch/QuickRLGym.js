@@ -7,6 +7,10 @@ The name of this Project might be a little deceiving. Is it quick? Well it depen
 
 Have fun with this project.
 
+## Links
+
+- [To the API Documentation](https://philippoesch.github.io/QuickRLGym.js/docs/)
+
 ## Environments
 
 - [x] BlackJack
