@@ -21,5 +21,6 @@ jobs:
 
             - name: Run coreLibrary Tests
               run: |
-                  pnpm buildCore
-                  pnpm test
+                  cd ./frontend; pnpm install;
+                  pnpm buildCore;
+                  pnpm test;
