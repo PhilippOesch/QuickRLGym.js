@@ -10,7 +10,8 @@
         "javascript",
         "typescript",
         "machine learning",
-        "games"
+        "games",
+        "library"
     ],
     "scripts": {
         "test": "pnpm buildDev; nyc mocha ./out/testing/*;",

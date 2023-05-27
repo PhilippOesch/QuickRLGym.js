@@ -1,8 +1,4 @@
-import {
-    Agents,
-    SingleAgentEnvironment,
-    QuickRLJS,
-} from '../../coreLibrary/src';
+import { Agents, SingleAgentEnvironment, QuickRLJS } from 'quickrl.core';
 
 const randomSeed = 1234;
 
