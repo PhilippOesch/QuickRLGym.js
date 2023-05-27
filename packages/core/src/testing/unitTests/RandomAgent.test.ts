@@ -1,6 +1,6 @@
 import { strict as assert } from 'node:assert';
 import { describe } from 'mocha';
-import { RandomAgent } from '../../Agents';
+import { Agents } from '../../index';
 import sinon from 'sinon';
 
 describe('RandomAgent', function () {
@@ -10,7 +10,7 @@ describe('RandomAgent', function () {
         actionSpace: ['a', 'b', 'c'],
     };
 
-    const mockAgent = new RandomAgent(envMock as any, randomSeed);
+    const mockAgent = new Agents.RandomAgent(envMock as any, randomSeed);
 
     it('config', function () {
         const config = <any>mockAgent.config;
@@ -30,7 +30,7 @@ describe('RandomAgent', function () {
     });
 
     it('init', function () {
-        const localMockAgent = new RandomAgent(<any>envMock);
+        const localMockAgent = new Agents.RandomAgent(<any>envMock);
 
         const spyInit = sinon.spy(localMockAgent, 'init');
         localMockAgent.init();

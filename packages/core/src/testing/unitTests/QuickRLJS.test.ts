@@ -5,9 +5,9 @@ import {
     QuickRLJS,
     SingleAgentEnvironment,
     StepResult,
+    Envs,
 } from '../../index';
 import { describe } from 'mocha';
-import { BlackJackEnv, TaxiEnv } from '../../Envs';
 
 //Mock Environment for registering;
 class MockEnv extends Environment {
@@ -64,7 +64,7 @@ describe('QuickRLJS', () => {
             const taxiEnv = QuickRLJS.loadEnv('Taxi');
             assert.strictEqual(true, taxiEnv instanceof Environment);
             assert.strictEqual(true, taxiEnv instanceof SingleAgentEnvironment);
-            assert.strictEqual(true, taxiEnv instanceof TaxiEnv);
+            assert.strictEqual(true, taxiEnv instanceof Envs.TaxiEnv);
         });
 
         it('load BlackJackEnv', function () {
@@ -74,7 +74,7 @@ describe('QuickRLJS', () => {
                 true,
                 blackJackEnv instanceof SingleAgentEnvironment
             );
-            assert.strictEqual(true, blackJackEnv instanceof BlackJackEnv);
+            assert.strictEqual(true, blackJackEnv instanceof Envs.BlackJackEnv);
         });
     });
 
@@ -101,7 +101,7 @@ describe('QuickRLJS', () => {
 
         it('register Environment a second time under a different name throws an error', function () {
             const registerNotAllowedEnv = () =>
-                QuickRLJS.register('TestEnv', TaxiEnv);
+                QuickRLJS.register('TestEnv', Envs.TaxiEnv);
             assert.throws(
                 registerNotAllowedEnv,
                 Error,

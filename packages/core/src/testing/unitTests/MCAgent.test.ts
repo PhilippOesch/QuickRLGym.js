@@ -1,23 +1,18 @@
 import { strict as assert } from 'node:assert';
 import { describe } from 'mocha';
-import { MCAgent, MCAgentSettings } from '../../Agents';
-import { EnvOptions } from '../../RLInterface/Environment';
-import { BlackJackEnv } from '../../Envs';
-import { QuickRLJS } from '../../index';
+import { QuickRLJS, Agents, Envs, EnvOptions, FileStrategy } from '../../index';
 import sinon from 'sinon';
-import FileStrategy from '../../RLInterface/FileStrategy';
-import { MCSaveFormat } from '../../Agents/MCAgent/MCAgent';
 
 describe('MCAgent', function () {
-    let env: BlackJackEnv;
-    let agent: MCAgent;
+    let env: Envs.BlackJackEnv;
+    let agent: Agents.MCAgent;
 
     const envOptions: EnvOptions = {
         randomSeed: 135,
     };
     const agentRandomSeed = 134;
 
-    const agentConfig: MCAgentSettings = {
+    const agentConfig: Agents.MCAgentSettings = {
         epsilonStart: 0.9,
         epsilonDecaySteps: 100,
         epsilonEnd: 0.1,
@@ -25,8 +20,8 @@ describe('MCAgent', function () {
     };
 
     this.beforeEach(function () {
-        env = <BlackJackEnv>QuickRLJS.loadEnv('BlackJack', envOptions);
-        agent = new MCAgent(env, agentConfig, agentRandomSeed);
+        env = <Envs.BlackJackEnv>QuickRLJS.loadEnv('BlackJack', envOptions);
+        agent = new Agents.MCAgent(env, agentConfig, agentRandomSeed);
 
         env.agent = agent;
         env.initAgent();
@@ -139,7 +134,9 @@ describe('MCAgent', function () {
             it('save', function () {
                 agent.save(fileStrategy);
 
-                const cache: MCSaveFormat = <MCSaveFormat>fileStrategy.cache;
+                const cache: Agents.MCSaveFormat = <Agents.MCSaveFormat>(
+                    fileStrategy.cache
+                );
                 assert.strictEqual(spy.save.callCount, 1);
                 assert.notStrictEqual(cache.valueTable, undefined);
                 assert.notStrictEqual(cache.stateReturnCountTable, undefined);

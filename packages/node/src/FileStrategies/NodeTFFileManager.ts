@@ -8,12 +8,12 @@ export interface TFFModelLoadResult {
     weights: tf.Tensor;
 }
 
-export interface NodeTFOptions {
+export interface TFFSOptions {
     folderPath: string;
 }
 
-class NodeTFFileStrategy implements FileStrategy {
-    async load(options: NodeTFOptions): Promise<object> {
+class TFFileStrategy implements FileStrategy {
+    async load(options: TFFSOptions): Promise<object> {
         if (options == undefined) {
             throw new Error('The options have to be defined');
         }
@@ -25,7 +25,7 @@ class NodeTFFileStrategy implements FileStrategy {
     }
     async save(
         saveObject: tf.LayersModel,
-        options: NodeTFOptions
+        options: TFFSOptions
     ): Promise<boolean> {
         const folderPath = path.dirname(options.folderPath);
         await mkdir(folderPath, { recursive: true }).catch(() => {
@@ -37,4 +37,4 @@ class NodeTFFileStrategy implements FileStrategy {
         return true;
     }
 }
-export default NodeTFFileStrategy;
+export default TFFileStrategy;

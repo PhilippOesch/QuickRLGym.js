@@ -1,7 +1,6 @@
 import { strict as assert } from 'node:assert';
 import { describe } from 'mocha';
-import { Games, StepResult } from '../..';
-import { BlackJackGameState } from '../../Games/BlackJack';
+import { Games, StepResult } from '../../index';
 
 describe('BlackJack', function () {
     const game: Games.BlackJack.BlackJackGame =
@@ -146,7 +145,9 @@ describe('BlackJack', function () {
         it('Hit step', function () {
             game.reset(false);
             const result: StepResult = game.step('Hit');
-            const newState = <BlackJackGameState>result.newState;
+            const newState = <Games.BlackJack.BlackJackGameState>(
+                result.newState
+            );
 
             assert.strictEqual(true, newState.playerScore > 0);
         });
@@ -154,7 +155,9 @@ describe('BlackJack', function () {
         it('Stick step', function () {
             game.reset(false);
             const result: StepResult = game.step('Stick');
-            const newState = <BlackJackGameState>result.newState;
+            const newState = <Games.BlackJack.BlackJackGameState>(
+                result.newState
+            );
 
             assert.strictEqual(0, newState.playerScore);
         });

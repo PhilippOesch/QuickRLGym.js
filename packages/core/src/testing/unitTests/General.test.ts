@@ -1,7 +1,7 @@
 import { strict as assert } from 'node:assert';
 import { describe } from 'mocha';
 import seedrandom from 'seedrandom';
-import { General } from '../../Utils';
+import { Utils } from '../../index';
 
 describe('General', function () {
     describe('shuffleArray', function () {
@@ -21,7 +21,7 @@ describe('General', function () {
                 9,
             ];
 
-            const shuffledArray = General.shuffleArray(array, rng);
+            const shuffledArray = Utils.General.shuffleArray(array, rng);
             assert.deepStrictEqual(shuffledArray, expectedShuffledArray);
         });
     });
@@ -39,7 +39,7 @@ describe('General', function () {
             ];
 
             const expectedSample = [56, 20, 79, 79, 54, 43, 88, 18, 43, 74];
-            const sample = General.sampleN(array, n, rng);
+            const sample = Utils.General.sampleN(array, n, rng);
             assert.deepStrictEqual(sample, expectedSample);
         });
     });
@@ -51,7 +51,7 @@ describe('General', function () {
             const epsilonStart = 1;
             const decaySteps = 9;
 
-            const { epsilon, stepCount } = General.linearDecayEpsilon(
+            const { epsilon, stepCount } = Utils.General.linearDecayEpsilon(
                 step,
                 decaySteps,
                 epsilonStart,
@@ -68,7 +68,7 @@ describe('General', function () {
             const epsilonStart = 1;
             const decaySteps = 9;
 
-            const { epsilon, stepCount } = General.linearDecayEpsilon(
+            const { epsilon, stepCount } = Utils.General.linearDecayEpsilon(
                 step,
                 decaySteps,
                 epsilonStart,

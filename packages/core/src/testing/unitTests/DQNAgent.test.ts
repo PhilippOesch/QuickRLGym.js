@@ -1,15 +1,7 @@
 import { describe } from 'mocha';
 import sinon from 'sinon';
-// import { TaxiEnv } from '../../Envs';
-// import { QuickRLJS } from '../../RLInterface/QuickRLJS';
-// import { EnvOptions } from '../../RLInterface/Environment';
-// import { DQNAgent, DQNAgentSettings, ReplayMemory } from '../../Agents';
 import assert from 'node:assert';
-// import { TaxiGameState } from '../../Games/TaxiGame';
-// import { Vec2 } from '../../Utils';
 import seedrandom from 'seedrandom';
-// import { DQNNetwork } from '../../Agents/DQNAgent/DQNAgent';
-// import FileStrategy from '../../RLInterface/FileStrategy';
 import {
     Envs,
     QuickRLJS,

@@ -1,13 +1,11 @@
 import { strict as assert } from 'node:assert';
 import sinon from 'sinon';
 import { describe } from 'mocha';
-import { EnvOptions, FileStrategy, QuickRLJS } from '../..';
-import { TaxiEnv } from '../../Envs';
-import { QLAgent } from '../../Agents';
+import { EnvOptions, FileStrategy, QuickRLJS, Envs, Agents } from '../..';
 
 describe('QLAgent', function () {
-    let env: TaxiEnv;
-    let agent: QLAgent;
+    let env: Envs.TaxiEnv;
+    let agent: Agents.QLAgent;
 
     const envOptions: EnvOptions = {
         randomSeed: 134,
@@ -23,8 +21,8 @@ describe('QLAgent', function () {
     };
 
     this.beforeEach(function () {
-        env = <TaxiEnv>QuickRLJS.loadEnv('Taxi', envOptions);
-        agent = new QLAgent(env, agentConfig, agentRandomSeed);
+        env = <Envs.TaxiEnv>QuickRLJS.loadEnv('Taxi', envOptions);
+        agent = new Agents.QLAgent(env, agentConfig, agentRandomSeed);
 
         env.agent = agent;
         env.initAgent();

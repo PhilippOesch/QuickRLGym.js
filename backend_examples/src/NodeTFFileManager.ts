@@ -12,7 +12,7 @@ export interface NodeTFOptions {
     folderPath: string;
 }
 
-class NodeTFFileStrategy implements FileStrategy {
+class TFFileStrategy implements FileStrategy {
     async load(options: NodeTFOptions): Promise<object> {
         if (options == undefined) {
             throw new Error('The options have to be defined');
@@ -37,4 +37,4 @@ class NodeTFFileStrategy implements FileStrategy {
         return true;
     }
 }
-export default NodeTFFileStrategy;
+export default TFFileStrategy;

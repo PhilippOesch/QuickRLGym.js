@@ -1,6 +1,6 @@
 import sinon from 'sinon';
 import { describe } from 'mocha';
-import FileStrategy from '../../RLInterface/FileStrategy';
+import { FileStrategy } from '../../index';
 
 describe('FileStrategy', function () {
     class TestFileStrategy implements FileStrategy {

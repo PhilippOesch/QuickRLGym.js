@@ -1,0 +1,18 @@
+{
+    "name": "quickrl.web",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/PhilippOesch/QuickRLGym.js.git"
+    },
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "buildProd": "rm -r ./out; npx tsc -d -p tsconfig.json",
+        "buildDev": "rm -r ./out; npx tsc -d -p tsconfig.dev.json"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC"
+}

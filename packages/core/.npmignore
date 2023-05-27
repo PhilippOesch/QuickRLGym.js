@@ -1,6 +1,6 @@
 node_modules
 src
-out/testing
+dist/dts/testing
 tsconfig.json
 .nyc_output
 coverage
@@ -9,3 +9,4 @@ tsconfig.dev.json
 Development.md
 .mocharc.json
 pnpm-lock.yaml
+distTesting

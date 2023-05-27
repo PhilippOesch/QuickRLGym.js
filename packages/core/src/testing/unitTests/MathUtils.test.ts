@@ -1,6 +1,6 @@
 import { strict as assert } from 'node:assert';
 import { describe } from 'mocha';
-import { MathUtils } from '../../Utils';
+import { Utils } from '../../index';
 
 describe('MathUtils', function () {
     describe('argMax', function () {
@@ -13,16 +13,16 @@ describe('MathUtils', function () {
             const test2Res = 0;
             const test3Res = 3;
 
-            assert.strictEqual(MathUtils.argMax(test1), test1Res);
-            assert.strictEqual(MathUtils.argMax(test2), test2Res);
-            assert.strictEqual(MathUtils.argMax(test3), test3Res);
+            assert.strictEqual(Utils.MathUtils.argMax(test1), test1Res);
+            assert.strictEqual(Utils.MathUtils.argMax(test2), test2Res);
+            assert.strictEqual(Utils.MathUtils.argMax(test3), test3Res);
         });
 
         it('empty array', function () {
             const test: number[] = [];
             const res = -1;
 
-            assert.strictEqual(MathUtils.argMax(test), res);
+            assert.strictEqual(Utils.MathUtils.argMax(test), res);
         });
     });
 });

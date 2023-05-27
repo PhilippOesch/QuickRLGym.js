@@ -1,15 +1,11 @@
 //import { SingleAgentEnvironment, Agents, QuickRLJS } from 'quickrl.core';
-import {
-    SingleAgentEnvironment,
-    Agents,
-    QuickRLJS,
-} from '../../coreLibrary/src';
-import NodeJSONFileStrategy from './NodeJSONFileManager';
-import NodeTFFileStrategy from './NodeTFFileManager';
+import { SingleAgentEnvironment, Agents, QuickRLJS } from 'quickrl.core';
+import JSONFileStrategy from './NodeJSONFileManager';
+import TFFileStrategy from './NodeTFFileManager';
 require('@tensorflow/tfjs-node-gpu');
 
 //parameters
-const fileManager = new NodeJSONFileStrategy();
+const fileManager = new JSONFileStrategy();
 
 async function main() {
     trainTaxiQLAgent();
@@ -148,7 +144,7 @@ async function trainTaxiDQN() {
     env.agent = agent;
     env.initAgent();
 
-    const tFFileManager: NodeTFFileStrategy = new NodeTFFileStrategy();
+    const tFFileManager: TFFileStrategy = new TFFileStrategy();
     await agent.saveConfig(fileManager, {
         filePath: './models/DQN/TaxiTest/config.json',
     });

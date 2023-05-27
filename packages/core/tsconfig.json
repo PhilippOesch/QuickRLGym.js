@@ -1,15 +1,19 @@
 {
     "extends": "../../tsconfig.json",
     "compilerOptions": {
+        "target": "ESNext",
         "moduleResolution": "node",
-        "module": "CommonJS" /* Specify what module code is generated. */ /* Specify multiple folders that act like './node_modules/@types'. */,
-        "types": [
-            "node"
-        ] /* Specify type package names to be included without being referenced in a source file. */ /* Specify a file that bundles all outputs into one JavaScript file. If 'declaration' is true, also designates a file that bundles all .d.ts output. */,
-        "outDir": "./out" /* Specify an output folder for all emitted files. */,
-        //"outFile": "./out/index.js",
-        "strict": true /* Enable all strict type-checking options. */
-        //"inlineSourceMap": true
+        "baseUrl": ".",
+        "module": "ESNext",
+        "types": ["node"],
+        "lib": ["ESNext", "DOM"],
+        "outDir": "./dist",
+        "strict": true,
+        "declaration": true,
+        "emitDeclarationOnly": true,
+        "declarationDir": "./dist/dts",
+        "resolveJsonModule": true,
+        "sourceMap": true
     },
     "include": ["src"],
     "exclude": ["node_modules"]

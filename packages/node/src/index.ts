@@ -1,15 +1,15 @@
-import NodeJSONFileStrategy, {
-    NodeJSONFMOptions,
+import JSONFileStrategy, {
+    JSONFSOptions,
 } from './FileStrategies/NodeJSONFileManager';
-import NodeTFFileStrategy, {
+import TFFileStrategy, {
     TFFModelLoadResult,
-    NodeTFOptions,
+    TFFSOptions,
 } from './FileStrategies/NodeTFFileManager';
 
 export {
-    NodeJSONFileStrategy,
-    type NodeJSONFMOptions,
-    NodeTFFileStrategy,
+    JSONFileStrategy,
+    type JSONFSOptions,
+    TFFileStrategy,
     type TFFModelLoadResult,
-    type NodeTFOptions,
+    type TFFSOptions,
 };

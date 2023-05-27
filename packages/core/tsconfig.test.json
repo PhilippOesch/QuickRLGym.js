@@ -1,0 +1,12 @@
+{
+    "extends": "./tsconfig.json",
+    "compilerOptions": {
+        "target": "ESNext",
+        "emitDeclarationOnly": false,
+        "module": "ESNext",
+        "outDir": "distTesting"
+    },
+    "include": ["src/testing"],
+    "exclude": ["node_modules"],
+    "files": ["src/index.ts"]
+}

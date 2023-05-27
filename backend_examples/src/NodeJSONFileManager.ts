@@ -6,7 +6,7 @@ export interface NodeJSONFMOptions {
     filePath: string;
 }
 
-class NodeJSONFileStrategy implements FileStrategy {
+class JSONFileStrategy implements FileStrategy {
     public async load(options: NodeJSONFMOptions): Promise<object> {
         let qtable: Buffer = await readFile(options.filePath);
         return JSON.parse(qtable.toString());
@@ -25,4 +25,4 @@ class NodeJSONFileStrategy implements FileStrategy {
     }
 }
 
-export default NodeJSONFileStrategy;
+export default JSONFileStrategy;
