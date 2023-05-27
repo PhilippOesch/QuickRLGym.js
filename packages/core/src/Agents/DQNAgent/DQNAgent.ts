@@ -1,6 +1,6 @@
 import seedrandom from 'seedrandom';
 import { Environment, EnvStateContext, Experience } from '../../index';
-import * as tf from '@tensorflow/tfjs';
+import tf from '@tensorflow/tfjs';
 import { MathUtils, General } from '../../Utils';
 import PersistableAgent from '../../RLInterface/PersistableAgent';
 import FileStrategy from '../../RLInterface/FileStrategy';
@@ -187,7 +187,7 @@ class DQNAgent extends PersistableAgent {
             this.env.encodeStateToIndices(state),
             [1, this.env.stateDim.length]
         );
-        const result: tf.Tensor<tf.Rank> = this.qNetworkLocal.predict(
+        const result: tf.Tensor<any> = this.qNetworkLocal.predict(
             encodedState
         ) as tf.Tensor<tf.Rank>;
         const qValues = result.arraySync() as number[][];

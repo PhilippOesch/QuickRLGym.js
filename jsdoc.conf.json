@@ -5,8 +5,12 @@
         "dictionaries": ["jsdoc", "closure"]
     },
     "source": {
-        "include": ["src"],
-        "exclude": ["src/testing"],
+        "include": [
+            "packages/core/src",
+            "packages/node/src",
+            "packages/web/src"
+        ],
+        "exclude": ["packages/core/src/testing"],
         "includePattern": "\\.(jsx|js|ts|tsx)$",
         "excludePattern": "(^|\\/|\\\\)_"
     },
@@ -37,9 +41,9 @@
         }
     },
     "opts": {
-        "destination": "../../pages/docs",
+        "destination": "./pages/docs",
         "recurse": true,
-        "readme": "../../README.md",
+        "readme": "./README.md",
         "template": "./node_modules/better-docs"
     }
 }

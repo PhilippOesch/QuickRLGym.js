@@ -10,7 +10,7 @@
         "backend": "cd ./backend; pnpm buildrun",
         "buildCore": "cd ./packages/core; pnpm buildDev",
         "deployDevDocker": "cd ./frontend; bash dev_deploy_docker.bash",
-        "buildDocs": "cd ./packages/core; pnpm genDocs"
+        "buildDocs": "jsdoc -c jsdoc.conf.json"
     },
     "repository": {
         "type": "git",
@@ -23,8 +23,11 @@
     },
     "homepage": "https://github.com/PhilippOesch/QuickRLGym.js#readme",
     "devDependencies": {
+        "better-docs": "^2.7.2",
+        "jsdoc": "^4.0.2",
         "prettier": "^2.8.3",
         "prettier-plugin-tailwindcss": "^0.2.2",
+        "taffydb": "^2.7.3",
         "typescript": "^4.8.4"
     }
 }
