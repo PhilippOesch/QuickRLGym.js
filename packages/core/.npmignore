@@ -9,4 +9,6 @@ tsconfig.dev.json
 Development.md
 .mocharc.json
 pnpm-lock.yaml
-distTesting
+jest.config.cjs
+tsconfig.build.json
+pnpm-lock.yaml

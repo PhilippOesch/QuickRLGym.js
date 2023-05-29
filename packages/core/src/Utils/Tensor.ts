@@ -326,7 +326,7 @@ class Tensor {
 
     private indexOutOfRange(indices: number[]): boolean {
         for (let i = 0; i < this._dim.length; i++) {
-            if (indices[i] >= this._dim[i]) {
+            if (indices[i] >= this._dim[i] || indices[i] < 0) {
                 return true;
             }
         }

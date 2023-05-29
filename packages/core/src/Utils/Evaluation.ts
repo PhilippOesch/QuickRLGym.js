@@ -1,7 +1,21 @@
 import Agent from '../RLInterface/Agent';
 import { SingleAgentEnvironment } from '../RLInterface/SingleAgentEnvironment';
 
-// expects an initialized Environment with agent
+/**
+ * Module for Evaluations
+ * @module Utils/Evaluation
+ * @category Utils
+ */
+
+/**
+ * Benchmark a single agent
+ * @param {SingleAgentEnvironment} env The environment to benchmark in
+ * @param {Agent} agent The agent to bechmark. The agent has to be initialized
+ * @param {number} iterations The number of iterations
+ * @param {number} randomSeed The random seed
+ * @param {number} maxIteration The maximum number of game iterations
+ * @returns {object} The bechmark result
+ */
 export function benchmarkSingleAgent(
     env: SingleAgentEnvironment,
     agent: Agent,

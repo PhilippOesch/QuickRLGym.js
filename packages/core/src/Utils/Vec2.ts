@@ -5,28 +5,28 @@
  * @category Utils
  */
 class Vec2 {
-    private x: number;
-    private y: number;
+    private _x: number;
+    private _y: number;
 
     constructor(x: number, y: number) {
-        this.x = x;
-        this.y = y;
+        this._x = x;
+        this._y = y;
     }
 
     /**
      * Get the x value
      * @type {number}
      */
-    public get getX(): number {
-        return this.x;
+    public get x(): number {
+        return this._x;
     }
 
     /**
      * Get the y value
      * @type {number}
      */
-    public get getY(): number {
-        return this.y;
+    public get y(): number {
+        return this._y;
     }
 
     /**
@@ -35,8 +35,8 @@ class Vec2 {
      * @returns {void}
      */
     public add(addVector: Vec2): void {
-        this.x += addVector.getX;
-        this.y += addVector.getY;
+        this._x += addVector.x;
+        this._y += addVector.y;
     }
 
     /**
@@ -44,7 +44,7 @@ class Vec2 {
      * @returns {Vec2} A copy of this vector
      */
     public copy(): Vec2 {
-        return new Vec2(this.x, this.y);
+        return new Vec2(this._x, this._y);
     }
 
     /**
@@ -53,7 +53,7 @@ class Vec2 {
      * @returns {boolean} True if the compared vectors are equal.
      */
     public isEqual(other: Vec2): boolean {
-        return this.x === other.x && this.y === other.y;
+        return this._x === other._x && this._y === other._y;
     }
 }
 

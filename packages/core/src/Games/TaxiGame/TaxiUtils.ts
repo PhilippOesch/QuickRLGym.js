@@ -18,11 +18,11 @@ import TaxiGameState from './GameState';
 export function adjustedToAbsPos(relPosition: Vec2): Vec2 {
     const x: number =
         (TaxiGlobals.tileWidth * 1.5 +
-            TaxiGlobals.tileWidth * 2 * relPosition.getX) *
+            TaxiGlobals.tileWidth * 2 * relPosition.x) *
         TaxiGlobals.scale;
     const y: number =
         (TaxiGlobals.tileHeight * 1.5 +
-            TaxiGlobals.tileHeight * relPosition.getY) *
+            TaxiGlobals.tileHeight * relPosition.y) *
         TaxiGlobals.scale;
     return new Vec2(x, y);
 }

@@ -58,14 +58,14 @@ class TaxiPlayer {
      */
     public detectCollision(action: TaxiAction): boolean {
         let adjustedPos: Vec2 = new Vec2(
-            1 + this._position.getX * 2,
-            1 + this._position.getY
+            1 + this._position.x * 2,
+            1 + this._position.y
         );
         const moveDir: Vec2 = TaxiPlayer.moveDirMapping.get(action)!.copy();
         adjustedPos.add(moveDir);
 
         return TaxiGameMap.wallTiles.has(
-            TaxiGameMap.tileMap[adjustedPos.getY][adjustedPos.getX]
+            TaxiGameMap.tileMap[adjustedPos.y][adjustedPos.x]
         );
     }
 

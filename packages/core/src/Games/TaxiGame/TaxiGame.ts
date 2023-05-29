@@ -273,8 +273,8 @@ class TaxiGame {
      */
     public static encodeStateToIndices(state: TaxiGameState): number[] {
         return [
-            state.playerPos.getX,
-            state.playerPos.getY,
+            state.playerPos.x,
+            state.playerPos.y,
             state.destinationIdx,
             state.customerPosIdx,
         ];
