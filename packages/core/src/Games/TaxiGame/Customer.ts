@@ -1,5 +1,5 @@
+import * as TaxiGlobals from './Globals';
 import Vec2 from '../../Utils/Vec2';
-import { TaxiGlobals } from './index';
 
 /**
  * The class of the Customer who has to be droped of

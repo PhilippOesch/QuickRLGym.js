@@ -16,7 +16,7 @@
         "library"
     ],
     "scripts": {
-        "test": "jest --silent --collect-coverage;",
+        "test": "jest",
         "release": "pnpm test; pnpm buildProd; pnpm publish --no-git-checks;",
         "coverage": "nyc report --reporter=lcov;",
         "build": "rm -r ./dist; rollup --config; npx tsc -d -p tsconfig.build.json"

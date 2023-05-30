@@ -1,4 +1,5 @@
-import { BlackJackPlayer, BlackJackCard } from './index';
+import BlackJackCard from './Card';
+import BlackJackPlayer from './Player';
 
 /**
  * The card object

@@ -15,9 +15,10 @@ export default {
             plugins: [terser()],
         },
     ],
+    external: ['seedrandom', '@tensorflow/tfjs'],
     plugins: [
         typescript({
-            exclude: ['src/testing'],
+            exclude: ['src/testing', 'node_modules'],
         }),
     ],
 };

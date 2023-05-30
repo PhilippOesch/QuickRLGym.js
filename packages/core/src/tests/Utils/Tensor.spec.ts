@@ -44,6 +44,42 @@ test('a copy should be of equal value to the original', () => {
     }
 });
 
+test('isEqual - tensors are unequal - should return false', () => {
+    const comp1: Utils.Tensor[] = [
+        Tensor.Zeros([4, 6, 8, 7, 2]),
+        Tensor.Ones([3, 5, 7, 2]),
+        Tensor.Random([3, 5, 7, 2, 9, 10], 12),
+    ];
+
+    const comp2: Utils.Tensor[] = [
+        Tensor.Ones([4, 6, 8, 7, 2]),
+        Tensor.Ones([3, 5, 7, 2, 1]),
+        Tensor.Random([3, 5, 7, 2, 9, 10], 14),
+    ];
+
+    for (let i = 0; i < comp1.length; i++) {
+        expect(comp1[i].isEqual(comp2[i])).toBe(false);
+    }
+});
+
+test('isEqual - tensors are equal - should return true', () => {
+    const comp1: Utils.Tensor[] = [
+        Tensor.Zeros([4, 6, 8, 7, 2]),
+        Tensor.Ones([3, 5, 7, 2]),
+        Tensor.Random([3, 5, 7, 2, 9, 10], 12),
+    ];
+
+    const comp2: Utils.Tensor[] = [
+        Tensor.Zeros([4, 6, 8, 7, 2]),
+        Tensor.Ones([3, 5, 7, 2]),
+        Tensor.Random([3, 5, 7, 2, 9, 10], 12),
+    ];
+
+    for (let i = 0; i < comp1.length; i++) {
+        expect(comp1[i].isEqual(comp2[i])).toBe(true);
+    }
+});
+
 test('get value is equal to set value after beeing set', () => {
     const testTensors: Utils.Tensor[] = [
         Tensor.Zeros([4, 6, 8, 7, 2]),
@@ -162,9 +198,10 @@ test('sum - Returns correct sum', () => {
         Utils.Tensor.Zeros([4, 6, 8, 7, 2]),
         Utils.Tensor.Ones([4, 6, 8, 7, 2]),
         Utils.Tensor.Random([7, 6, 5, 3], 15),
+        new Tensor([0], []),
     ];
 
-    const expectedSums: number[] = [0, 2688, 310.933666];
+    const expectedSums: number[] = [0, 2688, 310.933666, 0];
 
     for (let i = 0; i < tensors.length; i++) {
         expect(tensors[i].sum).toBeCloseTo(expectedSums[i], 6);

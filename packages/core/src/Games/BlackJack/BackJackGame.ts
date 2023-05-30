@@ -1,12 +1,10 @@
-import { StepResult } from '../../index';
+import StepResult from '../../RLInterface/StepResult';
 import seedrandom from 'seedrandom';
-import {
-    BlackJackAction,
-    BlackJackPlayer,
-    BlackJackDealer,
-    BlackJackGameState,
-    BlackJackCard,
-} from './index';
+import BlackJackAction from './Action';
+import BlackJackPlayer from './Player';
+import BlackJackDealer from './Dealer';
+import BlackJackGameState from './GameState';
+import BlackJackCard from './Card';
 
 /**
  * The Black Jack implementation is oriented on the logic described in Richard

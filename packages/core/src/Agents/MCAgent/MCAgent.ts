@@ -1,8 +1,12 @@
-import { Environment, EnvStateContext, FileStrategy, Utils } from '../../index';
 import seedrandom from 'seedrandom';
 import PersistableAgent from '../../RLInterface/PersistableAgent';
-import { Experience } from '../../index';
-import { General } from '../../Utils';
+import { General, JSONTensor, MathUtils, Tensor } from '../../Utils';
+import {
+    EnvStateContext,
+    Experience,
+} from '../../RLInterface/SingleAgentEnvironment';
+import Environment from '../../RLInterface/Environment';
+import FileStrategy from '../../RLInterface/FileStrategy';
 
 /**
  * Settings for the MCAgent
@@ -28,8 +32,8 @@ export interface MCAgentSettings {
  * @property {JSONTensor} stateReturnCountTable the state return count table
  */
 export interface MCSaveFormat {
-    valueTable: Utils.JSONTensor;
-    stateReturnCountTable: Utils.JSONTensor;
+    valueTable: JSONTensor;
+    stateReturnCountTable: JSONTensor;
 }
 
 /**
@@ -44,8 +48,8 @@ class MCAgent extends PersistableAgent {
     private _config?: MCAgentSettings;
     private rng: seedrandom.PRNG;
     private randomSeed?: string;
-    private _valueTable: Utils.Tensor;
-    private _stateReturnCountTable: Utils.Tensor;
+    private _valueTable: Tensor;
+    private _stateReturnCountTable: Tensor;
     private _experience: Experience[] = [];
 
     private epsilon: number = 0;
@@ -69,7 +73,7 @@ class MCAgent extends PersistableAgent {
      * Get the value table
      * @type {Tensor}
      */
-    public get valueTable(): Utils.Tensor {
+    public get valueTable(): Tensor {
         return this._valueTable;
     }
 
@@ -77,7 +81,7 @@ class MCAgent extends PersistableAgent {
      * Get the state retunn count table
      * @type {Tensor}
      */
-    public get stateReturnCountTable(): Utils.Tensor {
+    public get stateReturnCountTable(): Tensor {
         return this._stateReturnCountTable;
     }
 
@@ -92,8 +96,8 @@ class MCAgent extends PersistableAgent {
     public init(): void {
         const valueTableDims: number[] = [...this.env.stateDim];
         valueTableDims.push(this.env.actionSpace.length);
-        this._valueTable = Utils.Tensor.Zeros(valueTableDims);
-        this._stateReturnCountTable = Utils.Tensor.Zeros(valueTableDims);
+        this._valueTable = Tensor.Zeros(valueTableDims);
+        this._stateReturnCountTable = Tensor.Zeros(valueTableDims);
         this.setConfig(this._config);
     }
 
@@ -162,7 +166,7 @@ class MCAgent extends PersistableAgent {
 
     public evalStep(state: object): string {
         const actions: number[] = this.getStateActionValues(state);
-        const actionIdx: number = Utils.MathUtils.argMax(actions);
+        const actionIdx: number = MathUtils.argMax(actions);
         return this.env.actionSpace[actionIdx];
     }
 
@@ -266,8 +270,8 @@ class MCAgent extends PersistableAgent {
         const loadObject: MCSaveFormat = <MCSaveFormat>(
             await fileManager.load(options)
         );
-        this._valueTable = Utils.Tensor.fromJSONObject(loadObject.valueTable);
-        this._stateReturnCountTable = Utils.Tensor.fromJSONObject(
+        this._valueTable = Tensor.fromJSONObject(loadObject.valueTable);
+        this._stateReturnCountTable = Tensor.fromJSONObject(
             loadObject.stateReturnCountTable
         );
     }

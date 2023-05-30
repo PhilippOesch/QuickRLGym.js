@@ -1,5 +1,5 @@
 import seedrandom from 'seedrandom';
-import { Agent } from '../../index';
+import Agent from '../../RLInterface/Agent';
 import Environment from '../../RLInterface/Environment';
 
 /**

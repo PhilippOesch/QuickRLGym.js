@@ -1,5 +1,8 @@
-import { EnvOptions, SingleAgentEnvironment, StepResult } from '../index';
+// import { EnvOptions, SingleAgentEnvironment, StepResult } from '../index';
+import { EnvOptions } from '../RLInterface/Environment';
 import { BlackJackGame, BlackJackGameState } from '../Games/BlackJack/index';
+import { SingleAgentEnvironment } from '../RLInterface/SingleAgentEnvironment';
+import StepResult from '../RLInterface/StepResult';
 
 /**
  * The BlackJack stats

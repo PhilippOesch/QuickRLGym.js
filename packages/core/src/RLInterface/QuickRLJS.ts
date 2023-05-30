@@ -1,5 +1,6 @@
 import Environment from './Environment';
-import { Envs, SingleAgentEnvironment } from '../index';
+import { SingleAgentEnvironment } from './SingleAgentEnvironment';
+import * as Envs from '../Envs/';
 
 /**
  * The the typ of enviroment

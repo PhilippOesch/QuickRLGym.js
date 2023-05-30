@@ -1,10 +1,10 @@
 import TaxiAction from './Action';
 import TaxiGameState from './GameState';
-import { TaxiUtils } from '.';
+import * as TaxiGlobals from './Globals';
+import * as TaxiUtils from './TaxiUtils';
 import TaxiCustomer from './Customer';
 import TaxiPlayer from './Player';
 import Vec2 from '../../Utils/Vec2';
-import { TaxiGlobals } from './index';
 import StepResult from '../../RLInterface/StepResult';
 import seedrandom from 'seedrandom';
 import { CustomerStartState } from './TaxiUtils';

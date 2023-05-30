@@ -1,7 +1,7 @@
 import seedrandom from 'seedrandom';
-import { TaxiGlobals } from './index';
 import Vec2 from '../../Utils/Vec2';
 import TaxiGameState from './GameState';
+import * as TaxiGlobals from './Globals';
 
 /**
  * The Taxi Game Map

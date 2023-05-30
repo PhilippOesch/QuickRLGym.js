@@ -1,5 +1,5 @@
 import seedrandom from 'seedrandom';
-import { MathUtils } from '.';
+import * as MathUtils from './MathUtils';
 
 /**
  * Enum of Initialization Types for a Tensor-Object

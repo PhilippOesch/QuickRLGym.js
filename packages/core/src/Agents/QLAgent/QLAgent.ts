@@ -1,7 +1,9 @@
 import seedrandom from 'seedrandom';
-import { Utils, Environment, FileStrategy, EnvStateContext } from '../../index';
 import PersistableAgent from '../../RLInterface/PersistableAgent';
-import { General } from '../../Utils';
+import { General, Tensor, MathUtils, JSONTensor } from '../../Utils';
+import Environment from '../../RLInterface/Environment';
+import { EnvStateContext } from '../../RLInterface/SingleAgentEnvironment';
+import FileStrategy from '../../RLInterface/FileStrategy';
 
 /**
  * Settings for the QLAgent
@@ -33,7 +35,7 @@ class QLAgent extends PersistableAgent {
     private _config?: QLAgentSettings;
     private rng: seedrandom.PRNG;
     private randomSeed?: string;
-    private _qTable: Utils.Tensor;
+    private _qTable: Tensor;
     private epsilon: number;
     private epsilonStep: number;
 
@@ -74,14 +76,14 @@ class QLAgent extends PersistableAgent {
      * Get the q-table
      * @type {Tensor}
      */
-    public get qTable(): Utils.Tensor {
+    public get qTable(): Tensor {
         return this._qTable;
     }
 
     public init(): void {
         const qTableDims: number[] = [...this.env.stateDim];
         qTableDims.push(this.env.actionSpace.length);
-        this._qTable = Utils.Tensor.Zeros(qTableDims);
+        this._qTable = Tensor.Zeros(qTableDims);
         this.setConfig(this._config);
     }
 
@@ -95,7 +97,7 @@ class QLAgent extends PersistableAgent {
 
     public evalStep(state: object): string {
         const actions: number[] = this.getStateActionValues(state);
-        const actionIdx: number = Utils.MathUtils.argMax(actions);
+        const actionIdx: number = MathUtils.argMax(actions);
         return this.env.actionSpace[actionIdx];
     }
     public async feed(
@@ -109,7 +111,7 @@ class QLAgent extends PersistableAgent {
         const takenActionIdx = this.env.actionSpace.indexOf(takenAction);
         const prevActionQvalues = this.getStateActionValues(prevState);
         const newPossibleActionValues = this.getStateActionValues(newState);
-        const newBestActionIdx: number = Utils.MathUtils.argMax(
+        const newBestActionIdx: number = MathUtils.argMax(
             newPossibleActionValues
         );
 
@@ -188,9 +190,7 @@ class QLAgent extends PersistableAgent {
         options?: object
     ): Promise<void> {
         const loadObject: object = await fileStrategy.load(options);
-        this._qTable = Utils.Tensor.fromJSONObject(
-            <Utils.JSONTensor>loadObject
-        );
+        this._qTable = Tensor.fromJSONObject(<JSONTensor>loadObject);
     }
 
     public async loadConfig(

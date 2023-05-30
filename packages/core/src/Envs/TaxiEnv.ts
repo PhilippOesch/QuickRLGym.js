@@ -1,5 +1,7 @@
+import { SingleAgentEnvironment } from '../RLInterface/SingleAgentEnvironment';
 import { TaxiGame, TaxiGameState } from '../Games/TaxiGame/index';
-import { StepResult, SingleAgentEnvironment, EnvOptions } from '../index';
+import StepResult from '../RLInterface/StepResult';
+import { EnvOptions } from '../RLInterface/Environment';
 
 /**
  * The Taxi Environment stats

@@ -1,6 +1,6 @@
 import TaxiAction from './Action';
-import { TaxiGameMap } from './index';
 import Vec2 from '../../Utils/Vec2';
+import * as TaxiGameMap from './GameMap';
 
 /**
  * The Player class
