@@ -5,6 +5,8 @@ import FileStrategy from './FileStrategy';
  * Interface for Agents that can be stored and loaded for later usage of interference
  * @abstract
  * @extends Agent
+ * @param Tmodel The type of the model to load
+ * @param Tconfig The type of the config to save
  * @category QuickRLInterface
  */
 abstract class PersistableAgent<Tmodel, Tconfig> extends Agent {
