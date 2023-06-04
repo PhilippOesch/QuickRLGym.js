@@ -106,7 +106,7 @@ class DQNAgent extends PersistableAgent {
      * @type {DQNNetwork}
      */
     public get network(): DQNNetwork {
-        return <DQNNetwork>{
+        return {
             local: this.qNetworkLocal,
             target: this.qNetworkTarget,
         };
@@ -145,7 +145,6 @@ class DQNAgent extends PersistableAgent {
         if (this._config) {
             this.epsilon = this._config.epsilonStart;
 
-            // when active create target network for DDQN
             if (this._config.activateDoubleDQN)
                 this.qNetworkTarget = this.createNetwork();
         }

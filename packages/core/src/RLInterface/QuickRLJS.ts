@@ -24,16 +24,16 @@ const registery: Map<string, EnvType> = new Map();
  * @param {?object} initialState - initial state of the environment
  * @returns {Environment | undefined} an instatiated object of the environment or undefined
  */
-export function loadEnv(
+export function loadEnv<T extends Environment>(
     name: string,
     options?: object,
     initialState?: object
-): Environment | undefined {
+): T | undefined {
     if (registery.has(name)) {
         const env = registery.get(name) as any;
         const newEnv: Environment = new env();
         newEnv.init(options, initialState);
-        return newEnv;
+        return <T>newEnv;
     }
     return undefined;
 }

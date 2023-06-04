@@ -26,7 +26,7 @@ const agentConfig = {
 };
 
 beforeEach(() => {
-    _env = <Envs.TaxiEnv>QuickRLJS.loadEnv('Taxi', envOptions);
+    _env = QuickRLJS.loadEnv<Envs.TaxiEnv>('Taxi', envOptions)!;
     _agent = new Agents.QLAgent(_env, agentConfig, agentRandomSeed);
     _fileStrategy = new DummyFileStrategy();
 

@@ -1,10 +1,15 @@
+import Copiable from './Copiable';
+import Comparable from './Comparable';
+
 /**
  * Represent a 2d Vector
  * @param {number} x The x value
  * @param {number} y The y value
+ * @implements Copiable
+ * @implements Comparable
  * @category Utils
  */
-class Vec2 {
+class Vec2 implements Copiable<Vec2>, Comparable<Vec2> {
     private _x: number;
     private _y: number;
 

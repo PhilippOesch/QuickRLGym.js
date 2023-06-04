@@ -1,5 +1,7 @@
 import seedrandom from 'seedrandom';
 import * as MathUtils from './MathUtils';
+import Copiable from './Copiable';
+import Comparable from './Comparable';
 
 /**
  * Enum of Initialization Types for a Tensor-Object
@@ -29,8 +31,10 @@ interface JSONTensor {
  * @param {number[]} dim - The dimension of the Tensor
  * @param {any[]} array - The actual managed array element
  * @category Utils
+ * @implements Copiable
+ * @implements Comparable
  */
-class Tensor {
+class Tensor implements Copiable<Tensor>, Comparable<Tensor> {
     private readonly _dim: number[];
     private array: Array<any>;
 
