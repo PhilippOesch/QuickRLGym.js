@@ -10,7 +10,7 @@ import DummyFileStrategy from './dummies/MockFileStrategy';
 
 let _env: Envs.TaxiEnv;
 let _agent: Agents.QLAgent;
-let _fileStrategy: FileStrategy;
+let _fileStrategy: FileStrategy<any>;
 
 const envOptions: EnvOptions = {
     randomSeed: 134,
@@ -89,7 +89,7 @@ test('load agent - dummy file strategy empty - throws error', async () => {
     } catch (e: any) {
         expect(e).toBeInstanceOf(Error);
         expect(e.message).toMatch(
-            'object is missing important attributes for conversion'
+            "Cannot read properties of undefined (reading 'dim')"
         );
     }
 });

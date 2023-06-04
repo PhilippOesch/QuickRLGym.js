@@ -1,12 +1,12 @@
 import { FileStrategy } from '../../..';
 
-export default class DummyFileStrategy implements FileStrategy {
-    private cache: object = {};
+export default class DummyFileStrategy<T> implements FileStrategy<T> {
+    private cache?: T = undefined;
 
-    async load(): Promise<object> {
-        return this.cache;
+    async load(): Promise<T> {
+        return <T>this.cache;
     }
-    async save(saveObject: object): Promise<boolean> {
+    async save(saveObject: T): Promise<boolean> {
         this.cache = saveObject;
         return true;
     }

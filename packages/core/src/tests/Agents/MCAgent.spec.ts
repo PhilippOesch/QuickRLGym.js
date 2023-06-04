@@ -3,7 +3,7 @@ import DummyFileStrategy from './dummies/MockFileStrategy';
 
 let _env: Envs.BlackJackEnv;
 let _agent: Agents.MCAgent;
-let _fileStrategy: FileStrategy;
+let _fileStrategy: FileStrategy<any>;
 
 const envOptions: EnvOptions = {
     randomSeed: 135,
@@ -109,7 +109,7 @@ test('load without saving - throws error', async () => {
     } catch (e: any) {
         expect(e).toBeInstanceOf(Error);
         expect(e.message).toMatch(
-            "Cannot read properties of undefined (reading 'dim')"
+            "Cannot read properties of undefined (reading 'valueTable')"
         );
     }
 });

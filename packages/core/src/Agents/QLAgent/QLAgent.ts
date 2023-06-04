@@ -31,7 +31,7 @@ export interface QLAgentSettings {
  * @param {?QLAgentSettings} config - the configuration
  * @param {?number} randomSeed - The randomSeed
  */
-class QLAgent extends PersistableAgent {
+class QLAgent extends PersistableAgent<JSONTensor, QLAgentSettings> {
     private _config?: QLAgentSettings;
     private rng: seedrandom.PRNG;
     private randomSeed?: string;
@@ -174,7 +174,7 @@ class QLAgent extends PersistableAgent {
      * @param options - the options for the file strategy
      */
     public async save(
-        fileStrategy: FileStrategy,
+        fileStrategy: FileStrategy<JSONTensor>,
         options?: object
     ): Promise<void> {
         await fileStrategy.save(this._qTable.toJSONTensor(), options);
@@ -186,7 +186,7 @@ class QLAgent extends PersistableAgent {
      * @param options - the options for the file strategy
      */
     public async load(
-        fileStrategy: FileStrategy,
+        fileStrategy: FileStrategy<JSONTensor>,
         options?: object
     ): Promise<void> {
         const loadObject: object = await fileStrategy.load(options);
@@ -194,7 +194,7 @@ class QLAgent extends PersistableAgent {
     }
 
     public async loadConfig(
-        fileManager: FileStrategy,
+        fileManager: FileStrategy<QLAgentSettings>,
         options?: object
     ): Promise<void> {
         const loadObject: QLAgentSettings = <QLAgentSettings>(
@@ -203,7 +203,7 @@ class QLAgent extends PersistableAgent {
         this.setConfig(loadObject);
     }
     public async saveConfig(
-        fileManager: FileStrategy,
+        fileManager: FileStrategy<QLAgentSettings>,
         options?: object
     ): Promise<void> {
         await fileManager.save(this._config!, options);

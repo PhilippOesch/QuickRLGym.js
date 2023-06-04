@@ -7,14 +7,17 @@ import FileStrategy from './FileStrategy';
  * @extends Agent
  * @category QuickRLInterface
  */
-abstract class PersistableAgent extends Agent {
+abstract class PersistableAgent<Tmodel, Tconfig> extends Agent {
     /**
      * load the Model
      * @param {FileStrategy} fileManager FileManager Strategy
      * @param {?object} options the options zo use for loading
      * @returns {Promise<void>}
      */
-    abstract load(fileManager: FileStrategy, options?: object): Promise<void>;
+    abstract load(
+        fileManager: FileStrategy<Tmodel>,
+        options?: object
+    ): Promise<void>;
     /**
      * load the config
      * @param {FileStrategy} fileManager - FileManager Strategy
@@ -22,7 +25,7 @@ abstract class PersistableAgent extends Agent {
      * @returns {Promise<void>}
      */
     abstract loadConfig(
-        fileManager: FileStrategy,
+        fileManager: FileStrategy<Tconfig>,
         options?: object
     ): Promise<void>;
     /**
@@ -31,7 +34,10 @@ abstract class PersistableAgent extends Agent {
      * @param {?object} options the options to use for saving the agent
      * @returns {Promise<void>}
      */
-    abstract save(fileManager: FileStrategy, options?: object): Promise<void>;
+    abstract save(
+        fileManager: FileStrategy<Tmodel>,
+        options?: object
+    ): Promise<void>;
     /**
      * Save the Config
      * @param {FileStrategy} fileManager FileManager Strategy
@@ -39,7 +45,7 @@ abstract class PersistableAgent extends Agent {
      * @returns {Promise<void>}
      */
     abstract saveConfig(
-        fileManager: FileStrategy,
+        fileManager: FileStrategy<Tconfig>,
         options?: object
     ): Promise<void>;
 }

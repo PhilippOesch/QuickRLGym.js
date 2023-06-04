@@ -1,9 +1,9 @@
-import { Agents, Envs, EnvOptions, QuickRLJS } from '../../..';
+import { Agents, Envs, EnvOptions, QuickRLJS, FileStrategy } from '../../..';
 import DummyFileStrategy from '../dummies/MockFileStrategy';
 
 let _env: Envs.TaxiEnv;
 let _agent: Agents.DQNAgent;
-let _fileStrategy: DummyFileStrategy;
+let _fileStrategy: FileStrategy<any>;
 
 const envOptions: EnvOptions = {
     randomSeed: 134,
@@ -138,7 +138,7 @@ test('load agent - no reference is set - should throw', async () => {
     } catch (e: any) {
         expect(e).toBeInstanceOf(Error);
         expect(e.message).toMatch(
-            'this.qNetworkLocal.compile is not a function'
+            "Cannot read properties of undefined (reading 'compile')"
         );
     }
 });
@@ -156,4 +156,27 @@ test('load agent - In Double DQN file strategy save should be called twice', asy
 
     // because for loading a double dqn the load is called twice once for each network
     expect(fileStrategyLoadSpy).toBeCalledTimes(2);
+});
+
+test('save config - save of file strategy is called', async () => {
+    const fileStrategySaveSpy = jest.spyOn(_fileStrategy, 'save');
+
+    _agent.init();
+
+    await _agent.saveConfig(_fileStrategy);
+
+    expect(fileStrategySaveSpy).toBeCalledTimes(1);
+});
+
+test('save config - save of file strategy is called', async () => {
+    const fileStrategySaveSpy = jest.spyOn(_fileStrategy, 'save');
+    const fileStrategyLoadSpy = jest.spyOn(_fileStrategy, 'load');
+
+    _agent.init();
+
+    await _agent.saveConfig(_fileStrategy);
+    await _agent.loadConfig(_fileStrategy);
+
+    expect(fileStrategySaveSpy).toBeCalledTimes(1);
+    expect(fileStrategyLoadSpy).toBeCalledTimes(1);
 });

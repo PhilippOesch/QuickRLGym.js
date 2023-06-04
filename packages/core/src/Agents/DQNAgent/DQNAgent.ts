@@ -66,7 +66,7 @@ export interface DQNNetwork {
  * @param {?DQNAgentSettings} config The configuration
  * @param {?number} randomSeed The configuration
  */
-class DQNAgent extends PersistableAgent {
+class DQNAgent extends PersistableAgent<tf.Sequential, DQNAgentSettings> {
     private _config?: DQNAgentSettings;
     private rng: seedrandom.PRNG;
     private experienceReplay: ReplayMemory;
@@ -293,17 +293,17 @@ class DQNAgent extends PersistableAgent {
     }
 
     public async save(
-        fileManager: FileStrategy,
+        fileManager: FileStrategy<tf.Sequential>,
         options?: object
     ): Promise<void> {
         await fileManager.save(this.qNetworkLocal, options);
     }
 
     public async load(
-        fileManager: FileStrategy,
+        fileManager: FileStrategy<tf.Sequential>,
         options?: object
     ): Promise<void> {
-        this.qNetworkLocal = <tf.Sequential>await fileManager.load(options);
+        this.qNetworkLocal = await fileManager.load(options);
 
         const adamOptimizer = tf.train.adam(this._config!.learningRate);
 
@@ -331,16 +331,14 @@ class DQNAgent extends PersistableAgent {
         }
     }
     public async loadConfig(
-        fileManager: FileStrategy,
+        fileManager: FileStrategy<DQNAgentSettings>,
         options?: object
     ): Promise<void> {
-        const loadObject: DQNAgentSettings = <DQNAgentSettings>(
-            await fileManager.load(options)
-        );
+        const loadObject: DQNAgentSettings = await fileManager.load(options);
         this.setConfig(loadObject);
     }
     public async saveConfig(
-        fileManager: FileStrategy,
+        fileManager: FileStrategy<DQNAgentSettings>,
         options?: object
     ): Promise<void> {
         await fileManager.save(this._config!, options);

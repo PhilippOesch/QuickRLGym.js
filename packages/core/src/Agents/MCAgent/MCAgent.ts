@@ -44,7 +44,7 @@ export interface MCSaveFormat {
  * @param {?MCAgentSettings} config The configuration
  * @param {?number} randomSeed the random seed
  */
-class MCAgent extends PersistableAgent {
+class MCAgent extends PersistableAgent<MCSaveFormat, MCAgentSettings> {
     private _config?: MCAgentSettings;
     private rng: seedrandom.PRNG;
     private randomSeed?: string;
@@ -264,12 +264,10 @@ class MCAgent extends PersistableAgent {
     }
 
     public async load(
-        fileManager: FileStrategy,
+        fileManager: FileStrategy<MCSaveFormat>,
         options?: object
     ): Promise<void> {
-        const loadObject: MCSaveFormat = <MCSaveFormat>(
-            await fileManager.load(options)
-        );
+        const loadObject: MCSaveFormat = await fileManager.load(options);
         this._valueTable = Tensor.fromJSONObject(loadObject.valueTable);
         this._stateReturnCountTable = Tensor.fromJSONObject(
             loadObject.stateReturnCountTable
@@ -277,7 +275,7 @@ class MCAgent extends PersistableAgent {
     }
 
     public async save(
-        fileManager: FileStrategy,
+        fileManager: FileStrategy<MCSaveFormat>,
         options?: object
     ): Promise<void> {
         await fileManager.save(
@@ -291,16 +289,14 @@ class MCAgent extends PersistableAgent {
     }
 
     public async loadConfig(
-        fileManager: FileStrategy,
+        fileManager: FileStrategy<MCAgentSettings>,
         options?: object
     ): Promise<void> {
-        const loadObject: MCAgentSettings = <MCAgentSettings>(
-            await fileManager.load(options)
-        );
+        const loadObject: MCAgentSettings = await fileManager.load(options);
         this.setConfig(loadObject);
     }
     public async saveConfig(
-        fileManager: FileStrategy,
+        fileManager: FileStrategy<MCAgentSettings>,
         options?: object
     ): Promise<void> {
         await fileManager.save(this._config!, options);
