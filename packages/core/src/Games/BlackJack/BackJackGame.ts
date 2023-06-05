@@ -154,7 +154,7 @@ class BlackJackGame {
      * @param {string} actionString The action
      * @returns {StepResult} The result
      */
-    public step(actionString: string): StepResult {
+    public step(actionString: string): StepResult<BlackJackGameState> {
         this._iteration++;
         const action: BlackJackAction | undefined =
             BlackJackGame.actionMapping.get(actionString);

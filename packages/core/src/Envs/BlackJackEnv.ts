@@ -93,7 +93,7 @@ class BlackJackEnv extends SingleAgentEnvironment {
         }
         this._game.initGame();
     }
-    public step(action: string): StepResult {
+    public step(action: string): StepResult<BlackJackGameState> {
         this._lastAction = action;
         return this._game.step(action);
     }

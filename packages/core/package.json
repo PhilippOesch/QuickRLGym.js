@@ -17,8 +17,7 @@
     ],
     "scripts": {
         "test": "jest",
-        "release": "pnpm test; pnpm buildProd; pnpm publish --no-git-checks;",
-        "coverage": "nyc report --reporter=lcov;",
+        "release": "pnpm build; pnpm publish --no-git-checks;",
         "build": "rm -r ./dist; rollup --config; npx tsc -d -p tsconfig.build.json"
     },
     "author": "Philipp Oeschger",

@@ -64,7 +64,7 @@ export abstract class SingleAgentEnvironment extends Environment {
 
     /**
      * get the last action
-     * @type {string | undefined}
+     * @type {Taction | undefined}
      */
     public get lastAction(): string | undefined {
         return this._lastAction;

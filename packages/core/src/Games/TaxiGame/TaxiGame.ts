@@ -200,14 +200,15 @@ class TaxiGame {
      * @param {string} actionString - The action to perform.
      * @returns {StepResult} The result of the step
      */
-    public step(actionString: string): StepResult {
-        const action: TaxiAction | undefined =
-            TaxiGame.actionMapping.get(actionString);
+    public step(actionString: string): StepResult<TaxiGameState> {
+        const action: TaxiAction | undefined = TaxiGame.actionMapping.get(
+            <string>actionString
+        );
         if (action === undefined) {
             throw Error('Illegal Action');
         }
         this.incrementIterations();
-        let stepResult: StepResult;
+        let stepResult: StepResult<TaxiGameState>;
         if (action === TaxiAction.DropOff) {
             stepResult = this.dropOffCustomer();
         } else if (action === TaxiAction.PickUp) {
@@ -225,7 +226,7 @@ class TaxiGame {
         return this.customer.spawnDestIdx;
     }
 
-    private dropOffCustomer(): StepResult {
+    private dropOffCustomer(): StepResult<TaxiGameState> {
         let reward: number;
         if (
             this._player.position.isEqual(
@@ -247,7 +248,7 @@ class TaxiGame {
         };
     }
 
-    private pickUpCustomer(): StepResult {
+    private pickUpCustomer(): StepResult<TaxiGameState> {
         let reward: number;
         if (
             !this._customer.isCustomerPickedUp &&
@@ -285,7 +286,7 @@ class TaxiGame {
      * @param {TaxiAction} action the taken action
      * @returns {StepResult} The result of the steps
      */
-    public updatePlayerPosition(action: TaxiAction): StepResult {
+    public updatePlayerPosition(action: TaxiAction): StepResult<TaxiGameState> {
         this.updatePoints(TaxiGlobals.stepPenaltyPoints);
         this._player.updatePosition(action);
         return {

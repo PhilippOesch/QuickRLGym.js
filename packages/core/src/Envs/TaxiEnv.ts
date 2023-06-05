@@ -1,5 +1,5 @@
 import { SingleAgentEnvironment } from '../RLInterface/SingleAgentEnvironment';
-import { TaxiGame, TaxiGameState } from '../Games/TaxiGame/index';
+import { TaxiAction, TaxiGame, TaxiGameState } from '../Games/TaxiGame/index';
 import StepResult from '../RLInterface/StepResult';
 import { EnvOptions } from '../RLInterface/Environment';
 
@@ -96,7 +96,7 @@ class TaxiEnv extends SingleAgentEnvironment {
         return this._game.return;
     }
 
-    public step(action: string): StepResult {
+    public step(action: string): StepResult<TaxiGameState> {
         this._lastAction = action;
         return this._game.step(action);
     }

@@ -38,7 +38,7 @@ class DummyEnv extends Environment {
     ): void {
         throw new Error('Method not implemented.');
     }
-    step(action: string): StepResult {
+    step(action: string): StepResult<object> {
         throw new Error('Method not implemented.');
     }
     reset(): boolean {

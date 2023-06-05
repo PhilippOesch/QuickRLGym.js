@@ -9,10 +9,10 @@ const logEvery = 500;
 const maxIterationsPerGame = 25;
 
 // load the environment
-const env: SingleAgentEnvironment = <SingleAgentEnvironment>(
-    QuickRLJS.loadEnv('BlackJack', { randomSeed: randomSeed })
-);
-
+const env: SingleAgentEnvironment = QuickRLJS.loadEnv<SingleAgentEnvironment>(
+    'BlackJack',
+    { randomSeed: randomSeed }
+)!;
 // create an agent
 const agent: Agents.DQNAgent = new Agents.DQNAgent(env, {
     learningRate: 0.0001,
