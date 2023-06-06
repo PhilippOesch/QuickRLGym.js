@@ -1,18 +1,51 @@
 {
     "name": "quickrl.web",
-    "version": "1.0.0",
+    "version": "0.0.1",
     "description": "",
-    "main": "index.js",
     "repository": {
         "type": "git",
         "url": "git+https://github.com/PhilippOesch/QuickRLGym.js.git"
     },
+    "type": "module",
+    "main": "dist/index.cjs.js",
+    "module": "dist/index.es.js",
+    "types": "dist/dts/index.d.ts",
     "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1",
-        "buildProd": "rm -r ./out; npx tsc -d -p tsconfig.json",
-        "buildDev": "rm -r ./out; npx tsc -d -p tsconfig.dev.json"
+        "test": "jest",
+        "release": "pnpm build; pnpm publish --no-git-checks;",
+        "build": "rm -r ./dist; rollup --config; npx tsc -d -p tsconfig.build.json"
     },
-    "keywords": [],
-    "author": "",
-    "license": "ISC"
+    "keywords": [
+        "reinforcement learning",
+        "tensorflow",
+        "neural network",
+        "tensorflowJS",
+        "javascript",
+        "typescript",
+        "machine learning",
+        "games",
+        "library",
+        "AI",
+        "DQN",
+        "Monte Carlo",
+        "Q-Learning",
+        "web"
+    ],
+    "author": "Philipp Oeschger",
+    "license": "MIT",
+    "dependencies": {
+        "@tensorflow/tfjs": "^4.6.0",
+        "file-saver": "^2.0.5",
+        "quickrl.core": "^0.6.12"
+    },
+    "devDependencies": {
+        "@jest/globals": "^29.5.0",
+        "@rollup/plugin-terser": "^0.4.3",
+        "@rollup/plugin-typescript": "^11.1.1",
+        "@types/file-saver": "^2.0.5",
+        "@types/jest": "^29.5.2",
+        "jest": "^29.5.0",
+        "rollup": "^3.23.1",
+        "tslib": "^2.5.3"
+    }
 }

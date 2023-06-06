@@ -9,13 +9,8 @@ export default {
             format: 'cjs',
             plugins: [terser()],
         },
-        {
-            file: 'dist/index.es.js',
-            format: 'es',
-            plugins: [terser()],
-        },
     ],
-    external: ['seedrandom', '@tensorflow/tfjs', 'path'],
+    external: ['@tensorflow/tfjs', 'quickrl.core', 'path', 'fs/promises'],
     plugins: [
         typescript({
             exclude: ['src/testing', 'node_modules'],

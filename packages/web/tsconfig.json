@@ -5,7 +5,7 @@
         "moduleResolution": "node",
         "baseUrl": ".",
         "module": "ESNext",
-        "types": ["node", "jest"],
+        "types": ["jest"],
         "lib": ["ESNext", "DOM"],
         "outDir": "./dist",
         "strict": true,

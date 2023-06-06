@@ -1,11 +1,7 @@
 //import { SingleAgentEnvironment, Agents, QuickRLJS } from 'quickrl.core';
 import { SingleAgentEnvironment, Agents, QuickRLJS } from 'quickrl.core';
-import JSONFileStrategy from './NodeJSONFileManager';
-import TFFileStrategy from './NodeTFFileManager';
+import { FileStrategies } from 'quickrl.node';
 require('@tensorflow/tfjs-node-gpu');
-
-//parameters
-const fileManager = new JSONFileStrategy();
 
 async function main() {
     trainTaxiQLAgent();
@@ -36,7 +32,7 @@ async function trainBlackJack() {
     env.agent = agent;
     env.initAgent();
     await env.train(numIterations, logEvery);
-    await agent.save(fileManager, {
+    await agent.save(new FileStrategies.JSONFileStrategy(), {
         filePath: './models/qTables/blackjack/qTable.json',
     });
 }
@@ -64,7 +60,7 @@ async function trainTaxiQLAgent() {
     env.agent = agent;
     env.initAgent();
     await env.train(numIterations, logEvery, maxIterationsPerGame);
-    await agent.save(fileManager, {
+    await agent.save(new FileStrategies.JSONFileStrategy(), {
         filePath: './models/qTables/taxi/qTable.json',
     });
 }
@@ -87,7 +83,7 @@ async function trainTaxiMCAgent() {
     env.agent = agent;
     env.initAgent();
     await env.train(numIterations, logEvery, maxIterationsPerGame);
-    await agent.save(fileManager, {
+    await agent.save(new FileStrategies.JSONFileStrategy(), {
         filePath: './models/qTables/taxi/qTable.json',
     });
 }
@@ -110,7 +106,7 @@ async function trainBlackJackMCAgent() {
     env.agent = agent;
     env.initAgent();
     env.train(numIterations, logEvery);
-    await agent.save(fileManager, {
+    await agent.save(new FileStrategies.JSONFileStrategy(), {
         filePath: './models/MCAgent/blackjack/mcagent.json',
     });
 }
@@ -144,8 +140,7 @@ async function trainTaxiDQN() {
     env.agent = agent;
     env.initAgent();
 
-    const tFFileManager: TFFileStrategy = new TFFileStrategy();
-    await agent.saveConfig(fileManager, {
+    await agent.saveConfig(new FileStrategies.JSONFileStrategy(), {
         filePath: './models/DQN/TaxiTest/config.json',
     });
     // await agent.load(tFFileManager);

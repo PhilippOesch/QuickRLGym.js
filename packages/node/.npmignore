@@ -1,0 +1,13 @@
+node_modules
+src
+dist/dts/testing
+tsconfig.json
+.nyc_output
+coverage
+package-lock.json
+tsconfig.dev.json
+.mocharc.json
+pnpm-lock.yaml
+jest.config.cjs
+tsconfig.build.json
+pnpm-lock.yaml

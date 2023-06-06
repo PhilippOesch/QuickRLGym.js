@@ -15,7 +15,7 @@ export default {
             plugins: [terser()],
         },
     ],
-    external: ['seedrandom', '@tensorflow/tfjs', 'path'],
+    external: ['@tensorflow/tfjs', 'quickrl.core', 'file-saver'],
     plugins: [
         typescript({
             exclude: ['src/testing', 'node_modules'],
