@@ -5,7 +5,7 @@
   
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title> TaxiPlayer</title>
+  <title> NodeJSONFileLoader</title>
 
   <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
@@ -98,7 +98,7 @@
             <div class="content">
                 <header class="page-title">
                     <p>Class</p>
-                    <h1>TaxiPlayer</h1>
+                    <h1>NodeJSONFileLoader</h1>
                 </header>
                 
 
@@ -109,9 +109,9 @@
 
 <header>
     
-        <h2><span class="attribs"><span class="type-signature"></span></span>TaxiPlayer<span class="signature">(relPos, carMoveState)</span><span class="type-signature"></span></h2>
+        <h2><span class="attribs"><span class="type-signature"></span></span>NodeJSONFileLoader<span class="signature">(options)</span><span class="type-signature"></span></h2>
         
-            <div class="class-description"><p>The Player class</p></div>
+            <div class="class-description"><p>File Loader for loading json files in node</p></div>
         
     
 </header>
@@ -130,12 +130,12 @@
 
 
     
-    <h4 class="name" id="TaxiPlayer">
-        <a class="href-link" href="#TaxiPlayer">#</a>
+    <h4 class="name" id="NodeJSONFileLoader">
+        <a class="href-link" href="#NodeJSONFileLoader">#</a>
         
         <span class="code-name">
             
-                new TaxiPlayer<span class="signature">(relPos, carMoveState)</span><span class="type-signature"></span>
+                new NodeJSONFileLoader<span class="signature">(options)</span><span class="type-signature"></span>
             
         </span>
     </h4>
@@ -178,13 +178,13 @@
             
 <tr class="deep-level-0">
   
-      <td class="name"><code>relPos</code></td>
+      <td class="name"><code>options</code></td>
   
 
   <td class="type">
   
       
-<code class="param-type"><a href="Vec2.html">Vec2</a></code>
+<code class="param-type"><a href="JSONFileOptions.html">JSONFileOptions</a></code>
 
 
   
@@ -194,32 +194,7 @@
 
   
 
-  <td class="description last"><p>The relative start position of the player.</p></td>
-</tr>
-
-
-        
-
-            
-<tr class="deep-level-0">
-  
-      <td class="name"><code>carMoveState</code></td>
-  
-
-  <td class="type">
-  
-      
-<code class="param-type"><a href="global.html#TaxiAction">TaxiAction</a></code>
-
-
-  
-  </td>
-
-  
-
-  
-
-  <td class="description last"><p>The car move state at the start.</p></td>
+  <td class="description last"><p>load options</p></td>
 </tr>
 
 
@@ -245,6 +220,13 @@
     
 
     
+    <dt class="implements">Implements:</dt>
+    <dd class="implements"><ul>
+        
+            <li><a href="JSONLoader.html">JSONLoader</a></li>
+        
+    </ul></dd>
+    
 
     
 
@@ -265,9 +247,9 @@
 
     
         <p class="tag-source">
-            <a href="core_src_Games_TaxiGame_Player.ts.html" class="button">View Source</a>
+            <a href="node_src_FileStrategies_NodeJSONFileManager.ts.html" class="button">View Source</a>
             <span>
-                <a href="core_src_Games_TaxiGame_Player.ts.html">core/src/Games/TaxiGame/Player.ts</a>, <a href="core_src_Games_TaxiGame_Player.ts.html#line12">line 12</a>
+                <a href="node_src_FileStrategies_NodeJSONFileManager.ts.html">node/src/FileStrategies/NodeJSONFileManager.ts</a>, <a href="node_src_FileStrategies_NodeJSONFileManager.ts.html#line33">line 33</a>
             </span>
         </p>
     
@@ -306,6 +288,13 @@
     
 
     
+        <h3 class="subsection-title">Classes</h3>
+
+        <dl>
+            <dt><a href="NodeJSONFileLoader.html">NodeJSONFileLoader</a></dt>
+            <dd></dd>
+        </dl>
+    
 
     
 
@@ -323,16 +312,16 @@
     <span class="method-parameter is-pulled-right">
         <label>Type:</label>
         
-<code class="param-type"><a href="Vec2.html">Vec2</a></code>
+<code class="param-type">Promise.&lt;T></code>
 
 
     </span>
 
-<h4 class="name" id="carMoveState">
-    <a class="href-link" href="#carMoveState">#</a>
+<h4 class="name" id="load">
+    <a class="href-link" href="#load">#</a>
     
     <span class="code-name">
-        carMoveState
+        load
     </span>
     
 </h4>
@@ -341,7 +330,7 @@
 
 
 <div class="description">
-    <p>The car move state for the visualization</p>
+    <p>Load the object.</p>
 </div>
 
 
@@ -355,7 +344,10 @@
     
 
     
-
+    <dt class="inherited-from">Inherited From:</dt>
+    <dd class="inherited-from"><ul class="dummy"><li>
+        <a href="FileLoader.html#load">FileLoader#load</a>
+    </li></ul></dd>
     
 
     
@@ -363,157 +355,12 @@
     
 
     
-
-    
-
-    
-
-    
-
-    
-
-    
-    
-
-    
-
-    
-
-    
-        <p class="tag-source">
-            <a href="core_src_Games_TaxiGame_Player.ts.html" class="button">View Source</a>
-            <span>
-                <a href="core_src_Games_TaxiGame_Player.ts.html">core/src/Games/TaxiGame/Player.ts</a>, <a href="core_src_Games_TaxiGame_Player.ts.html#line38">line 38</a>
-            </span>
-        </p>
-    
-</dl>
-
-
-
-
-
-</div>
-            
-                <div class="member">
-
-    <span class="method-parameter is-pulled-right">
-        <label>Type:</label>
+    <dt class="implements">Implements:</dt>
+    <dd class="implements"><ul>
         
-<code class="param-type"><a href="Vec2.html">Vec2</a></code>
-
-
-    </span>
-
-<h4 class="name" id="position">
-    <a class="href-link" href="#position">#</a>
-    
-    <span class="code-name">
-        position
-    </span>
-    
-</h4>
-
-
-
-
-<div class="description">
-    <p>The player position</p>
-</div>
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    
-
-    
-
-    
-
-    
-        <p class="tag-source">
-            <a href="core_src_Games_TaxiGame_Player.ts.html" class="button">View Source</a>
-            <span>
-                <a href="core_src_Games_TaxiGame_Player.ts.html">core/src/Games/TaxiGame/Player.ts</a>, <a href="core_src_Games_TaxiGame_Player.ts.html#line31">line 31</a>
-            </span>
-        </p>
-    
-</dl>
-
-
-
-
-
-</div>
-            
-                <div class="member">
-
-    <span class="method-parameter is-pulled-right">
-        <label>Type:</label>
+            <li><a href="JSONLoader.html#load">JSONLoader#load</a></li>
         
-<code class="param-type"><a href="Vec2.html">Vec2</a></code>
-
-
-    </span>
-
-<h4 class="name" id="position">
-    <a class="href-link" href="#position">#</a>
-    
-    <span class="code-name">
-        position
-    </span>
-    
-</h4>
-
-
-
-
-<div class="description">
-    <p>Set the position</p>
-</div>
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
+    </ul></dd>
     
 
     
@@ -535,9 +382,9 @@
 
     
         <p class="tag-source">
-            <a href="core_src_Games_TaxiGame_Player.ts.html" class="button">View Source</a>
+            <a href="core_src_RLInterface_FileStrategy.ts.html" class="button">View Source</a>
             <span>
-                <a href="core_src_Games_TaxiGame_Player.ts.html">core/src/Games/TaxiGame/Player.ts</a>, <a href="core_src_Games_TaxiGame_Player.ts.html#line45">line 45</a>
+                <a href="core_src_RLInterface_FileStrategy.ts.html">core/src/RLInterface/FileStrategy.ts</a>, <a href="core_src_RLInterface_FileStrategy.ts.html#line11">line 11</a>
             </span>
         </p>
     
@@ -553,625 +400,6 @@
         </div>
     
 
-    
-        <div class='vertical-section'>
-            <h1>Methods</h1>
-            <div class="members">
-            
-                <div class="member">
-
-
-    
-    <h4 class="name" id="carMoveState">
-        <a class="href-link" href="#carMoveState">#</a>
-        
-        <span class="code-name">
-            
-                carMoveState<span class="signature">()</span><span class="type-signature"> &rarr; {<a href="global.html#TaxiAction">TaxiAction</a>}</span>
-            
-        </span>
-    </h4>
-    
-
-    
-    
-    <div class="description">
-        <p>The car move state for the visualization</p>
-    </div>
-    
-
-
-
-
-
-
-
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    
-
-    
-
-    
-
-    
-        <p class="tag-source">
-            <a href="core_src_Games_TaxiGame_Player.ts.html" class="button">View Source</a>
-            <span>
-                <a href="core_src_Games_TaxiGame_Player.ts.html">core/src/Games/TaxiGame/Player.ts</a>, <a href="core_src_Games_TaxiGame_Player.ts.html#line95">line 95</a>
-            </span>
-        </p>
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    <div class='columns method-parameter'>
-        <div class="column is-2"><label>Returns:</label></div>
-        <div class="column is-10">
-            
-                    
-
-<div class="columns">
-    
-    
-    <div class='column is-5 has-text-left'>
-        <label>Type: </label>
-        
-<code class="param-type"><a href="global.html#TaxiAction">TaxiAction</a></code>
-
-
-    </div>
-    
-</div>
-
-                
-        </div>
-    </div>
-
-
-
-
-</div>
-            
-                <div class="member">
-
-
-    
-    <h4 class="name" id="detectCollision">
-        <a class="href-link" href="#detectCollision">#</a>
-        
-        <span class="code-name">
-            
-                detectCollision<span class="signature">(action)</span><span class="type-signature"> &rarr; {boolean}</span>
-            
-        </span>
-    </h4>
-    
-
-    
-    
-    <div class="description">
-        <p>Collision detection logic for the collision with walls</p>
-    </div>
-    
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-<div class="table-container">
-    <table class="params table">
-        <thead>
-        <tr>
-            
-            <th>Name</th>
-            
-
-            <th>Type</th>
-
-            
-
-            
-
-            <th class="last">Description</th>
-        </tr>
-        </thead>
-
-        <tbody>
-        
-
-            
-<tr class="deep-level-0">
-  
-      <td class="name"><code>action</code></td>
-  
-
-  <td class="type">
-  
-      
-<code class="param-type"><a href="global.html#TaxiAction">TaxiAction</a></code>
-
-
-  
-  </td>
-
-  
-
-  
-
-  <td class="description last"><p>The action that was performed</p></td>
-</tr>
-
-
-        
-        </tbody>
-    </table>
-</div>
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    
-
-    
-
-    
-
-    
-        <p class="tag-source">
-            <a href="core_src_Games_TaxiGame_Player.ts.html" class="button">View Source</a>
-            <span>
-                <a href="core_src_Games_TaxiGame_Player.ts.html">core/src/Games/TaxiGame/Player.ts</a>, <a href="core_src_Games_TaxiGame_Player.ts.html#line111">line 111</a>
-            </span>
-        </p>
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    <div class='columns method-parameter'>
-        <div class="column is-2"><label>Returns:</label></div>
-        <div class="column is-10">
-            
-                    
-
-<div class="columns">
-    
-    <div class='param-desc column is-7'><p>true if a collision with the wall was detected.</p></div>
-    
-    
-    <div class='column is-5 has-text-left'>
-        <label>Type: </label>
-        
-<code class="param-type">boolean</code>
-
-
-    </div>
-    
-</div>
-
-                
-        </div>
-    </div>
-
-
-
-
-</div>
-            
-                <div class="member">
-
-
-    
-    <h4 class="name" id="position">
-        <a class="href-link" href="#position">#</a>
-        
-        <span class="code-name">
-            
-                position<span class="signature">(pos)</span><span class="type-signature"></span>
-            
-        </span>
-    </h4>
-    
-
-    
-    
-    <div class="description">
-        <p>Set the position</p>
-    </div>
-    
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-<div class="table-container">
-    <table class="params table">
-        <thead>
-        <tr>
-            
-            <th>Name</th>
-            
-
-            <th>Type</th>
-
-            
-
-            
-
-            <th class="last">Description</th>
-        </tr>
-        </thead>
-
-        <tbody>
-        
-
-            
-<tr class="deep-level-0">
-  
-      <td class="name"><code>pos</code></td>
-  
-
-  <td class="type">
-  
-      
-<code class="param-type"><a href="Vec2.html">Vec2</a></code>
-
-
-  
-  </td>
-
-  
-
-  
-
-  <td class="description last"></td>
-</tr>
-
-
-        
-        </tbody>
-    </table>
-</div>
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    
-
-    
-
-    
-
-    
-        <p class="tag-source">
-            <a href="core_src_Games_TaxiGame_Player.ts.html" class="button">View Source</a>
-            <span>
-                <a href="core_src_Games_TaxiGame_Player.ts.html">core/src/Games/TaxiGame/Player.ts</a>, <a href="core_src_Games_TaxiGame_Player.ts.html#line103">line 103</a>
-            </span>
-        </p>
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-</div>
-            
-                <div class="member">
-
-
-    
-    <h4 class="name" id="updatePosition">
-        <a class="href-link" href="#updatePosition">#</a>
-        
-        <span class="code-name">
-            
-                updatePosition<span class="signature">(action)</span><span class="type-signature"> &rarr; {void}</span>
-            
-        </span>
-    </h4>
-    
-
-    
-    
-    <div class="description">
-        <p>Update the player position according to the taken action</p>
-    </div>
-    
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-<div class="table-container">
-    <table class="params table">
-        <thead>
-        <tr>
-            
-            <th>Name</th>
-            
-
-            <th>Type</th>
-
-            
-
-            
-
-            <th class="last">Description</th>
-        </tr>
-        </thead>
-
-        <tbody>
-        
-
-            
-<tr class="deep-level-0">
-  
-      <td class="name"><code>action</code></td>
-  
-
-  <td class="type">
-  
-      
-<code class="param-type"><a href="global.html#TaxiAction">TaxiAction</a></code>
-
-
-  
-  </td>
-
-  
-
-  
-
-  <td class="description last"><p>the action taken</p></td>
-</tr>
-
-
-        
-        </tbody>
-    </table>
-</div>
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    
-
-    
-
-    
-
-    
-        <p class="tag-source">
-            <a href="core_src_Games_TaxiGame_Player.ts.html" class="button">View Source</a>
-            <span>
-                <a href="core_src_Games_TaxiGame_Player.ts.html">core/src/Games/TaxiGame/Player.ts</a>, <a href="core_src_Games_TaxiGame_Player.ts.html#line119">line 119</a>
-            </span>
-        </p>
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    <div class='columns method-parameter'>
-        <div class="column is-2"><label>Returns:</label></div>
-        <div class="column is-10">
-            
-                    
-
-<div class="columns">
-    
-    
-    <div class='column is-5 has-text-left'>
-        <label>Type: </label>
-        
-<code class="param-type">void</code>
-
-
-    </div>
-    
-</div>
-
-                
-        </div>
-    </div>
-
-
-
-
-</div>
-            
-            </div>
-        </div>
     
 
     
