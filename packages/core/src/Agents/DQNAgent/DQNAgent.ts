@@ -310,13 +310,13 @@ class DQNAgent extends PersistableAgent<tf.Sequential, DQNAgentSettings> {
     }
 
     public async save(
-        fileManager: FileStrategies.TFModelSave<tf.Sequential>
+        fileManager: FileStrategies.TFModelSaver<tf.Sequential>
     ): Promise<void> {
         await fileManager.save(this.qNetworkLocal);
     }
 
     public async load(
-        fileManager: FileStrategies.TFModelLoad<tf.Sequential>
+        fileManager: FileStrategies.TFModelLoader<tf.Sequential>
     ): Promise<void> {
         this.qNetworkLocal = await fileManager.load();
 
