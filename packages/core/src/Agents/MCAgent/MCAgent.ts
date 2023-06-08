@@ -6,7 +6,7 @@ import {
     Experience,
 } from '../../RLInterface/SingleAgentEnvironment';
 import Environment from '../../RLInterface/Environment';
-import FileStrategy from '../../RLInterface/FileStrategy';
+import * as FileStrategies from '../../RLInterface/FileStrategy';
 
 /**
  * Settings for the MCAgent
@@ -278,10 +278,9 @@ class MCAgent extends PersistableAgent<MCSaveFormat, MCAgentSettings> {
     }
 
     public async load(
-        fileManager: FileStrategy<MCSaveFormat>,
-        options?: object
+        fileManager: FileStrategies.JSONLoader<MCSaveFormat>
     ): Promise<void> {
-        const loadObject: MCSaveFormat = await fileManager.load(options);
+        const loadObject: MCSaveFormat = await fileManager.load();
         this._valueTable = Tensor.fromJSONObject(loadObject.valueTable);
         this._stateReturnCountTable = Tensor.fromJSONObject(
             loadObject.stateReturnCountTable
@@ -289,31 +288,27 @@ class MCAgent extends PersistableAgent<MCSaveFormat, MCAgentSettings> {
     }
 
     public async save(
-        fileManager: FileStrategy<MCSaveFormat>,
+        fileManager: FileStrategies.JSONSaver<MCSaveFormat>,
         options?: object
     ): Promise<void> {
-        await fileManager.save(
-            {
-                valueTable: this._valueTable.toJSONTensor(),
-                stateReturnCountTable:
-                    this._stateReturnCountTable.toJSONTensor(),
-            },
-            options
-        );
+        await fileManager.save({
+            valueTable: this._valueTable.toJSONTensor(),
+            stateReturnCountTable: this._stateReturnCountTable.toJSONTensor(),
+        });
     }
 
     public async loadConfig(
-        fileManager: FileStrategy<MCAgentSettings>,
+        fileManager: FileStrategies.JSONLoader<MCAgentSettings>,
         options?: object
     ): Promise<void> {
-        const loadObject: MCAgentSettings = await fileManager.load(options);
+        const loadObject: MCAgentSettings = await fileManager.load();
         this.setConfig(loadObject);
     }
     public async saveConfig(
-        fileManager: FileStrategy<MCAgentSettings>,
+        fileManager: FileStrategies.JSONSaver<MCAgentSettings>,
         options?: object
     ): Promise<void> {
-        await fileManager.save(this._config!, options);
+        await fileManager.save(this._config!);
     }
 }
 

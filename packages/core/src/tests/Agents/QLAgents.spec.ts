@@ -3,14 +3,14 @@ import {
     Agents,
     EnvOptions,
     QuickRLJS,
-    FileStrategy,
+    FileStrategies,
     Utils,
 } from '../..';
 import DummyFileStrategy from './dummies/MockFileStrategy';
 
 let _env: Envs.TaxiEnv;
 let _agent: Agents.QLAgent;
-let _fileStrategy: FileStrategy<any>;
+let _fileStrategy: DummyFileStrategy<any>;
 
 const envOptions: EnvOptions = {
     randomSeed: 134,

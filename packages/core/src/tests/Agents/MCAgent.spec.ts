@@ -1,9 +1,9 @@
-import { Agents, Envs, EnvOptions, QuickRLJS, FileStrategy } from '../..';
+import { Agents, Envs, EnvOptions, QuickRLJS } from '../..';
 import DummyFileStrategy from './dummies/MockFileStrategy';
 
 let _env: Envs.BlackJackEnv;
 let _agent: Agents.MCAgent;
-let _fileStrategy: FileStrategy<any>;
+let _fileStrategy: DummyFileStrategy<any>;
 
 const envOptions: EnvOptions = {
     randomSeed: 135,

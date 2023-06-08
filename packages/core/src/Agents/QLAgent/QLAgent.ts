@@ -3,7 +3,7 @@ import PersistableAgent from '../../RLInterface/PersistableAgent';
 import { General, Tensor, MathUtils, JSONTensor } from '../../Utils';
 import Environment from '../../RLInterface/Environment';
 import { EnvStateContext } from '../../RLInterface/SingleAgentEnvironment';
-import FileStrategy from '../../RLInterface/FileStrategy';
+import * as FileStrategies from '../../RLInterface/FileStrategy';
 
 /**
  * Settings for the QLAgent
@@ -184,10 +184,9 @@ class QLAgent extends PersistableAgent<JSONTensor, QLAgentSettings> {
      * @param options - the options for the file strategy
      */
     public async save(
-        fileStrategy: FileStrategy<JSONTensor>,
-        options?: object
+        fileStrategy: FileStrategies.JSONSaver<JSONTensor>
     ): Promise<void> {
-        await fileStrategy.save(this._qTable.toJSONTensor(), options);
+        await fileStrategy.save(this._qTable.toJSONTensor());
     }
 
     /**
@@ -196,27 +195,24 @@ class QLAgent extends PersistableAgent<JSONTensor, QLAgentSettings> {
      * @param options - the options for the file strategy
      */
     public async load(
-        fileStrategy: FileStrategy<JSONTensor>,
-        options?: object
+        fileStrategy: FileStrategies.JSONLoader<JSONTensor>
     ): Promise<void> {
-        const loadObject: object = await fileStrategy.load(options);
+        const loadObject: object = await fileStrategy.load();
         this._qTable = Tensor.fromJSONObject(<JSONTensor>loadObject);
     }
 
     public async loadConfig(
-        fileManager: FileStrategy<QLAgentSettings>,
-        options?: object
+        fileManager: FileStrategies.JSONLoader<QLAgentSettings>
     ): Promise<void> {
         const loadObject: QLAgentSettings = <QLAgentSettings>(
-            await fileManager.load(options)
+            await fileManager.load()
         );
         this.setConfig(loadObject);
     }
     public async saveConfig(
-        fileManager: FileStrategy<QLAgentSettings>,
-        options?: object
+        fileManager: FileStrategies.JSONSaver<QLAgentSettings>
     ): Promise<void> {
-        await fileManager.save(this._config!, options);
+        await fileManager.save(this._config!);
     }
 
     /**

@@ -1,5 +1,5 @@
 import Agent from './Agent';
-import FileStrategy from './FileStrategy';
+import * as FileStrategies from './FileStrategy';
 
 /**
  * Interface for Agents that can be stored and loaded for later usage of interference
@@ -9,7 +9,7 @@ import FileStrategy from './FileStrategy';
  * @param Tconfig The type of the config to save
  * @category QuickRLInterface
  */
-abstract class PersistableAgent<Tmodel, Tconfig> extends Agent {
+abstract class PersistableAgent<Tmodel, Tconfig extends object> extends Agent {
     /**
      * load the Model
      * @param {FileStrategy} fileManager FileManager Strategy
@@ -17,8 +17,7 @@ abstract class PersistableAgent<Tmodel, Tconfig> extends Agent {
      * @returns {Promise<void>}
      */
     abstract load(
-        fileManager: FileStrategy<Tmodel>,
-        options?: object
+        fileManager: FileStrategies.FileLoader<Tmodel>
     ): Promise<void>;
     /**
      * load the config
@@ -27,8 +26,7 @@ abstract class PersistableAgent<Tmodel, Tconfig> extends Agent {
      * @returns {Promise<void>}
      */
     abstract loadConfig(
-        fileManager: FileStrategy<Tconfig>,
-        options?: object
+        fileManager: FileStrategies.JSONLoader<Tconfig>
     ): Promise<void>;
     /**
      * Save the model
@@ -36,10 +34,7 @@ abstract class PersistableAgent<Tmodel, Tconfig> extends Agent {
      * @param {?object} options the options to use for saving the agent
      * @returns {Promise<void>}
      */
-    abstract save(
-        fileManager: FileStrategy<Tmodel>,
-        options?: object
-    ): Promise<void>;
+    abstract save(fileManager: FileStrategies.FileSaver<Tmodel>): Promise<void>;
     /**
      * Save the Config
      * @param {FileStrategy} fileManager FileManager Strategy
@@ -47,8 +42,7 @@ abstract class PersistableAgent<Tmodel, Tconfig> extends Agent {
      * @returns {Promise<void>}
      */
     abstract saveConfig(
-        fileManager: FileStrategy<Tconfig>,
-        options?: object
+        fileManager: FileStrategies.JSONSaver<Tconfig>
     ): Promise<void>;
 }
 

@@ -1,9 +1,9 @@
-import { Agents, Envs, EnvOptions, QuickRLJS, FileStrategy } from '../../..';
+import { Agents, Envs, EnvOptions, QuickRLJS } from '../../..';
 import DummyFileStrategy from '../dummies/MockFileStrategy';
 
 let _env: Envs.TaxiEnv;
 let _agent: Agents.DQNAgent;
-let _fileStrategy: FileStrategy<any>;
+let _fileStrategy: DummyFileStrategy<any>;
 
 const envOptions: EnvOptions = {
     randomSeed: 134,

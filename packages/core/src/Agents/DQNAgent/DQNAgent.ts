@@ -3,7 +3,7 @@ import { Environment, EnvStateContext, Experience } from '../../index';
 import tf from '@tensorflow/tfjs';
 import { MathUtils, General } from '../../Utils';
 import PersistableAgent from '../../RLInterface/PersistableAgent';
-import FileStrategy from '../../RLInterface/FileStrategy';
+import * as FileStrategies from '../../RLInterface/FileStrategy';
 
 /**
  * The settings of the DQN-Agent
@@ -310,17 +310,15 @@ class DQNAgent extends PersistableAgent<tf.Sequential, DQNAgentSettings> {
     }
 
     public async save(
-        fileManager: FileStrategy<tf.Sequential>,
-        options?: object
+        fileManager: FileStrategies.TFModelSave<tf.Sequential>
     ): Promise<void> {
-        await fileManager.save(this.qNetworkLocal, options);
+        await fileManager.save(this.qNetworkLocal);
     }
 
     public async load(
-        fileManager: FileStrategy<tf.Sequential>,
-        options?: object
+        fileManager: FileStrategies.TFModelLoad<tf.Sequential>
     ): Promise<void> {
-        this.qNetworkLocal = await fileManager.load(options);
+        this.qNetworkLocal = await fileManager.load();
 
         const adamOptimizer = tf.train.adam(this._config!.learningRate);
 
@@ -333,9 +331,7 @@ class DQNAgent extends PersistableAgent<tf.Sequential, DQNAgentSettings> {
 
         //additionally load target network when needed
         if (this._config?.activateDoubleDQN) {
-            this.qNetworkTarget = <tf.Sequential>(
-                await fileManager.load(options)
-            );
+            this.qNetworkTarget = <tf.Sequential>await fileManager.load();
 
             const adamOptimizer = tf.train.adam(this._config.learningRate);
 
@@ -348,17 +344,16 @@ class DQNAgent extends PersistableAgent<tf.Sequential, DQNAgentSettings> {
         }
     }
     public async loadConfig(
-        fileManager: FileStrategy<DQNAgentSettings>,
-        options?: object
+        fileManager: FileStrategies.JSONLoader<DQNAgentSettings>
     ): Promise<void> {
-        const loadObject: DQNAgentSettings = await fileManager.load(options);
+        const loadObject: DQNAgentSettings = await fileManager.load();
         this.setConfig(loadObject);
     }
     public async saveConfig(
-        fileManager: FileStrategy<DQNAgentSettings>,
+        fileManager: FileStrategies.JSONSaver<DQNAgentSettings>,
         options?: object
     ): Promise<void> {
-        await fileManager.save(this._config!, options);
+        await fileManager.save(this._config!);
     }
 
     private async train(): Promise<void> {

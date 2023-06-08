@@ -1,22 +1,25 @@
-/**
- * Interface To implement platform specific loading and saving mechanics
- * @category QuickRLInterface
- * @param T - type of the save and load object
- */
-interface FileStrategy<T> {
-    /**
-     * Load Function
-     * @param {?object} options The options
-     * @returns {Promise<T>} a promise for the loaded object
-     */
-    load(options?: object): Promise<T>;
+import tf from '@tensorflow/tfjs';
 
-    /**
-     * Save Function
-     * @param {?object} options The options
-     * @returns {Promise<boolean>} a boolean promise
-     */
-    save(saveObject: T, options?: object): Promise<boolean>;
+export interface FileLoader<T> {
+    load(): Promise<T>;
 }
 
-export default FileStrategy;
+export interface FileSaver<T> {
+    save(data: T): Promise<boolean>;
+}
+
+export interface JSONLoader<T extends object> extends FileLoader<T> {
+    load(): Promise<T>;
+}
+
+export interface JSONSaver<T extends object> extends FileSaver<T> {
+    save(data: T): Promise<boolean>;
+}
+
+export interface TFModelLoad<T extends tf.LayersModel> extends FileLoader<T> {
+    load(): Promise<T>;
+}
+
+export interface TFModelSave<T extends tf.LayersModel> extends FileSaver<T> {
+    save(data: T): Promise<boolean>;
+}

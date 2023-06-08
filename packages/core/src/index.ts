@@ -8,7 +8,7 @@ import {
 import Environment, { EnvOptions } from './RLInterface/Environment';
 import * as Envs from './Envs';
 import * as QuickRLJS from './RLInterface/QuickRLJS';
-import FileStrategy from './RLInterface/FileStrategy';
+import * as FileStrategies from './RLInterface/FileStrategy';
 import PersistableAgent from './RLInterface/PersistableAgent';
 import * as Agents from './Agents';
 import * as Games from './Games';
@@ -16,7 +16,7 @@ import * as Utils from './Utils';
 
 export {
     type EnvStateContext,
-    type FileStrategy,
+    type FileStrategies,
     type StepResult,
     type EnvOptions,
     type Experience,
