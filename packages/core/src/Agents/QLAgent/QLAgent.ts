@@ -81,6 +81,16 @@ class QLAgent extends PersistableAgent<JSONTensor, QLAgentSettings> {
     }
 
     public init(): void {
+        if (!this.trainingInitialized) {
+            this.reset();
+        }
+    }
+
+    public get trainingInitialized(): boolean {
+        return this.qTable !== undefined && this.config !== undefined;
+    }
+
+    public reset(): void {
         const qTableDims: number[] = [...this.env.stateDim];
         qTableDims.push(this.env.actionSpace.length);
         this._qTable = Tensor.Zeros(qTableDims);

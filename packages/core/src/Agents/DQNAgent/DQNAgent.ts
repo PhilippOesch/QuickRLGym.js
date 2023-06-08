@@ -134,7 +134,23 @@ class DQNAgent extends PersistableAgent<tf.Sequential, DQNAgentSettings> {
         this.epsilonStep = 0;
     }
 
+    public get trainingInitialized(): boolean {
+        return (
+            this._config !== undefined &&
+            this.qNetworkLocal !== undefined &&
+            ((this._config.activateDoubleDQN &&
+                this.qNetworkTarget !== undefined) ||
+                !this._config.activateDoubleDQN)
+        );
+    }
+
     public init(): void {
+        if (!this.trainingInitialized) {
+            this.reset();
+        }
+    }
+
+    public reset(): void {
         if (this._config) {
             this.experienceReplay = new ReplayMemory(
                 this._config.replayMemorySize
@@ -149,6 +165,7 @@ class DQNAgent extends PersistableAgent<tf.Sequential, DQNAgentSettings> {
                 this.qNetworkTarget = this.createNetwork();
         }
     }
+
     public step(state: object): string {
         return this.followEpsGreedyPolicy(state);
     }

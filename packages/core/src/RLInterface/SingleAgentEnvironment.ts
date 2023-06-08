@@ -96,7 +96,7 @@ export abstract class SingleAgentEnvironment extends Environment {
     }
 
     /**
-     * The training loop method as Async Version.
+     * The trains the agent, defined for the environment.
      * @param {number} [iterations=100] - numbers of iterations to iterate.
      * @param {number} [logEvery=-1] - loging interval relative to training iterations.
      * @param {number} [maxIterationPerGame=-1] - how many iterations for a game until it automatically terminates.
@@ -114,6 +114,9 @@ export abstract class SingleAgentEnvironment extends Environment {
 
         if (this._agent === undefined) {
             throw new Error('No Agent has been set');
+        }
+        if (!this._agent.trainingInitialized) {
+            throw new Error('The agent has not been initialized for training.');
         }
         for (let i = 0; i < iterations; i++) {
             while (

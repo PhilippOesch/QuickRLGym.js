@@ -58,6 +58,7 @@ class DummyEnv extends Environment {
 test('load - taxi env - is of correct type', () => {
     const taxiEnv = QuickRLJS.loadEnv('Taxi');
 
+    expect(taxiEnv).not.toBeUndefined();
     expect(taxiEnv).toBeInstanceOf(Environment);
     expect(taxiEnv).toBeInstanceOf(SingleAgentEnvironment);
     expect(taxiEnv).toBeInstanceOf(Envs.TaxiEnv);
@@ -66,6 +67,7 @@ test('load - taxi env - is of correct type', () => {
 test('load - blackjack env - is of correct type', () => {
     const blackJackEnv = QuickRLJS.loadEnv('BlackJack');
 
+    expect(blackJackEnv).not.toBeUndefined();
     expect(blackJackEnv).toBeInstanceOf(Environment);
     expect(blackJackEnv).toBeInstanceOf(SingleAgentEnvironment);
     expect(blackJackEnv).toBeInstanceOf(Envs.BlackJackEnv);

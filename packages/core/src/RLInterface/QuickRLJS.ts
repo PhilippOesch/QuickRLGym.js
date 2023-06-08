@@ -1,4 +1,4 @@
-import Environment from './Environment';
+import Environment, { EnvOptions } from './Environment';
 import { SingleAgentEnvironment } from './SingleAgentEnvironment';
 import * as Envs from '../Envs/';
 
@@ -20,13 +20,13 @@ const registery: Map<string, EnvType> = new Map();
 /**
  * load a registered environment class
  * @param {string} name - Name of the environment
- * @param {?object} options - options to use for instantiating environment
+ * @param {?EnvOptions} options - options to use for instantiating environment
  * @param {?object} initialState - initial state of the environment
  * @returns {Environment | undefined} an instatiated object of the environment or undefined
  */
 export function loadEnv<T extends Environment>(
     name: string,
-    options?: object,
+    options?: EnvOptions,
     initialState?: object
 ): T | undefined {
     if (registery.has(name)) {

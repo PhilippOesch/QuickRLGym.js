@@ -93,7 +93,21 @@ class MCAgent extends PersistableAgent<MCSaveFormat, MCAgentSettings> {
         return this._experience.map((entry) => Object.assign({}, entry));
     }
 
+    public get trainingInitialized(): boolean {
+        return (
+            this._valueTable !== undefined &&
+            this._stateReturnCountTable !== undefined &&
+            this._config !== undefined
+        );
+    }
+
     public init(): void {
+        if (!this.trainingInitialized) {
+            this.reset();
+        }
+    }
+
+    public reset(): void {
         const valueTableDims: number[] = [...this.env.stateDim];
         valueTableDims.push(this.env.actionSpace.length);
         this._valueTable = Tensor.Zeros(valueTableDims);

@@ -17,10 +17,8 @@ class RandomAgent extends Agent {
         super(env);
         if (randomSeed != undefined) {
             this.randomSeed = randomSeed.toString();
-            this.rng = seedrandom(this.randomSeed);
-        } else {
-            this.rng = seedrandom();
         }
+        this.reset();
     }
 
     get config(): object | undefined {
@@ -36,7 +34,12 @@ class RandomAgent extends Agent {
         }
     }
 
+    public get trainingInitialized(): boolean {
+        return true;
+    }
+
     public init(): void {
+        this.reset();
         console.log('Random Agent initialized');
     }
 
@@ -53,6 +56,14 @@ class RandomAgent extends Agent {
 
     public log(): void {
         return;
+    }
+
+    public reset(): void {
+        if (this.randomSeed != undefined) {
+            this.rng = seedrandom(this.randomSeed);
+        } else {
+            this.rng = seedrandom();
+        }
     }
 
     public async feed(): Promise<void> {

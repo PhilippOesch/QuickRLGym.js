@@ -13,6 +13,12 @@ abstract class Agent {
     }
 
     /**
+     * Get whether the agent was correctly initialized for training.
+     * @type {boolean}
+     */
+    abstract get trainingInitialized(): boolean;
+
+    /**
      * initialize the agent
      * @returns {void}
      */
@@ -68,6 +74,12 @@ abstract class Agent {
      * @returns {void}
      */
     abstract log(): void;
+
+    /**
+     * Reset the agent
+     * @returns {void}
+     */
+    abstract reset(): void;
 }
 
 export default Agent;

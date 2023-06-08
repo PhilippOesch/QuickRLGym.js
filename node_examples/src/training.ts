@@ -1,4 +1,5 @@
 import { SingleAgentEnvironment, Agents, QuickRLJS } from 'quickrl.core';
+import { FileStrategies } from 'quickrl.node';
 // if you want to improve training performance, make shure you import this dependency
 require('@tensorflow/tfjs-node-gpu');
 
