@@ -1,6 +1,6 @@
 {
     "name": "quickrl.node",
-    "version": "0.0.1",
+    "version": "0.6.14",
     "description": "",
     "repository": {
         "type": "git",
@@ -34,7 +34,7 @@
     "license": "MIT",
     "dependencies": {
         "@tensorflow/tfjs": "^4.6.0",
-        "quickrl.core": "^0.6.12"
+        "quickrl.core": "^0.6.13"
     },
     "devDependencies": {
         "@jest/globals": "^29.5.0",

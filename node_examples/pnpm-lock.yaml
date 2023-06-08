@@ -11,8 +11,11 @@ dependencies:
     specifier: ^4.2.0
     version: 4.4.0(seedrandom@3.0.5)
   quickrl.core:
-    specifier: ^0.6.11
-    version: 0.6.11
+    specifier: ^0.6.14
+    version: 0.6.14
+  quickrl.node:
+    specifier: ^0.6.14
+    version: 0.6.14(seedrandom@3.0.5)
   seedrandom:
     specifier: ^3.0.5
     version: 3.0.5
@@ -1028,13 +1031,23 @@ packages:
     engines: {node: '>=0.4.0'}
     dev: false
 
-  /quickrl.core@0.6.11:
-    resolution: {integrity: sha512-8pRuzHxx2Q/M7BEw/GSyzFtJDNbmAUo4o0rc51w+cO3DbI1oGZG83wsoqAQciq3FWuZNx86q8S2mIOvPvJ6Jfg==}
+  /quickrl.core@0.6.14:
+    resolution: {integrity: sha512-xG+VNb4ZhqRH90j8ypPctPsVuP2BSgK/jbA8RI546+IFYaMz2W5PVJRkNk/1cKKvxqv2L+q4eZURLh7y+SNekg==}
     dependencies:
       '@tensorflow/tfjs': 4.6.0(seedrandom@3.0.5)
       seedrandom: 3.0.5
     transitivePeerDependencies:
       - encoding
+    dev: false
+
+  /quickrl.node@0.6.14(seedrandom@3.0.5):
+    resolution: {integrity: sha512-/Ref3V1oIErvOSkGaa7E3aZKv7PuAqgAKcinaOSAet3z/1I2HSwVr+WLMkXG3NQXBXMsPvK4lReAFY+TuflTkA==}
+    dependencies:
+      '@tensorflow/tfjs': 4.6.0(seedrandom@3.0.5)
+      quickrl.core: 0.6.14
+    transitivePeerDependencies:
+      - encoding
+      - seedrandom
     dev: false
 
   /randombytes@2.1.0:

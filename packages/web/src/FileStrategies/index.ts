@@ -1,15 +1,21 @@
-import JSONBrowserFileStrategy, {
-    JSONBrowserLoadOptions,
-    JSONBrowserSaveOptions,
+import {
+    WebJSONFileLoader,
+    WebJSONFileSaver,
+    WebJSONLoadOptions,
+    WebJSONSaveOptions,
 } from './BrowserFileStrategy';
-import TFBrowserFileStrategy, {
-    TFBrowserLoadOptions,
+import {
+    WebTFModelLoader,
+    WebTFModelSaver,
+    WebTFLoadOptions,
 } from './TFBrowserFileStrategy';
 
 export {
-    JSONBrowserFileStrategy,
-    type JSONBrowserLoadOptions,
-    type JSONBrowserSaveOptions,
-    TFBrowserFileStrategy,
-    type TFBrowserLoadOptions,
+    WebJSONFileLoader,
+    WebJSONFileSaver,
+    type WebJSONLoadOptions,
+    type WebJSONSaveOptions,
+    WebTFModelSaver,
+    WebTFModelLoader,
+    type WebTFLoadOptions,
 };

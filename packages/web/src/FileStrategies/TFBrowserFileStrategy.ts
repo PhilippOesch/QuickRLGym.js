@@ -1,35 +1,56 @@
-import { FileStrategy } from 'quickrl.core';
+import { FileStrategies } from 'quickrl.core';
 import * as tf from '@tensorflow/tfjs';
 
 /**
  * Option for loading tensorflow layers models over the browser
  * @category Web
  * @subcategory FileStrategies
- * @property {File[]} files files to load
+ * @property {File} modelFile files representing the model structure
+ * @property {File} weightFile files representing the model weights
  */
-export interface TFBrowserLoadOptions {
-    files: File[];
+export interface WebTFLoadOptions {
+    modelFile: File;
+    weightFile: File;
 }
 
 /**
- * File Strategy for loading and saving tensorflow layers models over the browser
+ * File Saver for saving tensorflow models over the browser.
  * @category Web
  * @subcategory FileStrategies
- * @implements FileStrategy
+ * @implements TFModelSaver
  */
-class TFBrowserFileStrategy<T extends tf.LayersModel>
-    implements FileStrategy<T>
+export class WebTFModelSaver<T extends tf.LayersModel>
+    implements FileStrategies.TFModelSaver<T>
 {
-    async load(options: TFBrowserLoadOptions): Promise<T> {
-        const model = await tf.loadLayersModel(
-            tf.io.browserFiles([options.files[0], options.files[1]])
-        );
-        return <T>model;
-    }
-    async save(saveObject: T): Promise<boolean> {
-        await saveObject.save('downloads://model');
+    async save(data: T): Promise<boolean> {
+        await data.save('downloads://model');
         return true;
     }
 }
 
-export default TFBrowserFileStrategy;
+/**
+ * File Loader for loading tensorflow models over the browser.
+ * @category Web
+ * @subcategory FileStrategies
+ * @implements TFModelLoader
+ * @param {WebTFLoadOptions} options load options.
+ */
+export class WebTFModelLoader<T extends tf.LayersModel>
+    implements FileStrategies.TFModelLoader<T>
+{
+    private options: WebTFLoadOptions;
+
+    constructor(options: WebTFLoadOptions) {
+        this.options = options;
+    }
+
+    async load(): Promise<T> {
+        const model = await tf.loadLayersModel(
+            tf.io.browserFiles([
+                this.options.modelFile,
+                this.options.weightFile,
+            ])
+        );
+        return <T>model;
+    }
+}

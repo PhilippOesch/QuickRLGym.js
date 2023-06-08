@@ -1,5 +1,5 @@
 
-# QuickRL-Node
+# QuickRLJS-Web
 
-Contains Classes specific for usage in a node environment.
+Contains Classes specific for usage in a web environment usage.
 

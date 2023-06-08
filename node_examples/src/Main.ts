@@ -32,9 +32,11 @@ async function trainBlackJack() {
     env.agent = agent;
     env.initAgent();
     await env.train(numIterations, logEvery);
-    await agent.save(new FileStrategies.JSONFileStrategy(), {
-        filePath: './models/qTables/blackjack/qTable.json',
-    });
+    await agent.save(
+        new FileStrategies.NodeJSONFileSaver({
+            filePath: './models/qTables/blackjack/qTable.json',
+        })
+    );
 }
 
 async function trainTaxiQLAgent() {
@@ -60,9 +62,11 @@ async function trainTaxiQLAgent() {
     env.agent = agent;
     env.initAgent();
     await env.train(numIterations, logEvery, maxIterationsPerGame);
-    await agent.save(new FileStrategies.JSONFileStrategy(), {
-        filePath: './models/qTables/taxi/qTable.json',
-    });
+    await agent.save(
+        new FileStrategies.NodeJSONFileSaver({
+            filePath: './models/qTables/taxi/qTable.json',
+        })
+    );
 }
 
 async function trainTaxiMCAgent() {
@@ -83,9 +87,11 @@ async function trainTaxiMCAgent() {
     env.agent = agent;
     env.initAgent();
     await env.train(numIterations, logEvery, maxIterationsPerGame);
-    await agent.save(new FileStrategies.JSONFileStrategy(), {
-        filePath: './models/qTables/taxi/qTable.json',
-    });
+    await agent.save(
+        new FileStrategies.NodeJSONFileSaver({
+            filePath: './models/qTables/taxi/qTable.json',
+        })
+    );
 }
 
 async function trainBlackJackMCAgent() {
@@ -106,9 +112,11 @@ async function trainBlackJackMCAgent() {
     env.agent = agent;
     env.initAgent();
     env.train(numIterations, logEvery);
-    await agent.save(new FileStrategies.JSONFileStrategy(), {
-        filePath: './models/MCAgent/blackjack/mcagent.json',
-    });
+    await agent.save(
+        new FileStrategies.NodeJSONFileSaver({
+            filePath: './models/MCAgent/blackjack/mcagent.json',
+        })
+    );
 }
 
 async function trainTaxiDQN() {
@@ -140,9 +148,11 @@ async function trainTaxiDQN() {
     env.agent = agent;
     env.initAgent();
 
-    await agent.saveConfig(new FileStrategies.JSONFileStrategy(), {
-        filePath: './models/DQN/TaxiTest/config.json',
-    });
+    await agent.saveConfig(
+        new FileStrategies.NodeJSONFileSaver({
+            filePath: './models/DQN/TaxiTest/config.json',
+        })
+    );
     // await agent.load(tFFileManager);
     // await env.train(numEpisodes, logEvery, maxIterationsPerGame);
     // await agent.save(tFFileManager);

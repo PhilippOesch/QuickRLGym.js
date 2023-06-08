@@ -52,7 +52,63 @@ env.initAgent();
 
 // train the agent
 await env.train(numTrainingEpisodes, logEvery, maxIterationsPerGame);
+```
 
+### Saving Models
+
+After you trained the model, these models can be saved. Depending on whether you train on the web or in a node.js environment you have to install the specific package. The following example will show how it is done in a node environment.
+
+First install node `quickrl.node` package:
+
+```bash
+npm install quickrl.node
+```
+
+Now import the Filestrategies into your training script:
+
+```ts
+...
+import { FileStrategies } from 'quickrl.node';
+...
+```
+
+After the training was finished. The agent can be saved into a dedicated folder. Also make shure to save your settings so you don't lose them.
+
+```ts
+// train the agent
+await env.train(numTrainingEpisodes, logEvery, maxIterationsPerGame);
+
+await agent.save(
+    new FileStrategies.NodeTFModelSaver({
+        folderPath: './models/DQN/TaxiModel/',
+    })
+);
+await agent.saveConfig(
+    new FileStrategies.NodeJSONFileSaver({
+        filePath: './models/DQN/TaxiModel/config.json',
+    })
+);
+```
+
+### Loading models
+
+Previously saved models can also be loaded later. This way you can train the model, save it and load it at a later point in time to continue training, or you load trained models and can run benchmarks on them to analyse the results.
+
+This is how you can load the model into a new agent for example:
+
+```ts
+const benchmarkAgent = new Agents.DQNAgent(env);
+
+benchmarkAgent.loadConfig(
+    new FileStrategies.NodeJSONFileLoader({
+        filePath: './models/DQN/TaxiModel/config.json',
+    })
+);
+benchmarkAgent.load(
+    new FileStrategies.NodeTFModelLoader({
+        folderPath: './models/DQN/TaxiModel/',
+    })
+);
 ```
 
 ## Links

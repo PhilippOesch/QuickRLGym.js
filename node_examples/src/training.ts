@@ -36,3 +36,28 @@ env.initAgent();
 
 // train the agent
 await env.train(numTrainingEpisodes, logEvery, maxIterationsPerGame);
+
+await agent.save(
+    new FileStrategies.NodeTFModelSaver({
+        folderPath: './models/DQN/TaxiModel/',
+    })
+);
+
+await agent.saveConfig(
+    new FileStrategies.NodeJSONFileSaver({
+        filePath: './models/DQN/TaxiModel/config.json',
+    })
+);
+
+const benchmarkAgent = new Agents.DQNAgent(env);
+
+benchmarkAgent.loadConfig(
+    new FileStrategies.NodeJSONFileLoader({
+        filePath: './models/DQN/TaxiModel/config.json',
+    })
+);
+benchmarkAgent.load(
+    new FileStrategies.NodeTFModelLoader({
+        folderPath: './models/DQN/TaxiModel/',
+    })
+);

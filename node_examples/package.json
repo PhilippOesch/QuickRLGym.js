@@ -23,7 +23,8 @@
     "@tensorflow/tfjs": "^4.6.0",
     "@tensorflow/tfjs-node": "^4.2.0",
     "@tensorflow/tfjs-node-gpu": "^4.2.0",
-    "quickrl.core": "^0.6.11",
+    "quickrl.core": "^0.6.14",
+    "quickrl.node": "^0.6.14",
     "seedrandom": "^3.0.5"
   }
 }

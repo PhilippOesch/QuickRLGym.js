@@ -1,5 +1,5 @@
 import path from 'path';
-import { FileStrategy } from 'quickrl.core';
+import { FileStrategies } from 'quickrl.core';
 import { writeFile, readFile, mkdir } from 'fs/promises';
 
 /**
@@ -8,30 +8,53 @@ import { writeFile, readFile, mkdir } from 'fs/promises';
  * @subcategory FileStrategies
  * @property {string} filePath The path to the file
  */
-export interface JSONFSOptions {
+export interface JSONFileOptions {
     filePath: string;
 }
 
 /**
- * File Strategy for handling json files in node
+ * File Saver for saving json files in node
  * @category Node
  * @subcategory FileStrategies
- * @implements FileStrategy
+ * @implements JSONSaver
+ * @param {JSONFileOptions} options save options
  */
-class JSONFileStrategy<T extends object> implements FileStrategy<T> {
-    public async load(options: JSONFSOptions): Promise<T> {
-        let qtable: Buffer = await readFile(options.filePath);
-        return JSON.parse(qtable.toString());
+export class NodeJSONFileSaver<T extends object>
+    implements FileStrategies.JSONSaver<T>
+{
+    private options: JSONFileOptions;
+    constructor(options: JSONFileOptions) {
+        this.options = options;
     }
-    public async save(saveObject: T, options: JSONFSOptions): Promise<boolean> {
-        const folderPath = path.dirname(options.filePath);
+
+    async save(data: T): Promise<boolean> {
+        const folderPath = path.dirname(this.options.filePath);
         await mkdir(folderPath, { recursive: true }).catch(() => {
             console.error('something went wrong');
             return false;
         });
-        await writeFile(options.filePath, JSON.stringify(saveObject));
+        await writeFile(this.options.filePath, JSON.stringify(data));
         return true;
     }
 }
 
-export default JSONFileStrategy;
+/**
+ * File Loader for loading json files in node
+ * @category Node
+ * @subcategory FileStrategies
+ * @implements JSONLoader
+ * @param {JSONFileOptions} options load options
+ */
+export class NodeJSONFileLoader<T extends object>
+    implements FileStrategies.JSONLoader<T>
+{
+    private options: JSONFileOptions;
+    constructor(options: JSONFileOptions) {
+        this.options = options;
+    }
+
+    async load(): Promise<T> {
+        let qtable: Buffer = await readFile(this.options.filePath);
+        return JSON.parse(qtable.toString());
+    }
+}

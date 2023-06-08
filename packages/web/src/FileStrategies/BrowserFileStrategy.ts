@@ -1,4 +1,4 @@
-import { FileStrategy } from 'quickrl.core';
+import { FileStrategies } from 'quickrl.core';
 import { saveAs } from 'file-saver';
 
 /**
@@ -7,7 +7,7 @@ import { saveAs } from 'file-saver';
  * @subcategory FileStrategies
  * @property {string} fileName name of the file to save
  */
-export interface JSONBrowserSaveOptions {
+export interface WebJSONSaveOptions {
     fileName: string;
 }
 
@@ -17,20 +17,29 @@ export interface JSONBrowserSaveOptions {
  * @subcategory FileStrategies
  * @property {File} file file to load
  */
-export interface JSONBrowserLoadOptions {
+export interface WebJSONLoadOptions {
     file: File;
 }
 
 /**
- * File Strategy for loading and saving json files over the browser
+ * File Loader for loading json files over the browser
  * @category Web
  * @subcategory FileStrategies
- * @implements FileStrategy
+ * @implements JSONLoader
+ * @param {WebJSONLoadOptions} options the load options
  */
-class JSONBrowserFileStrategy<T extends object> implements FileStrategy<T> {
-    async load(options: JSONBrowserLoadOptions): Promise<T> {
+export class WebJSONFileLoader<T extends object>
+    implements FileStrategies.JSONLoader<T>
+{
+    private options: WebJSONLoadOptions;
+
+    constructor(options: WebJSONLoadOptions) {
+        this.options = options;
+    }
+
+    async load(): Promise<T> {
         const fileReader = new FileReader();
-        fileReader.readAsText(options.file);
+        fileReader.readAsText(this.options.file);
         let res: string = await new Promise<string>((resolve) => {
             let result = '';
             fileReader.onload = (evt: any) => {
@@ -42,17 +51,29 @@ class JSONBrowserFileStrategy<T extends object> implements FileStrategy<T> {
         });
         return JSON.parse(res);
     }
+}
 
-    async save(
-        saveObject: T,
-        options: JSONBrowserSaveOptions
-    ): Promise<boolean> {
-        const blob = new Blob([JSON.stringify(saveObject)], {
+/**
+ * File Saver for saving json files over the browser
+ * @category Web
+ * @subcategory FileStrategies
+ * @implements JSONSaver
+ * @param {WebJSONSaveOptions} options the save options
+ */
+export class WebJSONFileSaver<T extends object>
+    implements FileStrategies.JSONSaver<T>
+{
+    private options: WebJSONSaveOptions;
+
+    constructor(options: WebJSONSaveOptions) {
+        this.options = options;
+    }
+
+    async save(data: T): Promise<boolean> {
+        const blob = new Blob([JSON.stringify(data)], {
             type: 'application/json',
         });
-        saveAs(blob, options.fileName);
+        saveAs(blob, this.options.fileName);
         return true;
     }
 }
-
-export default JSONBrowserFileStrategy;

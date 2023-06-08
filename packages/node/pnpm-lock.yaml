@@ -5,8 +5,8 @@ dependencies:
     specifier: ^4.6.0
     version: 4.6.0(seedrandom@3.0.5)
   quickrl.core:
-    specifier: ^0.6.12
-    version: 0.6.12
+    specifier: ^0.6.13
+    version: 0.6.13
 
 devDependencies:
   '@jest/globals':
@@ -2213,8 +2213,8 @@ packages:
     resolution: {integrity: sha512-6Yg0ekpKICSjPswYOuC5sku/TSWaRYlA0qsXqJgM/d/4pLPHPuTxK7Nbf7jFKzAeedUhR8C7K9Uv63FBsSo8xQ==}
     dev: true
 
-  /quickrl.core@0.6.12:
-    resolution: {integrity: sha512-/wS/BFwC5eigY7g5Dx8tPbj4T84es1kQBbC6SmMF6b5a79y+Y7GAR1pch+9Eq6/+s/l2KsY6+Ayol/p0KyXFlg==}
+  /quickrl.core@0.6.13:
+    resolution: {integrity: sha512-7uYUqb0X7eyIVyN/rjwN12DeORhyrefNoUFlOt6fuzUY1M/Pt1/at5LBOlvfLFa/kteNO/rN1010e1ZxdHdaUg==}
     dependencies:
       '@tensorflow/tfjs': 4.6.0(seedrandom@3.0.5)
       seedrandom: 3.0.5

@@ -1,10 +1,14 @@
 {
     "name": "quickrl.core",
-    "version": "0.6.13",
+    "version": "0.6.14",
     "description": "This is a simple framework for implementing and testing reinforcement learning environments and algorithms",
     "main": "dist/index.cjs.js",
     "module": "dist/index.es.js",
     "types": "dist/dts/index.d.ts",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/PhilippOesch/QuickRLGym.js.git"
+    },
     "type": "module",
     "keywords": [
         "reinforcement learning",
