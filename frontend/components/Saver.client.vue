@@ -10,17 +10,14 @@
 </template>
 
 <script lang="ts" setup>
-import BrowserFileStrategy, {
-    BrowserSaveOptions,
-} from '~~/utils/BrowserFileStrategy';
 import { PersistableAgent } from 'quickrl.core';
 import { PropType } from 'vue';
+import { FileStrategies } from 'quickrl.web';
 import useSettingsStore from '~~/comsosable/useSettingsStore';
-import TFBrowserFileStrategy from '~~/utils/TFBrowserFileStrategy';
 import { agentMapping } from '~~/comsosable/useAgent';
 
 const props = defineProps({
-    agentObject: Object as PropType<PersistableAgent>,
+    agentObject: Object as PropType<PersistableAgent<any, any>>,
     gameId: {
         type: String,
         required: true,
@@ -38,20 +35,26 @@ async function save(): Promise<void> {
     const isTFModel: boolean =
         agentMapping.get(activeAlgorithm)!.usesTensorflow;
 
-    const trainableAgent: PersistableAgent = <PersistableAgent>(
-        props.agentObject
-    );
+    const trainableAgent: PersistableAgent<any, any> = <
+        PersistableAgent<any, any>
+    >props.agentObject;
 
     console.log('save Agent');
     console.log(props.agentObject);
 
-    const options: BrowserSaveOptions = { fileName: 'config.json' };
-    await trainableAgent.saveConfig(new BrowserFileStrategy(), options);
+    await trainableAgent.saveConfig(
+        new FileStrategies.WebJSONFileSaver({
+            fileName: 'config.json',
+        })
+    );
     if (isTFModel) {
-        await trainableAgent.save(new TFBrowserFileStrategy());
+        await trainableAgent.save(new FileStrategies.WebTFModelSaver());
     } else {
-        const options: BrowserSaveOptions = { fileName: 'model.json' };
-        await trainableAgent.save(new BrowserFileStrategy(), options);
+        await trainableAgent.save(
+            new FileStrategies.WebJSONFileSaver({
+                fileName: 'model.json',
+            })
+        );
     }
 }
 </script>

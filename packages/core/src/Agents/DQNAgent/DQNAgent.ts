@@ -1,6 +1,6 @@
 import seedrandom from 'seedrandom';
 import { Environment, EnvStateContext, Experience } from '../../index';
-import tf from '@tensorflow/tfjs';
+import * as tf from '@tensorflow/tfjs';
 import { MathUtils, General } from '../../Utils';
 import PersistableAgent from '../../RLInterface/PersistableAgent';
 import * as FileStrategies from '../../RLInterface/FileStrategy';

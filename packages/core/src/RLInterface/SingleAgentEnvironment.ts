@@ -121,7 +121,7 @@ export abstract class SingleAgentEnvironment extends Environment {
         for (let i = 0; i < iterations; i++) {
             while (
                 (!this.isTerminal && this.iteration < maxIterationPerGame) ||
-                (!this.isTerminal && maxIterationPerGame == -1)
+                (!this.isTerminal && maxIterationPerGame === -1)
             ) {
                 await this.singleTrainStep(maxIterationPerGame);
             }

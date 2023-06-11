@@ -6,7 +6,7 @@ import {
     Agents,
 } from 'quickrl.core';
 import BlackJackGameScene from '~~/utils/GameScenes/BlackJackGameScene';
-import StaticRenderScene from '~~/utils/GameScenes/StaticRenderScene';
+import StaticRenderScene from '~~/utils/GameScenes/helpers';
 import TaxiGameScene from '~~/utils/GameScenes/TaxiGameScene';
 
 export interface SceneInfo {

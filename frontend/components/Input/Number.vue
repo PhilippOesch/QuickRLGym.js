@@ -16,7 +16,7 @@
     </div>
 </template>
 <script setup lang="ts">
-import { defineProps, PropType, defineEmits, Ref } from 'vue';
+import { PropType, Ref } from 'vue';
 import { InputStyleType } from '~~/utils/enums';
 
 const props = defineProps({

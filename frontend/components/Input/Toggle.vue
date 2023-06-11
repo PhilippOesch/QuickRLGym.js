@@ -15,7 +15,7 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps, PropType } from 'vue';
+import { PropType } from 'vue';
 import { IconColor } from '~~/utils/enums';
 
 const props = defineProps({

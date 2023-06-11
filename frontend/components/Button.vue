@@ -8,7 +8,7 @@
 </template>
 
 <script lang="ts" setup>
-import { defineProps, PropType } from 'vue';
+import { PropType } from 'vue';
 import { ButtonSize } from '~~/utils/enums';
 
 const props = defineProps({

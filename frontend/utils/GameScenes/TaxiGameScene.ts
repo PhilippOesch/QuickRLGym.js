@@ -1,6 +1,6 @@
 import { GameObjects } from 'phaser';
 import { Games, Envs, Utils } from 'quickrl.core';
-import StaticRenderScene from '~~/utils/GameScenes/StaticRenderScene';
+import StaticRenderScene from '~~/utils/GameScenes/helpers';
 
 export default class TaxiGameScene extends StaticRenderScene {
     public static readonly destMapping: string[] = [
@@ -64,9 +64,9 @@ export default class TaxiGameScene extends StaticRenderScene {
             tileWidth: Games.Taxi.TaxiGlobals.tileWidth,
             tileHeight: Games.Taxi.TaxiGlobals.tileHeight,
         });
-        const tiles = map.addTilesetImage('tiles');
+        const tiles = map.addTilesetImage('tiles')!;
         const layer = map.createLayer(0, tiles, 0, 0);
-        layer.setScale(
+        layer!.setScale(
             Games.Taxi.TaxiGlobals.scale,
             Games.Taxi.TaxiGlobals.scale
         );
@@ -78,18 +78,15 @@ export default class TaxiGameScene extends StaticRenderScene {
         const absPositionPlayer = Games.Taxi.TaxiUtils.adjustedToAbsPos(
             this.taxiGame.player.position
         );
-        this.playerSprite.setPosition(
-            absPositionPlayer.getX,
-            absPositionPlayer.getY
-        );
+        this.playerSprite.setPosition(absPositionPlayer.x, absPositionPlayer.y);
 
         // generate Customer
         const absPositionCustomer = Games.Taxi.TaxiUtils.adjustedToAbsPos(
             this.taxiGame.customer.position
         );
         this.customerImage = this.add.image(
-            absPositionCustomer.getX,
-            absPositionCustomer.getY,
+            absPositionCustomer.x,
+            absPositionCustomer.y,
             'customer'
         );
         this.customerImage.setScale(
@@ -103,27 +100,27 @@ export default class TaxiGameScene extends StaticRenderScene {
     }
 
     private setupControlls(): void {
-        this.input.keyboard.on('keydown-D', () => {
+        this.input.keyboard!.on('keydown-D', () => {
             this.taxiGame.step('Left');
             this.reRender();
         });
-        this.input.keyboard.on('keydown-A', () => {
+        this.input.keyboard!.on('keydown-A', () => {
             this.taxiGame.step('Right');
             this.reRender();
         });
-        this.input.keyboard.on('keydown-W', () => {
+        this.input.keyboard!.on('keydown-W', () => {
             this.taxiGame.step('Up');
             this.reRender();
         });
-        this.input.keyboard.on('keydown-S', () => {
+        this.input.keyboard!.on('keydown-S', () => {
             this.taxiGame.step('Down');
             this.reRender();
         });
-        this.input.keyboard.on('keydown-SPACE', () => {
+        this.input.keyboard!.on('keydown-SPACE', () => {
             this.taxiGame.step('PickUp');
             this.reRender();
         });
-        this.input.keyboard.on('keydown-X', () => {
+        this.input.keyboard!.on('keydown-X', () => {
             this.taxiGame.step('DropOff');
             this.reRender();
         });
@@ -143,8 +140,8 @@ export default class TaxiGameScene extends StaticRenderScene {
         // for smooth movements
         this.tweens.add({
             targets: this.playerSprite,
-            x: adjustedToAbsPos.getX,
-            y: adjustedToAbsPos.getY,
+            x: adjustedToAbsPos.x,
+            y: adjustedToAbsPos.y,
             ease: 'Power1',
             duration: 100,
             repeat: 0,
@@ -159,8 +156,8 @@ export default class TaxiGameScene extends StaticRenderScene {
             this.taxiGame.customer.position
         );
         this.customerImage!.setPosition(
-            absPositionCustomer.getX,
-            absPositionCustomer.getY
+            absPositionCustomer.x,
+            absPositionCustomer.y
         );
 
         this.checkIfTerminated();
@@ -169,7 +166,7 @@ export default class TaxiGameScene extends StaticRenderScene {
     private checkIfTerminated(): void {
         if (this.taxiGame.isTerminal) {
             if (this.interactiveMode) {
-                this.input.keyboard.destroy();
+                this.input.keyboard!.destroy();
             }
             this.customerImage!.addToDisplayList();
         }

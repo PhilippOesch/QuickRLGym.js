@@ -14,6 +14,7 @@ import { SingleAgentEnvironment } from '../RLInterface/SingleAgentEnvironment';
  * @param {number} iterations The number of iterations
  * @param {number} randomSeed The random seed
  * @param {number} maxIteration The maximum number of game iterations
+ * @param {boolean} resetEnvStats Whether to reset the stats of the environment
  * @returns {object} The bechmark result
  */
 export function benchmarkSingleAgent(
@@ -21,12 +22,17 @@ export function benchmarkSingleAgent(
     agent: Agent,
     iterations: number,
     randomSeed: number,
-    maxIteration: number = 100
+    maxIteration: number = 100,
+    resetEnvStats: boolean = true
 ): object {
-    env.resetStats();
-    env.setOptions({
-        randomSeed: randomSeed,
-    });
+    if (resetEnvStats) {
+        env.resetStats();
+    }
+    if (env.options?.randomSeed !== randomSeed) {
+        env.setOptions({
+            randomSeed: randomSeed,
+        });
+    }
 
     env.agent = agent;
 
@@ -34,7 +40,7 @@ export function benchmarkSingleAgent(
     for (let i = 0; i < iterations; i++) {
         while (
             (!env.isTerminal && env.iteration < maxIteration) ||
-            (!env.isTerminal && maxIteration == -1)
+            (!env.isTerminal && maxIteration === -1)
         ) {
             const prevState: object = env.state;
             const nextAction: string = agent.evalStep(prevState);

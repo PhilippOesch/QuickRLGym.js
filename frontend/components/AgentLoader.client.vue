@@ -50,15 +50,10 @@
 
 <script setup lang="ts">
 import { SingleAgentEnvironment, PersistableAgent } from 'quickrl.core';
+import { FileStrategies } from 'quickrl.web';
 import { PropType } from 'vue';
 import useAgent, { agentMapping } from '~~/comsosable/useAgent';
 import useSettingsStore from '~~/comsosable/useSettingsStore';
-import BrowserFileStrategy, {
-    BrowserLoadOptions,
-} from '~~/utils/BrowserFileStrategy';
-import TFBrowserFileStrategy, {
-    TFLoadOptions,
-} from '~~/utils/TFBrowserFileStrategy';
 
 const loaderInputModel = ref();
 const loaderInputConfig = ref();
@@ -90,7 +85,7 @@ const props = defineProps({
     env: {
         type: Object as PropType<SingleAgentEnvironment>,
     },
-    agentObject: Object as PropType<PersistableAgent>,
+    agentObject: Object as PropType<PersistableAgent<any, any>>,
 });
 
 const agentLoaded = ref(false);
@@ -157,7 +152,9 @@ async function loadAgent(): Promise<void> {
 }
 
 async function loadIntoExistingAgent() {
-    let loadAgent: PersistableAgent = <PersistableAgent>props.agentObject;
+    let loadAgent: PersistableAgent<any, any> = <PersistableAgent<any, any>>(
+        props.agentObject
+    );
     await loadAgentFiles(loadAgent);
 }
 
@@ -176,7 +173,7 @@ async function loadNewAgent(): Promise<void> {
         props.gameId
     );
 
-    let agent: PersistableAgent = <PersistableAgent>(
+    let agent: PersistableAgent<any, any> = <PersistableAgent<any, any>>(
         useAgent(activeAlgorithm, props.env)
     );
     agent = await loadAgentFiles(agent);
@@ -184,8 +181,8 @@ async function loadNewAgent(): Promise<void> {
 }
 
 async function loadAgentFiles(
-    agent: PersistableAgent
-): Promise<PersistableAgent> {
+    agent: PersistableAgent<any, any>
+): Promise<PersistableAgent<any, any>> {
     const modelFile: File = loaderInputModel.value.files[0];
     const configFile: File = loaderInputConfig.value.file[0];
 
@@ -195,8 +192,9 @@ async function loadAgentFiles(
     }
 
     if (isValidFileType(configFile)) {
-        const options: BrowserLoadOptions = { file: configFile };
-        await agent.loadConfig(new BrowserFileStrategy(), options);
+        await agent.loadConfig(
+            new FileStrategies.WebJSONFileLoader({ file: configFile })
+        );
 
         settingStore.updateSetting(
             props.gameId,
@@ -206,8 +204,11 @@ async function loadAgentFiles(
     }
 
     if (!binWeightsActive.value && isValidFileType(modelFile)) {
-        const options: BrowserLoadOptions = { file: modelFile };
-        await agent.load(new BrowserFileStrategy(), options);
+        await agent.load(
+            new FileStrategies.WebJSONFileLoader({
+                file: modelFile,
+            })
+        );
         agentLoaded.value = true;
     }
 
@@ -216,10 +217,12 @@ async function loadAgentFiles(
         isValidFileType(modelFile) &&
         isValidFileType(weightFile!)
     ) {
-        const options: TFLoadOptions = {
-            files: [modelFile, weightFile!],
-        };
-        await agent.load(new TFBrowserFileStrategy(), options);
+        await agent.load(
+            new FileStrategies.WebTFModelLoader({
+                modelFile: modelFile,
+                weightFile: weightFile!,
+            })
+        );
         agentLoaded.value = true;
     }
     return agent;

@@ -61,6 +61,8 @@
             <SimpleTabSwitch
                 :groupName="`${gameId}-AlgTab`"
                 :customBtnOpenClasses="getTabStyleClass()"
+                :on-before-switch="(evt: SwitchEvent) => onSwitchCallback(evt)"
+                @afterSwitchTab="(evt: SwitchEvent) => onAfterSwitchTab(evt)"
             />
             <SimpleTab :tabGroup="`${gameId}-AlgTab`" tabName="QLearning">
             </SimpleTab>
@@ -69,7 +71,11 @@
             <SimpleTab :tabGroup="`${gameId}-AlgTab`" tabName="DQN">
             </SimpleTab>
             <div class="freeComponents">
-                <Button value="Start Benchmark" :size="ButtonSize.Large" />
+                <Button
+                    value="Start Benchmark"
+                    :size="ButtonSize.Large"
+                    :handler="startBenchmarkHandler"
+                />
                 <ParamSelector
                     :gameId="gameId"
                     settingsName="benchmarkSettings"
@@ -82,25 +88,38 @@
             <AgentLoader
                 :gameId="gameId"
                 :env="env"
-                :agentObject="(<PersistableAgent>agent)"
+                :agentObject="(<PersistableAgent<any, any>>agent)"
                 @loadNewAgent="onLoadNewAgent"
                 :activeAlgorithm="activeAlg"
             ></AgentLoader>
             <Saver
-                :agentObject="(<PersistableAgent>agent)"
+                :agentObject="(<PersistableAgent<any, any>>agent)"
                 :gameId="gameId"
             ></Saver>
         </div>
-        <div class="pb-2 pt-8">
-            <GameView
-                :training-iteration="25"
-                :id="gameId"
-                ref="gameViewRef"
-                :agent="agent"
-                @passAgent="onPassAgent"
-                @initializeScene="updateSceneInfo"
-            ></GameView>
-        </div>
+        <SimpleTab tabGroup="trainingBenchmarkSwitch" tabName="Training">
+            <div class="pb-2 pt-8">
+                <GameView
+                    :max-game-iteration="25"
+                    :id="gameId"
+                    ref="gameViewRef"
+                    :agent="agent"
+                    @passAgent="onPassAgent"
+                    @initializeScene="updateSceneInfo"
+                ></GameView>
+            </div>
+        </SimpleTab>
+        <SimpleTab tabGroup="trainingBenchmarkSwitch" tabName="Benchmark">
+            <div class="pb-2 pt-8">
+                <GameBenchmark
+                    :id="gameId"
+                    :agent="agent"
+                    ref="benchmarkViewRef"
+                    :max-game-iteration="50"
+                    @initializeScene="updateSceneInfo"
+                ></GameBenchmark>
+            </div>
+        </SimpleTab>
         <Alert
             v-if="isAlertOpen"
             content="The currently loaded models will be deleted. Do you still want to continue"
@@ -127,6 +146,7 @@ import {
 } from 'simple-tabs-vue';
 
 const gameViewRef: Ref = ref();
+const benchmarkViewRef: Ref = ref();
 
 const tabsStore: SimpleTabStore = useSimpleTabsStore();
 
@@ -142,9 +162,19 @@ const props = defineProps({
     accentColor: String as PropType<IconColor>,
 });
 
-let activeAlg: Ref<string> = ref(
-    settingsStore.getActiveAlgorithm(props.gameId)
-);
+let activeAlg: Ref<string> = getActiveAlgorithm();
+
+onMounted(() => {
+    tabsStore.switchTab(`${props.gameId}-AlgTab`, activeAlg.value);
+});
+
+function getActiveAlgorithm(): Ref<string> {
+    const activeAlg = settingsStore.getActiveAlgorithm(props.gameId);
+    if (activeAlg === 'random') {
+        settingsStore.setActiveAlgorithm(props.gameId, 'QLearning');
+    }
+    return ref(activeAlg);
+}
 
 function getTabStyleClass(): string[] {
     if (props.accentColor) {
@@ -170,9 +200,13 @@ function startTrainingHander() {
     gameViewRef.value.initializeTraining();
 }
 
+function startBenchmarkHandler() {
+    benchmarkViewRef.value.initializeBenchmark();
+}
+
 function onPassAgent(passedAgent: any) {
     agent.value = passedAgent;
-    console.log(agent.value);
+    console.log('agent passed', agent.value);
 }
 
 function onLoadNewAgent(loadedAgent: Agent | undefined) {

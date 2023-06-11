@@ -33,7 +33,7 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps, PropType, Ref } from 'vue';
+import { PropType, Ref } from 'vue';
 import { IconColor } from '~~/utils/enums';
 
 const props = defineProps({

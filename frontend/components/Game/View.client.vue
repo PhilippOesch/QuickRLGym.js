@@ -1,19 +1,17 @@
 <template>
     <div class="gameWrapper">
-        <Tab tabGroup="trainingBenchmarkSwitch" name="Training">
-            <div class="info" :key="counter">
-                <InfoBox
-                    title="Current Game Info:"
-                    :content="<object>reactiveInfo.gameInfo"
-                    styleClasses="gameInfo"
-                />
-                <InfoBox
-                    :title="`Training Progress - Iteration ${iteration}`"
-                    :content="<object>reactiveInfo.stats"
-                    styleClasses="trainingInfo"
-                />
-            </div>
-        </Tab>
+        <div class="info" :key="counter">
+            <InfoBox
+                title="Current Game Info:"
+                :content="<object>reactiveInfo.gameInfo"
+                styleClasses="gameInfo"
+            />
+            <InfoBox
+                :title="`Training Progress - Iteration ${iteration}`"
+                :content="<object>reactiveInfo.stats"
+                styleClasses="trainingInfo"
+            />
+        </div>
         <div ref="gameContainer" class="gameContainer">
             <Loader text="Training..." v-if="isTraining"></Loader>
         </div>
@@ -28,7 +26,7 @@ import useSettingsStore from '~~/comsosable/useSettingsStore';
 import useAgent from '~~/comsosable/useAgent';
 import { GameTrainingSettings } from '~~/comsosable/useDefaultSettings';
 import useGetGameScene from '~~/comsosable/useGameEnv';
-import StaticRenderScene from '~~/utils/GameScenes/StaticRenderScene';
+import { renderGame } from '~~/utils/GameScenes/helpers';
 import { Loader } from 'phaser';
 
 const gameContainer: any = ref(null);
@@ -78,17 +76,18 @@ async function initializeTraining() {
         env,
         gameSettings.episodes,
         gameSettings.showProgressEvery,
-        props.trainingIteration
+        props.maxGameIteration
     );
 }
 
 defineExpose({ initializeTraining });
+
 const props = defineProps({
     id: {
         type: String,
         required: true,
     },
-    trainingIteration: {
+    maxGameIteration: {
         type: Number,
         required: true,
     },
@@ -97,7 +96,7 @@ const props = defineProps({
         default: 100,
     },
     agent: {
-        type: Object as PropType<Agent>,
+        type: <PropType<Agent>>Object,
     },
 });
 const settingsStore = useSettingsStore();
@@ -130,38 +129,20 @@ async function trainingLoop(
         console.log(reactiveInfo.stats);
         console.log('iteration', iteration.value);
 
-        await renderGame();
+        isTraining.value = false;
+        await renderGame(sceneInfo!, agent!, reactiveInfo);
         trainingLoop(env, newIterationsLeft, trainingIterations, maxIterations);
     } else {
         await env.train(iterationsLeft, -1, maxIterations);
         iteration.value += iterationsLeft;
         console.log('iteration', env.iteration);
         settingsStore.setActiveState(props.id, true);
-        await renderGame();
-        console.log('end Training');
         isTraining.value = false;
+        await renderGame(sceneInfo!, agent!, reactiveInfo);
+        console.log('end Training');
         reactiveInfo.stats = sceneInfo!.env!.stats;
         emit('passAgent', agent);
     }
-}
-async function renderGame() {
-    isTraining.value = false;
-    const env: SingleAgentEnvironment = sceneInfo!.env as any;
-    const gameScene: StaticRenderScene = sceneInfo!
-        .gameScene as StaticRenderScene;
-
-    env.reset();
-    gameScene.reRender();
-    await new Promise((f) => setTimeout(f, 1000));
-
-    while (!env.isTerminal && env.iteration <= 25) {
-        await new Promise((f) => setTimeout(f, props.renderBetweenMoves));
-        const nextAction = agent!.evalStep(env.state);
-        env.step(nextAction);
-        gameScene.reRender();
-        reactiveInfo.gameInfo = sceneInfo!.gameScene!.gameInfo;
-    }
-    await new Promise((f) => setTimeout(f, 200));
 }
 
 onMounted(async () => {

@@ -1,14 +1,15 @@
 {
     "name": "quickrl.web",
-    "version": "0.6.15",
+    "version": "0.6.16",
     "description": "",
     "repository": {
         "type": "git",
         "url": "git+https://github.com/PhilippOesch/QuickRLGym.js.git"
     },
     "type": "module",
-    "main": "dist/index.cjs.js",
-    "module": "dist/index.es.js",
+    "main": "dist/index.cjs",
+    "module": "dist/index.esm.js",
+    "browser": "dist/index.umd.js",
     "types": "dist/dts/index.d.ts",
     "scripts": {
         "test": "jest",
@@ -40,6 +41,8 @@
     },
     "devDependencies": {
         "@jest/globals": "^29.5.0",
+        "@rollup/plugin-commonjs": "^25.0.0",
+        "@rollup/plugin-node-resolve": "^15.1.0",
         "@rollup/plugin-terser": "^0.4.3",
         "@rollup/plugin-typescript": "^11.1.1",
         "@types/file-saver": "^2.0.5",

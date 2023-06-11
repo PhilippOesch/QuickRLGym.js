@@ -1,7 +1,7 @@
 import { GameObjects } from 'phaser';
 import { Envs, Games } from 'quickrl.core';
 import BlackJackUtils from './BlackJackUtils';
-import StaticRenderScene from './StaticRenderScene';
+import StaticRenderScene from './helpers';
 
 export default class BlackJackGameScene extends StaticRenderScene {
     private interactiveMode: boolean;
@@ -44,7 +44,7 @@ export default class BlackJackGameScene extends StaticRenderScene {
     public create() {
         // dealer shown card
         const showCard: Games.BlackJack.BlackJackCard =
-            this.blackJackGame.getDealer.getShownCard;
+            this.blackJackGame.dealer.shownCard;
 
         // dealer hidden card
         this.add.image(210, 130, 'back');
@@ -53,7 +53,7 @@ export default class BlackJackGameScene extends StaticRenderScene {
 
         // player shown card
         const lastCard: Games.BlackJack.BlackJackCard =
-            this.blackJackGame.getPlayer.getCurrentCard!;
+            this.blackJackGame.player.currentCard!;
         this.lastPlayerCard = this.add.image(450, 130, lastCard.toString());
 
         // dealerUI
@@ -82,9 +82,9 @@ export default class BlackJackGameScene extends StaticRenderScene {
         playerTitle.setText('Player');
 
         const hasUsableAce: string = BlackJackGameScene.mapUsableAce(
-            this.blackJackGame.getPlayer.hasUsableAce
+            this.blackJackGame.player.hasUsableAce
         );
-        const playerScore = this.blackJackGame.getPlayer.getScore;
+        const playerScore = this.blackJackGame.player.score;
 
         this.playerUi = this.add.text(520, 70, '', {
             font: '14px Courier',
@@ -109,18 +109,18 @@ export default class BlackJackGameScene extends StaticRenderScene {
     public reRender(): void {
         // update cards:
         const currentCard: Games.BlackJack.BlackJackCard =
-            this.blackJackGame.getPlayer.getCurrentCard!;
+            this.blackJackGame.player.currentCard!;
         this.lastPlayerCard!.setTexture(currentCard.toString());
-        const newPlayerScore = this.blackJackGame.getPlayer.getScore;
-        const newDealerScore = this.blackJackGame.getDealer.getScore;
+        const newPlayerScore = this.blackJackGame.player.score;
+        const newDealerScore = this.blackJackGame.dealer.score;
         const hasUsableAce: string = BlackJackGameScene.mapUsableAce(
-            this.blackJackGame.getPlayer.hasUsableAce
+            this.blackJackGame.player.hasUsableAce
         );
 
         this.playerUi!.data.set('score', newPlayerScore);
         this.playerUi!.data.set('usableAce', hasUsableAce);
 
-        if (this.blackJackGame.getPlayer.getStick) {
+        if (this.blackJackGame.player.sticks) {
             this.dealerUi!.data.set('score', newDealerScore);
         } else {
             this.dealerUi!.data.set('score', 0);
