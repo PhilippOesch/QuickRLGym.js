@@ -232,7 +232,7 @@ export abstract class SingleAgentEnvironment extends Environment {
         for (let i = 0; i &lt; iterations; i++) {
             while (
                 (!this.isTerminal &amp;&amp; this.iteration &lt; maxIterationPerGame) ||
-                (!this.isTerminal &amp;&amp; maxIterationPerGame == -1)
+                (!this.isTerminal &amp;&amp; maxIterationPerGame === -1)
             ) {
                 await this.singleTrainStep(maxIterationPerGame);
             }
