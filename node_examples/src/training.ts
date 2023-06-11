@@ -11,11 +11,9 @@ const maxIterationsPerGame = 25;
 
 FileStrategies.NodeJSONFileSaver;
 
-// load the environment
-const env: SingleAgentEnvironment = QuickRLJS.loadEnv<SingleAgentEnvironment>(
-    'BlackJack',
-    { randomSeed: randomSeed }
-)!;
+const env: SingleAgentEnvironment = QuickRLJS.loadEnv('BlackJack', {
+    randomSeed,
+})!;
 
 async function runTraining() {
     // create an agent

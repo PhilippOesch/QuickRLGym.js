@@ -33,9 +33,7 @@ const logEvery = 500;
 const maxIterationsPerGame = 25;
 
 // load the environment
-const env: SingleAgentEnvironment = <SingleAgentEnvironment>(
-    QuickRLJS.loadEnv('BlackJack', { randomSeed: randomSeed })
-);
+const env: SingleAgentEnvironment = QuickRLJS.loadEnv('Taxi', { randomSeed: randomSeed })!;
 
 // create an agent
 const agent: Agents.DQNAgent = new Agents.DQNAgent(env, {
@@ -105,12 +103,13 @@ This is how you can load the model into a new agent for example:
 
 ```ts
 const benchmarkAgent = new Agents.DQNAgent(env);
-
+// load configuration
 benchmarkAgent.loadConfig(
     new FileStrategies.NodeJSONFileLoader({
         filePath: './models/DQN/TaxiModel/config.json',
     })
 );
+// load the model
 benchmarkAgent.load(
     new FileStrategies.NodeTFModelLoader({
         folderPath: './models/DQN/TaxiModel/',
