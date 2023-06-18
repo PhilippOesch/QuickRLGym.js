@@ -171,6 +171,10 @@ class Vec2 implements Copiable&lt;Vec2>, Comparable&lt;Vec2> {
     public isEqual(other: Vec2): boolean {
         return this._x === other._x &amp;&amp; this._y === other._y;
     }
+
+    public get key(): string {
+        return `${this.x}.${this.y}`;
+    }
 }
 
 export default Vec2;

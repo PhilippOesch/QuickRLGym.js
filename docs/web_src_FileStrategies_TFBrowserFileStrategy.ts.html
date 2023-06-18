@@ -109,8 +109,7 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>import { FileStrategies } from 'quickrl.core';
-import * as tf from '@tensorflow/tfjs';
+            <pre class="prettyprint source linenums"><code>import { FileStrategies, tf } from 'quickrl.core';
 
 /**
  * Option for loading tensorflow layers models over the browser
@@ -134,6 +133,7 @@ export class WebTFModelSaver&lt;T extends tf.LayersModel>
     implements FileStrategies.TFModelSaver&lt;T>
 {
     async save(data: T): Promise&lt;boolean> {
+        console.log('Saving Tensorflow Agent:', data);
         await data.save('downloads://model');
         return true;
     }
