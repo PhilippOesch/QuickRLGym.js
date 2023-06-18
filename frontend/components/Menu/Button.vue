@@ -10,16 +10,12 @@
 </template>
 
 <script lang="ts" setup>
-const props = defineProps({
-    clickHandler: {
-        type: Function,
-        required: true,
-    },
-    opened: {
-        type: Boolean,
-        default: false,
-    },
-});
+export interface MenuButtonProps {
+    clickHandler: () => any;
+    opened: boolean;
+}
+
+const props = withDefaults(defineProps<MenuButtonProps>(), { opened: false });
 
 function callClickHandler() {
     props.clickHandler();

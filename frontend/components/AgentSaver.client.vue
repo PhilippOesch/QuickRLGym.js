@@ -10,19 +10,18 @@
 </template>
 
 <script lang="ts" setup>
+import { ButtonSize } from '~/utils/enums';
+import { toRaw } from 'vue';
 import { PersistableAgent } from 'quickrl.core';
-import { PropType } from 'vue';
 import { FileStrategies } from 'quickrl.web';
 import useSettingsStore from '~~/comsosable/useSettingsStore';
 import { agentMapping } from '~~/comsosable/useAgent';
 
-const props = defineProps({
-    agentObject: Object as PropType<PersistableAgent<any, any>>,
-    gameId: {
-        type: String,
-        required: true,
-    },
-});
+export interface AgentSaverProps {
+    agentObject?: PersistableAgent<any, any>;
+    gameId: string;
+}
+const props = defineProps<AgentSaverProps>();
 
 const { getIsActive, getActiveAlgorithm } = useSettingsStore();
 
@@ -48,7 +47,8 @@ async function save(): Promise<void> {
         })
     );
     if (isTFModel) {
-        await trainableAgent.save(new FileStrategies.WebTFModelSaver());
+        let raw_agent = toRaw(trainableAgent);
+        await raw_agent.save(new FileStrategies.WebTFModelSaver());
     } else {
         await trainableAgent.save(
             new FileStrategies.WebJSONFileSaver({

@@ -16,23 +16,21 @@
     </div>
 </template>
 <script setup lang="ts">
-import { PropType, Ref } from 'vue';
+import { Ref } from 'vue';
+import { BaseInputProps } from '~/utils/PropTypes';
 import { InputStyleType } from '~~/utils/enums';
 
-const props = defineProps({
-    name: String,
-    title: String,
-    min: Number,
-    max: Number,
-    defaultValue: Number,
-    styleClasses: String,
-    disabled: Boolean,
-    stepSize: Number,
-    inputStyle: {
-        type: String as PropType<InputStyleType>,
-        default: InputStyleType.Dark,
-    },
+export interface NumberInputProps extends BaseInputProps {
+    min?: number;
+    max?: number;
+    defaultValue?: number;
+    stepSize?: number;
+}
+
+const props = withDefaults(defineProps<NumberInputProps>(), {
+    inputStyle: InputStyleType.Dark,
 });
+
 const valueRef: Ref<number> = ref(props.defaultValue ? props.defaultValue : 0);
 
 const emit = defineEmits(['updated']);

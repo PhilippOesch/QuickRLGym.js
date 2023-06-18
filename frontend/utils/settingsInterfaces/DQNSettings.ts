@@ -3,9 +3,10 @@ import {
     SettingNumber,
     SettingBoolean,
     SettingArray,
+    ISettingTemplate,
 } from './general';
 
-interface IDQNSettings {
+interface IDQNSettings extends ISettingTemplate {
     learningRate: Setting<SettingNumber>;
     discountFactor: Setting<SettingNumber>;
     nnLayer: Setting<SettingArray>;

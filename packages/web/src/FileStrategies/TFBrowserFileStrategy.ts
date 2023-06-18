@@ -1,5 +1,4 @@
-import { FileStrategies } from 'quickrl.core';
-import * as tf from '@tensorflow/tfjs';
+import { FileStrategies, tf } from 'quickrl.core';
 
 /**
  * Option for loading tensorflow layers models over the browser
@@ -23,6 +22,7 @@ export class WebTFModelSaver<T extends tf.LayersModel>
     implements FileStrategies.TFModelSaver<T>
 {
     async save(data: T): Promise<boolean> {
+        console.log('Saving Tensorflow Agent:', data);
         await data.save('downloads://model');
         return true;
     }

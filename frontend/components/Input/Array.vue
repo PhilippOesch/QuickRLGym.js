@@ -3,6 +3,7 @@
         <h3 :class="title">{{ title }}</h3>
         <input
             type="text"
+            :name="name"
             v-model="value"
             :class="inputStyle"
             @change="() => finishEdit()"
@@ -12,26 +13,18 @@
 </template>
 
 <script setup lang="ts">
+import { BaseInputProps } from '~/utils/PropTypes';
 import { InputStyleType } from '~~/utils/enums';
-import { PropType } from 'vue';
+import { ref } from 'vue';
 
-const props = defineProps({
-    name: String,
-    min: Number,
-    styleClasses: String,
-    title: String,
-    delimiter: {
-        type: String,
-        required: true,
-    },
-    inputStyle: {
-        type: Object as PropType<InputStyleType>,
-        default: InputStyleType.Dark,
-    },
-    defaultValue: {
-        type: Object as PropType<number[]>,
-    },
-    disabled: Boolean,
+export interface InputArrayProps extends BaseInputProps {
+    min?: number;
+    delimiter: string;
+    defaultValue?: number[];
+}
+
+const props = withDefaults(defineProps<InputArrayProps>(), {
+    inputStyle: InputStyleType.Dark,
 });
 
 const emit = defineEmits(['updated']);

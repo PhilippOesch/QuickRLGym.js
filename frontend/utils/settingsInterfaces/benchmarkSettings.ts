@@ -1,12 +1,12 @@
-import { Setting, SettingNumber } from './general';
+import { ISettingTemplate, Setting, SettingNumber } from './general';
 
-export interface BenchmarkSettings {
+export interface BenchmarkSettingsTemplate extends ISettingTemplate {
     benchmarkGames: Setting<SettingNumber>;
     simulateGameEvery: Setting<SettingNumber>;
     randomSeed: Setting<SettingNumber>;
 }
 
-const defaultBenchmarkSettings: BenchmarkSettings = {
+const defaultBenchmarkSettings: BenchmarkSettingsTemplate = {
     benchmarkGames: {
         displayName: 'Benchmark Games',
         setting: new SettingNumber(1, 1),

@@ -60,6 +60,10 @@ class Vec2 implements Copiable<Vec2>, Comparable<Vec2> {
     public isEqual(other: Vec2): boolean {
         return this._x === other._x && this._y === other._y;
     }
+
+    public get key(): string {
+        return `${this.x}.${this.y}`;
+    }
 }
 
 export default Vec2;

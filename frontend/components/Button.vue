@@ -8,17 +8,17 @@
 </template>
 
 <script lang="ts" setup>
-import { PropType } from 'vue';
 import { ButtonSize } from '~~/utils/enums';
 
-const props = defineProps({
-    handler: Function,
-    value: String,
-    size: {
-        type: String as PropType<ButtonSize>,
-        default: ButtonSize.Normal,
-    },
-    disabled: Boolean,
+export interface ButtonProps {
+    handler?: () => any;
+    value?: string;
+    size: ButtonSize;
+    disabled?: boolean;
+}
+
+const props = withDefaults(defineProps<ButtonProps>(), {
+    size: ButtonSize.Normal,
 });
 
 function clickHandler() {

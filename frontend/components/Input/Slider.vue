@@ -33,19 +33,19 @@
 </template>
 
 <script setup lang="ts">
-import { PropType, Ref } from 'vue';
+import { Ref } from 'vue';
+import { BaseInputProps } from '~/utils/PropTypes';
 import { IconColor } from '~~/utils/enums';
 
-const props = defineProps({
-    name: String,
-    title: String,
-    max: Number,
-    min: Number,
-    defaultValue: Number,
-    stepSize: Number,
-    disabled: Boolean,
-    accentColor: String as PropType<IconColor>,
-});
+export interface InputSliderProps extends BaseInputProps {
+    max?: number;
+    min?: number;
+    defaultValue?: number;
+    stepSize?: number;
+    accentColor?: IconColor;
+}
+
+const props = defineProps<InputSliderProps>();
 
 const valueRef: Ref<number> = ref(props.defaultValue ? props.defaultValue : 0);
 

@@ -1,5 +1,4 @@
-import { FileStrategies } from 'quickrl.core';
-import * as tf from '@tensorflow/tfjs';
+import { FileStrategies, tf } from 'quickrl.core';
 import path from 'path';
 import { mkdir } from 'fs/promises';
 

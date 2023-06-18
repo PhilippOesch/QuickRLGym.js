@@ -13,6 +13,7 @@ import PersistableAgent from './RLInterface/PersistableAgent';
 import * as Agents from './Agents';
 import * as Games from './Games';
 import * as Utils from './Utils';
+import * as tf from '@tensorflow/tfjs';
 
 export {
     type EnvStateContext,
@@ -29,4 +30,5 @@ export {
     Environment,
     Agent,
     QuickRLJS,
+    tf,
 };

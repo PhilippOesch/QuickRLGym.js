@@ -92,21 +92,21 @@
                 @loadNewAgent="onLoadNewAgent"
                 :activeAlgorithm="activeAlg"
             ></AgentLoader>
-            <Saver
+            <AgentSaver
                 :agentObject="(<PersistableAgent<any, any>>agent)"
                 :gameId="gameId"
-            ></Saver>
+            ></AgentSaver>
         </div>
         <SimpleTab tabGroup="trainingBenchmarkSwitch" tabName="Training">
             <div class="pb-2 pt-8">
-                <GameView
+                <GameTraining
                     :max-game-iteration="25"
                     :id="gameId"
                     ref="gameViewRef"
                     :agent="agent"
                     @passAgent="onPassAgent"
                     @initializeScene="updateSceneInfo"
-                ></GameView>
+                ></GameTraining>
             </div>
         </SimpleTab>
         <SimpleTab tabGroup="trainingBenchmarkSwitch" tabName="Benchmark">
@@ -142,7 +142,6 @@ import {
     SwitchEvent,
     useSimpleTabsStore,
     SimpleTabStore,
-    SimpleTabSwitch,
 } from 'simple-tabs-vue';
 
 const gameViewRef: Ref = ref();
@@ -154,13 +153,11 @@ const settingsStore = useSettingsStore();
 
 let env: Ref<SingleAgentEnvironment | undefined> = ref(undefined);
 
-const props = defineProps({
-    gameId: {
-        type: String,
-        required: true,
-    },
-    accentColor: String as PropType<IconColor>,
-});
+export interface GameProps {
+    gameId: string;
+    accentColor?: IconColor;
+}
+const props = defineProps<GameProps>();
 
 let activeAlg: Ref<string> = getActiveAlgorithm();
 

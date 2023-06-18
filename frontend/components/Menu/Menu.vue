@@ -27,7 +27,8 @@
 </template>
 
 <script setup lang="ts">
-import { Ref } from 'vue';
+import { IconColor } from '~/utils/enums';
+import { Ref, ref } from 'vue';
 const links = [
     {
         title: 'Taxi Game',
@@ -41,18 +42,6 @@ const links = [
         icon: 'card',
         color: IconColor.Green,
     },
-    // {
-    //     title: 'Grid World',
-    //     link: '/Games/TaxiGame',
-    //     icon: 'grid',
-    //     color: IconColor.Sky,
-    // },
-    // {
-    //     title: 'Tic-Tac-Toe',
-    //     link: '/Games/BlackJackGame',
-    //     icon: 'tic-tac-toe',
-    //     color: IconColor.Pink,
-    // },
 ];
 
 const menuOpen: Ref<boolean> = ref(false);

@@ -1,6 +1,6 @@
-import { SettingNumber, Setting } from './general';
+import { SettingNumber, Setting, ISettingTemplate } from './general';
 
-interface IQLSettings {
+interface IQLSettings extends ISettingTemplate {
     learningRate: Setting<SettingNumber>;
     discountFactor: Setting<SettingNumber>;
     epsilonStart: Setting<SettingNumber>;

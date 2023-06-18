@@ -1,6 +1,6 @@
 {
     "name": "quickrl.web",
-    "version": "0.6.16",
+    "version": "0.6.17",
     "description": "",
     "repository": {
         "type": "git",
@@ -35,9 +35,9 @@
     "author": "Philipp Oeschger",
     "license": "MIT",
     "dependencies": {
-        "@tensorflow/tfjs": "^4.6.0",
+        "@tensorflow/tfjs": "^4.7.0",
         "file-saver": "^2.0.5",
-        "quickrl.core": "^0.6.13"
+        "quickrl.core": "^0.6.18"
     },
     "devDependencies": {
         "@jest/globals": "^29.5.0",

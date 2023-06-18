@@ -8,6 +8,7 @@
                 @change="finishEdit"
                 ref="checkBoxRef"
                 :disabled="disabled"
+                :name="name"
             />
             <span class="slider round"></span>
         </label>
@@ -15,16 +16,14 @@
 </template>
 
 <script setup lang="ts">
-import { PropType } from 'vue';
+import { BaseInputProps } from '~/utils/PropTypes';
 import { IconColor } from '~~/utils/enums';
 
-const props = defineProps({
-    title: String,
-    name: String,
-    defaultValue: Boolean,
-    disabled: Boolean,
-    accentColor: String as PropType<IconColor>,
-});
+export interface InputToggleProps extends BaseInputProps {
+    defaultValue?: boolean;
+    accentColor?: IconColor;
+}
+const props = defineProps<InputToggleProps>();
 
 let value = props.defaultValue ? props.defaultValue : false;
 

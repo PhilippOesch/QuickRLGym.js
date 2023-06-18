@@ -5,25 +5,29 @@
             <template v-for="(item, index) in settingsObject" v-if="settings">
                 <InputSlider
                     v-if="getType(item) === 'Slider'"
-                    :name="index"
+                    :name="index.toString()"
                     :title="item.displayName"
                     :max="item.setting.max"
                     :min="item.setting.min"
                     :defaultValue="settings[index]"
                     :stepSize="item.setting.stepSize"
-                    @updated="(value) => updateSettings(value, index)"
+                    @updated="
+                        (value: any) => updateSettings(value, index.toString())
+                    "
                     :disabled="isDisabled"
                     :accentColor="accentColor"
                 ></InputSlider>
                 <InputNumber
                     v-if="getType(item) === 'Number'"
-                    :name="index"
+                    :name="index.toString()"
                     :title="item.displayName"
                     :max="item.setting.max"
                     :min="item.setting.min"
                     :defaultValue="settings[index]"
                     :stepSize="item.setting.stepSize"
-                    @updated="(value) => updateSettings(value, index)"
+                    @updated="
+                        (value: any) => updateSettings(value, index.toString())
+                    "
                     :inputStyle="
                         selectionType === SelectionType.Grid
                             ? InputStyleType.Dark
@@ -34,21 +38,25 @@
                 </InputNumber>
                 <InputToggle
                     v-if="getType(item) === 'Toggle'"
-                    :name="index"
+                    :name="index.toString()"
                     :title="item.displayName"
                     :defaultValue="settings[index]"
-                    @updated="(value) => updateSettings(value, index)"
+                    @updated="
+                        (value: any) => updateSettings(value, index.toString())
+                    "
                     :disabled="isDisabled"
                     :accentColor="accentColor"
                 >
                 </InputToggle>
                 <InputArray
                     v-if="getType(item) === 'Array'"
-                    :name="index"
+                    :name="index.toString()"
                     :delimiter="item.setting.delimiter"
                     :title="item.displayName"
                     :defaultValue="settings[index]"
-                    @updated="(value) => updateSettings(value, index)"
+                    @updated="
+                        (value: any) => updateSettings(value, index.toString())
+                    "
                     :disabled="isDisabled"
                 >
                 </InputArray>
@@ -58,8 +66,9 @@
 </template>
 
 <script setup lang="ts">
-import { PropType, computed, onMounted } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import {
+    ISettingTemplate,
     SettingArray,
     SettingBoolean,
     SettingNumber,
@@ -67,29 +76,17 @@ import {
 import { IconColor, InputStyleType, SelectionType } from '~~/utils/enums';
 import useSettingsStore from '~~/comsosable/useSettingsStore';
 
-const props = defineProps({
-    gameId: {
-        type: String,
-        required: true,
-    },
-    settingsName: {
-        type: String,
-        required: true,
-    },
-    settingsObject: {
-        type: Object,
-        required: true,
-    },
-    selectionType: {
-        type: Object as PropType<SelectionType>,
-        default: SelectionType.Grid,
-    },
-    title: {
-        type: String,
-    },
-    accentColor: {
-        type: Object as PropType<IconColor>,
-    },
+export interface ParamSelectorProps {
+    gameId: string;
+    settingsName: string;
+    settingsObject: ISettingTemplate;
+    selectionType: SelectionType;
+    title?: string;
+    accentColor?: IconColor;
+}
+
+const props = withDefaults(defineProps<ParamSelectorProps>(), {
+    selectionType: SelectionType.Grid,
 });
 
 const settingsStore = useSettingsStore();

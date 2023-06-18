@@ -17,20 +17,25 @@
 </template>
 
 <script setup lang="ts">
-import { PropType, Ref } from 'vue';
+import { Ref } from 'vue';
 import { Agent, SingleAgentEnvironment, Utils } from 'quickrl.core';
 import { SceneInfo } from '~~/comsosable/useGameEnv';
 import useGetGameScene from '~~/comsosable/useGameEnv';
 import useSettingsStore from '~~/comsosable/useSettingsStore';
 import { GameBenchmarkSettings } from '~~/comsosable/useDefaultSettings';
 import { renderGame } from '~~/utils/GameScenes/helpers';
-import { mappedRef, MappedRefType } from 'mappedref-vue';
+import { mappedRef } from 'mappedref-vue';
+import { GameViewProps } from '~/utils/PropTypes';
 
 enum BenchmarkState {
     NotStarted,
     InProgress,
     Finished,
 }
+
+const props = withDefaults(defineProps<GameViewProps>(), {
+    renderBetweenMoves: 100,
+});
 
 const benchmarkTitleRef = mappedRef(
     'not Initialed',
@@ -62,24 +67,6 @@ const settingsStore = useSettingsStore();
 let reactiveInfo = reactive({
     gameInfo: null as object | null,
     stats: null as object | null,
-});
-
-const props = defineProps({
-    id: {
-        type: String,
-        required: true,
-    },
-    agent: {
-        type: Object as PropType<Agent>,
-    },
-    maxGameIteration: {
-        type: Number,
-        required: true,
-    },
-    renderBetweenMoves: {
-        type: Number,
-        default: 100,
-    },
 });
 
 let benchmarkSettings: GameBenchmarkSettings;

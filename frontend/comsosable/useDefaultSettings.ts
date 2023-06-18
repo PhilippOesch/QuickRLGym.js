@@ -1,13 +1,13 @@
 import { Agents } from 'quickrl.core';
 
 export interface ISettingsStore {
-    [x: string]: SettingsEntry;
+    [x: string]: SettingsEntry<any>;
 }
 
-export interface SettingsEntry {
+export interface SettingsEntry<T> {
     algorithmActive: string;
     settingsActive: boolean;
-    gameSettings: object;
+    gameSettings: T;
     [x: string]: any;
 }
 

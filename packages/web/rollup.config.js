@@ -7,23 +7,31 @@ export default [
     // browser-friendly UMD build
     {
         input: 'src/index.ts',
+        external: ['@tensorflow/tfjs', 'quickrl.core'],
         plugins: [
             resolve(), // so Rollup can find `ms`
             commonjs(), // so Rollup can convert `ms` to an ES module
             typescript(), // so Rollup can convert TypeScript to JavaScript
             terser(),
         ],
-        external: ['@tensorflow/tfjs'],
         output: {
             name: 'quickrl.web',
-            globals: { '@tensorflow/tfjs': 'tf' },
+            globals: {
+                '@tensorflow/tfjs': 'tf',
+                'quickrl.core': 'quickrl.core',
+            },
             file: 'dist/index.umd.js',
             format: 'umd',
         },
     },
     {
         input: 'src/index.ts',
-        external: ['@tensorflow/tfjs', 'seedrandom', 'file-saver'],
+        external: [
+            '@tensorflow/tfjs',
+            'seedrandom',
+            'file-saver',
+            'quickrl.core',
+        ],
         plugins: [
             typescript(), // so Rollup can convert TypeScript to JavaScript
         ],

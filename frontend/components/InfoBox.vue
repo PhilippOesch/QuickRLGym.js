@@ -10,18 +10,13 @@
 </template>
 
 <script setup lang="ts">
-const props = defineProps({
-    title: {
-        type: String,
-        required: true,
-    },
-    content: {
-        type: Object,
-    },
-    styleClasses: {
-        type: String,
-    },
-});
+interface InfoBoxProps {
+    title: string;
+    content?: object;
+    styleClasses?: string;
+}
+
+const props = defineProps<InfoBoxProps>();
 </script>
 <style lang="postcss" scoped>
 .infoBox {

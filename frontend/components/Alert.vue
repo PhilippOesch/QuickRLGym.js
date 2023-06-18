@@ -22,12 +22,14 @@
 </template>
 
 <script setup lang="ts">
-const props = defineProps({
-    title: String,
-    content: String,
-    onSuccess: Function,
-    onAbort: Function,
-});
+import { ButtonSize } from '~/utils/enums';
+export interface AlertProps {
+    title?: string;
+    content?: string;
+    onSuccess?: () => any;
+    onAbort?: () => any;
+}
+defineProps<AlertProps>();
 </script>
 
 <style lang="postcss" scoped>

@@ -51,9 +51,16 @@
 <script setup lang="ts">
 import { SingleAgentEnvironment, PersistableAgent } from 'quickrl.core';
 import { FileStrategies } from 'quickrl.web';
-import { PropType } from 'vue';
 import useAgent, { agentMapping } from '~~/comsosable/useAgent';
 import useSettingsStore from '~~/comsosable/useSettingsStore';
+
+export interface AgentLoaderProps {
+    gameId: string;
+    activeAlgorithm: string;
+    env?: SingleAgentEnvironment;
+    agentObject?: PersistableAgent<any, any>;
+}
+const props = defineProps<AgentLoaderProps>();
 
 const loaderInputModel = ref();
 const loaderInputConfig = ref();
@@ -72,21 +79,6 @@ const binWeightsActive = computed(() => {
 });
 
 const settingStore = useSettingsStore();
-
-const props = defineProps({
-    gameId: {
-        type: String,
-        required: true,
-    },
-    activeAlgorithm: {
-        type: String,
-        required: true,
-    },
-    env: {
-        type: Object as PropType<SingleAgentEnvironment>,
-    },
-    agentObject: Object as PropType<PersistableAgent<any, any>>,
-});
 
 const agentLoaded = ref(false);
 

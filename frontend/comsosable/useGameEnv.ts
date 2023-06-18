@@ -34,18 +34,18 @@ export default function useGetGameScene(
     switch (name) {
         case 'Taxi':
             const taxiScene: TaxiGameScene = new TaxiGameScene(
-                env as Envs.TaxiEnv,
+                <Envs.TaxiEnv>env,
                 false
             );
-            return useTaxiScene(taxiScene, env as Envs.TaxiEnv, parent);
+            return useTaxiScene(taxiScene, <Envs.TaxiEnv>env, parent);
         case 'BlackJack':
             const blackJackScene: BlackJackGameScene = new BlackJackGameScene(
-                env as Envs.BlackJackEnv,
+                <Envs.BlackJackEnv>env,
                 false
             );
             return useBlackJackScene(
                 blackJackScene,
-                env as Envs.BlackJackEnv,
+                <Envs.BlackJackEnv>env,
                 parent
             );
     }

@@ -12,29 +12,28 @@
                 styleClasses="trainingInfo"
             />
         </div>
-        <div ref="gameContainer" class="gameContainer">
-            <Loader text="Training..." v-if="isTraining"></Loader>
-        </div>
+        <div ref="gameContainer" class="gameContainer"></div>
     </div>
 </template>
 
 <script lang="ts" setup>
 import { Agent, Environment, SingleAgentEnvironment } from 'quickrl.core';
-import { PropType, Ref } from 'vue';
+import { Ref, ref, reactive, nextTick, onMounted } from 'vue';
 import { SceneInfo } from '~~/comsosable/useGameEnv';
 import useSettingsStore from '~~/comsosable/useSettingsStore';
 import useAgent from '~~/comsosable/useAgent';
 import { GameTrainingSettings } from '~~/comsosable/useDefaultSettings';
 import useGetGameScene from '~~/comsosable/useGameEnv';
 import { renderGame } from '~~/utils/GameScenes/helpers';
-import { Loader } from 'phaser';
+import { GameViewProps } from '~/utils/PropTypes';
 
-const gameContainer: any = ref(null);
+const props = withDefaults(defineProps<GameViewProps>(), {
+    renderBetweenMoves: 100,
+});
 
-let isTraining: Ref<boolean> = ref(false);
+const gameContainer: Ref<any> = ref(null);
 
 async function initializeTraining() {
-    isTraining.value = true;
     iteration.value = 0;
     console.log('startTraining');
 
@@ -82,23 +81,6 @@ async function initializeTraining() {
 
 defineExpose({ initializeTraining });
 
-const props = defineProps({
-    id: {
-        type: String,
-        required: true,
-    },
-    maxGameIteration: {
-        type: Number,
-        required: true,
-    },
-    renderBetweenMoves: {
-        type: Number,
-        default: 100,
-    },
-    agent: {
-        type: <PropType<Agent>>Object,
-    },
-});
 const settingsStore = useSettingsStore();
 
 const counter = ref(0);
@@ -119,7 +101,6 @@ async function trainingLoop(
     trainingIterations: number,
     maxIterations: number
 ) {
-    isTraining.value = true;
     if (iterationsLeft > trainingIterations) {
         const newIterationsLeft = iterationsLeft - trainingIterations;
         await env.train(trainingIterations, -1, maxIterations);
@@ -129,15 +110,13 @@ async function trainingLoop(
         console.log(reactiveInfo.stats);
         console.log('iteration', iteration.value);
 
-        isTraining.value = false;
         await renderGame(sceneInfo!, agent!, reactiveInfo);
         trainingLoop(env, newIterationsLeft, trainingIterations, maxIterations);
     } else {
         await env.train(iterationsLeft, -1, maxIterations);
         iteration.value += iterationsLeft;
-        console.log('iteration', env.iteration);
+        console.log('iteration', iteration.value);
         settingsStore.setActiveState(props.id, true);
-        isTraining.value = false;
         await renderGame(sceneInfo!, agent!, reactiveInfo);
         console.log('end Training');
         reactiveInfo.stats = sceneInfo!.env!.stats;
@@ -146,7 +125,7 @@ async function trainingLoop(
 }
 
 onMounted(async () => {
-    if (!isTraining.value) settingsStore.setActiveState(props.id, true);
+    settingsStore.setActiveState(props.id, true);
     await nextTick();
     const parent = gameContainer.value as HTMLElement;
     sceneInfo = useGetGameScene(props.id, parent) as SceneInfo;

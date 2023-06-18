@@ -1,6 +1,6 @@
-import { Setting, SettingNumber } from './general';
+import { ISettingTemplate, Setting, SettingNumber } from './general';
 
-interface IMCSettings {
+interface IMCSettings extends ISettingTemplate {
     epsilonStart: Setting<SettingNumber>;
     discountFactor: Setting<SettingNumber>;
     epsilonEnd: Setting<SettingNumber>;

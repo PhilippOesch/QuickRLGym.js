@@ -33,3 +33,7 @@ export interface Setting<
     displayName: string;
     setting: Type;
 }
+
+export interface ISettingTemplate {
+    [x: string]: Setting<any>;
+}
