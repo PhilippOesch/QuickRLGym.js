@@ -13,4 +13,7 @@ module.exports = {
     silent: true,
     maxWorkers: 5,
     coverageDirectory: './coverage',
+    moduleNameMapper: {
+        '^@root/(.*)$': '<rootDir>/src/$1',
+    },
 };

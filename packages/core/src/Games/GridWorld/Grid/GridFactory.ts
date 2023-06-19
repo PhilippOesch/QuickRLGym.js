@@ -1,44 +1,68 @@
 import seedrandom from 'seedrandom';
 import Grid, { FieldType, GridField } from './Grid';
-import { Vec2 } from 'src/Utils';
+import { Vec2 } from '@root/Utils';
 
+/**
+ * The Taxi Game class
+ * @category Games
+ * @subcategory GridWorld
+ */
 class GridFactory {
     private static readonly chanceForAWall: number = 0.1;
     private static readonly chanceForNegativeRewardField: number = 0.05;
+    private static readonly chanceForBonusField: number = 0.02;
     private static readonly negativeReward: number = -1;
-    private static readonly goalReward: number = 1;
+    private static readonly goalReward: number = 5;
+    private static readonly bonusFieldReward: number = 1;
     private static readonly relativeGoalRange: number = 0.4;
 
+    /**
+     * Create a new grid.
+     * @param {number} size The size of the grid.
+     * @param {seedrandom.PRNG} rng The random number generator.
+     * @param {Vec2} startingPos The starting position.
+     * @returns {Grid} a new grid.
+     */
     public create(size: number, rng: seedrandom.PRNG, startingPos: Vec2): Grid {
-        let rawGrid = this.generateGrid(size, rng, startingPos);
-        let startingField = rawGrid[startingPos.y][startingPos.x];
+        let [rawGrid, goal] = this.generateGrid(size, rng);
+        let grid = new Grid(rawGrid, startingPos, goal);
 
-        while (!this.goalIsReachable(rawGrid, startingField)) {
-            rawGrid = this.generateGrid(size, rng, startingPos);
-            startingField = rawGrid[startingPos.y][startingPos.x];
+        while (!this.goalIsReachable(grid, startingPos)) {
+            [rawGrid, goal] = this.generateGrid(size, rng);
+            grid = new Grid(rawGrid, startingPos, goal);
         }
-        return new Grid(rawGrid);
+
+        return grid;
     }
 
+    /**
+     * Generates the grid.
+     * @param {number} size The size.
+     * @param {seedrandom.PRNG} rng The random number generator.
+     * @returns {GridField[][]} A filled 2D GridField Array.
+     */
     private generateGrid(
         size: number,
-        rng: seedrandom.PRNG,
-        startigPos: Vec2
-    ): GridField[][] {
+        rng: seedrandom.PRNG
+    ): [GridField[][], Vec2] {
         const rawGrid: GridField[][] = new Array<GridField[]>(size);
         for (let y = 0; y < size; y++) {
             rawGrid[y] = new Array<GridField>(size);
             for (let x = 0; x < size; x++) {
-                if (!this.fieldIsPotentialStartingPoint(x, y, size)) {
-                    rawGrid[y][x] = this.getNewField(rng, new Vec2(x, y));
-                }
+                rawGrid[y][x] = this.getNewField(rng, new Vec2(x, y));
             }
         }
 
-        this.generateGoalPosition(rawGrid, rng, size);
-        return rawGrid;
+        const goal = this.generateGoalPosition(rawGrid, rng);
+        return [rawGrid, goal.position];
     }
 
+    /**
+     * Generate a random grid field.
+     * @param {seedrandom.PRNG} rng The random number generator.
+     * @param {Vec2} vec the position of the field
+     * @returns {GridField} a new random field.
+     */
     private getNewField(rng: seedrandom.PRNG, vec: Vec2): GridField {
         let randNum = rng();
 
@@ -54,11 +78,23 @@ class GridFactory {
         randNum = rng();
 
         // generate negative value Field
+
         if (randNum < GridFactory.chanceForNegativeRewardField) {
             return {
                 position: vec,
                 reward: GridFactory.negativeReward,
-                type: FieldType.Normal,
+                type: FieldType.NegativeField,
+            };
+        } else if (
+            randNum <
+                GridFactory.chanceForNegativeRewardField +
+                    GridFactory.chanceForNegativeRewardField &&
+            randNum > GridFactory.chanceForNegativeRewardField
+        ) {
+            return {
+                position: vec,
+                reward: GridFactory.bonusFieldReward,
+                type: FieldType.BonusField,
             };
         }
 
@@ -69,17 +105,22 @@ class GridFactory {
         };
     }
 
+    /**
+     * Generate the goal position
+     * @param {GridField[][]} grid The grid.
+     * @param {seedrandom.PRNG} rng The random number generator.
+     * @returns {void}
+     */
     private generateGoalPosition(
         grid: GridField[][],
-        rng: seedrandom.PRNG,
-        size: number
-    ): void {
+        rng: seedrandom.PRNG
+    ): GridField {
         const randNumX = rng();
         const randNumY = rng();
 
-        const range = size * GridFactory.relativeGoalRange;
-        const max = Math.ceil(size - (size - range) / 2);
-        const min = Math.floor((size - range) / 2);
+        const range = grid.length * GridFactory.relativeGoalRange;
+        const max = Math.ceil(grid.length - (grid.length - range) / 2);
+        const min = Math.floor((grid.length - range) / 2);
         const x = Math.floor(randNumX * (max - min + 1)) + min;
         const y = Math.floor(randNumY * (max - min + 1)) + min;
 
@@ -90,34 +131,29 @@ class GridFactory {
         };
 
         grid[y][x] = goal;
+        return goal;
     }
 
-    private fieldIsPotentialStartingPoint(x: number, y: number, size: number) {
-        return (
-            (x == 0 && y == 0) ||
-            (x == 0 && y == size - 1) ||
-            (x == size - 1 && y == 0) ||
-            (x == size - 1 && y == size - 1)
-        );
-    }
-
-    private goalIsReachable(
-        grid: GridField[][],
-        startingPos: GridField
-    ): boolean {
+    /**
+     * Apply Breadth-first-search algorithm to find out whether the goal is reachable
+     * @param {GridField[][]} grid The grid.
+     * @param {Vec2} startingPos The starting position.
+     * @returns {boolean} Whether the goal is reachable.
+     */
+    private goalIsReachable(grid: Grid, startingPos: Vec2): boolean {
         // bfs algorithm
 
         const queue: GridField[] = [];
-        queue.push(startingPos);
+        queue.push(grid.getField(startingPos));
 
-        const visited: Set<string> = new Set([startingPos.position.key]);
+        const visited: Set<string> = new Set([startingPos.key]);
 
         let found = false;
 
         while (queue.length > 0 && !found) {
             const value: GridField = queue.pop()!;
 
-            const neighbors = this.getNeighbors(value.position, grid);
+            const neighbors = grid.getNeighbors(value.position);
 
             for (const neighbor of neighbors) {
                 if (!visited.has(neighbor.position.key)) {
@@ -133,36 +169,6 @@ class GridFactory {
         }
 
         return found;
-    }
-
-    private getNeighbors(vec: Vec2, grid: GridField[][]): GridField[] {
-        const neighbors: GridField[] = [];
-
-        const neighborVectors: Vec2[] = [
-            new Vec2(vec.x + 1, vec.y),
-            new Vec2(vec.x - 1, vec.y),
-            new Vec2(vec.x, vec.y + 1),
-            new Vec2(vec.x, vec.y - 1),
-        ];
-
-        for (const vector of neighborVectors) {
-            if (
-                this.insideBorders(vector, grid.length) &&
-                !this.isWall(grid, vector)
-            ) {
-                neighbors.push(grid[vector.y][vector.x]);
-            }
-        }
-
-        return neighbors;
-    }
-
-    private isWall(grid: GridField[][], vec: Vec2): boolean {
-        return grid[vec.y][vec.x].type === FieldType.Wall;
-    }
-
-    private insideBorders(vec: Vec2, size: number): boolean {
-        return !(vec.x >= 0 && vec.x < size && vec.y >= 0 && vec.y < size);
     }
 }
 

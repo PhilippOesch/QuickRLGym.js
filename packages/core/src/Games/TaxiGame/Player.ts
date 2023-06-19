@@ -7,7 +7,7 @@ import * as TaxiGameMap from './GameMap';
  * @category Games
  * @subcategory Taxi
  * @param {Vec2} relPos - The relative start position of the player.
- * @param {TaxiAction} carMoveState - The car move state at the start.
+ * @param {TaxiAction} [carMoveState=TaxiAction.Left] - The car move state at the start.
  */
 class TaxiPlayer {
     private static moveDirMapping: Map<TaxiAction, Vec2> = new Map([

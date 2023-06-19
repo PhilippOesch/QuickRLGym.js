@@ -13,7 +13,10 @@
         "emitDeclarationOnly": true,
         "declarationDir": "./dist/dts",
         "resolveJsonModule": true,
-        "esModuleInterop": true
+        "esModuleInterop": true,
+        "paths": {
+            "@root/*": ["./src/*"]
+        }
     },
     "include": ["src"]
 }
