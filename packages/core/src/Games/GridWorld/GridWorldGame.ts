@@ -29,6 +29,11 @@ class GridWorldGame {
      * @type {number}
      */
     public static readonly illegalMovePenalty: number = -10;
+    /**
+     * The amount of point for reaching a final state.
+     * @type {number}
+     */
+    public static readonly goalReward: number = 5;
 
     private static readonly asciiSymbols = '░▒▓$╬{}';
 
@@ -106,6 +111,7 @@ class GridWorldGame {
             this._rng,
             startigPos
         );
+        this._iteration = 0;
         this._player = new Player(this.grid, startigPos);
     }
 

@@ -5,6 +5,12 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer components {
+    .card {
+        @apply rounded-md p-3 drop-shadow bg-darkPurple-800;
+    }
+}
+
 body {
     @apply text-gray-50 bg-darkPurple-900;
 }

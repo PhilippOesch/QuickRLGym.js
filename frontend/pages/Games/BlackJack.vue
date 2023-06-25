@@ -2,7 +2,11 @@
     <div class="mainContainer">
         <!-- <Menu></Menu> -->
         <h1>Blackjack</h1>
-        <Game gameId="BlackJack" :accentColor="IconColor.Green"></Game>
+        <Game
+            gameId="BlackJack"
+            :accentColor="IconColor.Green"
+            contentPath="/blackjack"
+        ></Game>
     </div>
 </template>
 <script setup lang="ts">

@@ -69,6 +69,9 @@ class Grid {
      * @returns {boolean}
      */
     public isWall(vec: Vec2): boolean {
+        if (!this.insideBorders(vec)) {
+            return false;
+        }
         return this._grid[vec.y][vec.x].type === FieldType.Wall;
     }
 
@@ -78,11 +81,8 @@ class Grid {
      * @returns {boolean} Whether a position lies inside the borders.
      */
     public insideBorders(vec: Vec2): boolean {
-        return !(
-            vec.x >= 0 &&
-            vec.x < this._size &&
-            vec.y >= 0 &&
-            vec.y < this._size
+        return (
+            vec.x >= 0 && vec.x < this._size && vec.y >= 0 && vec.y < this._size
         );
     }
 
@@ -112,7 +112,7 @@ class Grid {
         ];
 
         for (const vector of neighborVectors) {
-            if (this.insideBorders(vector)) {
+            if (!this.insideBorders(vector)) {
                 continue;
             }
 

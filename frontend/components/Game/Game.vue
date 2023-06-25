@@ -84,19 +84,24 @@
                 />
             </div>
         </SimpleTab>
-        <div class="freeComponents">
-            <AgentLoader
-                :gameId="gameId"
-                :env="env"
-                :agentObject="(<PersistableAgent<any, any>>agent)"
-                @loadNewAgent="onLoadNewAgent"
-                :activeAlgorithm="activeAlg"
-            ></AgentLoader>
-            <AgentSaver
-                :agentObject="(<PersistableAgent<any, any>>agent)"
-                :gameId="gameId"
-            ></AgentSaver>
-        </div>
+        <SimpleTab
+            tabGroup="trainingBenchmarkSwitch"
+            :tabName="['Training', 'Benchmark']"
+        >
+            <div class="freeComponents">
+                <AgentLoader
+                    :gameId="gameId"
+                    :env="env"
+                    :agentObject="(<PersistableAgent<any, any>>agent)"
+                    @loadNewAgent="onLoadNewAgent"
+                    :activeAlgorithm="activeAlg"
+                ></AgentLoader>
+                <AgentSaver
+                    :agentObject="(<PersistableAgent<any, any>>agent)"
+                    :gameId="gameId"
+                ></AgentSaver>
+            </div>
+        </SimpleTab>
         <SimpleTab tabGroup="trainingBenchmarkSwitch" tabName="Training">
             <div class="pb-2 pt-8">
                 <GameTraining
@@ -120,6 +125,9 @@
                 ></GameBenchmark>
             </div>
         </SimpleTab>
+        <SimpleTab tabGroup="trainingBenchmarkSwitch" tabName="Description">
+            <Description v-if="contentPath" :path="contentPath"></Description>
+        </SimpleTab>
         <Alert
             v-if="isAlertOpen"
             content="The currently loaded models will be deleted. Do you still want to continue"
@@ -142,7 +150,9 @@ import {
     SwitchEvent,
     useSimpleTabsStore,
     SimpleTabStore,
+    SimpleTab,
 } from 'simple-tabs-vue';
+import Description from './Description.vue';
 
 const gameViewRef: Ref = ref();
 const benchmarkViewRef: Ref = ref();
@@ -155,6 +165,7 @@ let env: Ref<SingleAgentEnvironment | undefined> = ref(undefined);
 
 export interface GameProps {
     gameId: string;
+    contentPath?: string;
     accentColor?: IconColor;
 }
 const props = defineProps<GameProps>();

@@ -13,7 +13,7 @@ import { Grid, GridField } from './Grid';
  */
 class GridWorldPlayer {
     private _pos: Vec2;
-    private _return: number;
+    private _return: number = 0;
     private _grid: Grid;
     private _field: GridField;
 
@@ -65,8 +65,8 @@ class GridWorldPlayer {
         const newPosition = this._pos.copy();
         newPosition.add(GridWorldPlayer.directionMapping.get(action)!);
         if (
-            !this._grid.isWall(newPosition) &&
-            this._grid.insideBorders(newPosition)
+            this._grid.insideBorders(newPosition) &&
+            !this._grid.isWall(newPosition)
         ) {
             this._pos = newPosition;
             this._field = this._grid.getField(this._pos);
