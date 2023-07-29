@@ -1,6 +1,10 @@
 // import { EnvOptions, SingleAgentEnvironment, StepResult } from '../index';
 import { EnvOptions } from '../RLInterface/Environment';
-import { BlackJackGame, BlackJackGameState } from '../Games/BlackJack/index';
+import {
+    BlackJackAction,
+    BlackJackGame,
+    BlackJackGameState,
+} from '../Games/BlackJack/index';
 import { SingleAgentEnvironment } from '../RLInterface/SingleAgentEnvironment';
 import StepResult from '../RLInterface/StepResult';
 
@@ -93,7 +97,9 @@ class BlackJackEnv extends SingleAgentEnvironment {
         }
         this._game.initGame();
     }
-    public step(action: string): StepResult<BlackJackGameState> {
+    public step(
+        action: keyof typeof BlackJackAction
+    ): StepResult<BlackJackGameState> {
         this._lastAction = action;
         return this._game.step(action);
     }

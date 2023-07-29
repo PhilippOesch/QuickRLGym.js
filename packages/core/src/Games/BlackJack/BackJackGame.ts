@@ -20,11 +20,13 @@ class BlackJackGame {
      * @type {Map<string, BlackJackAction>}
      * @readonly
      */
-    public static readonly actionMapping: Map<string, BlackJackAction> =
-        new Map([
-            ['Stick', BlackJackAction.Stick],
-            ['Hit', BlackJackAction.Hit],
-        ]);
+    public static readonly actionMapping: Map<
+        keyof typeof BlackJackAction,
+        BlackJackAction
+    > = new Map([
+        ['Stick', BlackJackAction.Stick],
+        ['Hit', BlackJackAction.Hit],
+    ]);
 
     public static readonly _gameStateDim: number[] = [32, 11, 2];
 
@@ -151,10 +153,12 @@ class BlackJackGame {
 
     /**
      * Make an environment step
-     * @param {string} actionString The action
+     * @param {keyof typeof BlackJackAction} actionString The action
      * @returns {StepResult} The result
      */
-    public step(actionString: string): StepResult<BlackJackGameState> {
+    public step(
+        actionString: keyof typeof BlackJackAction
+    ): StepResult<BlackJackGameState> {
         this._iteration++;
         const action: BlackJackAction | undefined =
             BlackJackGame.actionMapping.get(actionString);

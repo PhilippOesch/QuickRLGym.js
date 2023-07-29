@@ -1,11 +1,11 @@
 import { GameObjects } from 'phaser';
 import { Envs, Games } from 'quickrl.core';
 import BlackJackUtils from './BlackJackUtils';
-import StaticRenderScene from './helpers';
+import StaticRenderScene from '../helpers';
 
 export default class BlackJackGameScene extends StaticRenderScene {
-    private interactiveMode: boolean;
-    private loopEndless: boolean;
+    // private interactiveMode: boolean;
+    // private loopEndless: boolean;
 
     private blackJackGame: Games.BlackJack.BlackJackGame;
     private lastPlayerCard: GameObjects.Image | undefined;
@@ -21,8 +21,6 @@ export default class BlackJackGameScene extends StaticRenderScene {
     ) {
         super('Black Jack Game');
         this.blackJackGame = env.game;
-        this.interactiveMode = interactiveMode;
-        this.loopEndless = loopEndless;
         this.env = env;
     }
 

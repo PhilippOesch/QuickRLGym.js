@@ -72,7 +72,7 @@ abstract class Environment {
      * @param {string} action - the action to take
      * @returns {StepResult} the result of the taken action
      */
-    abstract step<Taction extends string>(action: Taction): StepResult<object>;
+    abstract step(action: string): StepResult<object>;
 
     /**
      * The reset the environment

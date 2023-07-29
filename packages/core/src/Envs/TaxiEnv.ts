@@ -10,8 +10,8 @@ import { EnvOptions } from '../RLInterface/Environment';
  * @property {number} averageGameScore The average game score achieved
  */
 export interface TaxiStats {
-    averageGameIterations: number;
-    averageGameScore: number;
+    avgGameIterations: number;
+    avgGameScore: number;
 }
 
 /**
@@ -52,10 +52,10 @@ class TaxiEnv extends SingleAgentEnvironment {
      */
     public get stats(): TaxiStats {
         return {
-            averageGameIterations: this.intervalCount
+            avgGameIterations: this.intervalCount
                 ? this.averageGameIterations / this.intervalCount
                 : 0,
-            averageGameScore: this.intervalCount
+            avgGameScore: this.intervalCount
                 ? this.averageGameScore / this.intervalCount
                 : 0,
         };
@@ -96,7 +96,7 @@ class TaxiEnv extends SingleAgentEnvironment {
         return this._game.return;
     }
 
-    public step(action: string): StepResult<TaxiGameState> {
+    public step(action: keyof typeof TaxiAction): StepResult<TaxiGameState> {
         this._lastAction = action;
         return this._game.step(action);
     }

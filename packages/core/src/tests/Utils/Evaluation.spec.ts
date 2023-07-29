@@ -23,8 +23,8 @@ test('Evaluate Random Agent in Taxi Environment - returns correct stats and meth
         Utils.Evaluation.benchmarkSingleAgent(env, agent, 10, 20, 10)
     );
 
-    expect(stats.averageGameIterations).toStrictEqual(10);
-    expect(stats.averageGameScore).toStrictEqual(-35.2);
+    expect(stats.avgGameIterations).toStrictEqual(10);
+    expect(stats.avgGameScore).toStrictEqual(-35.2);
     expect(stepEnvFncSpy).toBeCalledTimes(100);
     expect(onIterationEndEnvFncSpy).toBeCalledTimes(10);
     expect(resetEnvFncSpy).toBeCalledTimes(11);

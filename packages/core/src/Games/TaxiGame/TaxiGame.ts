@@ -23,7 +23,10 @@ class TaxiGame {
      * @type {Map<string, TaxiAction>}
      * @readonly
      */
-    public static readonly actionMapping: Map<string, TaxiAction> = new Map([
+    public static readonly actionMapping: Map<
+        keyof typeof TaxiAction,
+        TaxiAction
+    > = new Map([
         ['Up', TaxiAction.Up],
         ['Down', TaxiAction.Down],
         ['Left', TaxiAction.Left],
@@ -200,10 +203,11 @@ class TaxiGame {
      * @param {string} actionString - The action to perform.
      * @returns {StepResult} The result of the step
      */
-    public step(actionString: string): StepResult<TaxiGameState> {
-        const action: TaxiAction | undefined = TaxiGame.actionMapping.get(
-            <string>actionString
-        );
+    public step(
+        actionString: keyof typeof TaxiAction
+    ): StepResult<TaxiGameState> {
+        const action: TaxiAction | undefined =
+            TaxiGame.actionMapping.get(actionString);
         if (action === undefined) {
             throw Error('Illegal Action');
         }

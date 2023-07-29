@@ -1,7 +1,6 @@
 import Environment, { EnvOptions } from './Environment';
 import { SingleAgentEnvironment } from './SingleAgentEnvironment';
 import * as Envs from '../Envs/';
-
 /**
  * The the typ of enviroment
  * @category QuickRLInterface
@@ -81,6 +80,11 @@ function nameAlreadyRegistered(envName: string): boolean {
     const envNames = new Set(registery.keys());
     return envNames.has(envName);
 }
+
+/**
+ * Predefined Environment keys
+ */
+export type EnvKey = 'Taxi' | 'BlackJack';
 
 // registering standard environments
 register('Taxi', Envs.TaxiEnv);
