@@ -108,7 +108,7 @@ test('feed', async () => {
 
     const prevState = _env.state;
     const action = _agent.step(prevState);
-    const { newState, reward } = _env.step(action);
+    const { newState, reward } = _env.step(<any>action);
     const gameState = _env.additionalInfo();
 
     await _agent.feed(prevState, action, newState, reward, gameState);

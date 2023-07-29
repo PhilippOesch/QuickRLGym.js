@@ -62,7 +62,7 @@ test('feed - single loop', async () => {
 
     const prevState = _env.state;
     const nextAction = _agent.step(prevState);
-    const { newState, reward } = _env.step(nextAction);
+    const { newState, reward } = _env.step(<any>nextAction);
     const gameStateContext = _env.additionalInfo(maxIterationState);
     await _agent.feed(
         prevState,

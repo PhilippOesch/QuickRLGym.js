@@ -60,7 +60,7 @@ test('feed', async () => {
 
     const prevState = _env.state;
     const action = _agent.step(_env.state);
-    const stepResult = _env.step(action);
+    const stepResult = _env.step(<any>action);
 
     // manipulate the game state context for testing.
     const envStateContext = {
@@ -85,7 +85,7 @@ test('decayStep - decayEpsilon is called', async () => {
 
     const prevState = _env.state;
     const action = _agent.step(_env.state);
-    const stepResult = _env.step(action);
+    const stepResult = _env.step(<any>action);
     const envStateContext = _env.additionalInfo();
 
     await _agent.feed(
