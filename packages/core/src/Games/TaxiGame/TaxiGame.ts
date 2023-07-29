@@ -200,7 +200,7 @@ class TaxiGame {
 
     /**
      * Perform a single game step
-     * @param {string} actionString - The action to perform.
+     * @param {keyof typeof TaxiAction} actionString - The action to perform.
      * @returns {StepResult} The result of the step
      */
     public step(

@@ -17,7 +17,7 @@ class BlackJackGame {
     /**
      * The action mapping
      * @static
-     * @type {Map<string, BlackJackAction>}
+     * @type {Map<keyof typeof BlackJackAction, BlackJackAction>}
      * @readonly
      */
     public static readonly actionMapping: Map<

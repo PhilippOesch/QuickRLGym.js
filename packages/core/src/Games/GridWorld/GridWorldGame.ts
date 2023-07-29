@@ -1,11 +1,10 @@
 import seedrandom from 'seedrandom';
 import Grid, { FieldType } from './Grid/Grid';
 import GridFactory from './Grid/GridFactory';
-import { Vec2 } from '@root/Utils';
+import { Vec2 } from '../../Utils';
 import GridWorldPlayer from './Player';
-import { Player } from '.';
 import GridWorldAction from './Action';
-import StepResult from '@root/RLInterface/StepResult';
+import StepResult from '../../RLInterface/StepResult';
 import GridWorldState from './GameState';
 
 /**
@@ -23,17 +22,6 @@ class GridWorldGame {
     private _gridSize: number;
     private _gameStateDim: number[];
     private _iteration = 0;
-
-    /**
-     * The penalty on an illegal move
-     * @type {number}
-     */
-    public static readonly illegalMovePenalty: number = -10;
-    /**
-     * The amount of point for reaching a final state.
-     * @type {number}
-     */
-    public static readonly goalReward: number = 5;
 
     private static readonly asciiSymbols = '░▒▓$╬{}';
 
@@ -57,15 +45,17 @@ class GridWorldGame {
 
     /**
      * The action string to action mapping
-     * @type {Map<string, GridWorldAction>}
+     * @type {Map<keyof typeof GridWorldAction, GridWorldAction>}
      */
-    public static readonly actionMapping: Map<string, GridWorldAction> =
-        new Map([
-            ['Up', GridWorldAction.Up],
-            ['Down', GridWorldAction.Down],
-            ['Left', GridWorldAction.Left],
-            ['Right', GridWorldAction.Right],
-        ]);
+    public static readonly actionMapping: Map<
+        keyof typeof GridWorldAction,
+        GridWorldAction
+    > = new Map([
+        ['Up', GridWorldAction.Up],
+        ['Down', GridWorldAction.Down],
+        ['Left', GridWorldAction.Left],
+        ['Right', GridWorldAction.Right],
+    ]);
 
     /**
      * Get the grid.
@@ -112,7 +102,7 @@ class GridWorldGame {
             startigPos
         );
         this._iteration = 0;
-        this._player = new Player(this.grid, startigPos);
+        this._player = new GridWorldPlayer(this.grid, startigPos);
     }
 
     /**
@@ -134,7 +124,9 @@ class GridWorldGame {
      * @param actionString The action to take.
      * @returns {StepResult<GridWorldState>} The result of the action.
      */
-    public step(actionString: string): StepResult<GridWorldState> {
+    public step(
+        actionString: keyof typeof GridWorldAction
+    ): StepResult<GridWorldState> {
         this._iteration++;
         const action = GridWorldGame.actionMapping.get(actionString)!;
         const reward = this.player.act(action);

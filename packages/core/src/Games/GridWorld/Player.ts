@@ -3,6 +3,7 @@ import GridWorldAction from './Action';
 import GridWorldGame from './GridWorldGame';
 import seedrandom from 'seedrandom';
 import { Grid, GridField } from './Grid';
+import * as Globals from './Globals';
 
 /**
  * The player.
@@ -73,8 +74,8 @@ class GridWorldPlayer {
             this._return += this._field.reward;
             return this._field.reward;
         }
-        this._return += GridWorldGame.illegalMovePenalty;
-        return GridWorldGame.illegalMovePenalty;
+        this._return += Globals.illegalMovePenalty;
+        return Globals.illegalMovePenalty;
     }
 }
 

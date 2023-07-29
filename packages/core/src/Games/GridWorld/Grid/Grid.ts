@@ -1,4 +1,4 @@
-import { Vec2 } from '@root/Utils';
+import { Vec2 } from '../../../Utils';
 
 /**
  * Type of a grid Field.

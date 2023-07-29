@@ -15,7 +15,7 @@ test('positions return correct expected field type', () => {
     game.print();
 
     const data: [Utils.Vec2, Games.GridWorld.Grid.FieldType][] = [
-        [new Utils.Vec2(5, 0), FieldType.BonusField],
+        [new Utils.Vec2(6, 9), FieldType.BonusField],
         [new Utils.Vec2(5, 2), FieldType.Wall],
         [new Utils.Vec2(6, 1), FieldType.NegativeField],
         [new Utils.Vec2(5, 5), FieldType.Normal],
@@ -76,7 +76,7 @@ test('reach terminal state', () => {
     ];
 
     for (const action of queueOfActions) {
-        game.step(action);
+        game.step(<any>action);
     }
 
     expect(game.isTerminal).toBe(true);

@@ -1,7 +1,8 @@
 import seedrandom from 'seedrandom';
 import Grid, { FieldType, GridField } from './Grid';
-import { Vec2 } from '@root/Utils';
+import { Vec2 } from '../../../Utils';
 import GridWorldGame from '../GridWorldGame';
+import * as Globals from '../Globals';
 
 /**
  * The Taxi Game class
@@ -88,7 +89,7 @@ class GridFactory {
         } else if (
             randNum <
                 GridFactory.chanceForNegativeRewardField +
-                    GridFactory.chanceForNegativeRewardField &&
+                    GridFactory.chanceForBonusField &&
             randNum > GridFactory.chanceForNegativeRewardField
         ) {
             return {
@@ -126,7 +127,7 @@ class GridFactory {
 
         const goal = {
             position: new Vec2(x, y),
-            reward: GridWorldGame.goalReward,
+            reward: Globals.goalReward,
             type: FieldType.EndState,
         };
 
