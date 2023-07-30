@@ -8,17 +8,17 @@
 </template>
 
 <script lang="ts" setup>
-import { ButtonSize } from '~~/utils/enums';
+import { Enums } from '~~/types';
 
 export interface ButtonProps {
     handler?: () => any;
     value?: string;
-    size: ButtonSize;
+    size: Enums.ButtonSize;
     disabled?: boolean;
 }
 
 const props = withDefaults(defineProps<ButtonProps>(), {
-    size: ButtonSize.Normal,
+    size: Enums.ButtonSize.Normal,
 });
 
 function clickHandler() {

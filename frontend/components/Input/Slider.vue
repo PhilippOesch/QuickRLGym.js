@@ -34,15 +34,15 @@
 
 <script setup lang="ts">
 import { Ref } from 'vue';
-import { BaseInputProps } from '~/utils/PropTypes';
-import { IconColor } from '~~/utils/enums';
+import { BaseInputProps } from '~/types/PropTypes';
+import { Enums } from '~~/types';
 
 export interface InputSliderProps extends BaseInputProps {
     max?: number;
     min?: number;
     defaultValue?: number;
     stepSize?: number;
-    accentColor?: IconColor;
+    accentColor?: Enums.IconColor;
 }
 
 const props = defineProps<InputSliderProps>();
@@ -139,3 +139,4 @@ function update(el: HTMLInputElement): void {
     @apply bg-darkPurple-900;
 }
 </style>
+~/types/PropTypes

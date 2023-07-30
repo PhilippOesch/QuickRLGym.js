@@ -16,9 +16,9 @@
                     title="Parameters:"
                     :gameId="gameId"
                     settingsName="QLearning"
-                    :settingsObject="qlSettingsDefault"
+                    :settingsObject="qlSettings"
                     :accentColor="accentColor"
-                    :selectionType="SelectionType.Grid"
+                    :selectionType="Enums.SelectionType.Grid"
                 />
             </SimpleTab>
             <SimpleTab :tabGroup="`${gameId}-AlgTab`" tabName="MCLearning">
@@ -26,9 +26,9 @@
                     title="Parameters:"
                     :gameId="gameId"
                     settingsName="MCLearning"
-                    :settingsObject="mcSettingsDefault"
+                    :settingsObject="mcSettings"
                     :accentColor="accentColor"
-                    :selectionType="SelectionType.Grid"
+                    :selectionType="Enums.SelectionType.Grid"
                 />
             </SimpleTab>
             <SimpleTab :tabGroup="`${gameId}-AlgTab`" tabName="DQN">
@@ -36,9 +36,9 @@
                     title="Parameters:"
                     :gameId="gameId"
                     settingsName="DQN"
-                    :settingsObject="dqnSettingsDefault"
+                    :settingsObject="dqnSettings"
                     :accentColor="accentColor"
-                    :selectionType="SelectionType.Grid"
+                    :selectionType="Enums.SelectionType.Grid"
                 />
             </SimpleTab>
         </SimpleTab>
@@ -47,13 +47,13 @@
                 <Button
                     :handler="startTrainingHander"
                     value="Start Training"
-                    :size="ButtonSize.Large"
+                    :size="Enums.ButtonSize.Large"
                 />
                 <ParamSelector
                     :gameId="gameId"
                     settingsName="gameSettings"
-                    :settingsObject="defaultTrainingSettings"
-                    :selectionType="SelectionType.FreeStanding"
+                    :settingsObject="trainingSettings"
+                    :selectionType="Enums.SelectionType.FreeStanding"
                 />
             </div>
         </SimpleTab>
@@ -73,14 +73,14 @@
             <div class="freeComponents">
                 <Button
                     value="Start Benchmark"
-                    :size="ButtonSize.Large"
+                    :size="Enums.ButtonSize.Large"
                     :handler="startBenchmarkHandler"
                 />
                 <ParamSelector
                     :gameId="gameId"
                     settingsName="benchmarkSettings"
-                    :settingsObject="defaultBenchmarkSettings"
-                    :selectionType="SelectionType.FreeStanding"
+                    :settingsObject="benchmarkSettings"
+                    :selectionType="Enums.SelectionType.FreeStanding"
                 />
             </div>
         </SimpleTab>
@@ -111,6 +111,7 @@
                     :agent="agent"
                     @passAgent="onPassAgent"
                     @initializeScene="updateSceneInfo"
+                    :renderBetweenMoves="renderBetweenMoves"
                 ></GameTraining>
             </div>
         </SimpleTab>
@@ -122,6 +123,7 @@
                     ref="benchmarkViewRef"
                     :max-game-iteration="50"
                     @initializeScene="updateSceneInfo"
+                    :renderBetweenMoves="renderBetweenMoves"
                 ></GameBenchmark>
             </div>
         </SimpleTab>
@@ -137,14 +139,16 @@
     </div>
 </template>
 <script lang="ts" setup>
-import { qlSettingsDefault } from '~~/utils/settingsInterfaces/QLSettings';
-import { mcSettingsDefault } from '~~/utils/settingsInterfaces/MCSettings';
-import { dqnSettingsDefault } from '~~/utils/settingsInterfaces/DQNSettings';
-import defaultTrainingSettings from '~~/utils/settingsInterfaces/trainingSettings';
-import { SelectionType, ButtonSize, IconColor } from '~~/utils/enums';
-import { PropType, Ref } from 'vue';
+import {
+    qlSettings,
+    mcSettings,
+    dqnSettings,
+    benchmarkSettings,
+    trainingSettings,
+} from '~~/utils/settingsStructure';
+import { Enums } from '~~/types';
+import { Ref } from 'vue';
 import { Agent, SingleAgentEnvironment, PersistableAgent } from 'quickrl.core';
-import defaultBenchmarkSettings from '~~/utils/settingsInterfaces/benchmarkSettings';
 import useSettingsStore from '~~/comsosable/useSettingsStore';
 import {
     SwitchEvent,
@@ -166,9 +170,13 @@ let env: Ref<SingleAgentEnvironment | undefined> = ref(undefined);
 export interface GameProps {
     gameId: string;
     contentPath?: string;
-    accentColor?: IconColor;
+    accentColor?: Enums.IconColor;
+    renderBetweenMoves?: number;
 }
-const props = defineProps<GameProps>();
+const props = withDefaults(defineProps<GameProps>(), {
+    renderBetweenMoves: 100,
+});
+//const props = defineProps<GameProps>();
 
 let activeAlg: Ref<string> = getActiveAlgorithm();
 
@@ -265,3 +273,6 @@ function switchTab(evt: SwitchEvent) {
     @apply mt-8 flex flex-wrap gap-8;
 }
 </style>
+~/utils/settingsInterfaces/algorithms/DQNSettings
+~/utils/settingsInterfaces/algorithms/MCSettings
+~/utils/settingsInterfaces/algorithms/QLSettings~/utils/defaultSettings/algorithms/MCSettings~/utils/defaultSettings/algorithms/DQNSettings~/utils/defaultSettings/trainingSettings~/utils/defaultSettings/benchmarkSettings

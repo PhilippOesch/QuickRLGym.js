@@ -13,7 +13,7 @@
             </NuxtLink>
             <hr />
             <h2 class="menuTitle">Games</h2>
-            <template v-for="link in links" :key="link.link">
+            <template v-for="link in gameLinks" :key="link.link">
                 <div class="menuLink" @click="navigate(link.link)">
                     <i :class="setClasses(link)" :alt="link.title" />
                     <div class="rightSide">
@@ -27,22 +27,8 @@
 </template>
 
 <script setup lang="ts">
-import { IconColor } from '~/utils/enums';
 import { Ref, ref } from 'vue';
-const links = [
-    {
-        title: 'Taxi Game',
-        link: '/Games/Taxi',
-        icon: 'car',
-        color: IconColor.Amber,
-    },
-    {
-        title: 'Blackjack',
-        link: '/Games/BlackJack',
-        icon: 'card',
-        color: IconColor.Green,
-    },
-];
+import { gameLinks } from '~~/constants';
 
 const menuOpen: Ref<boolean> = ref(false);
 

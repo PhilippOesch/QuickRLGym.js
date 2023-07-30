@@ -36,7 +36,7 @@
         >
         <div class="loaderButtonContainer">
             <Button
-                :size="ButtonSize.Large"
+                :size="Enums.ButtonSize.Large"
                 value="Load Model"
                 :handler="loadAgent"
                 :disabled="loaderDisabled"
@@ -51,6 +51,7 @@
 <script setup lang="ts">
 import { SingleAgentEnvironment, PersistableAgent } from 'quickrl.core';
 import { FileStrategies } from 'quickrl.web';
+import { Enums } from '~/types';
 import useAgent, { agentMapping } from '~~/comsosable/useAgent';
 import useSettingsStore from '~~/comsosable/useSettingsStore';
 

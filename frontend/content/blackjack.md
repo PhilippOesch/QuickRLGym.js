@@ -30,11 +30,11 @@ There are two actions, **stick** (action=0), and **hit** (action=1).
 
 ## Observation Space
 
- | Dimension | Size | Description                           |
- | --------- | ---- | ------------------------------------- |
- | 0         | 4-∞  | The current sum of the players cards  |
- | 1         | 1-10 | The one showing card of the dealer    |
- | 2         | 0-1  | Whether the player holds a usable ace |
+ | Dimension | Range        | Description                           |
+ | --------- | ------------ | ------------------------------------- |
+ | 0         | `(int)` 4-∞  | The current sum of the players cards  |
+ | 1         | `(int)` 1-10 | The one showing card of the dealer    |
+ | 2         | `(int)` 0-1  | Whether the player holds a usable ace |
 
  ## Rewards
 

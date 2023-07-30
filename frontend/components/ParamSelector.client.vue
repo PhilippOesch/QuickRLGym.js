@@ -29,9 +29,9 @@
                         (value: any) => updateSettings(value, index.toString())
                     "
                     :inputStyle="
-                        selectionType === SelectionType.Grid
-                            ? InputStyleType.Dark
-                            : InputStyleType.Light
+                        selectionType === Enums.SelectionType.Grid
+                            ? Enums.InputStyleType.Dark
+                            : Enums.InputStyleType.Light
                     "
                     :disabled="isDisabled"
                 >
@@ -72,21 +72,21 @@ import {
     SettingArray,
     SettingBoolean,
     SettingNumber,
-} from '~~/utils/settingsInterfaces/general';
-import { IconColor, InputStyleType, SelectionType } from '~~/utils/enums';
+} from '~~/types/settings';
+import { Enums } from '~~/types';
 import useSettingsStore from '~~/comsosable/useSettingsStore';
 
 export interface ParamSelectorProps {
     gameId: string;
     settingsName: string;
     settingsObject: ISettingTemplate;
-    selectionType: SelectionType;
+    selectionType: Enums.SelectionType;
     title?: string;
-    accentColor?: IconColor;
+    accentColor?: Enums.IconColor;
 }
 
 const props = withDefaults(defineProps<ParamSelectorProps>(), {
-    selectionType: SelectionType.Grid,
+    selectionType: Enums.SelectionType.Grid,
 });
 
 const settingsStore = useSettingsStore();

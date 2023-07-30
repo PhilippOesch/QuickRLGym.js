@@ -1,13 +1,14 @@
-import { Agents } from 'quickrl.core';
+import { Agents, QuickRLJS } from 'quickrl.core';
 
 export interface ISettingsStore {
-    [x: string]: SettingsEntry<any>;
+    [x: string]: SettingsEntry<any, any>;
 }
 
-export interface SettingsEntry<T> {
+export interface SettingsEntry<T, D> {
     algorithmActive: string;
     settingsActive: boolean;
     gameSettings: T;
+    benchmarkSettings: D;
     [x: string]: any;
 }
 
@@ -67,23 +68,24 @@ const defaultBenchmarkSettings: GameBenchmarkSettings = {
     randomSeed: 4321,
 };
 
-export const defaultSettings: ISettingsStore = {
-    Taxi: {
-        algorithmActive: 'random',
-        settingsActive: false,
-        QLearning: qLDefaultSettings,
-        MCLearning: mCDefaultSettings,
-        DQN: dqnDefaultSettings,
-        gameSettings: defaultGameSettings,
-        benchmarkSettings: defaultBenchmarkSettings,
-    },
-    BlackJack: {
-        algorithmActive: 'random',
-        settingsActive: false,
-        QLearning: qLDefaultSettings,
-        MCLearning: mCDefaultSettings,
-        DQN: dqnDefaultSettings,
-        gameSettings: defaultGameSettings,
-        benchmarkSettings: defaultBenchmarkSettings,
-    },
-};
+function buildDefaultSettings(): ISettingsStore {
+    let settings: ISettingsStore = {};
+
+    console.log('generated', settings);
+
+    for (let key of QuickRLJS.listEnvs()) {
+        settings[key] = {
+            algorithmActive: 'random',
+            settingsActive: false,
+            QLearning: qLDefaultSettings,
+            MCLearning: mCDefaultSettings,
+            DQN: dqnDefaultSettings,
+            gameSettings: defaultGameSettings,
+            benchmarkSettings: defaultBenchmarkSettings,
+        };
+    }
+
+    return settings;
+}
+
+export const defaultSettings: ISettingsStore = buildDefaultSettings();

@@ -5,7 +5,7 @@ import {
     QuickRLJS,
     Agents,
 } from 'quickrl.core';
-import BlackJackGameScene from '~~/utils/GameScenes/BlackJackGameScene';
+import BlackJackGameScene from '~/utils/GameScenes/BlackJack/BlackJackGameScene';
 import StaticRenderScene from '~~/utils/GameScenes/helpers';
 import TaxiGameScene from '~~/utils/GameScenes/TaxiGameScene';
 
@@ -25,7 +25,7 @@ function loadEnv(name: string) {
     return env;
 }
 
-export default function useGetGameScene(
+export default function useGameSceneFactory(
     name: string,
     parent: HTMLElement
 ): SceneInfo | undefined {
@@ -37,13 +37,13 @@ export default function useGetGameScene(
                 <Envs.TaxiEnv>env,
                 false
             );
-            return useTaxiScene(taxiScene, <Envs.TaxiEnv>env, parent);
+            return createTaxiScene(taxiScene, <Envs.TaxiEnv>env, parent);
         case 'BlackJack':
             const blackJackScene: BlackJackGameScene = new BlackJackGameScene(
                 <Envs.BlackJackEnv>env,
                 false
             );
-            return useBlackJackScene(
+            return createBlackJackScene(
                 blackJackScene,
                 <Envs.BlackJackEnv>env,
                 parent
@@ -52,7 +52,7 @@ export default function useGetGameScene(
     return undefined;
 }
 
-function useBlackJackScene(
+function createBlackJackScene(
     scene: BlackJackGameScene,
     env: Envs.BlackJackEnv,
     parent: HTMLElement
@@ -91,7 +91,7 @@ function useBlackJackScene(
     };
 }
 
-function useTaxiScene(
+function createTaxiScene(
     scene: TaxiGameScene,
     env: Envs.TaxiEnv,
     parent: HTMLElement

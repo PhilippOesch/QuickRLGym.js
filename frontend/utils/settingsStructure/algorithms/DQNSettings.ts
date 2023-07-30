@@ -1,27 +1,11 @@
 import {
-    Setting,
+    IDQNSettings,
     SettingNumber,
-    SettingBoolean,
     SettingArray,
-    ISettingTemplate,
-} from './general';
+    SettingBoolean,
+} from '~/types/settings';
 
-interface IDQNSettings extends ISettingTemplate {
-    learningRate: Setting<SettingNumber>;
-    discountFactor: Setting<SettingNumber>;
-    nnLayer: Setting<SettingArray>;
-    replayMemorySize: Setting<SettingNumber>;
-    batchSize: Setting<SettingNumber>;
-    replayMemoryInitSize: Setting<SettingNumber>;
-    epsilonStart: Setting<SettingNumber>;
-    epsilonEnd: Setting<SettingNumber>;
-    epsilonDecaySteps: Setting<SettingNumber>;
-    activateDoubleDQN: Setting<SettingBoolean>;
-    updateTargetEvery: Setting<SettingNumber>;
-    kernelInitializerSeed: Setting<SettingNumber>;
-}
-
-export const dqnSettingsDefault: IDQNSettings = {
+export const dqnSettings: IDQNSettings = {
     learningRate: {
         displayName: 'Learning Rate',
         setting: new SettingNumber(0.000001, 0, 0.5),
@@ -72,4 +56,4 @@ export const dqnSettingsDefault: IDQNSettings = {
     },
 };
 
-export default IDQNSettings;
+export default dqnSettings;

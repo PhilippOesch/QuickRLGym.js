@@ -17,8 +17,8 @@
 </template>
 <script setup lang="ts">
 import { Ref } from 'vue';
-import { BaseInputProps } from '~/utils/PropTypes';
-import { InputStyleType } from '~~/utils/enums';
+import { BaseInputProps } from '~~/types/PropTypes';
+import { Enums } from '~~/types';
 
 export interface NumberInputProps extends BaseInputProps {
     min?: number;
@@ -28,7 +28,7 @@ export interface NumberInputProps extends BaseInputProps {
 }
 
 const props = withDefaults(defineProps<NumberInputProps>(), {
-    inputStyle: InputStyleType.Dark,
+    inputStyle: Enums.InputStyleType.Dark,
 });
 
 const valueRef: Ref<number> = ref(props.defaultValue ? props.defaultValue : 0);
@@ -69,3 +69,4 @@ function update(el: HTMLInputElement): void {
     @apply bg-darkPurple-700;
 }
 </style>
+~/types/PropTypes

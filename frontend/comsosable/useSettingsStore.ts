@@ -6,7 +6,7 @@ import { ISettingsStore } from './useDefaultSettings';
 const useSettingsStore = defineStore('algSettings', {
     state: () => ({
         settings: useLocalStorage('settings', defaultSettings, {
-            mergeDefaults: true,
+            mergeDefaults: false,
         }),
     }),
     getters: {

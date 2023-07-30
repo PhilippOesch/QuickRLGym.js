@@ -13,8 +13,8 @@
 </template>
 
 <script setup lang="ts">
-import { BaseInputProps } from '~/utils/PropTypes';
-import { InputStyleType } from '~~/utils/enums';
+import { BaseInputProps } from '~~/types/PropTypes';
+import { Enums } from '~~/types';
 import { ref } from 'vue';
 
 export interface InputArrayProps extends BaseInputProps {
@@ -24,7 +24,7 @@ export interface InputArrayProps extends BaseInputProps {
 }
 
 const props = withDefaults(defineProps<InputArrayProps>(), {
-    inputStyle: InputStyleType.Dark,
+    inputStyle: Enums.InputStyleType.Dark,
 });
 
 const emit = defineEmits(['updated']);
@@ -68,3 +68,4 @@ function finishEdit(): void {
     @apply bg-darkPurple-700;
 }
 </style>
+~/types/PropTypes

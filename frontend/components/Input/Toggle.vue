@@ -16,12 +16,12 @@
 </template>
 
 <script setup lang="ts">
-import { BaseInputProps } from '~/utils/PropTypes';
-import { IconColor } from '~~/utils/enums';
+import { BaseInputProps } from '~~/types/PropTypes';
+import { Enums } from '~~/types';
 
 export interface InputToggleProps extends BaseInputProps {
     defaultValue?: boolean;
-    accentColor?: IconColor;
+    accentColor?: Enums.IconColor;
 }
 const props = defineProps<InputToggleProps>();
 
@@ -112,3 +112,4 @@ input:checked + .slider:before {
     border-radius: 50%;
 }
 </style>
+~/types/PropTypes

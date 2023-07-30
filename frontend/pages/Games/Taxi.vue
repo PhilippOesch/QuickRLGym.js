@@ -3,13 +3,13 @@
         <h1>Taxi Game</h1>
         <Game
             gameId="Taxi"
-            :accentColor="IconColor.Amber"
+            :accentColor="Enums.IconColor.Amber"
             contentPath="/taxi"
         ></Game>
     </div>
 </template>
 <script setup lang="ts">
-import { IconColor } from '~~/utils/enums';
+import { Enums } from '~~/types';
 
 definePageMeta({
     layout: 'game-page',

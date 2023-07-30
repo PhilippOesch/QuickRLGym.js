@@ -1,14 +1,6 @@
-import { SettingNumber, Setting, ISettingTemplate } from './general';
+import { IQLSettings, SettingNumber } from '~/types/settings';
 
-interface IQLSettings extends ISettingTemplate {
-    learningRate: Setting<SettingNumber>;
-    discountFactor: Setting<SettingNumber>;
-    epsilonStart: Setting<SettingNumber>;
-    epsilonEnd: Setting<SettingNumber>;
-    epsilonDecaySteps: Setting<SettingNumber>;
-}
-
-export const qlSettingsDefault: IQLSettings = {
+export const qlSettings: IQLSettings = {
     learningRate: {
         displayName: 'Learning Rate',
         setting: new SettingNumber(0.000001, 0, 1),
@@ -31,4 +23,4 @@ export const qlSettingsDefault: IQLSettings = {
     },
 };
 
-export default IQLSettings;
+export default qlSettings;

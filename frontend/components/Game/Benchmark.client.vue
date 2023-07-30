@@ -20,12 +20,12 @@
 import { Ref } from 'vue';
 import { Agent, SingleAgentEnvironment, Utils } from 'quickrl.core';
 import { SceneInfo } from '~~/comsosable/useGameEnv';
-import useGetGameScene from '~~/comsosable/useGameEnv';
+import useGameSceneFactory from '~~/comsosable/useGameEnv';
 import useSettingsStore from '~~/comsosable/useSettingsStore';
 import { GameBenchmarkSettings } from '~~/comsosable/useDefaultSettings';
 import { renderGame } from '~~/utils/GameScenes/helpers';
 import { mappedRef } from 'mappedref-vue';
-import { GameViewProps } from '~/utils/PropTypes';
+import { GameViewProps } from '~~/types/PropTypes';
 
 enum BenchmarkState {
     NotStarted,
@@ -78,7 +78,7 @@ let agent: Agent | undefined = undefined;
 onMounted(async () => {
     await nextTick();
     const parent = gameContainer.value as HTMLElement;
-    sceneInfo = useGetGameScene(props.id, parent) as SceneInfo;
+    sceneInfo = useGameSceneFactory(props.id, parent) as SceneInfo;
     emit('initializeScene', sceneInfo.env);
 });
 
@@ -137,7 +137,15 @@ async function benchmarkLoop(
         );
         iteration.value += benchmarkIterations;
         reactiveInfo.stats = sceneInfo!.env!.stats;
-        await renderGame(sceneInfo!, agent!, reactiveInfo);
+        await renderGame(
+            sceneInfo!,
+            agent!,
+            reactiveInfo,
+            props.maxGameIteration,
+            1000,
+            props.renderBetweenMoves,
+            1000
+        );
         benchmarkLoop(
             env,
             newIterationsLeft,
@@ -155,7 +163,15 @@ async function benchmarkLoop(
         );
         iteration.value += iterationsLeft;
         console.log('iteration', env.iteration);
-        await renderGame(sceneInfo!, agent!, reactiveInfo);
+        await renderGame(
+            sceneInfo!,
+            agent!,
+            reactiveInfo,
+            props.maxGameIteration,
+            1000,
+            props.renderBetweenMoves,
+            1000
+        );
         reactiveInfo.stats = sceneInfo!.env!.stats;
         settingsStore.setActiveState(props.id, true);
         benchmarkTitleRef.keyRef = BenchmarkState.Finished;
@@ -188,3 +204,4 @@ async function benchmarkLoop(
     @apply pointer-events-none;
 }
 </style>
+~/types/PropTypes

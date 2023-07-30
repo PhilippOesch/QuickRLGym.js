@@ -6,13 +6,13 @@
             <div class="buttons">
                 <Button
                     value="Ok"
-                    :size="ButtonSize.Normal"
+                    :size="Enums.ButtonSize.Normal"
                     :handler="onSuccess"
                 >
                 </Button>
                 <Button
                     value="Abort"
-                    :size="ButtonSize.Normal"
+                    :size="Enums.ButtonSize.Normal"
                     :handler="onAbort"
                 >
                 </Button>
@@ -22,7 +22,7 @@
 </template>
 
 <script setup lang="ts">
-import { ButtonSize } from '~/utils/enums';
+import { Enums } from '~/types';
 export interface AlertProps {
     title?: string;
     content?: string;

@@ -1,7 +1,7 @@
 <template>
     <div>
         <Button
-            :size="ButtonSize.Large"
+            :size="Enums.ButtonSize.Large"
             value="Save Model"
             :handler="save"
             :disabled="agentObject === undefined || !getIsActive(gameId)"
@@ -10,7 +10,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ButtonSize } from '~/utils/enums';
+import { Enums } from '~/types';
 import { toRaw } from 'vue';
 import { PersistableAgent } from 'quickrl.core';
 import { FileStrategies } from 'quickrl.web';

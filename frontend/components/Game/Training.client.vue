@@ -23,9 +23,9 @@ import { SceneInfo } from '~~/comsosable/useGameEnv';
 import useSettingsStore from '~~/comsosable/useSettingsStore';
 import useAgent from '~~/comsosable/useAgent';
 import { GameTrainingSettings } from '~~/comsosable/useDefaultSettings';
-import useGetGameScene from '~~/comsosable/useGameEnv';
+import useGameSceneFactory from '~~/comsosable/useGameEnv';
 import { renderGame } from '~~/utils/GameScenes/helpers';
-import { GameViewProps } from '~/utils/PropTypes';
+import { GameViewProps } from '~~/types/PropTypes';
 
 const props = withDefaults(defineProps<GameViewProps>(), {
     renderBetweenMoves: 100,
@@ -110,14 +110,30 @@ async function trainingLoop(
         console.log(reactiveInfo.stats);
         console.log('iteration', iteration.value);
 
-        await renderGame(sceneInfo!, agent!, reactiveInfo);
+        await renderGame(
+            sceneInfo!,
+            agent!,
+            reactiveInfo,
+            maxIterations,
+            1000,
+            props.renderBetweenMoves,
+            1000
+        );
         trainingLoop(env, newIterationsLeft, trainingIterations, maxIterations);
     } else {
         await env.train(iterationsLeft, -1, maxIterations);
         iteration.value += iterationsLeft;
         console.log('iteration', iteration.value);
         settingsStore.setActiveState(props.id, true);
-        await renderGame(sceneInfo!, agent!, reactiveInfo);
+        await renderGame(
+            sceneInfo!,
+            agent!,
+            reactiveInfo,
+            maxIterations,
+            1000,
+            props.renderBetweenMoves,
+            1000
+        );
         console.log('end Training');
         reactiveInfo.stats = sceneInfo!.env!.stats;
         emit('passAgent', agent);
@@ -128,7 +144,7 @@ onMounted(async () => {
     settingsStore.setActiveState(props.id, true);
     await nextTick();
     const parent = gameContainer.value as HTMLElement;
-    sceneInfo = useGetGameScene(props.id, parent) as SceneInfo;
+    sceneInfo = useGameSceneFactory(props.id, parent) as SceneInfo;
     emit('initializeScene', sceneInfo.env);
 
     reactiveInfo.gameInfo = sceneInfo.gameScene!.gameInfo;
@@ -161,3 +177,4 @@ onMounted(async () => {
     @apply pointer-events-none;
 }
 </style>
+~/types/PropTypes

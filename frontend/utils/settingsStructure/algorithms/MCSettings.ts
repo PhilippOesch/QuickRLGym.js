@@ -1,13 +1,6 @@
-import { ISettingTemplate, Setting, SettingNumber } from './general';
+import { IMCSettings, SettingNumber } from '~/types/settings';
 
-interface IMCSettings extends ISettingTemplate {
-    epsilonStart: Setting<SettingNumber>;
-    discountFactor: Setting<SettingNumber>;
-    epsilonEnd: Setting<SettingNumber>;
-    epsilonDecaySteps: Setting<SettingNumber>;
-}
-
-export const mcSettingsDefault: IMCSettings = {
+export const mcSettings: IMCSettings = {
     discountFactor: {
         displayName: 'Discount Factor',
         setting: new SettingNumber(0.001, 0, 1),
@@ -26,4 +19,4 @@ export const mcSettingsDefault: IMCSettings = {
     },
 };
 
-export default IMCSettings;
+export default mcSettings;

@@ -48,4 +48,8 @@ const props = defineProps<{
 :deep(th) {
     @apply border-slate-500 border-solid border-2 py-1 px-4;
 }
+
+:deep(code) {
+    @apply text-amber-400;
+}
 </style>

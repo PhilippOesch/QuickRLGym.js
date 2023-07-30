@@ -2,7 +2,7 @@
     <div class="mainContainer">
         <h1 class="title">Select A Game</h1>
         <div class="gameSelectContainer">
-            <template v-for="link in links" :key="link.link">
+            <template v-for="link in gameLinks" :key="link.link">
                 <NuxtLink class="linkButton bg-slate-600" :to="link.link">
                     <i :class="setClasses(link)" :alt="link.title" />
                     <div class="rightSide">
@@ -15,22 +15,7 @@
     </div>
 </template>
 <script setup lang="ts">
-const links = [
-    {
-        title: 'Taxi Game',
-        link: '/Games/Taxi',
-        description: 'Game Based on the Taxi Problem',
-        icon: 'car',
-        color: IconColor.Amber,
-    },
-    {
-        title: 'Blackjack',
-        link: '/Games/BlackJack',
-        description: 'Basic Implementation of Blackjack',
-        icon: 'card',
-        color: IconColor.Green,
-    },
-];
+import { gameLinks } from '~~/constants';
 
 function setClasses(link: any) {
     return ['icon', 'quickrl-' + link.icon, `text-${link.color}-500`];
@@ -69,3 +54,4 @@ p {
     @apply lg:rounded-bl-md;
 }
 </style>
+~/constants/gameLinks
