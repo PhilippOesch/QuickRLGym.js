@@ -17,8 +17,8 @@ class GridWorldEnv extends SingleAgentEnvironment {
     private avgGameScore: number = 0;
     private static _name = 'GridWorld';
 
-    public init(options?: EnvOptions, initialState?: GridWorldState) {
-        super.init(options, initialState);
+    public init(options?: EnvOptions) {
+        super.init(options);
         if (options) {
             this._game = new GridWorldGame(options.randomSeed);
         } else {

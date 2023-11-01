@@ -89,3 +89,4 @@ export type EnvKey = 'Taxi' | 'BlackJack';
 // registering standard environments
 register('Taxi', Envs.TaxiEnv);
 register('BlackJack', Envs.BlackJackEnv);
+register('GridWorld', Envs.GridWorldEnv);

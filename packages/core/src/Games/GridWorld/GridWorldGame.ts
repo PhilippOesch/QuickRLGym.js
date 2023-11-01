@@ -40,7 +40,7 @@ class GridWorldGame {
             this._rng = seedrandom();
         }
         this._gridSize = size;
-        this._gameStateDim = [size, size, size, size];
+        this._gameStateDim = [size, size];
     }
 
     /**
@@ -111,12 +111,7 @@ class GridWorldGame {
      * @returns {number[]} The encoded numbers array.
      */
     public static encodeStateToIndices(state: GridWorldState): number[] {
-        return [
-            state.playerPos.x,
-            state.playerPos.y,
-            state.goalPos.x,
-            state.goalPos.y,
-        ];
+        return [state.playerPos.x, state.playerPos.y];
     }
 
     /**
@@ -143,7 +138,6 @@ class GridWorldGame {
     public get state(): GridWorldState {
         return {
             playerPos: this.player.pos,
-            goalPos: this.grid.goal.position,
         };
     }
 
