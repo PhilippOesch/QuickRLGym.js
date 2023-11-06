@@ -1,22 +1,22 @@
 {
-    "extends": "../../tsconfig.json",
-    "compilerOptions": {
-        "target": "ESNext",
-        "moduleResolution": "node",
-        "baseUrl": ".",
-        "module": "ESNext",
-        "types": ["node", "jest"],
-        "lib": ["ESNext", "DOM"],
-        "outDir": "./dist",
-        "strict": true,
-        "declaration": true,
-        "emitDeclarationOnly": true,
-        "declarationDir": "./dist/dts",
-        "resolveJsonModule": true,
-        "esModuleInterop": true,
-        "paths": {
-            "@root/*": ["./src/*"]
-        }
-    },
-    "include": ["src"]
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "target": "ES6",
+    "moduleResolution": "node",
+    "baseUrl": ".",
+    "module": "ES6",
+    "types": ["node", "jest"],
+    "lib": ["ES6", "DOM"],
+    "outDir": "./dist",
+    "strict": true,
+    "declaration": true,
+    "emitDeclarationOnly": true,
+    "declarationDir": "./dist/dts",
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "paths": {
+      "@root/*": ["./src/*"]
+    }
+  },
+  "include": ["src"]
 }

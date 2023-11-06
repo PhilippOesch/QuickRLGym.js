@@ -1,19 +1,19 @@
 {
-    "extends": "../../tsconfig.json",
-    "compilerOptions": {
-        "target": "ESNext",
-        "moduleResolution": "node",
-        "baseUrl": ".",
-        "module": "ESNext",
-        "types": ["jest"],
-        "lib": ["ESNext", "DOM"],
-        "outDir": "./dist",
-        "strict": true,
-        "declaration": true,
-        "emitDeclarationOnly": true,
-        "declarationDir": "./dist/dts",
-        "resolveJsonModule": true
-    },
-    "include": ["src"],
-    "exclude": ["node_modules"]
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "target": "ES2022",
+    "moduleResolution": "node",
+    "baseUrl": ".",
+    "module": "ES2022",
+    "types": ["jest"],
+    "lib": ["ES2022", "DOM"],
+    "outDir": "./dist",
+    "strict": true,
+    "declaration": true,
+    "emitDeclarationOnly": true,
+    "declarationDir": "./dist/dts",
+    "resolveJsonModule": true
+  },
+  "include": ["src"],
+  "exclude": ["node_modules"]
 }

@@ -1,29 +1,29 @@
 {
-    "name": "backend",
-    "version": "1.0.0",
-    "description": "To install dependencies:",
-    "main": "Main.js",
-    "type": "commonjs",
-    "scripts": {
-        "compile": "rm -r ./out; npx tsc",
-        "run": "node ./out/backend/src/Main.js",
-        "buildrun": "rm -r ./out; npx tsc; node ./out/backend/src/Main.js"
-    },
-    "author": "Philipp Oeschger",
-    "license": "ISC",
-    "devDependencies": {
-        "@types/benchmark": "^2.1.2",
-        "@types/mocha": "^10.0.0",
-        "@types/node": "^18.11.9",
-        "@types/seedrandom": "^3.0.2",
-        "benchmark": "^2.1.4",
-        "mocha": "^10.1.0",
-        "typescript": "^4.8.4"
-    },
-    "dependencies": {
-        "@tensorflow/tfjs": "^4.6.0",
-        "@tensorflow/tfjs-node": "^4.2.0",
-        "@tensorflow/tfjs-node-gpu": "^4.2.0",
-        "seedrandom": "^3.0.5"
-    }
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "To install dependencies:",
+  "main": "Main.js",
+  "type": "commonjs",
+  "scripts": {
+    "compile": "rm -r ./out; npx tsc",
+    "run": "node ./out/Main.js",
+    "buildrun": "rm -r ./out; npx tsc; node ./out/Main.js"
+  },
+  "author": "Philipp Oeschger",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/benchmark": "^2.1.2",
+    "@types/mocha": "^10.0.0",
+    "@types/node": "^18.11.9",
+    "@types/seedrandom": "^3.0.2",
+    "benchmark": "^2.1.4",
+    "mocha": "^10.1.0",
+    "typescript": "^4.8.4"
+  },
+  "dependencies": {
+    "@tensorflow/tfjs": "^4.6.0",
+    "@tensorflow/tfjs-node": "^4.2.0",
+    "@tensorflow/tfjs-node-gpu": "^4.2.0",
+    "seedrandom": "^3.0.5"
+  }
 }

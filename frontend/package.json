@@ -24,6 +24,6 @@
         "phaser": "^3.60.0",
         "quickrl.core": "^0.6.18",
         "quickrl.web": "^0.6.16",
-        "simple-tabs-vue": "^0.1.12"
+        "simple-tabs-vue": "^0.1.16"
     }
 }
