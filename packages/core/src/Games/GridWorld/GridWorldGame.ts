@@ -3,7 +3,7 @@ import Grid, { FieldType } from './Grid/Grid';
 import GridFactory from './Grid/GridFactory';
 import { Vec2 } from '../../Utils';
 import GridWorldPlayer from './Player';
-import GridWorldAction from './Action';
+import GridWorldAction, { GridWorldActionKey } from './Action';
 import StepResult from '../../RLInterface/StepResult';
 import GridWorldState from './GameState';
 
@@ -45,10 +45,10 @@ class GridWorldGame {
 
     /**
      * The action string to action mapping
-     * @type {Map<keyof typeof GridWorldAction, GridWorldAction>}
+     * @type {Map<GridWorldActionKeys, GridWorldAction>}
      */
     public static readonly actionMapping: Map<
-        keyof typeof GridWorldAction,
+        GridWorldActionKey,
         GridWorldAction
     > = new Map([
         ['Up', GridWorldAction.Up],
@@ -116,11 +116,11 @@ class GridWorldGame {
 
     /**
      * Play an environment step.
-     * @param actionString The action to take.
+     * @param actionString {GridWorldActionKey} The action to take.
      * @returns {StepResult<GridWorldState>} The result of the action.
      */
     public step(
-        actionString: keyof typeof GridWorldAction
+        actionString: GridWorldActionKey 
     ): StepResult<GridWorldState> {
         this._iteration++;
         const action = GridWorldGame.actionMapping.get(actionString)!;

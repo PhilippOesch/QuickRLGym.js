@@ -14,4 +14,6 @@ enum TaxiAction {
     DropOff,
 }
 
+export type TaxiActionKey = keyof typeof TaxiAction;
+
 export default TaxiAction;

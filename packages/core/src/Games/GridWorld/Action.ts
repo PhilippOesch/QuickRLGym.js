@@ -10,4 +10,6 @@ enum GridWorldAction {
     Right,
 }
 
+export type GridWorldActionKey = keyof typeof GridWorldAction;
+
 export default GridWorldAction;
