@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -5,7 +7,7 @@
   
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title> Experience</title>
+  <title> core/src/Envs/GridWorldEnv.ts</title>
 
   <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
@@ -97,245 +99,138 @@
         <div class="core" id="main-content-wrapper">
             <div class="content">
                 <header class="page-title">
-                    <p>Interface</p>
-                    <h1>Experience</h1>
+                    <p>Source</p>
+                    <h1>core/src/Envs/GridWorldEnv.ts</h1>
                 </header>
                 
 
 
 
-
-<section>
-
-<header>
     
-        <h2>Experience</h2>
-        
-    
-</header>
-
-<article>
-    <div class="container-overview">
-    
-        
-            <div class="description"><p>Describes a single expericence of an enviroment step</p></div>
-        
-
-        
-
-
-    <h5 class="subsection-title">Properties:</h5>
-
-    
-<div class="table-container">
-    <table class="props table">
-        <thead>
-        <tr>
-            
-            <th>Name</th>
-            
-
-            <th>Type</th>
-
-            
-
-            
-
-            <th class="last">Description</th>
-        </tr>
-        </thead>
-
-        <tbody>
-        
-            
-<tr class="deep-level-0">
-    
-        <td class="name"><code>prevState</code></td>
-    
-
-    <td class="type">
-    
-        
-<code class="param-type">Array.&lt;number></code>
-
-
-    
-    </td>
-
-    
-
-    
-
-    <td class="description last"><p>The encoded previous state</p></td>
-</tr>
-
-        
-            
-<tr class="deep-level-0">
-    
-        <td class="name"><code>takenAction</code></td>
-    
-
-    <td class="type">
-    
-        
-<code class="param-type">number</code>
-
-
-    
-    </td>
-
-    
-
-    
-
-    <td class="description last"><p>The taken action index</p></td>
-</tr>
-
-        
-            
-<tr class="deep-level-0">
-    
-        <td class="name"><code>newState</code></td>
-    
-
-    <td class="type">
-    
-        
-<code class="param-type">Array.&lt;number></code>
-
-
-    
-    </td>
-
-    
-
-    
-
-    <td class="description last"><p>The encoded new state</p></td>
-</tr>
-
-        
-            
-<tr class="deep-level-0">
-    
-        <td class="name"><code>payoff</code></td>
-    
-
-    <td class="type">
-    
-        
-<code class="param-type">number</code>
-
-
-    
-    </td>
-
-    
-
-    
-
-    <td class="description last"><p>the payoff</p></td>
-</tr>
-
-        
-            
-<tr class="deep-level-0">
-    
-        <td class="name"><code>contextInfo</code></td>
-    
-
-    <td class="type">
-    
-        
-<code class="param-type"><a href="EnvStateContext.html">EnvStateContext</a></code>
-
-
-    
-    </td>
-
-    
-
-    
-
-    <td class="description last"><p>The environment context</p></td>
-</tr>
-
-        
-        </tbody>
-    </table>
-</div>
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    
-
-    
-
-    
-
-    
-        <p class="tag-source">
-            <a href="core_src_RLInterface_SingleAgentEnvironment.ts.html" class="button">View Source</a>
-            <span>
-                <a href="core_src_RLInterface_SingleAgentEnvironment.ts.html">core/src/RLInterface/SingleAgentEnvironment.ts</a>, <a href="core_src_RLInterface_SingleAgentEnvironment.ts.html#line154">line 154</a>
-            </span>
-        </p>
-    
-</dl>
-
-
-        
-    
-    </div>
-    
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</article>
-
-</section>
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import { SingleAgentEnvironment } from '../RLInterface/SingleAgentEnvironment';
+import StepResult from '../RLInterface/StepResult';
+import GridWorldState from '../Games/GridWorld/GameState';
+import GridWorldAction from '../Games/GridWorld/Action';
+import { EnvOptions } from '../RLInterface/Environment';
+import GridWorldGame from '@root/Games/GridWorld/GridWorldGame';
+
+export type GridWorldStats = {
+    avgGameIterations: number;
+    avgGameScore: number;
+};
+
+class GridWorldEnv extends SingleAgentEnvironment {
+    private _game: GridWorldGame;
+    private intervalCount: number = 0;
+    private avgGameIterations: number = 0;
+    private avgGameScore: number = 0;
+    private static _name = 'GridWorld';
+
+    public init(options?: EnvOptions) {
+        super.init(options);
+        if (options) {
+            this._game = new GridWorldGame(options.randomSeed);
+        } else {
+            this._game = new GridWorldGame();
+        }
+        this._game.init();
+    }
+
+    public get getReturn(): number {
+        return this._game.return;
+    }
+    get stateDim(): number[] {
+        return this._game.gameStateDim;
+    }
+    get actionSpace(): string[] {
+        return GridWorldGame.getActionSpace;
+    }
+    get state(): GridWorldState {
+        throw this._game.state;
+    }
+    get isTerminal(): boolean {
+        return this._game.isTerminal;
+    }
+    get iteration(): number {
+        return this._game.iteration;
+    }
+
+    /**
+     * Return the taxi problem game
+     * @returns {TaxiGame} The game object
+     */
+    public get game(): GridWorldGame {
+        return this._game;
+    }
+
+    /**
+     * Return the environment stats
+     * @type {GridWorldStats}
+     */
+    get stats(): GridWorldStats {
+        return {
+            avgGameIterations: this.intervalCount
+                ? this.avgGameIterations / this.intervalCount
+                : 0,
+            avgGameScore: this.intervalCount
+                ? this.avgGameScore / this.intervalCount
+                : 0,
+        };
+    }
+    get name(): string {
+        return GridWorldEnv._name;
+    }
+    public step(
+        action: keyof typeof GridWorldAction
+    ): StepResult&lt;GridWorldState> {
+        this._lastAction = action;
+        return this._game.step(action);
+    }
+    reset(): boolean {
+        return this._game.reset();
+    }
+    encodeStateToIndices(state: GridWorldState): number[] {
+        return GridWorldGame.encodeStateToIndices(state);
+    }
+    resetStats(): boolean {
+        this.avgGameIterations = 0;
+        this.intervalCount = 0;
+        this.avgGameScore = 0;
+        return true;
+    }
+
+    public override onIterationEnd(): void {
+        this.intervalCount++;
+        this.avgGameIterations += this.iteration;
+        this.avgGameScore += this._game.return;
+    }
+
+    public override log(trainIteration: number): void {
+        console.log('Iteration:', trainIteration);
+        console.log(
+            'average Game Iterations:',
+            this.avgGameIterations / this.intervalCount
+        );
+        console.log(
+            'average Game Score:',
+            this.avgGameScore / this.intervalCount
+        );
+    }
+
+    public setOptions(options: EnvOptions): void {
+        super.setOptions(options);
+        if (this.randomSeed) {
+            this._game.setRng = this.randomSeed;
+        }
+    }
+}
+
+export default GridWorldEnv;
+</code></pre>
+        </article>
+    </section>
 
 
 

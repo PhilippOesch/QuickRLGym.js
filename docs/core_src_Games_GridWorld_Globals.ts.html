@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -5,7 +7,7 @@
   
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title> Experience</title>
+  <title> core/src/Games/GridWorld/Globals.ts</title>
 
   <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
@@ -97,245 +99,34 @@
         <div class="core" id="main-content-wrapper">
             <div class="content">
                 <header class="page-title">
-                    <p>Interface</p>
-                    <h1>Experience</h1>
+                    <p>Source</p>
+                    <h1>core/src/Games/GridWorld/Globals.ts</h1>
                 </header>
                 
 
 
 
-
-<section>
-
-<header>
     
-        <h2>Experience</h2>
-        
-    
-</header>
-
-<article>
-    <div class="container-overview">
-    
-        
-            <div class="description"><p>Describes a single expericence of an enviroment step</p></div>
-        
-
-        
-
-
-    <h5 class="subsection-title">Properties:</h5>
-
-    
-<div class="table-container">
-    <table class="props table">
-        <thead>
-        <tr>
-            
-            <th>Name</th>
-            
-
-            <th>Type</th>
-
-            
-
-            
-
-            <th class="last">Description</th>
-        </tr>
-        </thead>
-
-        <tbody>
-        
-            
-<tr class="deep-level-0">
-    
-        <td class="name"><code>prevState</code></td>
-    
-
-    <td class="type">
-    
-        
-<code class="param-type">Array.&lt;number></code>
-
-
-    
-    </td>
-
-    
-
-    
-
-    <td class="description last"><p>The encoded previous state</p></td>
-</tr>
-
-        
-            
-<tr class="deep-level-0">
-    
-        <td class="name"><code>takenAction</code></td>
-    
-
-    <td class="type">
-    
-        
-<code class="param-type">number</code>
-
-
-    
-    </td>
-
-    
-
-    
-
-    <td class="description last"><p>The taken action index</p></td>
-</tr>
-
-        
-            
-<tr class="deep-level-0">
-    
-        <td class="name"><code>newState</code></td>
-    
-
-    <td class="type">
-    
-        
-<code class="param-type">Array.&lt;number></code>
-
-
-    
-    </td>
-
-    
-
-    
-
-    <td class="description last"><p>The encoded new state</p></td>
-</tr>
-
-        
-            
-<tr class="deep-level-0">
-    
-        <td class="name"><code>payoff</code></td>
-    
-
-    <td class="type">
-    
-        
-<code class="param-type">number</code>
-
-
-    
-    </td>
-
-    
-
-    
-
-    <td class="description last"><p>the payoff</p></td>
-</tr>
-
-        
-            
-<tr class="deep-level-0">
-    
-        <td class="name"><code>contextInfo</code></td>
-    
-
-    <td class="type">
-    
-        
-<code class="param-type"><a href="EnvStateContext.html">EnvStateContext</a></code>
-
-
-    
-    </td>
-
-    
-
-    
-
-    <td class="description last"><p>The environment context</p></td>
-</tr>
-
-        
-        </tbody>
-    </table>
-</div>
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    
-
-    
-
-    
-
-    
-        <p class="tag-source">
-            <a href="core_src_RLInterface_SingleAgentEnvironment.ts.html" class="button">View Source</a>
-            <span>
-                <a href="core_src_RLInterface_SingleAgentEnvironment.ts.html">core/src/RLInterface/SingleAgentEnvironment.ts</a>, <a href="core_src_RLInterface_SingleAgentEnvironment.ts.html#line154">line 154</a>
-            </span>
-        </p>
-    
-</dl>
-
-
-        
-    
-    </div>
-    
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</article>
-
-</section>
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * The penalty on an illegal move.
+ * @category Games
+ * @subcategory GridWorld
+ * @type {number}
+ */
+export const illegalMovePenalty: number = -10;
+
+/**
+ * The amount of point for reaching a final state.
+ * @category Games
+ * @subcategory GridWorld
+ * @type {number}
+ */
+export const goalReward: number = 5;
+</code></pre>
+        </article>
+    </section>
 
 
 
