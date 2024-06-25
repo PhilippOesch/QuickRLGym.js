@@ -10,6 +10,11 @@ enum GridWorldAction {
     Right,
 }
 
+/**
+ * GridWorld action keys.
+ * @category Games
+ * @subcategory GridWorld
+ */
 export type GridWorldActionKey = keyof typeof GridWorldAction;
 
 export default GridWorldAction;

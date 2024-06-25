@@ -1,7 +1,7 @@
 import { SingleAgentEnvironment } from '../RLInterface/SingleAgentEnvironment';
 import StepResult from '../RLInterface/StepResult';
 import GridWorldState from '../Games/GridWorld/GameState';
-import GridWorldAction from '../Games/GridWorld/Action';
+import GridWorldAction, { GridWorldActionKey } from '../Games/GridWorld/Action';
 import { EnvOptions } from '../RLInterface/Environment';
 import GridWorldGame from '@root/Games/GridWorld/GridWorldGame';
 
@@ -72,7 +72,7 @@ class GridWorldEnv extends SingleAgentEnvironment {
         return GridWorldEnv._name;
     }
     public step(
-        action: keyof typeof GridWorldAction
+        action: GridWorldActionKey
     ): StepResult<GridWorldState> {
         this._lastAction = action;
         return this._game.step(action);

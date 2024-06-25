@@ -9,6 +9,11 @@ export enum BlackJackAction {
     Hit,
 }
 
+/**
+ * BlackJack action key
+ * @category Games
+ * @subcategory BlackJack
+ */
 export type BlackJackActionKey = keyof typeof BlackJackAction
 
 export default BlackJackAction;

@@ -2,6 +2,7 @@ import { SingleAgentEnvironment } from '../RLInterface/SingleAgentEnvironment';
 import { TaxiAction, TaxiGame, TaxiGameState } from '../Games/TaxiGame/index';
 import StepResult from '../RLInterface/StepResult';
 import { EnvOptions } from '../RLInterface/Environment';
+import { TaxiActionKey } from '@root/Games/TaxiGame/Action';
 
 /**
  * The Taxi Environment stats
@@ -96,7 +97,7 @@ class TaxiEnv extends SingleAgentEnvironment {
         return this._game.return;
     }
 
-    public step(action: keyof typeof TaxiAction): StepResult<TaxiGameState> {
+    public step(action: TaxiActionKey): StepResult<TaxiGameState> {
         this._lastAction = action;
         return this._game.step(action);
     }
