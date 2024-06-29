@@ -81,7 +81,7 @@ export default defineNuxtConfig({
       ],
     },
   },
-  modules: ["@pinia/nuxt", "@vueuse/nuxt", "@nuxt/content", "@nuxt/image"],
+  modules: ["@pinia/nuxt", "@vueuse/nuxt", "@nuxt/content", "@nuxt/image", "@nuxt/test-utils/module"],
   devtools: { enabled: true },
 });
 
