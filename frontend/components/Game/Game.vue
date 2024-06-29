@@ -147,18 +147,16 @@ import {
     trainingSettings,
 } from '~~/utils/settingsStructure';
 import { Enums } from '~~/types';
-import { Ref } from 'vue';
 import { Agent, SingleAgentEnvironment, PersistableAgent } from 'quickrl.core';
 import useSettingsStore from '~~/comsosable/useSettingsStore';
 import {
-    SwitchEvent,
+    type SwitchEvent,
     useSimpleTabsStore,
     SimpleTabStore,
     SimpleTab,
 } from 'simple-tabs-vue';
-import Description from './Description.vue';
 
-const gameViewRef: Ref = ref();
+const gameViewRef = ref();
 const benchmarkViewRef: Ref = ref();
 
 const tabsStore: SimpleTabStore = useSimpleTabsStore();

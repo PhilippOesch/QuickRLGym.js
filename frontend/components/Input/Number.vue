@@ -16,11 +16,10 @@
     </div>
 </template>
 <script setup lang="ts">
-import { Ref } from 'vue';
-import { BaseInputProps } from '~~/types/PropTypes';
+import { type BaseInputProps } from '~~/types/PropTypes';
 import { Enums } from '~~/types';
 
-export interface NumberInputProps extends BaseInputProps {
+export type NumberInputProps = BaseInputProps & {
     min?: number;
     max?: number;
     defaultValue?: number;
@@ -31,7 +30,7 @@ const props = withDefaults(defineProps<NumberInputProps>(), {
     inputStyle: Enums.InputStyleType.Dark,
 });
 
-const valueRef: Ref<number> = ref(props.defaultValue ? props.defaultValue : 0);
+const valueRef = ref(props.defaultValue ? props.defaultValue : 0);
 
 const emit = defineEmits(['updated']);
 

@@ -17,15 +17,14 @@
 </template>
 
 <script setup lang="ts">
-import { Ref } from "vue";
 import { Agent, SingleAgentEnvironment, Utils } from "quickrl.core";
-import { SceneInfo } from "~~/comsosable/useGameEnv";
+import { type SceneInfo } from "~~/comsosable/useGameEnv";
 import useGameSceneFactory from "~~/comsosable/useGameEnv";
 import useSettingsStore from "~~/comsosable/useSettingsStore";
-import { GameBenchmarkSettings } from "~~/comsosable/useDefaultSettings";
+import { type GameBenchmarkSettings } from "~~/comsosable/useDefaultSettings";
 import { renderGame } from "~~/utils/GameScenes/helpers";
 import { mappedRef } from "mappedref-vue";
-import { GameViewProps } from "~~/types/PropTypes";
+import { type GameViewProps } from "~~/types/PropTypes";
 
 enum BenchmarkState {
   NotStarted,
@@ -57,7 +56,7 @@ benchmarkTitleRef.set(
 
 let sceneInfo: SceneInfo | undefined;
 
-let iteration: Ref<number> = ref(0);
+let iteration = ref(0);
 
 const counter = ref(0);
 

@@ -1,23 +1,16 @@
 <template>
     <div :class="['numberInputContainer', styleClasses]">
         <h3 :class="title">{{ title }}</h3>
-        <input
-            type="text"
-            :name="name"
-            v-model="value"
-            :class="inputStyle"
-            @change="() => finishEdit()"
-            :disabled="disabled"
-        />
+        <input type="text" :name="name" v-model="value" :class="inputStyle" @change="() => finishEdit()"
+            :disabled="disabled" />
     </div>
 </template>
 
 <script setup lang="ts">
-import { BaseInputProps } from '~~/types/PropTypes';
+import { type BaseInputProps } from '~~/types/PropTypes';
 import { Enums } from '~~/types';
-import { ref } from 'vue';
 
-export interface InputArrayProps extends BaseInputProps {
+export type InputArrayProps = BaseInputProps & {
     min?: number;
     delimiter: string;
     defaultValue?: number[];

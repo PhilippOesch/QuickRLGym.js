@@ -27,7 +27,6 @@
 </template>
 
 <script setup lang="ts">
-import { Ref, ref } from 'vue';
 import { gameLinks } from '~~/constants';
 
 const menuOpen: Ref<boolean> = ref(false);

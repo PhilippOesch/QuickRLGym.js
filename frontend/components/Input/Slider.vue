@@ -33,11 +33,10 @@
 </template>
 
 <script setup lang="ts">
-import { Ref } from 'vue';
-import { BaseInputProps } from '~/types/PropTypes';
+import { type BaseInputProps } from '~/types/PropTypes';
 import { Enums } from '~~/types';
 
-export interface InputSliderProps extends BaseInputProps {
+export type InputSliderProps = BaseInputProps& {
     max?: number;
     min?: number;
     defaultValue?: number;
@@ -47,7 +46,7 @@ export interface InputSliderProps extends BaseInputProps {
 
 const props = defineProps<InputSliderProps>();
 
-const valueRef: Ref<number> = ref(props.defaultValue ? props.defaultValue : 0);
+const valueRef = ref(props.defaultValue ? props.defaultValue : 0);
 
 const emit = defineEmits(['updated']);
 

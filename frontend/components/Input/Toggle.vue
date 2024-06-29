@@ -16,10 +16,10 @@
 </template>
 
 <script setup lang="ts">
-import { BaseInputProps } from "~~/types/PropTypes";
+import { type BaseInputProps } from "~~/types/PropTypes";
 import { Enums } from "~~/types";
 
-export interface InputToggleProps extends BaseInputProps {
+export type InputToggleProps = BaseInputProps & {
   defaultValue?: boolean;
   accentColor?: Enums.IconColor;
 }

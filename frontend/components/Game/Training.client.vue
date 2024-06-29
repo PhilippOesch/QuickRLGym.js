@@ -18,20 +18,19 @@
 
 <script lang="ts" setup>
 import { Agent, Environment, SingleAgentEnvironment } from 'quickrl.core';
-import { Ref, ref, reactive, nextTick, onMounted } from 'vue';
-import { SceneInfo } from '~~/comsosable/useGameEnv';
+import { type SceneInfo } from '~~/comsosable/useGameEnv';
 import useSettingsStore from '~~/comsosable/useSettingsStore';
 import useAgent from '~~/comsosable/useAgent';
-import { GameTrainingSettings } from '~~/comsosable/useDefaultSettings';
+import { type GameTrainingSettings } from '~~/comsosable/useDefaultSettings';
 import useGameSceneFactory from '~~/comsosable/useGameEnv';
 import { renderGame } from '~~/utils/GameScenes/helpers';
-import { GameViewProps } from '~~/types/PropTypes';
+import { type GameViewProps } from '~~/types/PropTypes';
 
 const props = withDefaults(defineProps<GameViewProps>(), {
     renderBetweenMoves: 100,
 });
 
-const gameContainer: Ref<any> = ref(null);
+const gameContainer = ref(null);
 
 async function initializeTraining() {
     iteration.value = 0;

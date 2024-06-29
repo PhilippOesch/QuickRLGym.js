@@ -68,7 +68,7 @@
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue';
 import {
-    ISettingTemplate,
+    type ISettingTemplate,
     SettingArray,
     SettingBoolean,
     SettingNumber,
